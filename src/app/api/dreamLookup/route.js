@@ -11,6 +11,8 @@ const openai = new OpenAI({
 
 export async function GET(request) {
     const dream = request.nextUrl.searchParams.get('dream');
+    const chatGPTPrompt = "What is the meaning of this dream? Interpret some of the symbols: \n\n" + dream;
+    console.log('chatGPTPrompt: ', chatGPTPrompt);
     try {
         const dreamData = await interpretDream(dream);
         return NextResponse.json(dreamData);
