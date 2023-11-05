@@ -8,8 +8,6 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-console.log("testing adding new thing");
-
 
 export async function GET(request) {
     const dream = request.nextUrl.searchParams.get('dream');

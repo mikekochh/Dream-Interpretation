@@ -99,7 +99,7 @@ body {
 
 .shooting-star:nth-child(7){
   top: 300px;
-  right: 0px;
+  right: 100px;
   left: initial;
   animation-delay: 0.2s;
   animation-duration: 3s;
@@ -125,6 +125,14 @@ body {
   background: transparent;
   border: 2px solid white;
   color: white;
+}
+
+.LoginInput {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 5px;
+  width: 350px;
 }
 
 
