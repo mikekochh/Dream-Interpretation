@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import OpenAI from 'openai';
 import axios from 'axios';
+import Link from 'next/link';
 
 export default function HomePage() {
 
@@ -34,6 +35,9 @@ export default function HomePage() {
                 <button className="border-2 border-white p-1 rounded-lg text-white" onClick={submitDream}>Submit</button>
             </div>
             { gptInterpretation ? <ChatGPTResponse gptInterpretation={gptInterpretation} /> : null}
+            <div className="logout absolute bottom-0 right-0 p-4">
+                <Link href={'/login'} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</Link>
+            </div>
         </div>
     );
 }
