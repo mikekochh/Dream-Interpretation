@@ -1,6 +1,6 @@
-import LoginForm from "@/components/LoginForm"
+import React from "react";
 
-export default function LoginPage() {
+const StarBackground = ({ children }) => {
     return (
         <div className="star-background">
             <span className="shooting-star"></span>
@@ -13,7 +13,9 @@ export default function LoginPage() {
             <span className="shooting-star"></span>
             <span className="shooting-star"></span>
             <span className="shooting-star"></span>
-            <LoginForm />
+            {children}
         </div>
     )
 }
+
+export default StarBackground;

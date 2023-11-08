@@ -1,10 +1,10 @@
-import RegisterForm from "@/components/RegisterForm";
+import LoginForm from "@/components/LoginForm"
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import StarBackground from "@/components/StarBackground";
 
-export default async function Register() {
+export default async function LoginPage() {
 
     const session = await getServerSession(authOptions);
 
@@ -14,7 +14,7 @@ export default async function Register() {
 
     return (
         <StarBackground>
-            <RegisterForm />
+            <LoginForm />
         </StarBackground>
     )
 }

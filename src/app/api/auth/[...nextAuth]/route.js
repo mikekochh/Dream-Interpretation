@@ -1,15 +1,39 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { connectMongoDB } from '../../../../../lib/mongodb';
+import User from '../../../../../models/user';
+import bcrypt from 'bcryptjs';
 
-const authOptions = {
+export const authOptions = {
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {},
 
             async authorize(credentials) {
-                const user = { id: "1" };
-                return user; 
+                const { email, password } = credentials;
+
+                try {
+                    await connectMongoDB();
+                    const user = await User.findOne({ email });
+
+                    if (!user) {
+                        return null;
+                    }
+
+                    const passwordsMatch = await bcrypt.compare(password, user.password);
+
+                    if (!passwordsMatch) {
+                        return null;
+                    }
+
+                    return user;
+
+                } catch (error) {
+                    console.log("There was an error: ", error);
+                }
+
+                return null; 
             }
         })
     ],
