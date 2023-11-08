@@ -85,7 +85,7 @@ export default function RegisterForm() {
                             {error}
                         </div>
                     )}
-                    <Link href={'/login'} className="text-sm mt-3 text-right">
+                    <Link href={'/userLogin'} className="text-sm mt-3 text-right">
                         Already have an account? <span className="underline">Log In</span>
                     </Link>
                 </form>

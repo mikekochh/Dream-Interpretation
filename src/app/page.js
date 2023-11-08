@@ -1,10 +1,10 @@
 import Image from 'next/image'
-import Login from './login/page'
+import UserLogin from './userLogin/page'
 
 export default function Home() {
   return (
     <main>
-      <Login />
+      <UserLogin />
     </main>
   )
 }
