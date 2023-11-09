@@ -9,16 +9,24 @@ import { useSession } from 'next-auth/react';
 
 export default function HomePage() {
 
-    const [dreamCredits, setDreamCredits] = useState(10);
+    const [dreamCredits, setDreamCredits] = useState(0);
 
-    // useEffect(() => {
-    //     async function getDreamCredits() {
-    //         const res = await axios.get('/api/userCredits');
-    //         console.log('res.data: ', res.data);
-    //         return res.data;
-    //     }
-    //     setDreamCredits(getDreamCredits());
-    // }, []);
+    useEffect(() => {
+        async function getDreamCredits() {
+            const email = session?.user?.email;
+            if (email) {
+                const res = await fetch(`api/userCredits/${email}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                return res.json();
+            }
+            return 0;
+        }
+        setDreamCredits(getDreamCredits());
+    }, []);
 
     const { data: session } = useSession();
 
@@ -43,7 +51,7 @@ export default function HomePage() {
                 <textarea type="text" rows={5} className="DreamBox border-2 border-black rounded-lg text-black w-2/3" />
                 <button className="border-2 border-white p-1 rounded-lg text-white" onClick={submitDream}>Submit</button>
             </div>
-            {/* <div className="absolute right-0 top-0">Dream Tokens: {dreamCredits}</div> */}
+            <div className="absolute right-0 top-0">Dream Tokens: {dreamCredits}</div>
             { gptInterpretation ? <ChatGPTResponse gptInterpretation={gptInterpretation} /> : null}
             <div className="logout absolute bottom-0 right-0 p-4">
                 <button onClick={() => signOut()} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
