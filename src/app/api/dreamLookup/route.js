@@ -1,5 +1,6 @@
 const axios = require('axios');
 import { NextResponse, NextRequest } from 'next/server';
+import { connectMongoDB } from '../../../../lib/mongodb';
 
 import OpenAI from 'openai';
 
@@ -11,6 +12,8 @@ const openai = new OpenAI({
 
 export async function GET(request) {
     const dream = request.nextUrl.searchParams.get('dream');
+    const dreamCredits = request.nextUrl.searchParams.get('dreamCredits');
+    const email = request.nextUrl.searchParams.get('email');
     const chatGPTPrompt = "What is the meaning of this dream? Interpret some of the symbols: \n\n" + dream;
     console.log('chatGPTPrompt: ', chatGPTPrompt);
     try {
@@ -27,6 +30,14 @@ async function interpretDream(dream) {
         model: "gpt-3.5-turbo",
         messages: [{role: "user", content: dream}],
     })
+
+    return chatCompletion.choices;
+}
+
+async function reduceDreamCredits(dreamCredits) {
+
+    await connectMongoDB();
+    await User.updateOne({ email }, { $set: { credits: 10 } });
 
     return chatCompletion.choices;
 }

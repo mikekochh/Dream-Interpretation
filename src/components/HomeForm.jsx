@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 export default function HomePage() {
 
     const [dreamCredits, setDreamCredits] = useState(0);
+    const [userID, setUserID] = useState(0);
 
     useEffect(() => {
         async function getDreamCredits() {
@@ -20,22 +21,38 @@ export default function HomePage() {
                         "Content-Type": "application/json",
                     },
                 });
+                // console.log("res: ", res.json());
+                return res.json();
+            }
+            return 0;
+        }
+
+        async function getUserID() {
+            const email = session?.user?.email;
+            if (email) {
+                const res = await fetch(`api/userID/${email}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
                 return res.json();
             }
             return 0;
         }
         setDreamCredits(getDreamCredits());
+        setUserID(getUserID());
     }, []);
 
     const { data: session } = useSession();
 
-    console.log('data: ', session);
+    console.log("session: ", session);
 
     const [gptInterpretation, setGptInterpretation] = useState('');
 
     async function submitDream() {  
         const dream = document.querySelector('.DreamBox').value;
-        const res = await axios.get('/api/dreamLookup', { params: { dream } });
+        const res = await axios.get('/api/dreamLookup', { params: { dream, dreamCredits } });
         console.log("res.data[0].message.content: ", res.data[0].message.content);
         setGptInterpretation(res.data[0].message.content);
     }
