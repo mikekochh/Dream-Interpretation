@@ -33,7 +33,9 @@ export default function HomePage() {
     async function submitDream() {  
         const dream = document.querySelector('.DreamBox').value;
         const res = await axios.get('/api/dreamLookup', { params: { dream, email: session?.user?.email, dreamCredits: dreamCredits.value } });
+        console.log('res: ', res);
         setGptInterpretation(res.data[0].message.content);
+        setDreamCredits(dreamCredits.value - 1 );
     }
 
     return (
