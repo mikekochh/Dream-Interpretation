@@ -15,3 +15,17 @@ export async function GET(req) {
         return NextResponse.error(error);
     }
 }
+
+export async function POST(req) {
+
+    const { email, dreamCredits } = await req.json();
+
+    try {
+        User.updateOne({ email }, { $set: { credits:  dreamCredits - 1} });
+        return NextResponse.json({message: "User credits updated successfully!"}, { status: 200 })
+    }
+    catch (error) {
+        console.log('error: ', error);
+        return NextResponse.error(error);
+    }
+}
