@@ -10,10 +10,22 @@ export default function HomePage() {
 
     const [dreamCredits, setDreamCredits] = useState(0);
     const [gptInterpretation, setGptInterpretation] = useState('');
+    const [character, setCharacter] = useState('');
 
     const { data: session } = useSession();
 
     const router = useRouter();
+
+    useEffect(() => {
+        async function setCharacterData() {
+            const res = await axios.get(`api/characterSelection`, { params: { email: session?.user?.email } });
+            setCharacter(res.data);
+        }
+
+        if (session) {
+            setCharacterData();
+        }
+    }, [session]);
 
     useEffect(() => {
         async function getDreamCredits() {
@@ -35,7 +47,15 @@ export default function HomePage() {
 
     async function submitDream() {  
         const dream = document.querySelector('.DreamBox').value;
-        const res = await axios.get('/api/dreamLookup', { params: { dream, email: session?.user?.email, dreamCredits: dreamCredits.value } });
+        const res = await axios.get('/api/dreamLookup', 
+            { 
+                params: { 
+                    dream, 
+                    email: session?.user?.email,
+                    dreamCredits: dreamCredits.value,
+                    prompt: character.prompt
+                } 
+            });
         console.log('res: ', res);
         setGptInterpretation(res.data[0].message.content);
         setDreamCredits(dreamCredits.value - 1 );
@@ -56,6 +76,7 @@ export default function HomePage() {
                 <button className="border-2 border-white p-1 rounded-lg text-white" onClick={submitDream}>Submit</button>
             </div>
             <div className="absolute right-0 top-0">Dream Tokens: {dreamCredits}</div>
+            <div className="justify-center flex">{character.characterName}</div>
             { gptInterpretation ? <ChatGPTResponse gptInterpretation={gptInterpretation} /> : null}
             {/* { true ? <ChatGPTResponse gptInterpretation={gptInterpretation} /> : null} */}
             <div className="logout absolute bottom-0 right-0 p-4">
