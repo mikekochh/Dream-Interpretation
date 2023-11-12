@@ -16,6 +16,9 @@ const userSchema = new Schema({
     },
     credits: {
         type: Number,
+    },
+    characterID: {
+        type: Number,
     }
 
 }, {timestamps: true});

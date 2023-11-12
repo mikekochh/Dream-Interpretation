@@ -3,11 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function CharacterSelectionForm() {
 
     const [characters, setCharacters] = useState([]);
     const [selectedCharacter, setSelectedCharacter] = useState(null);
+
+    const { data: session } = useSession();
+
+    const router = useRouter();
 
     useEffect(() => {
         async function getCharacters() {
@@ -24,8 +30,12 @@ export default function CharacterSelectionForm() {
         setSelectedCharacter(character.characterID);
     }
 
-    const saveCharacter = () => { 
-
+    const saveCharacter = async () => { 
+        console.log('selectedCharacter: ', selectedCharacter);
+        const email = session?.user?.email;
+        const res = await axios.post('/api/characterSelection', { characterID: selectedCharacter, email });
+        console.log('res: ', res);
+        router.replace("/home");
     }
 
     return (
@@ -47,6 +57,9 @@ export default function CharacterSelectionForm() {
                         </div>
                     )
                 })}
+            </div>
+            <div className="flex justify-center">
+                <button className="border-2 border-white p-1 rounded-lg text-white" onClick={saveCharacter}>Save</button>
             </div>
         </div>
         
