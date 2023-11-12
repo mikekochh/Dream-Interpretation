@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { signOut } from "next-auth/react";
 import { useSession } from 'next-auth/react';
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
 
@@ -11,6 +12,8 @@ export default function HomePage() {
     const [gptInterpretation, setGptInterpretation] = useState('');
 
     const { data: session } = useSession();
+
+    const router = useRouter();
 
     useEffect(() => {
         async function getDreamCredits() {
@@ -38,8 +41,13 @@ export default function HomePage() {
         setDreamCredits(dreamCredits.value - 1 );
     }
 
+    function characterSelection() {
+        router.replace("/characterSelection");
+    }
+
     return (
         <div className='text-white'>
+        <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={characterSelection}>Character Selection</button>
             <h1 className=" text-3xl text-center">The Dream Interpreter</h1>
             <h2 className="text-center">Welcome back {session?.user?.name}</h2>
             <div className="flex justify-center">Enter Dream description below</div>
