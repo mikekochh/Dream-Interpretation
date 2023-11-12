@@ -5,7 +5,6 @@ import User from "../../../../../models/user";
 export async function GET(req) {
     try {
         const pathname = req.nextUrl.pathname;
-        // Extract the email from the end of the pathname
         const email = pathname.split('/').pop();
         await connectMongoDB();
         const userCredits = await User.findOne({ email }).select("credits");
@@ -16,13 +15,23 @@ export async function GET(req) {
     }
 }
 
-export async function POST(req) {
-
-    const { email, dreamCredits } = await req.json();
-
+export async function POST(req) {    
     try {
-        User.updateOne({ email }, { $set: { credits:  dreamCredits - 1} });
-        return NextResponse.json({message: "User credits updated successfully!"}, { status: 200 })
+        const pathname = req.nextUrl.pathname;
+        const email = pathname.split('/').pop();
+        await connectMongoDB();
+        
+        console.log('email: ', email);
+
+        const updatedUser = User.findOneAndUpdate({ email }, { $set: { credits: 3 } }, { new: true });
+
+        console.log('updatedUser: ', updatedUser);
+
+        if (!updatedUser) {
+            throw new Error("User not found!");
+        }
+
+        return NextResponse.json({message: "User credits updated successfully!"}, { status: 200 });
     }
     catch (error) {
         console.log('error: ', error);
