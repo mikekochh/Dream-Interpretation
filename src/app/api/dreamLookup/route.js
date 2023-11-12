@@ -15,7 +15,8 @@ export async function GET(request) {
     const dream = request.nextUrl.searchParams.get('dream');
     const dreamCredits = request.nextUrl.searchParams.get('dreamCredits');
     const email = request.nextUrl.searchParams.get('email');
-    const chatGPTPrompt = "What is the meaning of this dream? Interpret some of the symbols: \n\n" + dream;
+    const prompt = request.nextUrl.searchParams.get('prompt');
+    const chatGPTPrompt = prompt + "\n\n" + dream;
     try {
         const dreamData = await interpretDream(chatGPTPrompt);
         const dreamCreditsData = await reduceDreamCredits(dreamCredits, email);

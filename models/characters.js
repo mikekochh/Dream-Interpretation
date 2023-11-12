@@ -1,7 +1,7 @@
 import mongoose, { Schema, models } from "mongoose";
 
 const characterSchema = new Schema({
-    name: {
+    characterName: {
         type: String,
         required: [true, "Please enter character name!"]
     },
@@ -9,7 +9,7 @@ const characterSchema = new Schema({
         type: String,
         required: [true, "Please enter character prompt!"]
     },
-    ID: {
+    characterID: {
         type: Number,
         required: [true, "Please enter character ID!"]
     },
