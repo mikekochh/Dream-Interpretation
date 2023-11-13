@@ -20,15 +20,19 @@ export async function POST(req) {
         const pathname = req.nextUrl.pathname;
         const email = pathname.split('/').pop();
         await connectMongoDB();
-        
-        console.log('email: ', email);
 
-        const updatedUser = User.findOneAndUpdate({ email }, { $set: { credits: 3 } }, { new: true });
-
-        console.log('updatedUser: ', updatedUser);
+        const updatedUser = await User.findOneAndUpdate({ email }, { $set: { credits: 3 } }, { new: true });
 
         if (!updatedUser) {
             throw new Error("User not found!");
+        }
+
+        const updatedUserWithCredits = await User.findOneAndUpdate({ email }, { $set: { redeemedCredits: true } }, { new: true });
+
+        console.log('updatedUserWithCredits: ', updatedUserWithCredits);
+
+        if (!updatedUserWithCredits) {
+            throw new Error("User credits not received!");
         }
 
         return NextResponse.json({message: "User credits updated successfully!"}, { status: 200 });

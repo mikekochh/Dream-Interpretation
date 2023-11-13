@@ -7,12 +7,13 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
+import { set } from 'mongoose';
 
 export default function HomePage() {
 
-    const [dreamCredits, setDreamCredits] = useState(0);
     const [gptInterpretation, setGptInterpretation] = useState('');
     const [character, setCharacter] = useState('');
+    const [user, setUser] = useState('');
 
     const { data: session } = useSession();
 
@@ -30,28 +31,40 @@ export default function HomePage() {
     }, [session]);
 
     useEffect(() => {
-        async function getDreamCredits() {
+        console.log('session: ', session);
+
+
+        async function getUser() {
             const email = session?.user?.email;
             if (email) {
-                const res = await fetch(`api/userCredits/${email}`, {
+                const res = await fetch(`api/user/${email}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                     },
                 });
+                console.log('res: ', res);
                 return res.json();
             }
-            return 0;
+            return null;
         }
 
-        setDreamCredits(getDreamCredits());
+        if (session) {
+            getUser().then(userData => {
+                console.log('userData: ', userData);
+                setUser(userData);
+            }).catch(err => {
+                console.log('err: ', err);
+            });
+        }
     }, [session]);
 
+
+
     async function redeemCredits () {
-        console.log("redeemCredits");
         const email = session?.user?.email;
         const res = await axios.post(`/api/userCredits/${email}`);
-        console.log('res: ', res);
+        window.location.reload();
     }
 
     async function submitDream() {  
@@ -61,27 +74,23 @@ export default function HomePage() {
                 params: { 
                     dream, 
                     email: session?.user?.email,
-                    dreamCredits: dreamCredits.value,
+                    dreamCredits: user.credits,
                     prompt: character.prompt
                 } 
             });
-        console.log('res: ', res);
         setGptInterpretation(res.data[0].message.content);
-        setDreamCredits(dreamCredits.value - 1 );
     }
 
     function characterSelection() {
         router.replace("/characterSelection");
     }
 
-    console.log('dreamCredits: ', dreamCredits.value);
-
     return (
         <div className='text-white'>
         <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={characterSelection}>Character Selection</button>
             <h1 className=" text-3xl text-center">The Dream Interpreter</h1>
-            <h2 className="text-center">Welcome back {session?.user?.name}</h2>
-            { dreamCredits.value === 0 ? 
+            <h2 className="text-center">Welcome back {user.name}</h2>
+            { user.credits === 0 ? 
             
             <div className="flex justify-center flex-col items-center text-center">
                 <div className="text-center text-3xl">
@@ -89,19 +98,32 @@ export default function HomePage() {
                     If you would like to continue to explore the meaning of your dreams, please purchase more dream credits below
                 </div>
                 <Popup 
-                    trigger={<button  className="bg-blue-500 p-2 m-2 rounded-xl">More Credits</button>} 
+                    trigger={<button  className="bg-blue-500 p-2 m-2 rounded-xl">Buy More Credits</button>} 
                     position="bottom center"
                     contentStyle={{width: "50%"}}
                 >
-                    <div className="text-center text-3xl">
-                        Gotcha! This was a test to see your interest in purchasing more dream credits! 
-                        Happy to see you are enjoying the application and I appreciate you being an early adopter of the Dream Oracle.
-                        For being couragous enough to be an early user, here is an additional 3 dream credits for free for you to keep using the application during our testing period.
-                        Please leave us feedback if you see any bugs or have any suggestions, and keep on dreaming! <br />
+
+                    { !user.redeemedCredits ?                     
+                    <div>
+                        <div className="text-center text-3xl">
+                            Gotcha! This was a test to see your interest in purchasing more dream credits! 
+                            Happy to see you are enjoying the application and I appreciate you being an early adopter of the Dream Oracle.
+                            For being couragous enough to be an early user, here is an additional 3 dream credits for free for you to keep using the application during our testing period.
+                            Please leave us feedback if you see any bugs or have any suggestions, and keep on dreaming! <br />
+                        </div>
+                        <div className="text-center text-3xl">
+                            <button className="bg-blue-500 p-2 m-2 rounded-xl text-white" onClick={redeemCredits}>Claim Credits</button>
+                        </div>
                     </div>
+                    : 
+                    <div>
                     <div className="text-center text-3xl">
-                        <button className="bg-blue-500 p-2 m-2 rounded-xl text-white" onClick={redeemCredits}>Claim Credits</button>
+                            Hello again! I know you are eager to continue using The Dream Oracle, but unfortunately we are still in testing phase and buying credits is unavailable.
+                            We appreciate you using our application so much, and when credits become more available (among other additional features), we would love to have you back!
+                            Thanks for using The Dream Oracle, keep on dreaming! <br />
+                        </div>
                     </div>
+                    }
                 </Popup>
             </div> : 
             <div>
@@ -114,7 +136,7 @@ export default function HomePage() {
                 { gptInterpretation ? <ChatGPTResponse gptInterpretation={gptInterpretation} /> : null}
             </div>
             }
-            <div className="absolute right-0 top-0">Dream Tokens: {dreamCredits}</div>
+            <div className="absolute right-0 top-0">Dream Tokens: {user.credits}</div>
             <div className="logout absolute bottom-0 right-0 p-4">
                     <button onClick={() => signOut()} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
             </div>

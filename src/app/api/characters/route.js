@@ -6,7 +6,6 @@ export async function GET(req) {
     try {
         await connectMongoDB();
         const characters = await Character.find();
-        console.log('characters: ', characters);   
         return NextResponse.json(characters);
     } catch (error) {
         console.log('error: ', error);
