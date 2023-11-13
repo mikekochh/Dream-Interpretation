@@ -18,7 +18,6 @@ export default function CharacterSelectionForm() {
     useEffect(() => {
         async function getCharacters() {
             const res = await axios.get('/api/characters');
-            console.log('res: ', res.data);
             setCharacters(res.data);
         }
         getCharacters();
@@ -31,10 +30,8 @@ export default function CharacterSelectionForm() {
     }
 
     const saveCharacter = async () => { 
-        console.log('selectedCharacter: ', selectedCharacter);
         const email = session?.user?.email;
         const res = await axios.post('/api/characterSelection', { characterID: selectedCharacter, email });
-        console.log('res: ', res);
         router.replace("/home");
     }
 

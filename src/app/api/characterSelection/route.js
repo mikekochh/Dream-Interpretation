@@ -7,9 +7,6 @@ export async function POST(req) {
     try {
         const { email, characterID } = await req.json();
 
-        console.log('email: ', email);
-        console.log('characterID: ', characterID);
-
         await connectMongoDB();
         const updatedUser = await User.findOneAndUpdate({ email }, { $set: { characterID }}, { new: true });
 
@@ -27,11 +24,8 @@ export async function POST(req) {
 export async function GET(req) {
     try {
         const email = req.nextUrl.searchParams.get('email');
-        console.log('email: ', email);
         await connectMongoDB();
-        const user = await User.findOne({ email }).select("characterID");
-        console.log('user: ', user);
-        console.log('user.characterID: ', user.characterID);   
+        const user = await User.findOne({ email }).select("characterID"); 
         const character = await Character.findOne({ characterID: user.characterID });
 
         if (!character) {
