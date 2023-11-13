@@ -110,15 +110,14 @@ export default function HomePage() {
                     <textarea type="text" rows={5} className="DreamBox border-2 border-black rounded-lg text-black w-2/3" />
                     <button className="border-2 border-white p-1 rounded-lg text-white" onClick={submitDream}>Submit</button>
                 </div>
-                <div className="absolute right-0 top-0">Dream Tokens: {dreamCredits}</div>
                 <div className="justify-center flex">{character.characterName}</div>
                 { gptInterpretation ? <ChatGPTResponse gptInterpretation={gptInterpretation} /> : null}
-                {/* { true ? <ChatGPTResponse gptInterpretation={gptInterpretation} /> : null} */}
-                <div className="logout absolute bottom-0 right-0 p-4">
-                    <button onClick={() => signOut()} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
-                </div>
             </div>
             }
+            <div className="absolute right-0 top-0">Dream Tokens: {dreamCredits}</div>
+            <div className="logout absolute bottom-0 right-0 p-4">
+                    <button onClick={() => signOut()} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
+            </div>
         </div>
     );
 }
