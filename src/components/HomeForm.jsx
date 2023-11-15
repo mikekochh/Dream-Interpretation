@@ -13,6 +13,8 @@ export default function HomePage() {
     const [gptInterpretation, setGptInterpretation] = useState('');
     const [character, setCharacter] = useState('');
     const [user, setUser] = useState('');
+    const [disableSubmit, setDisableSubmit] = useState(false);
+    const [loadingDream, setLoadingDream] = useState(false);
 
     const { data: session } = useSession();
 
@@ -62,6 +64,8 @@ export default function HomePage() {
     }
 
     async function submitDream() {  
+        setLoadingDream(true);
+        setDisableSubmit(true);
         const dream = document.querySelector('.DreamBox').value;
         const res = await axios.get('/api/dreamLookup', 
             { 
@@ -73,6 +77,8 @@ export default function HomePage() {
                 } 
             });
         setGptInterpretation(res.data[0].message.content);
+        setDisableSubmit(false);
+        setLoadingDream(false);
     }
 
     function characterSelection() {
@@ -124,9 +130,16 @@ export default function HomePage() {
                 <div className="flex justify-center">Enter Dream description below</div>
                 <div className="flex justify-center">
                     <textarea type="text" rows={5} className="DreamBox border-2 border-black rounded-lg text-black w-2/3" />
-                    <button className="border-2 border-white p-1 rounded-lg text-white" onClick={submitDream}>Submit</button>
+                    { !disableSubmit && <button className="border-2 border-white p-1 rounded-lg text-white" onClick={submitDream}>Submit</button>}
                 </div>
                 <div className="justify-center flex">{character.characterName}</div>
+                {loadingDream ? (
+                    <div className="flex justify-center">
+                        <div className="loader"></div>
+                        Dream Being Interpreted...
+                    </div>
+                    ) : null
+                }
                 { gptInterpretation ? <ChatGPTResponse gptInterpretation={gptInterpretation} /> : null}
             </div>
             }
