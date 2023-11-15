@@ -13,6 +13,10 @@ const characterSchema = new Schema({
         type: Number,
         required: [true, "Please enter character ID!"]
     },
+    characterNameShort: {
+        type: String,
+        required: [true, "Please enter character short name!"]
+    },
 });
 
 const Character = models.Character || mongoose.model("Character", characterSchema);
