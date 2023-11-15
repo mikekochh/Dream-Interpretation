@@ -7,7 +7,6 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
-import { set } from 'mongoose';
 
 export default function HomePage() {
 
@@ -31,9 +30,6 @@ export default function HomePage() {
     }, [session]);
 
     useEffect(() => {
-        console.log('session: ', session);
-
-
         async function getUser() {
             const email = session?.user?.email;
             if (email) {
@@ -43,7 +39,6 @@ export default function HomePage() {
                         "Content-Type": "application/json",
                     },
                 });
-                console.log('res: ', res);
                 return res.json();
             }
             return null;
@@ -51,7 +46,6 @@ export default function HomePage() {
 
         if (session) {
             getUser().then(userData => {
-                console.log('userData: ', userData);
                 setUser(userData);
             }).catch(err => {
                 console.log('err: ', err);
