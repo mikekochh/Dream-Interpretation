@@ -62,10 +62,14 @@ export default function CharacterSelectionForm() {
         router.replace("/home");
     }
 
+    const cancelCharacter = () => {
+        router.replace("/home");
+    }
+
     return (
-        <div className="">
-            <div className="text-white text-center">Select Your Character</div>
-            <div className="grid grid-cols-2 gap-4">
+        <div>
+            <div className="text-white text-center text-xl">Select Your Character</div>
+            <div className="grid xl:grid-cols-2 sm:grid-cols-4 gap-4 mr-2 ml-2 grid-cols-1">
                 {characters.map((character, index) => {
 
                     const isSelected = selectedCharacter === character.characterID;
@@ -73,26 +77,44 @@ export default function CharacterSelectionForm() {
                     return (
                         <div key={index} className={`text-white text-center flex flex-col items-center justify-center rounded-xl`}>
                             <input type="radio" id={character.characterName} name="character" value={character.characterID} checked={isSelected} onChange={() => {}} style={{ display: 'none'}} />
-                            <label htmlFor={character.name} className={`${isSelected ? 'font-bold' : ''}`}>{character.characterName}</label>
-                            <Image 
-                                width={300} 
-                                height={300} 
-                                src={character.characterPicture} 
-                                alt={character.characterName} 
-                                className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`} 
-                                onClick={() => handleCharacterClick(character)}
-                            />
+                            {/* Good characters for desktop */}
+                            <div className="hidden sm:block sm:flex-col">
+                                <div className="flex justify-center items-center">
+                                    <Image 
+                                        width={300} 
+                                        height={300} 
+                                        src={character.characterPicture} 
+                                        alt={character.characterName} 
+                                        className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`} 
+                                        onClick={() => handleCharacterClick(character)}
+                                    />
+                                </div>
+                                <label htmlFor={character.name} className={`${isSelected ? 'font-bold md:text-sm' : ''}`}>{character.characterName}</label>
+                            </div>
+
+                            {/* Characters for mobile */}
+                            <div className="sm:hidden justify-center items-center flex">
+                                <Image 
+                                    width={150} 
+                                    height={150} 
+                                    src={character.characterPicture} 
+                                    alt={character.characterName} 
+                                    className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`} 
+                                    onClick={() => handleCharacterClick(character)}
+                                />
+                                <label htmlFor={character.name} className={`block text-center ml-2 ${isSelected ? 'font-bold md:text-sm' : ''}`} style={{maxWidth: '300px'}}>{character.characterName}</label>
+                            </div>
                         </div>
                     )
                 })}
             </div>
             <div className="flex justify-center flex-col items-center">
-                <div className="">
+                <div className="fixed bottom-0 mb-4">
                     <button className="border-2 border-white p-1 rounded-lg text-white" onClick={saveCharacter}>Save</button>
+                    <button className="border-2 border-white p-1 rounded-lg text-white ml-2" onClick={cancelCharacter}>Cancel</button>
                 </div>
                 {errorMessage && <div className="bg-red-600 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 font-bold">{errorMessage}</div>}
             </div>
         </div>
-        
     )
 }
