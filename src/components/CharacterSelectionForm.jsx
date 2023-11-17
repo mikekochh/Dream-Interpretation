@@ -109,7 +109,7 @@ export default function CharacterSelectionForm() {
                 })}
             </div>
             <div className="flex justify-center flex-col items-center">
-                <div className="fixed bottom-0 mb-4">
+                <div className="fixed bottom-0 mb-6">
                     <button className="border-2 border-white p-1 rounded-lg text-white" onClick={saveCharacter}>Save</button>
                     <button className="border-2 border-white p-1 rounded-lg text-white ml-2" onClick={cancelCharacter}>Cancel</button>
                 </div>
