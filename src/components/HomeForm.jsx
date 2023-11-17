@@ -159,7 +159,7 @@ export default function HomePage() {
                     : null}
                 </div>
             )}
-            <div className="absolute right-0 top-0">Dream Tokens: {user.credits}</div>
+            <div className="absolute right-0 top-0 p-2">Dream Tokens: {user.credits}</div>
             <div className="logout absolute bottom-0 left-0 p-4">
                     <button onClick={() => signOut()} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
             </div>
