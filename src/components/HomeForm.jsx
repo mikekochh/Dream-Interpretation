@@ -100,7 +100,7 @@ export default function HomePage() {
             (
                 <div className="flex justify-center flex-col items-center text-center">
                     <div className="text-center text-3xl">
-                        Thank you for using The Dream Oracle! You've reached your limit of free dream interpretations. <br />
+                        Thank you for using The Dream Oracle! You&apos;ve reached your limit of free dream interpretations. <br />
                         If you would like to continue to explore the meaning of your dreams, please purchase more dream credits below
                     </div>
                     <Popup 
@@ -188,7 +188,7 @@ const ChatGPTResponse = ({ gptInterpretation, characterNameShort, newDream, user
     return (
         <div>
             <div className="text-center m-10 DreamCard rounded-xl p-4 relative">
-                <div className="flex justify-center text-4xl">You're original dream:</div><br />
+                <div className="flex justify-center text-4xl">You&apos;re original dream:</div><br />
                 <div className="flex justify-center sm:w-3/4 mx-auto">
                     {insertLineBreaks(userDream)}
                 </div>
