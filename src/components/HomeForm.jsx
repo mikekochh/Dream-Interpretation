@@ -24,7 +24,6 @@ export default function HomePage() {
     useEffect(() => {
         async function setCharacterData() {
             const res = await axios.get(`api/characterSelection`, { params: { email: session?.user?.email } });
-            console.log("res.data: ", res.data);
             setCharacter(res.data);
         }
 
