@@ -1,23 +1,11 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 
 const StarBackground = ({ children }) => {
-    const router = useRouter();
-
-    const privacyNotice = () => {
-        router.push("/privacyNotice");
-    }
-
-    const contactMe = () => {
-        router.push("/contactMe");
-    }
 
     useEffect(() => {
-
-        console.log("useEffect called");
-
         let top = false;
 
         const interval = setInterval(() => {
@@ -55,10 +43,7 @@ const StarBackground = ({ children }) => {
     return (
         <div className="star-background relative">
             {children}
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-white text-center">
-                <button className="underline p-1" onClick={privacyNotice}>Privacy Notice</button>
-                <button className="underline p-1" onClick={contactMe}>Contact Me</button>
-            </div>
+            <ContactAndPrivacyButtons />
         </div>
     );
 }

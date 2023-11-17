@@ -11,6 +11,7 @@ export default function CharacterSelectionForm() {
     const [characters, setCharacters] = useState([]);
     const [selectedCharacter, setSelectedCharacter] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
+    const [cancelVisible, setCancelVisible] = useState(false);
 
     const { data: session } = useSession();
 
@@ -28,6 +29,7 @@ export default function CharacterSelectionForm() {
         async function getUser() {
             const email = session?.user?.email;
             if (email) {
+                setCancelVisible(true);
                 const res = await fetch(`api/user/${email}`, {
                     method: "GET",
                     headers: {
@@ -41,7 +43,13 @@ export default function CharacterSelectionForm() {
 
         if (session) {
             getUser().then(userData => {
-                setSelectedCharacter(userData.characterID);
+                if (userData?.characterID) {
+                    setSelectedCharacter(userData.characterID);
+                }
+                else {
+                    setCancelVisible(false);
+                }
+                
             }).catch(err => {
                 console.log('err: ', err);
             });
@@ -111,7 +119,7 @@ export default function CharacterSelectionForm() {
             <div className="flex justify-center flex-col items-center">
                 <div className="fixed bottom-0 mb-6">
                     <button className="border-2 border-white p-1 rounded-lg text-white" onClick={saveCharacter}>Save</button>
-                    <button className="border-2 border-white p-1 rounded-lg text-white ml-2" onClick={cancelCharacter}>Cancel</button>
+                    {cancelVisible && <button className="border-2 border-white p-1 rounded-lg text-white ml-2" onClick={cancelCharacter}>Cancel</button>}
                 </div>
                 {errorMessage && <div className="bg-red-600 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 font-bold">{errorMessage}</div>}
             </div>
