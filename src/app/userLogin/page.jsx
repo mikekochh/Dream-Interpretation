@@ -1,7 +1,7 @@
 import LoginForm from "@/components/LoginForm"
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { authOptions } from "../api/auth/[...nextAuth]/route";
 import StarBackground from "@/components/StarBackground";
 
 export default async function LoginPage() {
