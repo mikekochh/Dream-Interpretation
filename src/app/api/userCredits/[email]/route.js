@@ -29,8 +29,6 @@ export async function POST(req) {
 
         const updatedUserWithCredits = await User.findOneAndUpdate({ email }, { $set: { redeemedCredits: true } }, { new: true });
 
-        console.log('updatedUserWithCredits: ', updatedUserWithCredits);
-
         if (!updatedUserWithCredits) {
             throw new Error("User credits not received!");
         }
