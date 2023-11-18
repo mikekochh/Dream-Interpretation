@@ -145,7 +145,7 @@ export default function HomePage() {
                             <b>How do I write a good prompt?</b><br/>
                             Describe your dream in as much detail as you can. The more detail you provide, the more accurate the interpretation will be.
                             If you can, also try and describe how you felt during the dream. Were you scared? Happy? Sad? Angry? 
-                            Who was in your dream? Don't use names, describe their relationship to you. Was it a friend? A family member? A stranger?
+                            Who was in your dream? Don&apos;t use names, describe their relationship to you. Was it a friend? A family member? A stranger?
                             <br/><br/>
                             <b>I have a theory about what my dream means</b><br/>
                             Great! Please include this in the prompt. If you have no idea what the dream means, that is fine it will still work fine.
