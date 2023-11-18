@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 export default function HomePage() {
 
@@ -133,7 +135,24 @@ export default function HomePage() {
                 </div>
             ) : !gptInterpretation ? (
                 <div>
-                    <div className="flex justify-center">Enter Dream description below</div>
+                    <div className="flex justify-center">
+                        Enter Dream description below
+                        <Popup 
+                            trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
+                            position="bottom center"
+                            contentStyle={{width: "50%"}}
+                        >
+                            <b>How do I write a good prompt?</b><br/>
+                            Describe your dream in as much detail as you can. The more detail you provide, the more accurate the interpretation will be.
+                            If you can, also try and describe how you felt during the dream. Were you scared? Happy? Sad? Angry? 
+                            Who was in your dream? Don't use names, describe their relationship to you. Was it a friend? A family member? A stranger?
+                            <br/><br/>
+                            <b>I have a theory about what my dream means</b><br/>
+                            Great! Please include this in the prompt. If you have no idea what the dream means, that is fine it will still work fine.
+                            But, if you think it is relating to something in real life, include this in the dream. Our dreams are inspired by real life,
+                            and it is important to paint the full picture as much as possible. 
+                        </Popup>
+                    </div>
                     <div className="flex justify-center">
                         <textarea type="text" rows={5} className="DreamBox border-2 border-black rounded-lg text-black w-2/3" />
                         { !disableSubmit && <button className="border-2 border-white p-1 rounded-lg text-white" onClick={submitDream}>Submit</button>}
