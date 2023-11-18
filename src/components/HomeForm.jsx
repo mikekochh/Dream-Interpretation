@@ -74,14 +74,23 @@ export default function HomePage() {
         setDisableSubmit(true);
         const dream = document.querySelector('.DreamBox').value;
         setUserDream(dream);
-        const res = await axios.get('/api/dreamLookup', 
-            { 
-                params: { 
-                    dream, 
+        // const res = await axios.get('/api/dreamLookup', 
+        //     { 
+        //         params: { 
+        //             dream, 
+        //             email: session?.user?.email,
+        //             dreamCredits: user.credits,
+        //             prompt: character.prompt
+        //         } 
+        //     });
+        const res = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
+            {
+                params: {
+                    dream,
                     email: session?.user?.email,
                     dreamCredits: user.credits,
                     prompt: character.prompt
-                } 
+                }
             });
         setGptInterpretation(res.data[0].message.content);
         setDisableSubmit(false);

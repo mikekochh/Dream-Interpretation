@@ -1,5 +1,4 @@
-const axios = require('axios');
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../lib/mongodb';
 import User from "../../../../models/user";
 
@@ -37,7 +36,6 @@ async function interpretDream(dream) {
 }
 
 async function reduceDreamCredits(dreamCredits, email) {
-
     await connectMongoDB();
     const newCredits = await User.updateOne({ email }, { $set: { credits: dreamCredits - 1 } });
     return newCredits;
