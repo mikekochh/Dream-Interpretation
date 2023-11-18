@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useEffect } from "react";
-import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 
 const StarBackground = ({ children }) => {
 
@@ -43,7 +42,6 @@ const StarBackground = ({ children }) => {
     return (
         <div className="star-background relative">
             {children}
-            <ContactAndPrivacyButtons />
         </div>
     );
 }
