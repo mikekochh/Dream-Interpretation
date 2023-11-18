@@ -4,6 +4,7 @@ import { useState } from "react";
 import validator from 'validator';
 import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
+import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 
 export default function RegisterForm() {
 
@@ -103,6 +104,7 @@ export default function RegisterForm() {
                     </Link>
                 </form>
             </div>
+            <ContactAndPrivacyButtons />
         </div>
     )
 }

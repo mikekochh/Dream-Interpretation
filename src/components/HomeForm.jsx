@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { signOut } from "next-auth/react";
@@ -7,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
+import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 
 export default function HomePage() {
 
@@ -168,6 +168,7 @@ export default function HomePage() {
                     <button className="rounded-lg bg-blue-600 text-sm mt-3 p-2" onClick={newDream}>New Dream</button>
                 </div>
             )}
+            <ContactAndPrivacyButtons />
         </div>
     );
 }
