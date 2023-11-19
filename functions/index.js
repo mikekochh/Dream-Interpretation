@@ -12,7 +12,7 @@ const openai = new OpenAI({
 });
 
 const corsOptions = {
-    origin: "https://www.dreamoracles.co",
+    origin: "https://www.dreamoracles.co/",
     methods: "GET",
 };
 
