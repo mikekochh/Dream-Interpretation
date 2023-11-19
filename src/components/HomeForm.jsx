@@ -83,6 +83,7 @@ export default function HomePage() {
                     prompt: character.prompt
                 }
             });
+        const resCredits = await axios.post(`api/userCredits/${session?.user?.email}`, { action: 'decrementCredit' });
         setGptInterpretation(res.data[0].message.content);
         setDisableSubmit(false);
         setLoadingDream(false);

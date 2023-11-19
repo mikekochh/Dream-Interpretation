@@ -19,18 +19,27 @@ export async function POST(req) {
     try {
         const pathname = req.nextUrl.pathname;
         const email = pathname.split('/').pop();
+        const { action } = await req.json();
         await connectMongoDB();
+        console.log('action: ', action);
 
-        const updatedUser = await User.findOneAndUpdate({ email }, { $set: { credits: 3 } }, { new: true });
-
-        if (!updatedUser) {
-            throw new Error("User not found!");
+        if (action === "redeemCredits") {
+            console.log('redeemCredits')
+            const updatedUser = await User.findOneAndUpdate({ email }, { $set: { credits: 4 } }, { new: true });
+            if (!updatedUser) {
+                throw new Error("User not found!");
+            }
+            const updatedUserWithCredits = await User.findOneAndUpdate({ email }, { $set: { redeemedCredits: true } }, { new: true });
+            if (!updatedUserWithCredits) {
+                throw new Error("User credits not received!");
+            }
         }
-
-        const updatedUserWithCredits = await User.findOneAndUpdate({ email }, { $set: { redeemedCredits: true } }, { new: true });
-
-        if (!updatedUserWithCredits) {
-            throw new Error("User credits not received!");
+        else {
+            console.log('else');
+            const updatedUser = await User.findOneAndUpdate({ email }, { $inc: { credits: -1 } }, { new: true });
+            if (!updatedUser) {
+                throw new Error("User not found!");
+            }
         }
 
         return NextResponse.json({message: "User credits updated successfully!"}, { status: 200 });
