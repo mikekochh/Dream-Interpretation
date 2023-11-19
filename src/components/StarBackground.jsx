@@ -8,7 +8,6 @@ const StarBackground = ({ children }) => {
         let top = false;
 
         const interval = setInterval(() => {
-            console.log("setInterval called");
             const starBackground = document.querySelector('.star-background');
             const star = document.createElement('span');
             star.className = 'shooting-star';
