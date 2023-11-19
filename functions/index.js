@@ -11,9 +11,14 @@ const openai = new OpenAI({
     apiKey: functions.config().openai.api_key,
 });
 
+const corsOptions = {
+    origin: "https://www.dreamoracles.co",
+    methods: "GET",
+};
+
 exports.dreamLookup = functions.runWith({ maxInstances: 10 }).https.onRequest(async (req, res) => {
 
-    cors(req, res, async () => {
+    cors(corsOptions, req, res, async () => {
         const { dream, dreamCredits, email, prompt } = req.query;
         const chatGPTPrompt = prompt + "\n\n" + dream;
     
