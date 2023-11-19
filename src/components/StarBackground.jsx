@@ -5,29 +5,17 @@ import { useEffect } from "react";
 const StarBackground = ({ children }) => {
 
     useEffect(() => {
-        let top = false;
 
         const interval = setInterval(() => {
             const starBackground = document.querySelector('.star-background');
             const star = document.createElement('span');
             star.className = 'shooting-star';
 
-            // Randomize position
-            const topPosition = Math.random() * window.innerHeight;
             const rightPosition = Math.random() * window.innerWidth;
 
             // Set position
-            star.style.top = `${topPosition}px`;
+            star.style.top = `0px`;
             star.style.right = `${rightPosition}px`;
-
-            if (top) {
-                star.style.right = '0px';
-                top = false;
-            }
-            else {
-                star.style.top = `0px`;
-                top = true;
-            }
 
             // Append and remove star
             starBackground.appendChild(star);

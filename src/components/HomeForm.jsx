@@ -162,7 +162,7 @@ export default function HomePage() {
                     {loadingDream ? (
                         <div className="flex justify-center">
                             <div className="loader"></div>
-                            Dream Being Interpreted...
+                            Dream Being Interpreted... (est. 1 - 2 minutes)
                         </div>
                         ) : null
                     }
