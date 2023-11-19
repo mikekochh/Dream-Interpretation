@@ -72,8 +72,10 @@ export default function RegisterForm() {
                     setError("Invalid Credentials");
                     return;
                 }
-    
-                router.replace("/characterSelection");
+
+                router.replace("/emailVerification");
+                router.replace(`/emailVerification?email=${email}`);
+
             }
             else {
                 setError("User registration failed!");

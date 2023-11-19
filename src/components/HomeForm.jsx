@@ -65,7 +65,7 @@ export default function HomePage() {
 
     async function redeemCredits () {
         const email = session?.user?.email;
-        const res = await axios.post(`/api/userCredits/${email}`);
+        const res = await axios.post(`/api/userCredits/${email}`, { action: 'redeemCredits' });
         window.location.reload();
     }
 
@@ -116,7 +116,8 @@ export default function HomePage() {
                             <div className="text-center text-3xl">
                                 Gotcha! This was a test to see your interest in purchasing more dream credits! 
                                 Happy to see you are enjoying the application and I appreciate you being an early adopter of the Dream Oracle.
-                                For being couragous enough to be an early user, here is an additional 3 dream credits for free for you to keep using the application during our testing period.
+                                For being couragous enough to be an early user, here is an additional 4 dream credits 
+                                for free for you to keep using the application during our testing period.
                                 Please leave us feedback if you see any bugs or have any suggestions, and keep on dreaming! <br />
                             </div>
                             <div className="text-center text-3xl">
