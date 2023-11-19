@@ -11,7 +11,7 @@ const openai = new OpenAI({
     apiKey: functions.config().openai.api_key,
 });
 
-exports.dreamLookup = functions.runWith({ maxInstances: 10 }).https.onRequest(async (req, res) => {
+exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
 
     cors(req, res, async () => {
         const { dream, dreamCredits, email, prompt } = req.query;
