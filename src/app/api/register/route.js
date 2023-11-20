@@ -6,6 +6,10 @@ import { transporter } from '../../../../config/nodemailer';
 import { randomUUID } from 'crypto';
 
 export async function POST(req) {
+
+    await connectMongoDB();
+    let newUser;
+
     try {
         // create user
         const { name, email, password } = await req.json();
@@ -13,8 +17,7 @@ export async function POST(req) {
 
         const activationTokenID = `${randomUUID()}-${randomUUID()}`.replace(/-/g, '');
 
-        await connectMongoDB();
-        await User.create({ 
+        newUser = await User.create({ 
             name, 
             email, 
             password:hashedPassword, 
@@ -47,6 +50,17 @@ export async function POST(req) {
 
         return NextResponse.json({message: "User registered successfully!"}, { status: 200 })
     } catch (error) {
+        console.log('error during registration: ', error);
+
+        if (newUser && newUser._id) {
+            try {
+                await User.deleteOne({ _id: newUser._id });
+                console.log('Rolling back user creation');
+            } catch (deleteError) {
+                console.log('error during rollback: ', deleteError);
+            }
+        }
+
         return NextResponse.json({message: "User registration failed!"}, { status: 500 })
     }
 }
