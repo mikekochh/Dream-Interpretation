@@ -32,7 +32,7 @@ export default function LoginForm() {
 
         try {
 
-            const resUserActivated = await axios.get('api/sendEmail', { params: { email }});
+            const resUserActivated = await axios.get('api/login', { params: { email }});
 
             if (resUserActivated.data.activated == false) {
                 setError("Please verify your email");

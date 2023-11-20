@@ -48,6 +48,13 @@ export default function RegisterForm() {
                 return;
             }
 
+            const resUserActivated = await axios.get('api/login', { params: { email }});
+
+            if (resUserActivated.data?.activated == false) {
+                setError("User already exists, please verify email");
+                return;
+            }
+
             const resNewUser = await fetch('api/register', {
                 method: "POST",
                 headers: {
@@ -61,8 +68,6 @@ export default function RegisterForm() {
             });
             
             if (resNewUser.ok) {
-                console.log("name: ", name);
-                const res = await axios.post('api/sendEmail/', { name, email, password });
                 router.replace(`/emailVerification?email=${email}`);
             }
             else {
