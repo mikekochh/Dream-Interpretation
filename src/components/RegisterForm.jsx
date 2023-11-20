@@ -13,20 +13,24 @@ export default function RegisterForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [registeringUser, setRegisteringUser] = useState(false);
 
     const router = useRouter();
 
     const register = async (e) => {
         e.preventDefault();
+        setRegisteringUser(true);
 
         // check if this user alread exists before registering them and sending them an email verification link
 
         if (!name || !email || !password) {
             setError("Please fill in all fields");
+            setRegisteringUser(false);
             return;
         }
         else if (!validator.isEmail(email)) {
             setError("Please enter a valid email");
+            setRegisteringUser(false);
             return;
         }
 
@@ -45,6 +49,7 @@ export default function RegisterForm() {
 
             if (user) {
                 setError("User already exists!");
+                setRegisteringUser(false);
                 return;
             }
 
@@ -52,6 +57,7 @@ export default function RegisterForm() {
 
             if (resUserActivated.data?.activated == false) {
                 setError("User already exists, please verify email");
+                setRegisteringUser(false);
                 return;
             }
 
@@ -72,11 +78,13 @@ export default function RegisterForm() {
             }
             else {
                 setError("User registration failed!");
+                setRegisteringUser(false);
                 return;
             }
         }
         catch (error) {
             setError("User registration failed!");
+            setRegisteringUser(false);
             console.log("error: ", error);
             return;
         }
@@ -90,6 +98,11 @@ export default function RegisterForm() {
                     <input type="text" placeholder="Name" className="LoginInput rounded-lg text-black" onChange={(e) => setName(e.target.value)} />
                     <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} />
+                    { registeringUser && (
+                        <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                            Registering user...
+                        </div>
+                    )}
                     <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center">Register</button>
                     { error && (
                         <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
