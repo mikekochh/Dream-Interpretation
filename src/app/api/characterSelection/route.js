@@ -28,14 +28,8 @@ export async function GET(req) {
         const user = await User.findOne({ email }).select("characterID"); 
         const character = await Character.findOne({ characterID: user.characterID });
 
-        if (!character) {
-            console.log('character not found!');
-            throw new Error("Character not found!");
-        }
-        else {
-            console.log('character: ', character);
-            return NextResponse.json(character);
-        }
+        console.log('character: ', character);
+        return NextResponse.json(character);
     }
     catch (error) {
         console.log('error: ', error);
