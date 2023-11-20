@@ -27,6 +27,9 @@ const userSchema = new Schema({
     activated: {
         type: Boolean,
     },
+    activationTokenID: {
+        type: String,
+    }
 
 }, {timestamps: true});
 
