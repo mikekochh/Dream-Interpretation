@@ -34,7 +34,12 @@ export default function LoginForm() {
 
             const resUserActivated = await axios.get('api/login', { params: { email }});
 
-            if (resUserActivated.data.activated == false) {
+            if (resUserActivated.data == null) {
+                setError("Please register first");
+                return;
+            }
+
+            if (resUserActivated.data?.activated == false) {
                 setError("Please verify your email");
                 return;
             }
@@ -50,7 +55,16 @@ export default function LoginForm() {
                 return;
             }
 
-            router.replace("/home");
+            const resCharacter = await axios.get(`api/characterSelection`, { params: { email } });
+
+            console.log("resCharacter: ", resCharacter);
+
+            if (resCharacter.data == null) {
+                router.replace("/characterSelection");
+            }
+            else {
+                router.replace("/home");
+            }
             
         } catch (error) {
             setError("Login failed!");

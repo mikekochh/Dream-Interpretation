@@ -24,7 +24,7 @@ export default function ActivationForm() {
 
     useEffect(() => {
         activateUser();
-    }, []);
+    });
 
     return (
         <div className="text-white text-3xl text-center">
