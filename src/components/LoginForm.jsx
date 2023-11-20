@@ -5,6 +5,7 @@ import validator from 'validator';
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
+import axios from "axios";
 
 export default function LoginForm() {
 
@@ -30,6 +31,14 @@ export default function LoginForm() {
         }
 
         try {
+
+            const resUserActivated = await axios.get('api/sendEmail', { params: { email }});
+
+            if (resUserActivated.data.activated == false) {
+                setError("Please verify your email");
+                return;
+            }
+
             const res = await signIn("credentials", { 
                 email,
                 password, 
@@ -45,6 +54,7 @@ export default function LoginForm() {
             
         } catch (error) {
             setError("Login failed!");
+            console.log('error: ', error);
         }
     }
 

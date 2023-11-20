@@ -5,6 +5,7 @@ import validator from 'validator';
 import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
+import axios from "axios";
 
 export default function RegisterForm() {
 
@@ -18,6 +19,8 @@ export default function RegisterForm() {
     const register = async (e) => {
         e.preventDefault();
 
+        // check if this user alread exists before registering them and sending them an email verification link
+
         if (!name || !email || !password) {
             setError("Please fill in all fields");
             return;
@@ -28,7 +31,6 @@ export default function RegisterForm() {
         }
 
         try {
-
             const resUserExist = await fetch("api/userExists", {
                 method: "POST",
                 headers: {
@@ -46,7 +48,7 @@ export default function RegisterForm() {
                 return;
             }
 
-            const res = await fetch('api/register', {
+            const resNewUser = await fetch('api/register', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -57,33 +59,21 @@ export default function RegisterForm() {
                     password
                 }),
             });
-
-            if (res.ok) {
-                const form = e.target;
-                form.reset();
-
-                const loginRes = await signIn("credentials", { 
-                    email,
-                    password, 
-                    redirect: false
-                });
-    
-                if (loginRes.error) {
-                    setError("Invalid Credentials");
-                    return;
-                }
-
-                router.replace("/emailVerification");
+            
+            if (resNewUser.ok) {
+                console.log("name: ", name);
+                const res = await axios.post('api/sendEmail/', { name, email, password });
                 router.replace(`/emailVerification?email=${email}`);
-
             }
             else {
                 setError("User registration failed!");
                 return;
             }
-        } catch (error) {
+        }
+        catch (error) {
             setError("User registration failed!");
             console.log("error: ", error);
+            return;
         }
     }
 
