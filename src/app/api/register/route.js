@@ -4,6 +4,9 @@ import User from '../../../../models/user';
 import bcrypt from 'bcryptjs';
 import { transporter } from '../../../../config/nodemailer';
 import { randomUUID } from 'crypto';
+import sgMail from '@sendgrid/mail';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export async function POST(req) {
 
@@ -44,7 +47,7 @@ export async function POST(req) {
             `
         };
 
-        const emailResult = await transporter.sendMail(mailOptions);
+        const emailResult = await sgMail.send(mailOptions);
 
         console.log('Email sent: ', emailResult);
 
