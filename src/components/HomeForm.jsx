@@ -18,6 +18,7 @@ export default function HomePage() {
     const [disableSubmit, setDisableSubmit] = useState(false);
     const [loadingDream, setLoadingDream] = useState(false);
     const [userDream, setUserDream] = useState('');
+    const [error, setError] = useState(false);
 
     const { data: session } = useSession();
 
@@ -78,11 +79,15 @@ export default function HomePage() {
             {
                 params: {
                     dream,
-                    email: session?.user?.email,
-                    dreamCredits: user.credits,
                     prompt: character.prompt
                 }
             });
+        
+        if (res.status !== 200) {
+            setError(true);
+            setLoadingDream(false);
+            return;
+        }
         const resCredits = await axios.post(`api/userCredits/${session?.user?.email}`, { action: 'decrementCredit' });
         setGptInterpretation(res.data[0].message.content);
         setDisableSubmit(false);
@@ -180,6 +185,7 @@ export default function HomePage() {
                     : null}
                 </div>
             )}
+            { error ? <div className="text-center text-3xl">There was an error interpreting your dream. Please try again later.</div> : null}
             <div className="absolute right-0 top-0 p-2">Dream Tokens: {user.credits}</div>
             <div className="logout absolute bottom-0 left-0 p-4">
                     <button onClick={() => signOut()} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
