@@ -32,9 +32,13 @@ export default function LoginForm() {
 
         try {
 
-            const resUserActivated = await axios.get('api/login', { params: { email }});
+            console.log("email: ", email);
 
-            if (resUserActivated.data == null) {
+            const resUserActivated = await axios.get('api/login/' + email);
+
+            console.log("resUserActivated: ", resUserActivated);
+
+            if (resUserActivated.data == null || resUserActivated.data == undefined || resUserActivated.data == false) {
                 setError("Please register first");
                 return;
             }
