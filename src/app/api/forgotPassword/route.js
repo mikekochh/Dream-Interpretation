@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../lib/mongodb';
 import User from '../../../../models/user';
-import bcrypt from 'bcryptjs';
 import { randomUUID } from 'crypto';
 import sgMail from '@sendgrid/mail';
 
@@ -14,33 +13,38 @@ export async function POST(req) {
 
     try {
         // create user
-        const { name, email, password } = await req.json();
-        const hashedPassword = await bcrypt.hash(password, 12);
+        //find user
+        const { email } = await req.json();
 
         const verificationTokenID = `${randomUUID()}-${randomUUID()}`.replace(/-/g, '');
 
-        newUser = await User.create({ 
-            name, 
-            email, 
-            password:hashedPassword, 
-            credits: 8, 
-            redeemedCredits: false, 
-            activated: false,
-            verificationTokenID: verificationTokenID
-        });
+        const passwordResetUser = await User.findOneAndUpdate({ email }, { $set: { verificationTokenID }}, { new: true });
+
+        console.log('passwordResetUser: ', passwordResetUser);
+
+        if (!passwordResetUser) {
+            console.log('User not found!');
+            return NextResponse.json({message: "User not found!"}, { status: 404 })
+        }
+
+        const data = await User.findOne({ email }).select("name");
+
+        if (!data) {
+            return NextResponse.json({message: "User not found!"}, { status: 404 })
+        }
 
         // send email
         const fromAddress = process.env.EMAIL_FROM_ADDRESS;
         const domain = process.env.DOMAIN;
-        const verificationLink = `${domain}/activate?verificationTokenID=${verificationTokenID}`;
+        const passwordResetLink = `${domain}/updatePassword?verificationTokenID=${verificationTokenID}`;
         const mailOptions = { 
             from: `Dream Oracles <${fromAddress}>`,
             to: email,
-            subject: "Verify your email address",
+            subject: "Reset Password",
             html: `
-                <h1>Hi ${name}!</h1>
-                <p>Please verify your email address ${email} using the link below. If you did not request this link, you can safely ignore this email.</p>
-                <p><a href="${verificationLink}">${verificationLink}</a></p>
+                <h1>Hi ${data.name}!</h1>
+                <p>Please follow the link below to reset your password. If you did not request this link, you can safely ignore this email.</p>
+                <p><a href="${passwordResetLink}">${passwordResetLink}</a></p>
                 <p>Thank you,<br/>
                 The Dream Oracles</p>
             `
@@ -50,7 +54,7 @@ export async function POST(req) {
 
         console.log('Email sent: ', emailResult);
 
-        return NextResponse.json({message: "User registered successfully!"}, { status: 200 })
+        return NextResponse.json({message: "Password Reset Email Sent Successfully!"}, { status: 200 })
     } catch (error) {
         console.log('error during registration: ', error);
 

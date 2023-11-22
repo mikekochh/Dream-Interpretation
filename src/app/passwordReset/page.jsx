@@ -1,11 +1,12 @@
 "use client";
-import ActivationForm from "@/components/ActivationForm"
+import PasswordResetForm from "@/components/PasswordResetForm"
 import StarBackground from "@/components/StarBackground";
 
-export default function ActivatePage() {
+export default function PasswordResetPage() {
+
     return (
         <StarBackground>
-            <ActivationForm />
+            <PasswordResetForm />
         </StarBackground>
     )
 }
