@@ -14,19 +14,24 @@ export default function LoginForm() {
     const [error, setError] = useState(""); 
     const [sendVerifyEmail, setSendVerifyEmail] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
+    const [logginIn, setLogginIn] = useState(false);
 
     const router = useRouter();
 
     const login = async (e) => {
         e.preventDefault();
         setSendVerifyEmail(false);
+        setForgotPassword(false);
+        setLogginIn(true);
 
         if (!email || !password) {
             setError("Please fill in all fields");
+            setLogginIn(false);
             return;
         }
         else if (!validator.isEmail(email)) {
             setError("Please enter a valid email");
+            setLogginIn(false);
             return;
         }
         else {
@@ -38,12 +43,14 @@ export default function LoginForm() {
 
             if (resUserActivated.data == null || resUserActivated.data == undefined || resUserActivated.data == false) {
                 setError("Please register first");
+                setLogginIn(false);
                 return;
             }
 
             if (resUserActivated.data?.activated == false) {
                 setError("Please verify your email");
                 setSendVerifyEmail(true);
+                setLogginIn(false);
                 return;
             }
 
@@ -56,6 +63,7 @@ export default function LoginForm() {
             if (res.error) {
                 setError("Invalid Credentials");
                 setForgotPassword(true);
+                setLogginIn(false);
                 return;
             }
 
@@ -70,6 +78,7 @@ export default function LoginForm() {
             
         } catch (error) {
             setError("Login failed!");
+            setLogginIn(false);
             console.log('error: ', error);
         }
     }
@@ -131,6 +140,11 @@ export default function LoginForm() {
                                 <button onClick={sendVerficationEmail} className="underline">
                                     Send Again?
                                 </button>
+                            </div>
+                        )}
+                        { logginIn && (
+                            <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                                Loggin in...
                             </div>
                         )}
                         { forgotPassword && (
