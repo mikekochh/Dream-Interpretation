@@ -53,7 +53,7 @@ export default function RegisterForm() {
                 return;
             }
 
-            const resUserActivated = await axios.get('api/login', { params: { email }});
+            const resUserActivated = await axios.get('api/login/' + email);
 
             if (resUserActivated.data?.activated == false) {
                 setError("User already exists, please verify email");

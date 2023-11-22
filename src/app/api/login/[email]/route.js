@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
-import { connectMongoDB } from '../../../../lib/mongodb';
-import User from '../../../../models/user';
+import { connectMongoDB } from '../../../../../lib/mongodb';
+import User from '../../../../../models/user';
 
 export async function GET(request) {
     try {
-        const email = request.nextUrl.searchParams.get('email');
+        console.log("testig this is working");
+        const pathname = request.nextUrl.pathname;
+        const email = pathname.split('/').pop();
         console.log('email: ', email);
         await connectMongoDB();
         const activated = await User.findOne({ email }).select("activated");
