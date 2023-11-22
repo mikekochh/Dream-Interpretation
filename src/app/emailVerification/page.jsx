@@ -2,7 +2,7 @@
 import EmailVerificationForm from "@/components/EmailVerificationForm"
 import StarBackground from "@/components/StarBackground";
 
-export default function ContactMePage() {
+export default function EmailVerificationPage() {
 
     return (
         <StarBackground>

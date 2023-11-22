@@ -12,11 +12,14 @@ export default function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(""); 
+    const [sendVerifyEmail, setSendVerifyEmail] = useState(false);
+    const [forgotPassword, setForgotPassword] = useState(false);
 
     const router = useRouter();
 
     const login = async (e) => {
         e.preventDefault();
+        setSendVerifyEmail(false);
 
         if (!email || !password) {
             setError("Please fill in all fields");
@@ -31,12 +34,7 @@ export default function LoginForm() {
         }
 
         try {
-
-            console.log("email: ", email);
-
             const resUserActivated = await axios.get('api/login/' + email);
-
-            console.log("resUserActivated: ", resUserActivated);
 
             if (resUserActivated.data == null || resUserActivated.data == undefined || resUserActivated.data == false) {
                 setError("Please register first");
@@ -45,6 +43,7 @@ export default function LoginForm() {
 
             if (resUserActivated.data?.activated == false) {
                 setError("Please verify your email");
+                setSendVerifyEmail(true);
                 return;
             }
 
@@ -56,12 +55,11 @@ export default function LoginForm() {
 
             if (res.error) {
                 setError("Invalid Credentials");
+                setForgotPassword(true);
                 return;
             }
 
             const resCharacter = await axios.get(`api/characterSelection`, { params: { email } });
-
-            console.log("resCharacter: ", resCharacter);
 
             if (resCharacter.data == null) {
                 router.replace("/characterSelection");
@@ -76,6 +74,44 @@ export default function LoginForm() {
         }
     }
 
+    const sendVerficationEmail = async (e) => {
+        const res = await fetch('api/sendVerificationEmail', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email
+            }),
+        });
+
+        if (!res.ok) {
+            setError("Failed to send verification email");
+            return;
+        }
+
+        router.replace(`/emailVerification?email=${email}`);
+    }
+
+    const sendForgotPassword = async (e) => {
+        const res = await fetch('api/forgotPassword', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email
+            }),
+        });
+
+        if (!res.ok) {
+            setError("Failed to send password reset email");
+            return;
+        }
+
+        router.replace(`/passwordReset?email=${email}`);
+    }
+
     return (
         <div className='text-white grid place-items-center h-screen z-0'>
             <div className="p-5 rounded-lg border-t-4 border-white-400 border">
@@ -84,11 +120,27 @@ export default function LoginForm() {
                     <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} />
                     <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center" onClick={login}>Login</button>
-                    { error && (
-                        <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                            {error}
-                        </div>
-                    )}
+                    <div className="flex">
+                        { error && (
+                            <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 mr-1">
+                                {error}
+                            </div>
+                        )}
+                        { sendVerifyEmail && (
+                            <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 ml-1">
+                                <button onClick={sendVerficationEmail} className="underline">
+                                    Send Again?
+                                </button>
+                            </div>
+                        )}
+                        { forgotPassword && (
+                            <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 ml-1">
+                                <button onClick={sendForgotPassword} className="underline">
+                                    Forgot Password?
+                                </button>
+                            </div>
+                        )}
+                    </div>
                     <Link href={'/register'} className="text-sm mt-3 text-right">
                         Don&apos;t have an account? <span className="underline">Register</span>
                     </Link>

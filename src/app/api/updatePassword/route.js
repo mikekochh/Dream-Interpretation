@@ -1,19 +1,22 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../lib/mongodb';
 import User from '../../../../models/user';
+import bcrypt from 'bcryptjs';
 
 export async function POST(req) {
     try {
         // create user
-        const { verificationTokenID } = await req.json();
-
-        console.log('verificationTokenID: ', verificationTokenID);
+        const { verificationTokenID, password } = await req.json();
+        const hashedPassword = await bcrypt.hash(password, 12);
 
         await connectMongoDB();
 
-        const activatedUser = await User.findOneAndUpdate({ verificationTokenID }, { $set: { activated: true }}, { new: true });
+        const updatedUser = await User.findOneAndUpdate(
+            { verificationTokenID }, 
+            { $set: { password: hashedPassword, verificationTokenID: null }},
+            { new: true });
 
-        if (!activatedUser) {
+        if (!updatedUser) {
             throw new Error("User not found!");
         }
 
