@@ -14,12 +14,11 @@ const openai = new OpenAI({
 exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
 
     cors(req, res, async () => {
-        const { dream, dreamCredits, email, prompt } = req.query;
+        const { dream, prompt } = req.query;
         const chatGPTPrompt = prompt + "\n\n" + dream;
     
         try {
             const dreamData = await interpretDream(chatGPTPrompt);
-            // await reduceDreamCredits(dreamCredits, email);
             res.status(200).json(dreamData);
         } catch (error) {
             logger.error('Error: ', error);
@@ -38,9 +37,3 @@ async function interpretDream(dream) {
 
     return chatCompletion.choices;
 }
-
-// async function reduceDreamCredits(dreamCredits, email) {
-//     await connectMongoDB();
-//     const newCredits = await User.updateOne({ email }, { $set: { credits: dreamCredits - 1 } });
-//     return newCredits;
-// }
