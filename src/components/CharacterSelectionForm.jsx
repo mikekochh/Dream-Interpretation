@@ -103,8 +103,8 @@ export default function CharacterSelectionForm() {
                             {/* Characters for mobile */}
                             <div className="sm:hidden justify-center items-center flex">
                                 <Image 
-                                    width={100} 
-                                    height={100} 
+                                    width={125} 
+                                    height={125} 
                                     src={character.characterPicture} 
                                     alt={character.characterName} 
                                     className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`} 
