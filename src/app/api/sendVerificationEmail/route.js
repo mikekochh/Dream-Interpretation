@@ -16,6 +16,9 @@ export async function POST(req) {
         //find user
         const { email } = await req.json();
 
+        console.log('email: ', email);
+        console.log('Testing to make sure email is received');
+
         const verificationTokenID = `${randomUUID()}-${randomUUID()}`.replace(/-/g, '');
 
         const updatedUser = await User.findOneAndUpdate({ email }, { $set: { verificationTokenID }}, { new: true });

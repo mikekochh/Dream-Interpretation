@@ -10,7 +10,7 @@ import axios from "axios";
 export default function LoginForm() {
 
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState("password");
     const [error, setError] = useState(""); 
     const [sendVerifyEmail, setSendVerifyEmail] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
@@ -127,7 +127,7 @@ export default function LoginForm() {
                 <h1 className="text-xl font-bold my-4">Enter Login Details</h1>
                 <form className="flex flex-col gap-3" onSubmit={login}>
                     <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
-                    <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} />
+                    {/* <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} /> */}
                     <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center" onClick={login}>Login</button>
                     <div className="flex">
                         { error && (

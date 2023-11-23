@@ -17,38 +17,15 @@ export async function POST(req) {
         const { name, email, password } = await req.json();
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const verificationTokenID = `${randomUUID()}-${randomUUID()}`.replace(/-/g, '');
-
         newUser = await User.create({ 
             name, 
             email, 
             password:hashedPassword, 
-            credits: 8, 
+            credits: 1, 
             redeemedCredits: false, 
             activated: false,
-            verificationTokenID: verificationTokenID
+            verificationTokenID: null
         });
-
-        // send email
-        const fromAddress = process.env.EMAIL_FROM_ADDRESS;
-        const domain = process.env.DOMAIN;
-        const verificationLink = `${domain}/activate?verificationTokenID=${verificationTokenID}`;
-        const mailOptions = { 
-            from: `Dream Oracles <${fromAddress}>`,
-            to: email,
-            subject: "Verify your email address",
-            html: `
-                <h1>Hi ${name}!</h1>
-                <p>Please verify your email address ${email} using the link below. If you did not request this link, you can safely ignore this email.</p>
-                <p><a href="${verificationLink}">${verificationLink}</a></p>
-                <p>Thank you,<br/>
-                The Dream Oracles</p>
-            `
-        };
-
-        const emailResult = await sgMail.send(mailOptions);
-
-        console.log('Email sent: ', emailResult);
 
         return NextResponse.json({message: "User registered successfully!"}, { status: 200 })
     } catch (error) {
