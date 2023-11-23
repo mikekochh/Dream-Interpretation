@@ -11,7 +11,7 @@ export default function RegisterForm() {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState("password");
     const [error, setError] = useState("");
     const [registeringUser, setRegisteringUser] = useState(false);
 
@@ -53,13 +53,15 @@ export default function RegisterForm() {
                 return;
             }
 
-            const resUserActivated = await axios.get('api/login/' + email);
+            // commenting out for now, we want user to be able to register without having to verify email.
+            // they then can verify email later for more credits 
+            // const resUserActivated = await axios.get('api/login/' + email);
 
-            if (resUserActivated.data?.activated == false) {
-                setError("User already exists, please verify email");
-                setRegisteringUser(false);
-                return;
-            }
+            // if (resUserActivated.data?.activated == false) {
+            //     setError("User already exists, please verify email");
+            //     setRegisteringUser(false);
+            //     return;
+            // }
 
             const resNewUser = await fetch('api/register', {
                 method: "POST",
@@ -73,14 +75,27 @@ export default function RegisterForm() {
                 }),
             });
             
+
             if (resNewUser.ok) {
-                router.replace(`/emailVerification?email=${email}`);
+                const resSignIn = await signIn("credentials", { 
+                    email,
+                    password, 
+                    redirect: false
+                });
+
+                router.replace("/characterSelection");
             }
-            else {
-                setError("User registration failed!");
-                setRegisteringUser(false);
-                return;
-            }
+
+
+            // for verifying email before logging in
+            // if (resNewUser.ok) {
+            //     router.replace(`/emailVerification?email=${email}`);
+            // }
+            // else {
+            //     setError("User registration failed!");
+            //     setRegisteringUser(false);
+            //     return;
+            // }
         }
         catch (error) {
             setError("User registration failed!");
@@ -97,7 +112,7 @@ export default function RegisterForm() {
                 <form className="flex flex-col gap-3" onSubmit={register}>
                     <input type="text" placeholder="Name" className="LoginInput rounded-lg text-black" onChange={(e) => setName(e.target.value)} />
                     <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
-                    <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} />
+                    {/* <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} /> */}
                     { registeringUser && (
                         <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
                             Registering user...

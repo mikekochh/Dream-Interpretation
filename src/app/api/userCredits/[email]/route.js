@@ -24,8 +24,7 @@ export async function POST(req) {
         console.log('action: ', action);
 
         if (action === "redeemCredits") {
-            console.log('redeemCredits')
-            const updatedUser = await User.findOneAndUpdate({ email }, { $set: { credits: 4 } }, { new: true });
+            const updatedUser = await User.findOneAndUpdate({ email }, { $set: { credits: 3 } }, { new: true });
             if (!updatedUser) {
                 throw new Error("User not found!");
             }

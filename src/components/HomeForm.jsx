@@ -103,63 +103,11 @@ export default function HomePage() {
         <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={characterSelection}>Character Selection</button>
             <h1 className=" text-3xl text-center">The Dream Oracles</h1>
             <h2 className="text-center">Welcome back {user.name}</h2>
-            { user.credits === 0 ? 
-            (
-                <div className="flex justify-center flex-col items-center text-center">
-                    <div className="text-center text-3xl">
-                        Thank you for using The Dream Oracle! You&apos;ve reached your limit of free dream interpretations. <br />
-                        If you would like to continue to explore the meaning of your dreams, please purchase more dream credits below
-                    </div>
-                    <Popup 
-                        trigger={<button  className="bg-blue-500 p-2 m-2 rounded-xl">Buy More Credits</button>} 
-                        position="bottom center"
-                        contentStyle={{width: "50%"}}
-                    >
-
-                        { !user.redeemedCredits ?                     
-                        <div>
-                            <div className="text-center text-3xl">
-                                Gotcha! This was a test to see your interest in purchasing more dream credits! 
-                                Happy to see you are enjoying the application and I appreciate you being an early adopter of the Dream Oracle.
-                                For being couragous enough to be an early user, here is an additional 4 dream credits 
-                                for free for you to keep using the application during our testing period.
-                                Please leave us feedback if you see any bugs or have any suggestions, and keep on dreaming! <br />
-                            </div>
-                            <div className="text-center text-3xl">
-                                <button className="bg-blue-500 p-2 m-2 rounded-xl text-white" onClick={redeemCredits}>Claim Credits</button>
-                            </div>
-                        </div>
-                        : 
-                        <div>
-                        <div className="text-center text-3xl">
-                                Hello again! I know you are eager to continue using The Dream Oracle, but unfortunately we are still in testing phase and buying credits is unavailable.
-                                We appreciate you using our application so much, and when credits become more available (among other additional features), we would love to have you back!
-                                Thanks for using The Dream Oracle, keep on dreaming! <br />
-                            </div>
-                        </div>
-                        }
-                    </Popup>
-                </div>
-            ) : !gptInterpretation ? (
+            { user.credits === 0 && !gptInterpretation ? 
+                ( <OutOfCredits redeemCredits={redeemCredits} user={user} />) : 
+            !gptInterpretation ? (
                 <div>
-                    <div className="flex justify-center">
-                        Enter Dream description below
-                        <Popup 
-                            trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-                            position="bottom center"
-                            contentStyle={{width: "50%"}}
-                        >
-                            <b>How do I write a good prompt?</b><br/>
-                            Describe your dream in as much detail as you can. The more detail you provide, the more accurate the interpretation will be.
-                            If you can, also try and describe how you felt during the dream. Were you scared? Happy? Sad? Angry? 
-                            Who was in your dream? Don&apos;t use names, describe their relationship to you. Was it a friend? A family member? A stranger?
-                            <br/><br/>
-                            <b>I have a theory about what my dream means</b><br/>
-                            Great! Please include this in the prompt. If you have no idea what the dream means, that is fine it will still work fine.
-                            But, if you think it is relating to something in real life, include this in the dream. Our dreams are inspired by real life,
-                            and it is important to paint the full picture as much as possible. 
-                        </Popup>
-                    </div>
+                    <HowItWorksPopup />
                     <div className="flex justify-center">
                         <textarea type="text" rows={5} className="DreamBox border-2 border-black rounded-lg text-black w-2/3" />
                         { !disableSubmit && <button className="border-2 border-white p-1 rounded-lg text-white" onClick={submitDream}>Submit</button>}
@@ -226,4 +174,88 @@ const ChatGPTResponse = ({ gptInterpretation, characterNameShort, newDream, user
             </div>
         </div>
     )
+}
+
+const HowItWorksPopup = () => {
+
+    return (
+        <div className="flex justify-center">
+            Enter Dream description below
+            <Popup 
+                trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
+                position="bottom center"
+                contentStyle={{width: "50%"}}
+            >
+                <b>How do I write a good prompt?</b><br/>
+                Describe your dream in as much detail as you can. The more detail you provide, the more accurate the interpretation will be.
+                If you can, also try and describe how you felt during the dream. Were you scared? Happy? Sad? Angry? 
+                Who was in your dream? Don&apos;t use names, describe their relationship to you. Was it a friend? A family member? A stranger?
+                <br/><br/>
+                <b>I have a theory about what my dream means</b><br/>
+                Great! Please include this in the prompt. If you have no idea what the dream means, that is fine it will still work fine.
+                But, if you think it is relating to something in real life, include this in the dream. Our dreams are inspired by real life,
+                and it is important to paint the full picture as much as possible. 
+            </Popup>
+        </div>
+    )
+}
+
+const OutOfCredits = ({ redeemCredits, user }) => {
+
+    const router = useRouter();
+
+
+    const verifyEmail = async () => {
+        console.log('verify email');
+        const email = user.email;
+        const res = await axios.post('api/sendVerificationEmail', { email });
+        router.replace(`/emailVerification?email=${email}`);
+    }
+
+    return (
+        <div className="flex justify-center flex-col items-center text-center">
+            <div className="text-center text-3xl">
+                { !user.activated ?
+                    <div>
+                        <p>Thank you for using The Dream Oracles! Verify your email address below to receive an additional 4 dream credits.</p> 
+                        <button onClick={verifyEmail} className="bg-blue-500 p-2 m-2 rounded-xl">Verify Email Address</button>
+                    </div>
+                    :
+                    <div>
+                        <p>Thank you for using The Dream Oracles! You&apos;ve reached your limit of free dream interpretations. <br />
+                        If you would like to continue to explore the meaning of your dreams, please purchase more dream credits below</p>
+                        <Popup 
+                            trigger={<button  className="bg-blue-500 p-2 m-2 rounded-xl">Buy More Credits</button>} 
+                            position="bottom center"
+                            contentStyle={{width: "50%"}}
+                        >
+                            { !user.redeemedCredits ?                     
+                            <div>
+                                <div className="text-center text-3xl">
+                                    Gotcha! This was a test to see your interest in purchasing dream credits! 
+                                    Happy to see you are enjoying the application and I appreciate you being an early adopter of The Dream Oracles.
+                                    For being couragous enough to be an early user, here&apos;s some additional dream credits
+                                    for free for you to keep using the application while we work on a payment system. 
+                                    Please leave us feedback if you see any bugs or have any suggestions, and keep on dreaming! <br />
+                                </div>
+                                <div className="text-center text-3xl">
+                                    <button className="bg-blue-500 p-2 m-2 rounded-xl text-white" onClick={redeemCredits}>Claim Credits</button>
+                                </div>
+                            </div>
+                            : 
+                            <div>
+                            <div className="text-center text-3xl">
+                                    Hello again! I know you are eager to continue using The Dream Oracles, but unfortunately purchasing credits is currently unavailable.
+                                    We appreciate you using our application so much, and when credits become more available (among other exciting new features), we would love to have you back!
+                                    Thanks for using The Dream Oracles, keep on dreaming! <br />
+                                </div>
+                            </div>
+                            }
+                        </Popup>
+                    </div>
+                }
+            </div>
+        </div>
+    )
+
 }
