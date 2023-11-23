@@ -206,7 +206,6 @@ const OutOfCredits = ({ redeemCredits, user }) => {
 
 
     const verifyEmail = async () => {
-        console.log('verify email');
         const email = user.email;
         const res = await axios.post('api/sendVerificationEmail', { email });
         router.replace(`/emailVerification?email=${email}`);
