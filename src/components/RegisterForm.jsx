@@ -20,6 +20,7 @@ export default function RegisterForm() {
     const register = async (e) => {
         e.preventDefault();
         setRegisteringUser(true);
+        setError("");
 
         // check if this user alread exists before registering them and sending them an email verification link
 
@@ -35,33 +36,18 @@ export default function RegisterForm() {
         }
 
         try {
-            const resUserExist = await fetch("api/userExists", {
-                method: "POST",
+            const res = await fetch(`api/user/${email}`, {
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    email
-                }),
             });
 
-            const { user } = await resUserExist.json();
-
-            if (user) {
+            if (res.ok) {
                 setError("User already exists!");
                 setRegisteringUser(false);
                 return;
             }
-
-            // commenting out for now, we want user to be able to register without having to verify email.
-            // they then can verify email later for more credits 
-            // const resUserActivated = await axios.get('api/login/' + email);
-
-            // if (resUserActivated.data?.activated == false) {
-            //     setError("User already exists, please verify email");
-            //     setRegisteringUser(false);
-            //     return;
-            // }
 
             const resNewUser = await fetch('api/register', {
                 method: "POST",
@@ -85,17 +71,6 @@ export default function RegisterForm() {
 
                 router.replace("/characterSelection");
             }
-
-
-            // for verifying email before logging in
-            // if (resNewUser.ok) {
-            //     router.replace(`/emailVerification?email=${email}`);
-            // }
-            // else {
-            //     setError("User registration failed!");
-            //     setRegisteringUser(false);
-            //     return;
-            // }
         }
         catch (error) {
             setError("User registration failed!");
@@ -106,7 +81,7 @@ export default function RegisterForm() {
     }
 
     return (
-        <div className='text-white grid place-items-center h-screen'>
+        <div className='text-white'>
             <div className="p-5 rounded-lg border-t-4 border-white-400 border">
                 <h1 className="text-xl font-bold my-4">Register Below</h1>
                 <form className="flex flex-col gap-3" onSubmit={register}>
@@ -129,7 +104,6 @@ export default function RegisterForm() {
                     </Link>
                 </form>
             </div>
-            <ContactAndPrivacyButtons />
         </div>
     )
 }

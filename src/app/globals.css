@@ -11,7 +11,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background: #000011;
+  background: #000020;
   background-position-x: center;
   background-size: cover;
   width: 100%;
@@ -82,5 +82,67 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+.video-container {
+  position: relative; /* Establishes a new stacking context */
+  width: 100vw; /* Full view width */
+  z-index: 1;;
+}
+
+.cosmic-video {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the entire container */
+  z-index: -1; /* Send the video to the back */
+}
+
+.text-container {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 35%; /* Center horizontally */
+  transform: translate(-50%, -50%); 
+  color: white; /* Text color */
+  z-index: 10; /* Ensure it's on top of the video */
+
+}
+
+.home-page {
+  max-height: 102vh;
+  overflow-y: auto;
+}
+
+.register-form {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+}
+
+
+.character-container {
+  background-color: grey;
+  text-align: left;
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  position: relative;
+  overflow: auto;
+}
+
+.oracle-image {
+  flex-shrink: 0;
+  width: 350px;
+  height: 350px;
+  float: left;
+  object-fit: cover;
+  margin-right: 30px;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 
 
