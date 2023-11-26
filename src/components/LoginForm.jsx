@@ -47,12 +47,12 @@ export default function LoginForm() {
                 return;
             }
 
-            if (resUserActivated.data?.activated == false) {
-                setError("Please verify your email");
-                setSendVerifyEmail(true);
-                setLogginIn(false);
-                return;
-            }
+            // if (resUserActivated.data?.activated == false) {
+            //     setError("Please verify your email");
+            //     setSendVerifyEmail(true);
+            //     setLogginIn(false);
+            //     return;
+            // }
 
             const res = await signIn("credentials", { 
                 email,
