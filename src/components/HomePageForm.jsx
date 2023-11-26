@@ -138,7 +138,7 @@ export default function HomePageForm() {
                     </p>
                 </div>
             </div>
-            <div className="grid place-items-center pb-20">
+            <div className="grid place-items-center pb-40 md:pb-10">
                 <RegisterForm />
             </div>
         </div>
