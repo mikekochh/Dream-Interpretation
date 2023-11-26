@@ -10,12 +10,15 @@ export default function HomePageForm() {
                 <video autoPlay loop muted playsInline className="cosmic-video h-96 rounded-3xl p-4">
                     <source src="/cosmic_background.mp4" type="video/mp4" />
                 </video>
-                <div className="text-white text-container text-5xl">
-                    <h1 className="text-5xl pb-2">The Dream Oracles</h1>
-                    <h2 className="text-3xl">Interpret your dreams using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
+                <div className="text-white text-container text-5xl md:pr-52 p-4">
+                    <h1 className="md:text-5xl text-3xl pb-2">The Dream Oracles</h1>
+                    <h2 className="md:text-3xl text-xl">Interpret your dreams using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
                 </div>
-                <div className="grid place-items-center register-form">
+                <div className="place-items-center register-form hidden md:block">
                     <RegisterForm />
+                </div>
+                <div className="register-form md:hidden">
+                    <button className="text-white text-3xl rounded-2xl p-2 mt-5 ml-5 bg-blue-500 hover:bg-blue-700" onClick={() => window.location.href = "/register"}>Sign Up</button>
                 </div>
             </div>
             <div className="text-white text-5xl p-4 text-center">
@@ -28,7 +31,7 @@ export default function HomePageForm() {
                         alt="Carl Jung"
                         className="rounded-3xl oracle-image"
                     />
-                    <div>
+                    <div className="pr-2">
                         <p className="p-3">Carl Jung, The Revolutionary Psychotherapist</p>
                         <p className="p-3 text-2xl">
                             Jung introduced groundbreaking concepts that reshaped our understanding of the human psyche.
@@ -51,7 +54,7 @@ export default function HomePageForm() {
                         alt="Sigmund Freud"
                         className="rounded-3xl oracle-image"
                     />
-                    <div className="ml-2">
+                    <div className="ml-2 pr-2">
                         <p className="p-3">Sigmund Freud, The Father of Psychoanalysis</p>
                         <p className="p-3 text-2xl">
                             Freud, often hailed as the father of psychoanalysis, made monumental contributions to the field of psychology
@@ -76,7 +79,7 @@ export default function HomePageForm() {
                         alt="Alexander"
                         className="rounded-3xl oracle-image"
                     />
-                    <div>
+                    <div className="pr-2">
                         <p className="p-3">Alexander, The Sage of Mirage Visions</p>
                         <p className="p-3 text-2xl">
                             In the heart of a vast, starlit desert, you, a weary and solitary traveler, traverse the endless sands in search 
@@ -101,7 +104,7 @@ export default function HomePageForm() {
                         alt="Luna"
                         className="rounded-3xl oracle-image"
                     />
-                    <div>
+                    <div className="pr-2">
                         <p className="p-3">Luna, The Cosmic Dream Catcher</p>
                         <p className="p-3 text-2xl">
                             Luna, a celestial being, is transcendent and boundless, existing primarily within the intricate tapestry of the dream realm. 
@@ -118,7 +121,7 @@ export default function HomePageForm() {
                         </p>
                     </div>
                 </div>
-                <div className="pr-20 pl-20">
+                <div className="md:pr-20 md:pl-20">
                     <p className="p-3">
                         And many more oracles to come in the future!
                     </p>
