@@ -2,10 +2,6 @@ import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../lib/mongodb';
 import User from '../../../../models/user';
 import bcrypt from 'bcryptjs';
-import { randomUUID } from 'crypto';
-import sgMail from '@sendgrid/mail';
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export async function POST(req) {
 
