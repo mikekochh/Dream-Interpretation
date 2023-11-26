@@ -105,7 +105,6 @@ body {
   transform: translate(-50%, -50%); 
   color: white; /* Text color */
   z-index: 10; /* Ensure it's on top of the video */
-
 }
 
 .home-page {
