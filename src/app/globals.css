@@ -138,10 +138,6 @@ body {
   margin-right: 30px;
 }
 
-.clearfix::after {
-  content: "";
-  clear: both;
-  display: table;
-}
+
 
 
