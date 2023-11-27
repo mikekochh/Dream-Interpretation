@@ -31,7 +31,7 @@ export default function HomePageForm() {
                         alt="Carl Jung"
                         className="rounded-3xl oracle-image"
                     />
-                    <div className="">
+                    <div>
                         <p className="pb-3">Carl Jung, The Revolutionary Psychotherapist</p>
                         <p className="text-2xl">
                             Jung introduced groundbreaking concepts that reshaped our understanding of the human psyche.
@@ -40,7 +40,7 @@ export default function HomePageForm() {
                         </p>
                         <p className="pt-3 text-2xl">
                             Jung also believed that dreams offered us a window into this collective unconsciousness. He believed
-                            that dreams were not just random neaural firings, but meaningfun reflections of our innermost thoughts
+                            that dreams were not just random neural firings, but meaningful reflections of our innermost thoughts
                             and feelings, providing critical insights into personal development and growth. With Dream Oracles, you can ask Carl Jung directly
                             what he thinks your dream means, and he will draw on his books and studies to provide you with a personalized interpretation.
                         </p>
