@@ -65,7 +65,7 @@ export default function HomePageForm() {
                         <p className="pt-3 text-2xl">
                             A significant part of Freud&apos;s legacy is his theory of dream analysis, where he also argued that dreams are not 
                             random mental activities but meaningful manifestations of our deepest desires and unresolved conflicts. He believed 
-                            interpreting these dream symbols could unlock insights into an individuals&apos;s unconscious mind, offering a pathway 
+                            interpreting these dream symbols could unlock insights into an individual&apos;s unconscious mind, offering a pathway 
                             to understanding and treating psychological distress. Ask one of the most prominent dream interpreters in history 
                             what he thinks about your dreams. 
                         </p>
