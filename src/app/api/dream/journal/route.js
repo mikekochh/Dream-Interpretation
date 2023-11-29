@@ -25,11 +25,6 @@ export async function POST(req) {
         console.log("newDream: ", newDream);
 
         return NextResponse.json(newDream);
-
-        // return NextResponse.json(
-        //     { status: 200 },
-        //     { newDream }
-        // );
     } catch (error) {
         console.log('error: ', error);
         return NextResponse.json({message: "User activation failed!"}, { status: 500 })

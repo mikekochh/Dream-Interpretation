@@ -15,6 +15,11 @@ export default function JournalForm() {
     const { data: session } = useSession();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
+    const [disableSubmit, setDisableSubmit] = useState(false);
+    const [loadingDream, setLoadingDream] = useState(false);
+    const [savingDream, setSavingDream] = useState(false);
+    const [interpretingDream, setInterpretingDream] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         async function setUserData() {
@@ -39,9 +44,9 @@ export default function JournalForm() {
 
     async function journalDream() {
         const userID = user._id;
-        const dream = "testing adding dream";
         var checkbox = document.getElementById('interpretCheckbox');
         const interpretDream = checkbox.checked;
+        var dream = document.querySelector('.DreamBox').value;
         if (checkbox.checked) {
             console.log("Checkbox is checked.");
         } else {
@@ -52,12 +57,16 @@ export default function JournalForm() {
             if (interpretDream) {
                 const dreamID = resJournal.data._id;
                 const characterID = user.characterID;
-                const resInterpret = await axios.post('/api/dream/interpret', { dreamID, characterID });
+                const resInterpret = await axios.post('/api/dream/interpret', { dreamID, dream, characterID, user });
             }
         }
         catch (error) {
             setError("Error Journaling Dream");
         }   
+    }
+
+    function returnMainMenu() {
+        router.push("/home");
     }
 
     return (
@@ -66,7 +75,52 @@ export default function JournalForm() {
             <div>
                 Interpret Dream<input type="checkbox" id="interpretCheckbox"></input>
             </div>
+            <div>
+                <HowItWorksPopup />
+                <div className="flex justify-center">
+                    <textarea type="text" rows={15} className="DreamBox border-2 border-black rounded-lg text-black w-2/3" />
+                </div>
+                {savingDream ? (
+                    <div className="flex justify-center">
+                        <div className="loader"></div>
+                        Dream Being Saved...
+                    </div>
+                    ) : null
+                }
+                {interpretingDream ? (
+                    <div className="flex justify-center">
+                        <div className="loader"></div>
+                        Dream Being Interpreted... (est. 1-2 minutes)
+                    </div>
+                    ) : null
+                }
+            </div>
+            <button className="rounded-xl bg-red-600 p-2 m-2" onClick={returnMainMenu}>Main Menu</button>
         </div>
 
+    )
+}
+
+const HowItWorksPopup = () => {
+
+    return (
+        <div className="flex justify-center text-3xl pb-5">
+            Enter Dream Description Below
+            <Popup 
+                trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
+                position="bottom center"
+                contentStyle={{width: "50%"}}
+            >
+                <b>How do I write a good prompt?</b><br/>
+                Describe your dream in as much detail as you can. The more detail you provide, the more accurate the interpretation will be.
+                If you can, also try and describe how you felt during the dream. Were you scared? Happy? Sad? Angry? 
+                Who was in your dream? Don&apos;t use names, describe their relationship to you. Was it a friend? A family member? A stranger?
+                <br/><br/>
+                <b>I have a theory about what my dream means</b><br/>
+                Great! Please include this in the prompt. If you have no idea what the dream means, that is fine it will still work fine.
+                But, if you think it is relating to something in real life, include this in the dream. Our dreams are inspired by real life,
+                and it is important to paint the full picture as much as possible. 
+            </Popup>
+        </div>
     )
 }

@@ -2,7 +2,7 @@ import mongoose, { Schema, models } from "mongoose";
 
 const interpretationSchema = new Schema({
     dreamID: {
-        type: Number,
+        type: String,
         required: [true, "Please enter user ID!"]
     },
     interpretation: {
