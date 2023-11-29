@@ -256,5 +256,4 @@ const OutOfCredits = ({ redeemCredits, user }) => {
             </div>
         </div>
     )
-
 }
