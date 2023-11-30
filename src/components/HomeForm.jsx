@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 export default function HomePage() {
