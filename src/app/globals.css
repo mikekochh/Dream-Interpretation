@@ -138,6 +138,10 @@ body {
   margin-right: 30px;
 }
 
+.thenavbar {
+  z-index: 100;
+}
+
 
 
 
