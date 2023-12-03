@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { signOut } from "next-auth/react";
 import { useSession } from 'next-auth/react';
-import { useRouter } from "next/navigation";
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
@@ -19,7 +18,6 @@ export default function JournalForm() {
     const [loadingDream, setLoadingDream] = useState(false);
     const [savingDream, setSavingDream] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
-    const router = useRouter();
 
     useEffect(() => {
         async function setUserData() {
@@ -53,24 +51,20 @@ export default function JournalForm() {
             console.log("Checkbox is not checked.");
         }
         try {
-            const resJournal = await axios.post('/api/dream/journal', { userID, dream });
-            if (interpretDream) {
-                const dreamID = resJournal.data._id;
-                const characterID = user.characterID;
-                const resInterpret = await axios.post('/api/dream/interpret', { dreamID, dream, characterID, user });
-            }
+            const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream });
+            // if (interpretDream) {
+            //     const dreamID = resJournal.data._id;
+            //     const characterID = user.characterID;
+            //     const resInterpret = await axios.post('/api/dream/interpret', { dreamID, dream, characterID, user });
+            // }
         }
         catch (error) {
             setError("Error Journaling Dream");
         }   
     }
 
-    function returnMainMenu() {
-        router.push("/home");
-    }
-
     return (
-        <div className="text-white">
+        <div className="text-white main-content">
             <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>Journal Dream</button>
             <div>
                 Interpret Dream<input type="checkbox" id="interpretCheckbox"></input>
@@ -78,7 +72,7 @@ export default function JournalForm() {
             <div>
                 <HowItWorksPopup />
                 <div className="flex justify-center">
-                    <textarea type="text" rows={15} className="DreamBox border-2 border-black rounded-lg text-black w-2/3" />
+                    <textarea type="text" rows={15} className="DreamBox border-2 border-black rounded-lg text-black w-3/4" />
                 </div>
                 {savingDream ? (
                     <div className="flex justify-center">
@@ -95,7 +89,7 @@ export default function JournalForm() {
                     ) : null
                 }
             </div>
-            <button className="rounded-xl bg-red-600 p-2 m-2" onClick={returnMainMenu}>Main Menu</button>
+            {/* <button className="rounded-xl bg-red-600 p-2 m-2" onClick={returnMainMenu}>Main Menu</button> */}
         </div>
 
     )

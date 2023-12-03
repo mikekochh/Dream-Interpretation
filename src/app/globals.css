@@ -138,10 +138,17 @@ body {
   margin-right: 30px;
 }
 
-.thenavbar {
-  z-index: 100;
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10; /* Ensure it's above other elements */
+  height: 60px; /* Height of navbar */
 }
 
+.main-content {
+  padding-top: 60px; /* Add a top padding to avoid content overlay */
+}
 
 
 
