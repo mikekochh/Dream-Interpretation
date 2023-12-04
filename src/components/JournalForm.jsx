@@ -52,11 +52,11 @@ export default function JournalForm() {
         }
         try {
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream });
-            // if (interpretDream) {
-            //     const dreamID = resJournal.data._id;
-            //     const characterID = user.characterID;
-            //     const resInterpret = await axios.post('/api/dream/interpret', { dreamID, dream, characterID, user });
-            // }
+            if (interpretDream) {
+                const dreamID = resJournal.data._id;
+                const characterID = user.characterID;
+                const resInterpret = await axios.post('/api/dream/interpret', { dreamID, dream, characterID, user });
+            }
         }
         catch (error) {
             setError("Error Journaling Dream");

@@ -9,11 +9,13 @@ import Popup from 'reactjs-popup';
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 export default function DreamsForm() { 
 
     const { data: session } = useSession();
     const [dreams, setDreams] = useState([]);
+    const router = useRouter();
 
     useEffect(() => {
 
@@ -37,10 +39,6 @@ export default function DreamsForm() {
         return month + "/" + day + "/" + year;
     }
 
-    const dreamDetails = (e) => {
-        console.log("dreamDetails");
-    }
-
     return (
         <div className="text-white main-content">
             <h1 className="text-3xl text-center">Dreams</h1>    
@@ -49,11 +47,24 @@ export default function DreamsForm() {
                     <div 
                         key={dream._id} 
                         className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl cursor-pointer"
-                        onClick={dreamDetails}
                     >
+                        <Link href={{
+                            pathname: '/dreamDetails',
+                            query: { dreamID: dream._id },
                         
-                        Dream Description: {dream.dream}<br/>
-                        Dream Date: {formatDreamDate(dream.dreamDate)}
+                        }}>
+                            <div className="pl-10">
+                                <p>
+                                    <span className="font-bold">Dream Description: </span>{dream.dream}
+                                </p>
+                                <p>
+                                    <span className="font-bold">Dream Date: </span>{formatDreamDate(dream.dreamDate)}
+                                </p>
+                                <p>
+                                    <span className="font-bold">Interpretations: </span>{dream.interpretation ? 'Yes' : 'No'}
+                                </p>
+                            </div>
+                        </Link>
                     </div>
                 )
             ))}

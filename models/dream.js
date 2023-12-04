@@ -17,6 +17,11 @@ const dreamSchema = new Schema({
         type: Date,
         required: [true, "Please enter dream date!"]
     },
+    interpretation: {
+        type: Boolean,
+        default: false,
+        required: [true, "Is dream being interpreted?!"]
+    }
 });
 
 const Dream = models.Dream || mongoose.model("Dream", dreamSchema);

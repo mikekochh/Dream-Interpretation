@@ -20,7 +20,8 @@ export async function POST(req) {
             dream, 
             userID, 
             interpretationID: 0, 
-            dreamDate
+            dreamDate,
+            interpretation: interpretDream
         });
 
         console.log("newDream: ", newDream);
