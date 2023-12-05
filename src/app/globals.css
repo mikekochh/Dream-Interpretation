@@ -148,7 +148,30 @@ nav {
 
 .main-content {
   padding-top: 60px; /* Add a top padding to avoid content overlay */
+  overflow-y: auto;
+  max-height: 100vh; 
 }
 
+.wiggle:hover {
+  animation: wiggle 0.5s infinite;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
 
 

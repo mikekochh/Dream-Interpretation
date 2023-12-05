@@ -18,6 +18,7 @@ export default function JournalForm() {
     const [loadingDream, setLoadingDream] = useState(false);
     const [savingDream, setSavingDream] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
+    const [characters, setCharacters] = useState([]);
 
     useEffect(() => {
         async function setUserData() {
@@ -40,22 +41,42 @@ export default function JournalForm() {
         }
     }, [session]);
 
+
+    useEffect(() => {
+        async function getCharacters() {
+            const res = await axios.get('/api/characters');
+            setCharacters(res.data);
+        }
+
+        getCharacters();
+    }, []);
+
     async function journalDream() {
         const userID = user._id;
-        var checkbox = document.getElementById('interpretCheckbox');
-        const interpretDream = checkbox.checked;
+        let interpretDream = false;
+        characters.forEach(character => {
+            var checkbox = document.getElementById(character.characterID);
+            if (checkbox.checked) {
+                interpretDream = true;
+            }
+        });
         var dream = document.querySelector('.DreamBox').value;
-        if (checkbox.checked) {
-            console.log("Checkbox is checked.");
-        } else {
-            console.log("Checkbox is not checked.");
-        }
         try {
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream });
             if (interpretDream) {
                 const dreamID = resJournal.data._id;
-                const characterID = user.characterID;
-                const resInterpret = await axios.post('/api/dream/interpret', { dreamID, dream, characterID, user });
+                for (let character of characters) {
+                    var checkbox = document.getElementById(character.characterID);
+                    if (checkbox.checked) {
+                        const resInterpret = await axios.post('/api/dream/interpret', 
+                            { 
+                                dreamID, 
+                                dream, 
+                                characterID: character.characterID, 
+                                user 
+                            });
+                    }
+                }
             }
         }
         catch (error) {
@@ -63,16 +84,28 @@ export default function JournalForm() {
         }   
     }
 
+    const sendInterpretation = async (dreamID, characterID, ) => {
+        const res = await axios.post('/api/dream/interpret', { dreamID, dream, characterID, user });
+    }
+
     return (
         <div className="text-white main-content">
             <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>Journal Dream</button>
             <div>
-                Interpret Dream<input type="checkbox" id="interpretCheckbox"></input>
-            </div>
-            <div>
                 <HowItWorksPopup />
                 <div className="flex justify-center">
                     <textarea type="text" rows={15} className="DreamBox border-2 border-black rounded-lg text-black w-3/4" />
+                </div>
+                <div>
+                    <h1 className="font-bold text-2xl text-center">Select Characters to Interpret Your Dreams</h1>
+                </div>
+                <div className="justify-center flex">
+                    {characters.map((character) => (
+                        <div key={character._id} className="flex justify-center p-5">
+                            <input type="checkbox" id={character.characterID} name={character.characterID} value={character.characterID}></input>
+                            <label htmlFor={character.characterID}>{character.characterName}</label>
+                        </div>
+                    ))}
                 </div>
                 {savingDream ? (
                     <div className="flex justify-center">

@@ -10,6 +10,7 @@ import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function DreamsForm() { 
 
@@ -39,6 +40,15 @@ export default function DreamsForm() {
         return month + "/" + day + "/" + year;
     }
 
+    const deleteDream = async (dreamID) => {
+        console.log("deleteing dream: ", dreamID);
+        const res = await axios.post('/api/dream/delete', { dreamID });
+        if (res.status === 200) {
+            const newDreams = dreams.filter(dream => dream._id !== dreamID);
+            setDreams(newDreams);
+        }
+    }
+
     return (
         <div className="text-white main-content">
             <h1 className="text-3xl text-center">Dreams</h1>    
@@ -46,14 +56,14 @@ export default function DreamsForm() {
                 dreams.map((dream) => (
                     <div 
                         key={dream._id} 
-                        className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl cursor-pointer"
+                        className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl cursor-pointer relative"
                     >
                         <Link href={{
                             pathname: '/dreamDetails',
                             query: { dreamID: dream._id },
                         
                         }}>
-                            <div className="pl-10">
+                            <div className="pl-10 pr-10 relative">
                                 <p>
                                     <span className="font-bold">Dream Description: </span>{dream.dream}
                                 </p>
@@ -65,6 +75,12 @@ export default function DreamsForm() {
                                 </p>
                             </div>
                         </Link>
+                        <FontAwesomeIcon 
+                                    icon={faTrash} 
+                                    size="2x" 
+                                    className="absolute right-0 top-0 p-2 wiggle"
+                                    onClick={() => deleteDream(dream._id)}    
+                        />
                     </div>
                 )
             ))}
