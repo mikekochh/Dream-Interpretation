@@ -29,6 +29,7 @@ export default function DreamsForm() {
 
         async function getNotes() {
             const res = await axios.get('/api/dream/note/' + dreamID);
+            if (!res.data.dreamNotes.length) return;
             console.log("res", res.data.dreamNotes[0].note);
             // setNotes(res.data.dreamNotes[0].note);
             document.querySelector('.NoteBox').value = res.data.dreamNotes[0].note;

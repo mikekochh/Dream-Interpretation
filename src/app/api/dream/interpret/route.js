@@ -15,14 +15,19 @@ export async function POST(req) {
     try {
         await connectMongoDB();
         // create user
-        const { dreamID, dream , characterID, user } = await req.json();
+        const { dreamID, dream , characterID, user, short } = await req.json();
 
         const character = await Character.findOne({ characterID });
         const prompt = character.prompt;
 
+        console.log("short: ", short);
+
         const interpretationDate = new Date();
 
-        const chatGPTPrompt = prompt + "\n\n" + dream;
+        const shorternText = short ? "\n\n" + "Also, provide a comprehensive interpretation within 4-5 sentences." : "";
+
+        const chatGPTPrompt = prompt + "\n\n" + dream + shorternText;
+
         try {
             console.log("Waiting to interpret dream...");
             const dreamData = await interpretDream(chatGPTPrompt);
