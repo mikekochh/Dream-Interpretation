@@ -84,10 +84,6 @@ export default function JournalForm() {
         }   
     }
 
-    const sendInterpretation = async (dreamID, characterID, ) => {
-        const res = await axios.post('/api/dream/interpret', { dreamID, dream, characterID, user });
-    }
-
     return (
         <div className="text-white main-content">
             <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>Journal Dream</button>
