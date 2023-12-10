@@ -17,6 +17,8 @@ export async function POST(req) {
         // create user
         const { dreamID, dream , characterID, user, short } = await req.json();
 
+        console.log("characterID: ", characterID);
+
         const character = await Character.findOne({ characterID });
         const prompt = character.prompt;
 

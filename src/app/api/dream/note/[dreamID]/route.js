@@ -31,7 +31,18 @@ export async function POST(request) {
         const { note } = await request.json();
         console.log("note: ", note);
 
-        const newNote = await Note.create({ dreamID: dreamID, note: note, lastUpdated: new Date() });
+        const existingNote = await Note.findOne({ dreamID: dreamID });
+
+        if (existingNote) {
+            existingNote.note = note;
+            existingNote.lastUpdated = new Date();
+            await existingNote.save();
+            console.log("Note updated for dreamID: ", dreamID);
+        }
+        else {
+            const newNote = await Note.create({ dreamID: dreamID, note: note, lastUpdated: new Date() });
+
+        }
 
         return NextResponse.json({message: "Note added successfully!"}, { status: 200 });
         // const newNote = await Note.updateOne({ dreamID: dreamID }, { $set: { note: request.body.note, lastUpdated: request.body.lastUpdated }}, { new: true });

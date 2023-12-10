@@ -15,8 +15,6 @@ export default function HomePage() {
     const [gptInterpretation, setGptInterpretation] = useState('');
     const [character, setCharacter] = useState('');
     const [user, setUser] = useState('');
-    const [disableSubmit, setDisableSubmit] = useState(false);
-    const [loadingDream, setLoadingDream] = useState(false);
     const [userDream, setUserDream] = useState('');
     const [error, setError] = useState(false);
 
@@ -71,8 +69,6 @@ export default function HomePage() {
     }
 
     async function submitDream() {  
-        setLoadingDream(true);
-        setDisableSubmit(true);
         const dream = document.querySelector('.DreamBox').value;
         setUserDream(dream);
         const res = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
@@ -85,13 +81,10 @@ export default function HomePage() {
         
         if (res.status !== 200) {
             setError(true);
-            setLoadingDream(false);
             return;
         }
         const resCredits = await axios.post(`api/userCredits/${session?.user?.email}`, { action: 'decrementCredit' });
         setGptInterpretation(res.data[0].message.content);
-        setDisableSubmit(false);
-        setLoadingDream(false);
     }
 
     function characterSelection() {

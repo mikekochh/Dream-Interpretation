@@ -14,6 +14,7 @@ export default function DreamsForm() {
     const [characters, setCharacters] = useState([]);
     const [notes, setNotes] = useState('');
     const router = useRouter();
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
 
@@ -31,7 +32,6 @@ export default function DreamsForm() {
             const res = await axios.get('/api/dream/note/' + dreamID);
             if (!res.data.dreamNotes.length) return;
             console.log("res", res.data.dreamNotes[0].note);
-            // setNotes(res.data.dreamNotes[0].note);
             document.querySelector('.NoteBox').value = res.data.dreamNotes[0].note;
         }
 
@@ -65,8 +65,11 @@ export default function DreamsForm() {
     }
 
     const saveNotes = async () => {
+        setSaving(true);
         const note = document.querySelector('.NoteBox').value;
+        console.log("note", note);
         const res = await axios.post('api/dream/note/' + dreamID, { note });
+        router.push('/dreams');
     }
 
     const backToDreams = () => {
@@ -102,9 +105,15 @@ export default function DreamsForm() {
                     <p className="font-bold">Dream Notes</p>
                     <textarea type="text" rows={20} className="DreamBox NoteBox border-2 border-black rounded-lg text-black w-full h-full" />
                 </div>
-                <div>
+                <div className="relative">
                     <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2" onClick={backToDreams}>Back</button>
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 absolute m-2" onClick={saveNotes}>Save</button>
+                    {saving ? (
+                        <div className="flex right-0 absolute m-2 top-0">
+                            <div className="loader"></div>
+                        </div>
+                    ) : (
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 absolute m-2" onClick={saveNotes}>Save</button>
+                    )}
                 </div>
             </div>
         </div>

@@ -126,3 +126,22 @@ export default function CharacterSelectionForm() {
         </div>
     )
 }
+
+const CharacterDetailsPopup = (characterName, characterDescription) => {
+
+    return (
+        <div className="flex justify-center text-3xl pt-5">
+            <Popup 
+                trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
+                position="top center"
+                contentStyle={{width: "50%"}}
+            >
+                <b>Response Type</b><br/>
+                Our oracles by default will give you a longer, more detailed, and more educational interpretation.
+                If you would like a shorter, straight to the point answer, or the ability to ask a followup
+                question, select short. We recommend getting the full answer as a beginner, and then switching
+                to short answers once you are familiar with dream concepts.
+            </Popup>
+        </div>
+    )
+}

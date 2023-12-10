@@ -8,6 +8,8 @@ import Popup from 'reactjs-popup';
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
+import { set } from 'mongoose';
 
 export default function JournalForm() { 
 
@@ -16,6 +18,36 @@ export default function JournalForm() {
     const [error, setError] = useState(false);
     const [savingDream, setSavingDream] = useState(false);
     const [characters, setCharacters] = useState([]);
+    const [buttonText, setButtonText] = useState("Journal Dream");
+    const [selectedCharacters, setSelectedCharacters] = useState({});
+    const [short, setShort] = useState(true);
+
+    function handleSelectionChange(characterID) {
+        setSelectedCharacters(prev => ({
+            ...prev,
+            [characterID]: !prev[characterID]
+        }));
+    }
+
+    useEffect(() => {
+
+        console.log("selectedCharacters", selectedCharacters);
+        console.log("Object.keys(selectedCharacters).length", Object.keys(selectedCharacters).length);
+
+        if (Object.keys(selectedCharacters).length) {
+            let anyChecked = false;
+            for (let characterSelected in selectedCharacters) {
+                if (selectedCharacters[characterSelected]) {
+                    anyChecked = true;
+                }
+            }
+            setButtonText(anyChecked ? "Journal Dream and Interpret" : "Journal Dream");
+        }
+        else {
+            setButtonText("Journal Dream");
+        }
+
+    }, [selectedCharacters]);
 
     useEffect(() => {
         async function setUserData() {
@@ -57,29 +89,33 @@ export default function JournalForm() {
         setSavingDream(true);
         const userID = user._id;
         let interpretDream = false;
-        characters.forEach(character => {
-            var checkbox = document.getElementById(character.characterID);
-            if (checkbox.checked) {
-                interpretDream = true;
+        if (Object.keys(selectedCharacters).length) {
+            for (let characterSelected in selectedCharacters) {
+                if (selectedCharacters[characterSelected]) {
+                    console.log("characterSelected", characterSelected);
+                    interpretDream = true;
+                }
             }
-        });
+        }
         try {
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream });
             if (interpretDream) {
+                console.log("interpretDream");
                 const dreamID = resJournal.data._id;
-                const short = document.getElementById('short').checked;
+                console.log("dreamID", dreamID);
                 console.log("short", short);
-                for (let character of characters) {
-                    var checkbox = document.getElementById(character.characterID);
-                    if (checkbox.checked) {
+                for (let characterSelected in selectedCharacters) {
+                    console.log("characterSelected", selectedCharacters[characterSelected]);
+                    if (selectedCharacters[characterSelected]) {
+                        console.log("characterSelected", characterSelected); 
                         const resInterpret = await axios.post('/api/dream/interpret', 
-                            { 
-                                dreamID, 
-                                dream, 
-                                characterID: character.characterID, 
-                                user,
-                                short
-                            });
+                        { 
+                            dreamID, 
+                            dream, 
+                            characterID: characterSelected, 
+                            user,
+                            short
+                        });
                     }
                 }
             }
@@ -95,8 +131,13 @@ export default function JournalForm() {
         setError('');
     }
 
+    const handleCheckboxChange = (event) => {
+        setShort(event.target.checked);
+    };
+
     return (
         <div className="text-white main-content relative">
+            <div className="absolute right-0 top-0 p-2 main-content">Dream Credits: {user?.credits}</div>
             {savingDream ? (
                 <div className="flex justify-center flex-col">
                     <p className="text-center text-2xl">
@@ -109,7 +150,7 @@ export default function JournalForm() {
                 </div>
             ) : (
                 <div>
-                    <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>Journal Dream</button>
+                    <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>{buttonText}</button>
                     <div>
                         <HowItWorksPopup />
                         <div className="flex flex-col">
@@ -124,23 +165,42 @@ export default function JournalForm() {
                         </div>
                         <CharacterSelectionPopup />
                         <div className="justify-center flex">
-                            {characters.map((character) => (
-                                <div key={character._id} className="flex justify-center p-5">
-                                    <input type="checkbox" id={character.characterID} name={character.characterID} value={character.characterID}></input>
-                                    <label htmlFor={character.characterID}>{character.characterName}</label>
-                                </div>
-                            ))}
+                            {characters.map((character) => {
+                            
+                                let isSelected = selectedCharacters[character.characterID];
+
+                                return (
+                                    <div key={character._id} className="flex flex-col justify-center items-center p-5">
+                                        <div className="w-48 h-48 relative">
+                                            <Image 
+                                                layout="fill"
+                                                src={character.characterPicture} 
+                                                alt={character.characterName} 
+                                                className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`}
+                                                onClick={() => handleSelectionChange(character.characterID)} 
+                                                htmlFor={character.characterID}
+                                            />
+                                        </div>
+                                        <label htmlFor={character.characterID}>{character.characterName}</label>
+                                    </div>
+                            )})}
                         </div>
                         <ResponseTypePopup />
                         <div className="justify-center flex">
                             <div className="flex justify-center p-5">
-                                <input type="checkbox" id="short" name="short" value="short"></input>
+                                <input 
+                                    type="checkbox" 
+                                    id="short" 
+                                    name="short" 
+                                    value="short" 
+                                    onChange={handleCheckboxChange}
+                                    checked={short}
+                                ></input>
                                 <label htmlFor="short">Short</label>
                             </div>
                         </div>
-                        <button className="rounded-xl bg-blue-600 p-2 m-2 absolute right-0" onClick={journalDream}>Journal Dream</button><br />
+                        <button className="rounded-xl bg-blue-600 p-2 m-2 absolute right-0" onClick={journalDream}>{buttonText}</button><br />
                     </div>
-                    {/* <button className="rounded-xl bg-red-600 p-2 m-2" onClick={returnMainMenu}>Main Menu</button> */}
                 </div>
             )}
         </div>
@@ -176,7 +236,7 @@ const CharacterSelectionPopup = () => {
 
     return (
         <div className="flex justify-center text-3xl pt-5">
-            Select Characters to Interpret Your Dreams
+            Select Oracles to Interpret Your Dreams
             <Popup 
                 trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
                 position="top center"
@@ -202,8 +262,10 @@ const ResponseTypePopup = () => {
                 contentStyle={{width: "50%"}}
             >
                 <b>Response Type</b><br/>
-                If you would like a shorter answer, or the ability to ask a followup question, select short.
-                Otherwise, you can leave it blank and the dream oracle will provide a full interpretation.
+                Our oracles by default will give you a longer, more detailed, and more educational interpretation.
+                If you would like a shorter, straight to the point answer, or the ability to ask a followup
+                question, select short. We recommend getting the full answer as a beginner, and then switching
+                to short answers once you are familiar with dream concepts.
             </Popup>
         </div>
     )
