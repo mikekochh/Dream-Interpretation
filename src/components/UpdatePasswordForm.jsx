@@ -36,7 +36,7 @@ export default function UpdatePasswordForm() {
         e.preventDefault();
         try {
             const res = await axios.post('api/updatePassword', { verificationTokenID, password });
-            router.push('/userLogin');
+            router.push('/login');
         } catch (error) {
             console.log('error: ', error);
         }

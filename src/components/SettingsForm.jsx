@@ -12,10 +12,17 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const SettingsForm = () => {
 
+    const router = useRouter();
+
+    const logout = async () => {
+        await signOut();
+        router.push("/homePage");
+    }
+
     return (
         <div>
             <div className="logout absolute bottom-0 left-0 p-4">
-                <button onClick={() => signOut()} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
+                <button onClick={logout} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
             </div>
         </div>
     )

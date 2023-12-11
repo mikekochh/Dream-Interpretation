@@ -73,7 +73,7 @@ export default function LoginForm() {
                 router.replace("/characterSelection");
             }
             else {
-                router.replace("/home");
+                router.replace("/journal");
             }
             
         } catch (error) {

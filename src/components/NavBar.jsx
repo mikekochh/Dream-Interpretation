@@ -1,12 +1,26 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation'
 
 const NavBar = () => {
 
+    const [noNavBarPage, setNoNavBarPage] = useState(false);
+    const path = usePathname();
+
+    useEffect(() => {
+        if (path === '/login' || path === '/homePage' || path === '/register') {
+            setNoNavBarPage(true);
+        }
+        else {
+            setNoNavBarPage(false);
+        }
+    }, [path]);
+
     return (
+        noNavBarPage ? null :
         <nav className="flex justify-between items-center w-full z-10 p-4 border-b bg-white">
             {/* Section for logo and ability to change based off of screen size */}
             <Link href="https://www.michaelgkoch.com">
@@ -26,7 +40,7 @@ const NavBar = () => {
                         <Link href="/dreams">Dreams</Link>
                     </li>
                     <li className={`cursor-pointer mr-4 Character`}>
-                        <Link href="/characterSelection">Characters</Link>
+                        <Link href="/characterSelection">Oracles</Link>
                     </li>
                     <li className={`cursor-pointer Settings`}>
                         <Link href="/settings">Settings</Link>
