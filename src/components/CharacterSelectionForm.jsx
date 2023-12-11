@@ -81,7 +81,7 @@ export default function CharacterSelectionForm() {
                 {characters.map((character, index) => {
 
                     const isSelected = selectedCharacter === character.characterID;
-
+ 
                     return (
                         <div key={index} className={`text-white text-center flex flex-col items-center justify-center rounded-xl`}>
                             <input type="radio" id={character.characterName} name="character" value={character.characterID} checked={isSelected} onChange={() => {}} style={{ display: 'none'}} />

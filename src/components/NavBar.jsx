@@ -25,8 +25,11 @@ const NavBar = () => {
                     <li className={`cursor-pointer mr-4 Interpret`}>
                         <Link href="/dreams">Dreams</Link>
                     </li>
-                    <li className={`cursor-pointer Character`}>
+                    <li className={`cursor-pointer mr-4 Character`}>
                         <Link href="/characterSelection">Characters</Link>
+                    </li>
+                    <li className={`cursor-pointer Settings`}>
+                        <Link href="/settings">Settings</Link>
                     </li>
                 </ul>
             </div>
