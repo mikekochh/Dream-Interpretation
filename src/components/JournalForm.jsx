@@ -126,7 +126,6 @@ export default function JournalForm() {
     }
 
     const goToDreamDetails = () => {
-        console.log('go to dream details');
         window.location.href = `/dreamDetails?dreamID=${newDreamID}`;
     }
 
