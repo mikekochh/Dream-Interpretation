@@ -67,11 +67,11 @@ export default function CharacterSelectionForm() {
         }
         const email = session?.user?.email;
         const res = await axios.post('/api/characterSelection', { characterID: selectedCharacter, email });
-        router.replace("/home");
+        router.replace("/journal");
     }
 
     const cancelCharacter = () => {
-        router.replace("/home");
+        router.replace("/journal");
     }
 
     return (

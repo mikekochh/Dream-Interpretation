@@ -11,7 +11,7 @@ export default function ContactMeForm() {
     const router = useRouter();
 
     function exit () {
-        router.push('/home');
+        router.push('/journal');
     }
 
     return (

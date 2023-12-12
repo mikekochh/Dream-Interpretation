@@ -11,7 +11,7 @@ const NavBar = () => {
     const path = usePathname();
 
     useEffect(() => {
-        if (path === '/login' || path === '/homePage' || path === '/register') {
+        if (path === '/login' || path === '/homePage' || path === '/register' || path === '/') {
             setNoNavBarPage(true);
         }
         else {

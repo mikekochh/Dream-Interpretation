@@ -1,23 +1,20 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { signOut } from "next-auth/react";
 import { useSession } from 'next-auth/react';
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import 'reactjs-popup/dist/index.css';
-import Popup from 'reactjs-popup';
-import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const SettingsForm = () => {
 
     const router = useRouter();
 
     const logout = async () => {
-        await signOut();
+        console.log("logout");
+        await signOut({ redirect: false });
         router.push("/homePage");
     }
+    
 
     return (
         <div>
