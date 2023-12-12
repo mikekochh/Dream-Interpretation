@@ -78,7 +78,7 @@ export default function DreamsForm() {
 
     return (
         <div className="flex h-screen">
-            <div className="w-2/3 main-content">
+            <div className="md:w-2/3 main-content">
                 {dreamDetails && characters && (
                     dreamDetails.map((detail) => (
                         <div 
@@ -100,7 +100,7 @@ export default function DreamsForm() {
                     )
                 ))}
             </div>
-            <div className="w-1/3 main-content relative">
+            <div className="md:w-1/3 main-content relative">
                 <div className="border border-white rounded-xl text-white m-2 p-2">
                     <p className="font-bold">Dream Notes</p>
                     <textarea type="text" rows={20} className="DreamBox NoteBox border-2 border-black rounded-lg text-black w-full h-full" />

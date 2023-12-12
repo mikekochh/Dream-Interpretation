@@ -7,12 +7,7 @@ export async function POST(req) {
     try {
         // create user
         const { dream, userID, interpretDream } = await req.json();
-
-        console.log("Dream: ", dream);
-        console.log("userID: ", userID);
-        console.log("interpretDream: ", interpretDream);
         const dreamDate = new Date();
-        console.log("Date: ", dreamDate);
 
         await connectMongoDB();
 

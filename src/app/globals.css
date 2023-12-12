@@ -47,11 +47,25 @@ body {
   100%{ transform: rotate(325deg) translateX(-1400px); opacity: 0; }
 }
 
-.DreamBox {
+/* .DreamBox {
   background: transparent;
   border: 2px solid white;
   color: white;
+  background-color: #33334D;
+} */
+
+.DreamBox {
+  background: linear-gradient(to top, #0D1B2A, #1B263B, #415A77, #778DA9); /* Gradient resembling night sky */
+  border: 2px solid white; /* Border properties */
+  color: white; /* Text color */
 }
+
+textarea.DreamBox {
+  /* Additional styles to improve text readability on the gradient background */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  color: white; /* Ensures the text stands out */
+}
+
 
 .LoginInput {
   background: transparent;
@@ -142,14 +156,55 @@ nav {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 10; /* Ensure it's above other elements */
-  height: 60px; /* Height of navbar */
+  z-index: 10; 
+  height: 60px; 
 }
+/* 
+nav {
+  z-index: 10;
+  height: 60px;
+  position: fixed; 
+  top: 0; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border-radius: 25px; 
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1); 
+  border-bottom: none; 
+}
+
+nav::before, nav::after {
+  content: '';
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  position: absolute;
+  width: 100px; 
+  height: 100px; 
+  top: -50px; 
+}
+
+nav::before {
+  left: 10%; 
+}
+
+nav::after {
+  right: 10%; 
+} */
 
 .main-content {
   padding-top: 60px; /* Add a top padding to avoid content overlay */
   overflow-y: auto;
   max-height: 100vh; 
+}
+
+.middle-content {
+  height: calc(100vh - 60px); /* Subtract the navbar height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .wiggle:hover {

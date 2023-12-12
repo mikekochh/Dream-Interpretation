@@ -10,7 +10,6 @@ const SettingsForm = () => {
     const router = useRouter();
 
     const logout = async () => {
-        console.log("logout");
         await signOut({ redirect: false });
         router.push("/homePage");
     }

@@ -21,6 +21,7 @@ export default function JournalForm() {
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [selectedCharacters, setSelectedCharacters] = useState({});
     const [short, setShort] = useState(true);
+    const [newDreamID, setNewDreamID] = useState(null);
 
     function handleSelectionChange(characterID) {
         setSelectedCharacters(prev => ({
@@ -30,9 +31,6 @@ export default function JournalForm() {
     }
 
     useEffect(() => {
-
-        console.log("selectedCharacters", selectedCharacters);
-        console.log("Object.keys(selectedCharacters).length", Object.keys(selectedCharacters).length);
 
         if (Object.keys(selectedCharacters).length) {
             let anyChecked = false;
@@ -99,15 +97,12 @@ export default function JournalForm() {
         }
         try {
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream });
+            console.log('resJournal: ', resJournal.data._id);
+            setNewDreamID(resJournal.data._id);
             if (interpretDream) {
-                console.log("interpretDream");
                 const dreamID = resJournal.data._id;
-                console.log("dreamID", dreamID);
-                console.log("short", short);
                 for (let characterSelected in selectedCharacters) {
-                    console.log("characterSelected", selectedCharacters[characterSelected]);
                     if (selectedCharacters[characterSelected]) {
-                        console.log("characterSelected", characterSelected); 
                         const resInterpret = await axios.post('/api/dream/interpret', 
                         { 
                             dreamID, 
@@ -126,9 +121,13 @@ export default function JournalForm() {
     }
 
     const resetPage = () => {
-        console.log("resetPage");
         setSavingDream(false);
         setError('');
+    }
+
+    const goToDreamDetails = () => {
+        console.log('go to dream details');
+        window.location.href = `/dreamDetails?dreamID=${newDreamID}`;
     }
 
     const handleCheckboxChange = (event) => {
@@ -137,25 +136,27 @@ export default function JournalForm() {
 
     return (
         <div className="text-white main-content relative">
-            <div className="absolute right-0 top-0 p-2 main-content">Dream Credits: {user?.credits}</div>
             {savingDream ? (
-                <div className="flex justify-center flex-col">
-                    <p className="text-center text-2xl">
-                        You're dream has been saved and is currently being interpreted. Please wait up to 1-2 minutes for your
-                        interpretations to appear under the dream details.
-                    </p>
-                    <div className="flex justify-center">
-                        <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={resetPage}>OK</button>
-                    </div>  
+                <div className="flex justify-center items-center middle-content">
+                    <div className="flex justify-center items-center flex-col">
+                        <p className="text-center text-2xl p-4">
+                            You&apos;re dream has been saved and is currently being interpreted. Interpretation will appear under the dream details.
+                        </p>
+                        <div className="flex justify-center">
+                            <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={resetPage}>Journal New Dream</button>
+                            <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={goToDreamDetails}>Go To Dream Details</button>
+                        </div>  
+                    </div>
                 </div>
             ) : (
                 <div>
+                <div className="absolute right-0 top-0 p-2 main-content">Dream Credits: {user?.credits}</div>
                     <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>{buttonText}</button>
                     <div>
                         <HowItWorksPopup />
                         <div className="flex flex-col">
                             <div className="flex justify-center">
-                                <textarea type="text" rows={15} className="DreamBox border-2 border-black rounded-lg text-black w-3/4" />
+                                <textarea type="text" rows={15} className="DreamBox border-2 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" />
                             </div>
                         </div>
                         <div>
@@ -164,7 +165,7 @@ export default function JournalForm() {
                             )}  
                         </div>
                         <CharacterSelectionPopup />
-                        <div className="justify-center flex">
+                        <div className="justify-center flex lg:flex-row flex-col">
                             {characters.map((character) => {
                             
                                 let isSelected = selectedCharacters[character.characterID];
@@ -211,11 +212,11 @@ export default function JournalForm() {
 const HowItWorksPopup = () => {
 
     return (
-        <div className="flex justify-center text-3xl pb-5">
+        <div className="flex justify-center text-3xl pb-5 p-3">
             Enter Dream Description Below
             <Popup 
                 trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-                position="bottom center"
+                position="bottom right center"
                 contentStyle={{width: "50%"}}
             >
                 <b>How do I write a good prompt?</b><br/>
@@ -235,16 +236,16 @@ const HowItWorksPopup = () => {
 const CharacterSelectionPopup = () => {
 
     return (
-        <div className="flex justify-center text-3xl pt-5">
+        <div className="flex justify-center text-3xl pt-5 p-3 text-center">
             Select Oracles to Interpret Your Dreams
             <Popup 
                 trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-                position="top center"
+                position="bottom right center"
                 contentStyle={{width: "50%"}}
             >
                 <b>Selecting characters</b><br/>
                 Here, you can select which characters you would like to interpret your dream. You can select as
-                many as you'd like, or none at all. There interpretations will appear under the dream details page.
+                many as you&apos;d like, or none at all. There interpretations will appear under the dream details page.
                 Please allow 1-2 minutes for the interpretations to appear under the dream details page.
             </Popup>
         </div>
@@ -258,7 +259,7 @@ const ResponseTypePopup = () => {
             Select Response Type
             <Popup 
                 trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-                position="top center"
+                position="top right center"
                 contentStyle={{width: "50%"}}
             >
                 <b>Response Type</b><br/>

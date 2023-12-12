@@ -21,12 +21,12 @@ const NavBar = () => {
 
     return (
         noNavBarPage ? null :
-        <nav className="flex justify-between items-center w-full z-10 p-4 border-b bg-white">
+        <nav className="flex justify-between items-center w-full p-4 border-b bg-white rounded-3xl">
             {/* Section for logo and ability to change based off of screen size */}
             <Link href="https://www.michaelgkoch.com">
                 <div className="flex items-center cursor-pointer">
                     <Image src="/dream_icon.png" className="rounded-lg" objectFit="contain" width={32} height={32} alt="logo" />
-                    <p className="text-black font-semibold text-lg ml-1">Dream Oracles</p>
+                    <p className="text-black font-semibold text-lg ml-1 hidden md:block">Dream Oracles</p>
                 </div>
             </Link>
 
