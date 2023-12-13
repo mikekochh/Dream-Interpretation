@@ -24,7 +24,7 @@ const NavBar = () => {
 
     return (
         noNavBarPage ? null :
-        <nav className="flex justify-between items-center w-full p-4 border-b bg-white rounded-3xl">
+        <nav className="flex justify-between items-center w-full p-4 border-b bg-white">
             {/* Section for logo and ability to change based off of screen size */}
             <Link href="https://www.michaelgkoch.com">
                 <div className="flex items-center cursor-pointer">

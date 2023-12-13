@@ -47,18 +47,18 @@ body {
   100%{ transform: rotate(325deg) translateX(-1400px); opacity: 0; }
 }
 
-/* .DreamBox {
+.DreamBox {
   background: transparent;
-  border: 2px solid white;
+  border: 1px solid white;
   color: white;
   background-color: #33334D;
-} */
-
-.DreamBox {
-  background: linear-gradient(to top, #0D1B2A, #1B263B, #415A77, #778DA9); /* Gradient resembling night sky */
-  border: 2px solid white; /* Border properties */
-  color: white; /* Text color */
 }
+
+/* .DreamBox {
+  background: linear-gradient(to top, #0D1B2A, #1B263B, #415A77, #778DA9); 
+  border: 2px solid white; 
+  color: white; 
+} */
 
 textarea.DreamBox {
   /* Additional styles to improve text readability on the gradient background */

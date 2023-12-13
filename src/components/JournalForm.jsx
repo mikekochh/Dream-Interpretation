@@ -17,25 +17,18 @@ export default function JournalForm() {
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
     const [savingDream, setSavingDream] = useState(false);
-    const [characters, setCharacters] = useState([]);
+    const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
-    const [selectedCharacters, setSelectedCharacters] = useState({});
+    const [selectedOracles, setSelectedOracles] = useState({});
     const [short, setShort] = useState(true);
     const [newDreamID, setNewDreamID] = useState(null);
 
-    function handleSelectionChange(characterID) {
-        setSelectedCharacters(prev => ({
-            ...prev,
-            [characterID]: !prev[characterID]
-        }));
-    }
-
     useEffect(() => {
 
-        if (Object.keys(selectedCharacters).length) {
+        if (Object.keys(selectedOracles).length) {
             let anyChecked = false;
-            for (let characterSelected in selectedCharacters) {
-                if (selectedCharacters[characterSelected]) {
+            for (let oracleSelected in selectedOracles) {
+                if (selectedOracles[oracleSelected]) {
                     anyChecked = true;
                 }
             }
@@ -45,7 +38,7 @@ export default function JournalForm() {
             setButtonText("Journal Dream");
         }
 
-    }, [selectedCharacters]);
+    }, [selectedOracles]);
 
     useEffect(() => {
         async function setUserData() {
@@ -70,13 +63,20 @@ export default function JournalForm() {
 
 
     useEffect(() => {
-        async function getCharacters() {
-            const res = await axios.get('/api/characters');
-            setCharacters(res.data);
+        async function getOracles() {
+            const res = await axios.get('/api/oracles');
+            setOracles(res.data);
         }
 
-        getCharacters();
+        getOracles();
     }, []);
+
+    function handleSelectionChange(oracleID) {
+        setSelectedOracles(prev => ({
+            ...prev,
+            [oracleID]: !prev[oracleID]
+        }));
+    }
 
     async function journalDream() {
         var dream = document.querySelector('.DreamBox').value;
@@ -87,10 +87,9 @@ export default function JournalForm() {
         setSavingDream(true);
         const userID = user._id;
         let interpretDream = false;
-        if (Object.keys(selectedCharacters).length) {
-            for (let characterSelected in selectedCharacters) {
-                if (selectedCharacters[characterSelected]) {
-                    console.log("characterSelected", characterSelected);
+        if (Object.keys(selectedOracles).length) {
+            for (let oracleSelected in selectedOracles) {
+                if (selectedOracles[oracleSelected]) {
                     interpretDream = true;
                 }
             }
@@ -101,13 +100,13 @@ export default function JournalForm() {
             setNewDreamID(resJournal.data._id);
             if (interpretDream) {
                 const dreamID = resJournal.data._id;
-                for (let characterSelected in selectedCharacters) {
-                    if (selectedCharacters[characterSelected]) {
+                for (let oracleSelected in selectedOracles) {
+                    if (selectedOracles[oracleSelected]) {
                         const resInterpret = await axios.post('/api/dream/interpret', 
                         { 
                             dreamID, 
                             dream, 
-                            characterID: characterSelected, 
+                            oracleID: oracleSelected, 
                             user,
                             short
                         });
@@ -122,6 +121,7 @@ export default function JournalForm() {
 
     const resetPage = () => {
         setSavingDream(false);
+        setSelectedOracles({});
         setError('');
     }
 
@@ -155,7 +155,7 @@ export default function JournalForm() {
                         <HowItWorksPopup />
                         <div className="flex flex-col">
                             <div className="flex justify-center">
-                                <textarea type="text" rows={15} className="DreamBox border-2 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" />
+                                <textarea type="text" rows={15} placeholder='Enter Dream' className="DreamBox border-2 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" />
                             </div>
                         </div>
                         <div>
@@ -163,25 +163,25 @@ export default function JournalForm() {
                                 <div className="bg-red-500 w-max p-1 rounded-xl">{error}</div>
                             )}  
                         </div>
-                        <CharacterSelectionPopup />
+                        <OracleSelectionPopup />
                         <div className="justify-center flex lg:flex-row flex-col">
-                            {characters.map((character) => {
+                            {oracles.map((oracle) => {
                             
-                                let isSelected = selectedCharacters[character.characterID];
+                                let isSelected = selectedOracles[oracle.oracleID];
 
                                 return (
-                                    <div key={character._id} className="flex flex-col justify-center items-center p-5">
+                                    <div key={oracle._id} className="flex flex-col justify-center items-center p-5">
                                         <div className="w-48 h-48 relative">
                                             <Image 
                                                 layout="fill"
-                                                src={character.characterPicture} 
-                                                alt={character.characterName} 
+                                                src={oracle.oraclePicture} 
+                                                alt={oracle.oracleName} 
                                                 className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`}
-                                                onClick={() => handleSelectionChange(character.characterID)} 
-                                                htmlFor={character.characterID}
+                                                onClick={() => handleSelectionChange(oracle.oracleID)} 
+                                                htmlFor={oracle.oracleID}
                                             />
                                         </div>
-                                        <label htmlFor={character.characterID}>{character.characterName}</label>
+                                        <label htmlFor={oracle.oracleID}>{oracle.oracleName}</label>
                                     </div>
                             )})}
                         </div>
@@ -232,7 +232,7 @@ const HowItWorksPopup = () => {
     )
 }
 
-const CharacterSelectionPopup = () => {
+const OracleSelectionPopup = () => {
 
     return (
         <div className="flex justify-center text-3xl pt-5 p-3 text-center">
@@ -242,10 +242,9 @@ const CharacterSelectionPopup = () => {
                 position="bottom right center"
                 contentStyle={{width: "50%"}}
             >
-                <b>Selecting characters</b><br/>
-                Here, you can select which characters you would like to interpret your dream. You can select as
-                many as you&apos;d like, or none at all. There interpretations will appear under the dream details page.
-                Please allow 1-2 minutes for the interpretations to appear under the dream details page.
+                <b>Selecting oracles</b><br/>
+                Here, you can select which oracles you would like to interpret your dream. You can select as
+                many as you&apos;d like, or none at all. Their interpretations will appear under the dream details page.
             </Popup>
         </div>
     )
@@ -261,11 +260,26 @@ const ResponseTypePopup = () => {
                 position="top right center"
                 contentStyle={{width: "50%"}}
             >
-                <b>Response Type</b><br/>
-                Our oracles by default will give you a longer, more detailed, and more educational interpretation.
-                If you would like a shorter, straight to the point answer, or the ability to ask a followup
-                question, select short. We recommend getting the full answer as a beginner, and then switching
-                to short answers once you are familiar with dream concepts.
+                <b>Short</b><br/>
+                If you are looking for a simple interpretation, we recommend checking short. This will speed up interpretation time,
+                and give you a more concise answer. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.<br/>
+                <b>Simplify</b><br/>
+                Some of our oracles, especially Carl and Freud can be a bit wordy and hard to understand for beginners. If you aren't as familiar with
+                with some of their work, we recommend checking this box. This will simplify their interpretations to be more beginner friendly.<br/>
+                <b>Expert</b><br/>
+                If you are looking for a more advanced interpretation, we recommend checking this box. All of our oracles are more than happy to go into 
+                full detail about your dream and draw upon their knowledge extensively. This is great for people who are interested in going deeper and want 
+                more information about their dream as it relates to the oracles dream knowledge.<br/>
+                <b>Educate</b><br/>
+                If you're a beginner and want to learn more about dream interpretation, we recommend checking this box. Our oracles will take a more educational 
+                approach and provide lessons and ideas from their work to fill you in on their dream interpretation process. If you're more curious about learning about
+                a particular oracles work, we recommend checking this box.<br/>
+                <b>Entertain</b><br/>
+                If you're looking for a more entertaining interpretation, we recommend checking this box. Our oracles will take a more creative and fun apporach to
+                your dream. <br/><br/>
+                <b>Warning</b><br/>
+                What you select will impact the speed and accuracy of your interpretations. Longer, more detailed interpreations can take up to 2 minutes, while shorten
+                interpretations should only take a couple seconds.
             </Popup>
         </div>
     )

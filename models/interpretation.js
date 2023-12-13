@@ -9,9 +9,9 @@ const interpretationSchema = new Schema({
         type: String,
         required: [true, "Please enter a dream!"]
     },
-    characterID: {
+    oracleID: {
         type: Number,
-        required: [true, "Please enter a dream interpretation!"]
+        required: [true, "Please enter a oracle ID!"]
     },
     interpretationDate: {
         type: Date,

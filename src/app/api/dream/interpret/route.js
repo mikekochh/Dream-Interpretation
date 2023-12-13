@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import Interpretation from "../../../../../models/interpretation";
-import Character from '../../../../../models/characters';
+import Oracle from '../../../../../models/oracles';
 import User from "../../../../../models/user";
-import { Inter } from 'next/font/google';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
@@ -15,18 +14,18 @@ export async function POST(req) {
     try {
         await connectMongoDB();
         // create user
-        const { dreamID, dream , characterID, user, short } = await req.json();
+        const { dreamID, dream , oracleID, user, short } = await req.json();
 
-        console.log("characterID: ", characterID);
+        console.log("oracleID: ", oracleID);
 
-        const character = await Character.findOne({ characterID });
-        const prompt = character.prompt;
+        const oracle = await Oracle.findOne({ oracleID });
+        const prompt = oracle.prompt;
 
         console.log("short: ", short);
 
         const interpretationDate = new Date();
 
-        const shorternText = short ? "\n\n" + "Also, provide a comprehensive interpretation within 4-5 sentences." : "";
+        const shorternText = short ? "\n\n" + "The interpretation should only be 5 sentences long. " : "";
 
         const chatGPTPrompt = prompt + "\n\n" + dream + shorternText;
 
@@ -37,7 +36,7 @@ export async function POST(req) {
             const dreamCreditsData = await reduceDreamCredits(user.credits, user._id);
             const newInterpretation = await Interpretation.create({
                 dreamID,
-                characterID,
+                oracleID,
                 interpretation,
                 interpretationDate
             });
