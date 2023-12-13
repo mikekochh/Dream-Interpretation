@@ -33,7 +33,9 @@ export async function POST(req) {
             console.log("Waiting to interpret dream...");
             const dreamData = await interpretDream(chatGPTPrompt);
             const interpretation = dreamData[0].message.content;
-            const dreamCreditsData = await reduceDreamCredits(user.credits, user._id);
+            if (!user.subscribed) {
+                const dreamCreditsData = await reduceDreamCredits(user.credits, user._id);
+            }
             const newInterpretation = await Interpretation.create({
                 dreamID,
                 oracleID,

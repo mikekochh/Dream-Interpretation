@@ -70,7 +70,7 @@ export default function LoginForm() {
             const resCharacter = await axios.get(`api/characterSelection`, { params: { email } });
 
             if (resCharacter.data == null) {
-                router.replace("/characterSelection");
+                router.replace("/oracles");
             }
             else {
                 router.replace("/journal");

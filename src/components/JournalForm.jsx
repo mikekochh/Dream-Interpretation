@@ -22,6 +22,7 @@ export default function JournalForm() {
     const [selectedOracles, setSelectedOracles] = useState({});
     const [short, setShort] = useState(true);
     const [newDreamID, setNewDreamID] = useState(null);
+    const [subscribed, setSubscribed] = useState(false);
 
     useEffect(() => {
 
@@ -54,6 +55,7 @@ export default function JournalForm() {
 
         if (session) {
             setUserData().then(userData => {
+                setSubscribed(userData.subscribed);
                 setUser(userData);
             }).catch(err => {
                 console.log('err: ', err);
@@ -149,7 +151,7 @@ export default function JournalForm() {
                 </div>
             ) : (
                 <div>
-                <div className="absolute right-0 top-0 p-2 main-content">Dream Credits: {user?.credits}</div>
+                    {!subscribed && (<div className="absolute right-0 top-0 p-2 main-content">Dream Credits: {user?.credits}</div>)}
                     <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>{buttonText}</button>
                     <div>
                         <HowItWorksPopup />
@@ -163,7 +165,7 @@ export default function JournalForm() {
                                 <div className="bg-red-500 w-max p-1 rounded-xl">{error}</div>
                             )}  
                             <div id="interpretation-section" className="relative">
-                                <div className={`${user?.credits === 0 ? 'blur pointer-events-none' : ''}`}>
+                                <div className={`${user?.credits === 0 && !subscribed ? 'blur pointer-events-none' : ''}`}>
                                     <OracleSelectionPopup />
                                     <div className="justify-center flex lg:flex-row flex-col">
                                         {oracles.map((oracle) => {
@@ -202,9 +204,9 @@ export default function JournalForm() {
                                     </div>
                                     <button className="rounded-xl bg-blue-600 p-2 m-2 absolute right-0" onClick={journalDream}>{buttonText}</button><br />
                                 </div>
-                                {user?.credits === 0 && (
-                                    <div className="absolute inset-0 flex flex-col justify-center items-center">
-                                        <span className="text-3xl font-semibold">You must buy more credits or start a subscription to interpret your dreams</span>
+                                {user?.credits === 0 && !subscribed && (
+                                    <div className="absolute inset-0 flex flex-col md:justify-center items-center">
+                                        <span className="text-3xl font-semibold text-center mt-5 md:mt-0">You must buy more credits or start a subscription to interpret your dreams</span>
                                         <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={() => window.location.href = '/pricing'}>See Pricing</button>
                                     </div>
                                 )}
@@ -214,7 +216,6 @@ export default function JournalForm() {
                 </div>
             )}
         </div>
-
     )
 }
 

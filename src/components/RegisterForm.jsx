@@ -69,7 +69,7 @@ export default function RegisterForm() {
                     redirect: false
                 });
 
-                router.replace("/characterSelection");
+                router.replace("/oracles");
             }
         }
         catch (error) {

@@ -10,7 +10,6 @@ export default function OracleSelectionForm() {
 
     const [oracles, setOracles] = useState([]);
     const [selectedOracle, setSelectedOracle] = useState(null);
-    const [errorMessage, setErrorMessage] = useState('');
 
     const { data: session } = useSession();
 
@@ -58,9 +57,9 @@ export default function OracleSelectionForm() {
     }
 
     return (
-        <div>
-            <div className="text-white text-center text-xl main-content">Meet the Oracles!</div>
-            <div className="grid grid-cols-5 gap-4 mr-2 ml-2">
+        <div className="main-content">
+            <div className="text-white text-center text-3xl mb-5">Meet the Oracles!</div>
+            <div className="gap-4 mr-2 ml-2 flex md:flex-row flex-col justify-center">
                 {oracles.map((oracle, index) => {
 
                     const isSelected = selectedOracle === oracle.oracleID;
@@ -68,7 +67,7 @@ export default function OracleSelectionForm() {
                     return (
                         <div key={index} className={`text-white text-center flex flex-col items-center justify-center rounded-xl`}>
                             <input type="radio" id={oracle.oracleName} name="oracle" value={oracle.oracleID} checked={isSelected} onChange={() => {}} style={{ display: 'none'}} />
-                            {/* Good oracles for desktop */}
+                            {/* oracles for desktop */}
                             <div className="hidden sm:block sm:flex-col">
                                 <div className="flex justify-center items-center">
                                     <Image 
@@ -84,7 +83,7 @@ export default function OracleSelectionForm() {
                             </div>
 
                             {/* oracles for mobile */}
-                            <div className="sm:hidden justify-center items-center flex">
+                            <div className="sm:hidden justify-center flex-col items-center">
                                 <Image 
                                     width={125} 
                                     height={125} 
@@ -98,11 +97,6 @@ export default function OracleSelectionForm() {
                         </div>
                     )
                 })}
-            </div>
-            <div className="flex justify-center flex-col items-center">
-                <div className="fixed bottom-0 mb-6">
-                </div>
-                {errorMessage && <div className="bg-red-600 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 font-bold">{errorMessage}</div>}
             </div>
         </div>
     )

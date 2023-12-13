@@ -25,6 +25,10 @@ const oracleSchema = new Schema({
         type: Boolean,
         required: [true, "Please enter oracle active status!"]
     },
+    oracleDescription: {
+        type: String,
+        required: [true, "Please enter oracle description!"]
+    },
 });
 
 const Oracle = models.Oracle || mongoose.model("Oracle", oracleSchema);

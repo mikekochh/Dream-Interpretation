@@ -30,6 +30,9 @@ const userSchema = new Schema({
     verificationTokenID: {
         type: String,
     },
+    subscribed: {
+        type: Boolean,
+    },
 
 }, {timestamps: true});
 
