@@ -41,6 +41,18 @@ export default function JournalForm() {
     }, [selectedOracles]);
 
     useEffect(() => {
+        console.log("Are we getting here?");
+        console.log("user: ", user);
+        if (user?.credits === 0) {
+            document.getElementById('interpretation-section').setAttribute('className', 'blur');
+        }
+        else {
+            var div = document.getElementById('interpretation-section');
+            div.className = '';
+        }
+    }, [user]);
+
+    useEffect(() => {
         async function setUserData() {
             const email = session?.user?.email;
             const res = await fetch(`api/user/${email}`, {
@@ -162,44 +174,54 @@ export default function JournalForm() {
                             {error && (
                                 <div className="bg-red-500 w-max p-1 rounded-xl">{error}</div>
                             )}  
-                        </div>
-                        <OracleSelectionPopup />
-                        <div className="justify-center flex lg:flex-row flex-col">
-                            {oracles.map((oracle) => {
-                            
-                                let isSelected = selectedOracles[oracle.oracleID];
+                            <div id="interpretation-section" className="relative">
+                                <div className={`${user?.credits === 0 ? 'blur pointer-events-none' : ''}`}>
+                                    <OracleSelectionPopup />
+                                    <div className="justify-center flex lg:flex-row flex-col">
+                                        {oracles.map((oracle) => {
+                                        
+                                            let isSelected = selectedOracles[oracle.oracleID];
 
-                                return (
-                                    <div key={oracle._id} className="flex flex-col justify-center items-center p-5">
-                                        <div className="w-48 h-48 relative">
-                                            <Image 
-                                                layout="fill"
-                                                src={oracle.oraclePicture} 
-                                                alt={oracle.oracleName} 
-                                                className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`}
-                                                onClick={() => handleSelectionChange(oracle.oracleID)} 
-                                                htmlFor={oracle.oracleID}
-                                            />
-                                        </div>
-                                        <label htmlFor={oracle.oracleID}>{oracle.oracleName}</label>
+                                            return (
+                                                <div key={oracle._id} className="flex flex-col justify-center items-center p-5">
+                                                    <div className="w-48 h-48 relative">
+                                                        <Image 
+                                                            layout="fill"
+                                                            src={oracle.oraclePicture} 
+                                                            alt={oracle.oracleName} 
+                                                            className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`}
+                                                            onClick={() => handleSelectionChange(oracle.oracleID)} 
+                                                            htmlFor={oracle.oracleID}
+                                                        />
+                                                    </div>
+                                                    <label htmlFor={oracle.oracleID}>{oracle.oracleName}</label>
+                                                </div>
+                                        )})}
                                     </div>
-                            )})}
-                        </div>
-                        <ResponseTypePopup />
-                        <div className="justify-center flex">
-                            <div className="flex justify-center p-5">
-                                <input 
-                                    type="checkbox" 
-                                    id="short" 
-                                    name="short" 
-                                    value="short" 
-                                    onChange={handleCheckboxChange}
-                                    checked={short}
-                                ></input>
-                                <label htmlFor="short">Short</label>
+                                    <ResponseTypePopup />
+                                    <div className="justify-center flex">
+                                        <div className="flex justify-center p-5">
+                                            <input 
+                                                type="checkbox" 
+                                                id="short" 
+                                                name="short" 
+                                                value="short" 
+                                                onChange={handleCheckboxChange}
+                                                checked={short}
+                                            ></input>
+                                            <label htmlFor="short">Short</label>
+                                        </div>
+                                    </div>
+                                    <button className="rounded-xl bg-blue-600 p-2 m-2 absolute right-0" onClick={journalDream}>{buttonText}</button><br />
+                                </div>
+                                {user?.credits === 0 && (
+                                    <div className="absolute inset-0 flex flex-col justify-center items-center">
+                                        <span className="text-3xl font-semibold">You must buy more credits or start a subscription to interpret your dreams</span>
+                                        <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={() => window.location.href = '/pricing'}>See Pricing</button>
+                                    </div>
+                                )}
                             </div>
                         </div>
-                        <button className="rounded-xl bg-blue-600 p-2 m-2 absolute right-0" onClick={journalDream}>{buttonText}</button><br />
                     </div>
                 </div>
             )}

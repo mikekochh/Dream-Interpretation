@@ -229,4 +229,26 @@ nav::after {
   }
 }
 
+.pricing-card {
+  height: calc(100vh - 140px);
+  padding: 1.25rem;
+  margin: 1.25rem;
+  margin-bottom: 0;
+}
+
+.pricing-card:hover {
+  transform: scale(1.05);
+  transition: transform 0.5s ease-in-out;
+}
+
+.pricing-card-mobile {
+  padding: 1.25rem;
+  margin: 1.25rem;
+  margin-bottom: 0;
+}
+
+.subscribe-button{
+  background-color: gold;
+}
+
 
