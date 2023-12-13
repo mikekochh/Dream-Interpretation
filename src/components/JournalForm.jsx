@@ -41,18 +41,6 @@ export default function JournalForm() {
     }, [selectedOracles]);
 
     useEffect(() => {
-        console.log("Are we getting here?");
-        console.log("user: ", user);
-        if (user?.credits === 0) {
-            document.getElementById('interpretation-section').setAttribute('className', 'blur');
-        }
-        else {
-            var div = document.getElementById('interpretation-section');
-            div.className = '';
-        }
-    }, [user]);
-
-    useEffect(() => {
         async function setUserData() {
             const email = session?.user?.email;
             const res = await fetch(`api/user/${email}`, {
