@@ -1,14 +1,35 @@
 "use client"
-import React from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 
 export default function PricingForm() { 
 
     const router = useRouter();
+    const { data: session } = useSession();
+    const [activated, setActivated] = useState(false);
 
-    function exit () {
-        router.push('/journal');
-    }
+    useEffect(() => {
+        async function setUserData() {
+            const email = session?.user?.email;
+            const res = await fetch(`api/user/${email}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            return res.json();
+        }
+
+        if (session) {
+            setUserData().then(userData => {
+                setActivated(userData.activated);
+            }).catch(err => {
+                console.log('err: ', err);
+            });
+        }
+    }, [session]);
 
     function buyCredits () {
         console.log("buy credits");
@@ -18,14 +39,18 @@ export default function PricingForm() {
         console.log("subscribe");
     }
 
+    function verifyEmail () {
+        console.log("verify email");  
+    }
+
     return (
-    <div className="text-white text-center p-4 main-content">
-        <h1 className="text-3xl">Pricing</h1>
+    <div className="text-white text-center p-4 main-content text-xl">
+        <h1 className="text-4xl">Pricing</h1>
 
         {/* Desktop view */}
-        <div className="flex-row lg:flex hidden">
+        <div className="flex-row lg:flex hidden mb-5">
             <div className="border border-white rounded-xl pricing-card w-1/3"> 
-                <h2 className="text-2xl pb-5">Free</h2>
+                <h2 className="text-3xl pb-5">Free</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
@@ -33,7 +58,7 @@ export default function PricingForm() {
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
-                <h2 className="text-2xl pb-5">Buy Credits</h2>
+                <h2 className="text-3xl pb-5">Buy Credits</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
@@ -46,15 +71,21 @@ export default function PricingForm() {
                 </div>
                 <div>
                     <button 
-                        className="rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap"
+                        className={`rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap ${activated ? "hidden" : ""}`}
                         onClick={buyCredits}
                     >
                         Buy 5 credits for $5
                     </button>
+                    <button 
+                        className={`rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap ${!activated ? "hidden" : ""}`}
+                        onClick={verifyEmail}
+                    >
+                        Verify Email to Buy Credits
+                    </button>
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
-                <h2 className="text-2xl pb-5">Subscription</h2>
+                <h2 className="text-3xl pb-5">Subscription</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
@@ -67,9 +98,17 @@ export default function PricingForm() {
                 </div>
                 <div>
                     <button 
-                        className="rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap"
+                        className={`rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap ${activated ? "hidden" : ""}`}
                         onClick={subscribe}
-                    >Subscribe for $7/month</button>
+                    >
+                        Subscribe for $7/month
+                    </button>
+                    <button 
+                        className={`rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap ${!activated ? "hidden" : ""}`}
+                        onClick={verifyEmail}
+                    >
+                        Verify Email to Buy Subscription
+                    </button>
                 </div>
             </div>
         </div>
@@ -97,7 +136,8 @@ export default function PricingForm() {
                     </ul>
                 </div>
                 <div>
-                    <button className="rounded-xl p-2 text-black m-2 mb-0 subscribe-button" onClick={buyCredits}>Buy 5 credits for $5</button>
+                    <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${activated ? "hidden" : ""}`} onClick={buyCredits}>Buy 5 credits for $5</button>
+                    <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${!activated ? "hidden" : ""}`} onClick={verifyEmail}>Verify Email to Buy Credits</button>
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card-mobile relative"> 
@@ -113,7 +153,8 @@ export default function PricingForm() {
                     </ul>
                 </div>
                 <div>
-                    <button className="rounded-xl p-2 text-black m-2 mb-0 subscribe-button" onClick={subscribe}>Subscribe for $7/month</button>
+                    <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${activated ? "hidden" : ""}`} onClick={subscribe}>Subscribe for $7/month</button>
+                    <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${!activated ? "hidden" : ""}`} onClick={verifyEmail}>Verify Email to Buy Subscription</button>
                 </div>
             </div>
         </div>

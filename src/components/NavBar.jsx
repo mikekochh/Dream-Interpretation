@@ -9,19 +9,8 @@ import { useSession } from "next-auth/react";
 
 const NavBar = () => {
 
-    const [noNavBarPage, setNoNavBarPage] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
-    const { data: session } = useSession();
-
-
-    useEffect(() => {
-        if (session) {
-            setNoNavBarPage(false);
-        }
-        else {
-            setNoNavBarPage(true);
-        }
-    }, [session]);
+    const [noNavBarPage, setNoNavBarPage] = useState(false);
 
     return (
         <div>
@@ -38,16 +27,19 @@ const NavBar = () => {
                     {/* Section on the right */}
                     <div className="justify-end items-center text-black md:flex hidden">
                         <ul className="flex">
-                            <li className={`cursor-pointer mr-4 Journal`}>
+                            <li className={`cursor-pointer mr-4`}>
                                 <Link href="/journal">Journal</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4 Interpret`}>
+                            <li className={`cursor-pointer mr-4`}>
                                 <Link href="/dreams">Dreams</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4 Character`}>
+                            <li className={`cursor-pointer mr-4`}>
                                 <Link href="/oracles">Oracles</Link>
                             </li>
-                            <li className={`cursor-pointer Settings`}>
+                            <li className={`cursor-pointer mr-4`}>
+                                <Link href="/pricing">Pricing</Link>
+                            </li>
+                            <li className={`cursor-pointer`}>
                                 <Link href="/settings">Settings</Link>
                             </li>
                         </ul>
@@ -96,6 +88,9 @@ const MenuItems = ({setIsOpen}) => {
             </li>
             <li className='cursor-pointer text-3xl p-4' onClick={() => setIsOpen(false)}>
                 <Link href="/oracles">Oracles</Link>
+            </li>
+            <li className='cursor-pointer text-3xl p-4' onClick={() => setIsOpen(false)}>
+                <Link href="/pricing">Pricing</Link>
             </li>
             <li className='cursor-pointer text-3xl p-4' onClick={() => setIsOpen(false)}>
                 <Link href="/settings">Settings</Link>
