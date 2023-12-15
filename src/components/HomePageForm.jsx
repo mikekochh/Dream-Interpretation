@@ -3,10 +3,21 @@ import Image from 'next/image';
 import RegisterForm from './RegisterForm';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+
 
 export default function HomePageForm() {
 
     const [oracles, setOracles] = useState([]);
+    const { data: session } = useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (session) {
+            router.push('/journal');
+        }
+    }, [session]);
 
     useEffect(() => {
 

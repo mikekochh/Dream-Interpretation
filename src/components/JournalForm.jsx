@@ -167,24 +167,38 @@ export default function JournalForm() {
                             <div id="interpretation-section" className="relative">
                                 <div className={`${user?.credits === 0 && !subscribed ? 'blur pointer-events-none' : ''}`}>
                                     <OracleSelectionPopup />
-                                    <div className="justify-center flex lg:flex-row flex-col">
+                                    <div className="justify-center flex md:flex-row flex-col">
                                         {oracles.map((oracle) => {
                                         
                                             let isSelected = selectedOracles[oracle.oracleID];
 
                                             return (
                                                 <div key={oracle._id} className="flex flex-col justify-center items-center p-5">
-                                                    <div className="w-48 h-48 relative">
+                                                    <div className="w-full relative max-w-sm hidden md:block">
                                                         <Image 
-                                                            layout="fill"
+                                                            layout="responsive"
+                                                            width={100}
+                                                            height={100}
                                                             src={oracle.oraclePicture} 
                                                             alt={oracle.oracleName} 
-                                                            className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-blue-500' : ''}`}
+                                                            className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-8 border-gold' : ''}`}
                                                             onClick={() => handleSelectionChange(oracle.oracleID)} 
                                                             htmlFor={oracle.oracleID}
                                                         />
                                                     </div>
-                                                    <label htmlFor={oracle.oracleID}>{oracle.oracleName}</label>
+                                                    <div className="w-full relative max-w-sm md:hidden oracle-image-mobile">
+                                                        <Image 
+                                                            layout="responsive"
+                                                            width={100}
+                                                            height={100}
+                                                            src={oracle.oraclePicture} 
+                                                            alt={oracle.oracleName} 
+                                                            className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-gold' : ''}`}
+                                                            onClick={() => handleSelectionChange(oracle.oracleID)} 
+                                                            htmlFor={oracle.oracleID}
+                                                        />
+                                                    </div>
+                                                    <label htmlFor={oracle.oracleID} className={`${isSelected ? "text-gold" : ""}`}>{oracle.oracleName}</label>
                                                 </div>
                                         )})}
                                     </div>
@@ -222,7 +236,7 @@ export default function JournalForm() {
 const HowItWorksPopup = () => {
 
     return (
-        <div className="flex justify-center text-3xl pb-5 p-3">
+        <div className="flex justify-center text-3xl pb-5 p-3 text-center">
             Enter Dream Description Below
             <Popup 
                 trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
