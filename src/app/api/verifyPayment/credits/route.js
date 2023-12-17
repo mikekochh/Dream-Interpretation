@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { connectMongoDB } from '../../../../lib/mongodb';
-import User from "../../../../models/user";
-import Payment from '../../../../models/payments';
+import { connectMongoDB } from '../../../../../lib/mongodb';
+import User from "../../../../../models/user";
+import Payment from '../../../../../models/payments';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST);
 
 export async function POST(req) {
     try {

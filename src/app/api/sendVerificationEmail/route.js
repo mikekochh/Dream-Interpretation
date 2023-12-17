@@ -8,8 +8,6 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export async function POST(req) {
 
-    console.log("Are we getting here now?");
-
     await connectMongoDB();
     let newUser;
 

@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 
-export default function SuccessForm() { 
+export default function SuccessCreditsForm() { 
 
     const searchParams = useSearchParams();
     const session_id = searchParams.get('session_id');
@@ -19,13 +18,13 @@ export default function SuccessForm() {
             if (session && session_id && !isVerified) {
                 try {
                     setIsVerified(true);
-                    const res = await axios.post('/api/verifyPayment', { session_id, userEmail: session.user.email });
+                    const res = await axios.post('/api/verifyPayment/credits', { session_id, userEmail: session.user.email });
                     console.log("res: ", res);
                     if (res.status === 200) {
                         console.log("User credits successfully purchased and updated!");
                         setTimeout(() => {
                             window.location.href = "/journal";
-                        }, 2000);
+                        }, 1500);
                     }
                 } catch (error) {
                     setError(error.response.data.message);

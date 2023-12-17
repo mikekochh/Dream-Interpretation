@@ -17,6 +17,10 @@ const paymentTypeSchema = new Schema({
         type: String,
         required: [true, "Please enter a payment type description!"]
     },
+    paymentTypePriceID: {
+        type: String,
+        required: [true, "Please enter a payment type price id!"]
+    }
 });
 
 const PaymentType = models.PaymentType || mongoose.model("PaymentType", paymentTypeSchema);

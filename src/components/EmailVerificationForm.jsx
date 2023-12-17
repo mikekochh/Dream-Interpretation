@@ -8,13 +8,21 @@ export default function EmailVerificationForm() {
     const searchParams = useSearchParams();
  
     const email = searchParams.get('email');
+    const [emailSent, setEmailSent] = useState(false);
 
     useEffect(() => {
-        if (!email) return;
         async function sendVerificationEmail() {
-            const res = await axios.post('api/sendVerificationEmail', { email });
+            try {
+                setEmailSent(true);
+                const res = await axios.post('api/sendVerificationEmail', { email });
+            } catch (error) {
+                console.log('error: ', error);
+            }
         }
-        sendVerificationEmail();
+
+        if (email && !emailSent) {
+            sendVerificationEmail();
+        }
     }, [email]);
 
     return (

@@ -47,13 +47,6 @@ export default function LoginForm() {
                 return;
             }
 
-            // if (resUserActivated.data?.activated == false) {
-            //     setError("Please verify your email");
-            //     setSendVerifyEmail(true);
-            //     setLogginIn(false);
-            //     return;
-            // }
-
             const res = await signIn("credentials", { 
                 email,
                 password, 
@@ -67,15 +60,7 @@ export default function LoginForm() {
                 return;
             }
 
-            const resCharacter = await axios.get(`api/characterSelection`, { params: { email } });
-
-            if (resCharacter.data == null) {
-                router.replace("/oracles");
-            }
-            else {
-                router.replace("/journal");
-            }
-            
+            router.replace("/journal");            
         } catch (error) {
             setError("Login failed!");
             setLogginIn(false);

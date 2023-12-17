@@ -4,7 +4,7 @@ import User from '../../../../models/user';
 import PaymentType from '../../../../models/paymentTypes';
 import Payment from '../../../../models/payments';
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST);
 
 export async function POST(req) {
     try {
@@ -22,24 +22,44 @@ export async function POST(req) {
             throw new Error("Payment type not found!");
         }
 
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            mode: paymentType.paymentTypeName,
-            line_items: [
-                {
-                    price_data: {
-                        currency: 'usd',
-                        product_data: {
-                            name: paymentType.paymentTypeDescription,
+        let session = null;
+
+        if (paymentType.paymentTypeID === 1) {
+            session = await stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                mode: paymentType.paymentTypeName,
+                line_items: [
+                    {
+                        price_data: {
+                            currency: 'usd',
+                            product_data: {
+                                name: paymentType.paymentTypeDescription,
+                            },
+                            unit_amount: paymentType.paymentTypePrice,
                         },
-                        // unit_amount: paymentType.paymentTypePrice,
-                        unit_amount: 0,
+                        quantity: quantity,
                     },
-                    quantity: quantity,
-                },
-            ],
-            success_url: process.env.DOMAIN + '/success?session_id={CHECKOUT_SESSION_ID}',
-        });
+                ],
+                success_url: process.env.DOMAIN + '/success/credits?session_id={CHECKOUT_SESSION_ID}',
+            });
+        }
+        else if (paymentType.paymentTypeID === 2) {
+            session = await stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                mode: paymentType.paymentTypeName,
+                line_items: [
+                    {
+                        // price: paymentType.paymentTypePriceID,
+                        price: "price_1OOSGYLbl7BCsE9K5Mza20XY",
+                        quantity: quantity,
+                    },
+                ],
+                success_url: process.env.DOMAIN + '/success/subscription?session_id={CHECKOUT_SESSION_ID}',
+            });
+        }
+        else {
+            throw new Error("Invalid payment type!");
+        }
 
         const newPayment = await Payment.create({
             paymentTypeID,
