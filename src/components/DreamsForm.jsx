@@ -17,15 +17,19 @@ export default function DreamsForm() {
     const { data: session } = useSession();
     const [dreams, setDreams] = useState([]);
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
 
         const getDreams = async () => {
             if (session && dreams.length === 0) {
-                console.log("session", session);
+                setLoading(true);
                 const res = await axios.get('api/dream/user/' + session.user.email);
-                console.log("res", res);
-                setDreams(res.data);
+                const sortedDreams = res.data.sort((a, b) => {
+                    return new Date(b.dreamDate) - new Date(a.dreamDate);
+                });
+                setDreams(sortedDreams);
+                setLoading(false);
             }
         }
 
@@ -51,7 +55,13 @@ export default function DreamsForm() {
 
     return (
         <div className="text-white main-content">
-            <h1 className="text-3xl text-center">Dreams</h1>    
+            <h1 className="text-5xl text-center font-bold pb-5">Dreams</h1>    
+            {loading && (
+                <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
+                    <p className="text-center text-3xl pr-3">Loading Dreams</p>
+                    <div className="loader"></div>  
+                </div>
+            )}
             {session && (
                 dreams.map((dream) => (
                     <div 

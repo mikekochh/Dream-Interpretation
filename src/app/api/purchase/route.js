@@ -35,7 +35,7 @@ export async function POST(req) {
                         product_data: {
                             name: payment.paymentName,
                         },
-                        unit_amount: payment.paymentPrice,
+                        unit_amount: 0,
                     },
                     quantity: quantity,
                 },
@@ -46,8 +46,6 @@ export async function POST(req) {
         console.log("session: ", session);
 
         return NextResponse.json({sessionID: session.url}, { status: 200 });
-
-        return NextResponse.json({message: "User activation success!"}, { status: 200 });
     } catch (error) {
         console.log('error: ', error);
         return NextResponse.json({message: "User activation failed!"}, { status: 500 })
