@@ -1,49 +1,59 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../lib/mongodb';
 import User from '../../../../models/user';
+import PaymentType from '../../../../models/paymentTypes';
 import Payment from '../../../../models/payments';
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
     try {
-        const { userID, paymentID, quantity } = await req.json();
-
-        console.log('userID: ', userID);
-        console.log('paymentID: ', paymentID);
-        console.log('quantity: ', quantity);
-
+        const { userID, paymentTypeID, quantity } = await req.json();
         await connectMongoDB();
+        const paymentTypeObject = await PaymentType.findOne({ paymentTypeID });
 
-        const paymentObject = await Payment.findOne({ paymentID });
+        if (!paymentTypeObject) {
+            throw new Error("Payment type not found!");
+        }
 
-        const payment = paymentObject.toObject();
+        const paymentType = paymentTypeObject.toObject();
 
-        console.log("payment: ", payment);
-
-        if (!payment) {
-            throw new Error("Payment not found!");
+        if (!paymentType) {
+            throw new Error("Payment type not found!");
         }
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
-            mode: payment.paymentType,
+            mode: paymentType.paymentTypeName,
             line_items: [
                 {
                     price_data: {
                         currency: 'usd',
                         product_data: {
-                            name: payment.paymentName,
+                            name: paymentType.paymentTypeDescription,
                         },
+                        // unit_amount: paymentType.paymentTypePrice,
                         unit_amount: 0,
                     },
                     quantity: quantity,
                 },
             ],
-            success_url: process.env.DOMAIN + '/success',
+            success_url: process.env.DOMAIN + '/success?session_id={CHECKOUT_SESSION_ID}',
         });
 
-        console.log("session: ", session);
+        const newPayment = await Payment.create({
+            paymentTypeID,
+            paymentTypeName: paymentType.paymentTypeName,
+            userID,
+            paymentDate: new Date(),
+            paymentAmount: paymentType.paymentTypePrice,
+            paymentCompleted: false,
+            stripeSessionID: session.id
+        });
+        
+        if (!newPayment) {
+            throw new Error("Failed to create new payment");
+        }
 
         return NextResponse.json({sessionID: session.url}, { status: 200 });
     } catch (error) {

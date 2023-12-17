@@ -14,6 +14,7 @@ export default function HomePageForm() {
     const router = useRouter();
 
     useEffect(() => {
+        console.log("session: ", session);
         if (session) {
             router.push('/journal');
         }

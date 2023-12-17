@@ -11,7 +11,15 @@ const NavBar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [noNavBarPage, setNoNavBarPage] = useState(false);
+    const { data: session } = useSession();
 
+    useEffect(() => {
+        if (session) {
+            setNoNavBarPage(false);
+        } else {
+            setNoNavBarPage(true);
+        }
+    }, [session]);
     return (
         <div>
             {noNavBarPage ? null :

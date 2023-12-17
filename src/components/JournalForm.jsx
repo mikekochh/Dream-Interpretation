@@ -74,10 +74,20 @@ export default function JournalForm() {
     }, []);
 
     function handleSelectionChange(oracleID) {
-        setSelectedOracles(prev => ({
-            ...prev,
-            [oracleID]: !prev[oracleID]
-        }));
+        setSelectedOracles(prev => {
+            const isSelected = prev[oracleID];
+    
+            if (isSelected) {
+                const updatedOracles = { ...prev };
+                delete updatedOracles[oracleID];
+                return updatedOracles;
+            }
+    
+            return {
+                ...prev,
+                [oracleID]: true
+            };
+        });
     }
 
     async function journalDream() {
@@ -89,6 +99,11 @@ export default function JournalForm() {
         setSavingDream(true);
         const userID = user._id;
         let interpretDream = false;
+        if (Object.keys(selectedOracles).length > user.credits && !subscribed) {
+            setError("You don't have enough credits to get this many interpretations. Please select less oracles or buy more credits");
+            setSavingDream(false);
+            return;
+        }
         if (Object.keys(selectedOracles).length) {
             for (let oracleSelected in selectedOracles) {
                 if (selectedOracles[oracleSelected]) {
@@ -98,7 +113,6 @@ export default function JournalForm() {
         }
         try {
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream });
-            console.log('resJournal: ', resJournal.data._id);
             setNewDreamID(resJournal.data._id);
             if (interpretDream) {
                 const dreamID = resJournal.data._id;
@@ -125,6 +139,7 @@ export default function JournalForm() {
         setSavingDream(false);
         setSelectedOracles({});
         setError('');
+        window.location.href = '/journal';
     }
 
     const goToDreamDetails = () => {
@@ -157,12 +172,12 @@ export default function JournalForm() {
                         <HowItWorksPopup />
                         <div className="flex flex-col">
                             <div className="flex justify-center">
-                                <textarea type="text" rows={15} placeholder='Enter Dream' className="DreamBox border-2 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" />
+                                <textarea type="text" rows={15} placeholder='Enter Dream' className="DreamBox border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" />
                             </div>
                         </div>
                         <div>
                             {error && (
-                                <div className="bg-red-500 w-max p-1 rounded-xl">{error}</div>
+                                <div className="bg-red-500 w-max p-1 text-black font-bold rounded-xl">{error}</div>
                             )}  
                             <div id="interpretation-section" className="relative">
                                 <div className={`${user?.credits === 0 && !subscribed ? 'blur pointer-events-none' : ''}`}>

@@ -38,7 +38,7 @@ export default function PricingForm() {
         console.log("buy credits");
         const res = await axios.post("/api/purchase", {
             userID: user._id,
-            paymentID: 1,
+            paymentTypeID: 1,
             quantity: 1
         });
         if (res.status === 200) {
@@ -53,7 +53,7 @@ export default function PricingForm() {
         console.log("subscribe");
         const res = await axios.post("/api/purchase", {
             userID: user._id,
-            paymentID: 2,
+            paymentTypeID: 2,
             quantity: 1
         });
         if (res.status === 200) {

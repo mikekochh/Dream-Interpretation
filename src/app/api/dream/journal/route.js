@@ -19,8 +19,6 @@ export async function POST(req) {
             interpretation: interpretDream
         });
 
-        console.log("newDream: ", newDream);
-
         return NextResponse.json(newDream);
     } catch (error) {
         console.log('error: ', error);

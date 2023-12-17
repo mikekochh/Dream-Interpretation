@@ -34,7 +34,7 @@ export async function POST(req) {
             const dreamData = await interpretDream(chatGPTPrompt);
             const interpretation = dreamData[0].message.content;
             if (!user.subscribed) {
-                const dreamCreditsData = await reduceDreamCredits(user.credits, user._id);
+                const dreamCreditsData = await reduceDreamCredits(user._id);
             }
             const newInterpretation = await Interpretation.create({
                 dreamID,
@@ -62,8 +62,8 @@ async function interpretDream(dream) {
     return chatCompletion.choices;
 }
 
-async function reduceDreamCredits(dreamCredits, _id) {
+async function reduceDreamCredits(_id) {
     await connectMongoDB();
-    const newCredits = await User.updateOne({ _id }, { $set: { credits: dreamCredits - 1 } });
+    const newCredits = await User.updateOne({ _id }, { $inc: { credits: -1 } });
     return newCredits;
 }
