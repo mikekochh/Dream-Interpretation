@@ -13,6 +13,8 @@ export default function HomePageForm() {
     const { data: session } = useSession();
     const router = useRouter();
 
+    const video = document.getElementById("cosmic-video");
+
     useEffect(() => {
         console.log("session: ", session);
         if (session) {
@@ -32,10 +34,16 @@ export default function HomePageForm() {
         getOracles();
     }, []);
 
+    useEffect(() => {
+        if(video) {
+            video.play();
+        }
+    }, [video]);
+
     return (
         <div className="home-page">
             <div className="video-container h-96">
-                <video autoPlay loop muted playsInline className="cosmic-video h-96 rounded-3xl p-4">
+                <video autoPlay loop muted playsInline preload='auto' className="cosmic-video h-96 rounded-3xl p-4">
                     <source src="/cosmic_background.mp4" type="video/mp4" />
                 </video>
                 <div className="text-white text-container text-5xl md:pr-52 p-4">
