@@ -23,6 +23,8 @@ export default function JournalForm() {
     const [short, setShort] = useState(true);
     const [newDreamID, setNewDreamID] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
+    const [interpretingDream, setInterpretingDream] = useState(false);
+    const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
 
     useEffect(() => {
 
@@ -108,6 +110,8 @@ export default function JournalForm() {
             for (let oracleSelected in selectedOracles) {
                 if (selectedOracles[oracleSelected]) {
                     interpretDream = true;
+                    setSaveMessage("Your dream has been saved and is currently being interpreted.");
+                    break;
                 }
             }
         }
@@ -115,6 +119,7 @@ export default function JournalForm() {
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream });
             setNewDreamID(resJournal.data._id);
             if (interpretDream) {
+                setInterpretingDream(true);
                 const dreamID = resJournal.data._id;
                 for (let oracleSelected in selectedOracles) {
                     if (selectedOracles[oracleSelected]) {
@@ -128,6 +133,8 @@ export default function JournalForm() {
                         });
                     }
                 }
+                setInterpretingDream(false);
+                setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
             }
         }
         catch (error) {
@@ -156,11 +163,21 @@ export default function JournalForm() {
                 <div className="flex justify-center items-center middle-content">
                     <div className="flex justify-center items-center flex-col">
                         <p className="text-center text-2xl p-4">
-                            You&apos;re dream has been saved and is currently being interpreted. Interpretation will appear under the dream details.
+                            {saveMessage}
                         </p>
                         <div className="flex justify-center">
-                            <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={resetPage}>Journal New Dream</button>
-                            <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={goToDreamDetails}>Go To Dream Details</button>
+                            {interpretingDream ? (
+                                <div className="flex flex-row text-center items-center justify-center inset-0">
+                                    <p className="text-2xl p-4">Please wait while we interpret your dream...</p>
+                                    <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={resetPage}>Journal New Dream</button>
+                                    <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={goToDreamDetails}>Go To Dream Details</button>
+                                </div>
+                            )}
+
                         </div>  
                     </div>
                 </div>

@@ -11,6 +11,7 @@ export default function PricingForm() {
     const { data: session } = useSession();
     const [activated, setActivated] = useState(false);
     const [user, setUser] = useState(null);
+    const [subscribed, setSubscribed] = useState(false);
 
     useEffect(() => {
         async function setUserData() {
@@ -28,6 +29,7 @@ export default function PricingForm() {
             setUserData().then(userData => {
                 setActivated(userData.activated);
                 setUser(userData);
+                setSubscribed(userData.subscribed);
             }).catch(err => {
                 console.log('err: ', err);
             });
@@ -65,7 +67,7 @@ export default function PricingForm() {
     }
 
     function verifyEmail () {
-        console.log("verify email");  
+        window.location.href = `/emailVerification?email=${session.user.email}`;
     }
 
     return (
@@ -94,19 +96,23 @@ export default function PricingForm() {
                         <li>• Interpretation customizations costs an additional credit</li>
                     </ul>
                 </div>
-                <div>
-                    <button 
-                        className={`rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap ${!activated ? "hidden" : ""}`}
-                        onClick={buyCredits}
-                    >
-                        Buy 5 credits for $5
-                    </button>
-                    <button 
-                        className={`rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap ${activated ? "hidden" : ""}`}
-                        onClick={verifyEmail}
-                    >
-                        Verify Email to Buy Credits
-                    </button>
+                <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
+                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                        <div>
+                            <button 
+                                className={`rounded-xl p-2 text-black m-2 subscribe-button ${!activated ? "hidden" : ""}`}
+                                onClick={buyCredits}
+                            >
+                                Buy 5 credits for $5
+                            </button>
+                            <button 
+                                className={`rounded-xl p-2 text-black m-2 subscribe-button ${activated ? "hidden" : ""}`}
+                                onClick={verifyEmail}
+                            >
+                                Verify Email to Buy Credits
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
@@ -121,19 +127,23 @@ export default function PricingForm() {
                         <li>• Freely use all interpretation customizations</li>
                     </ul>
                 </div>
-                <div>
-                    <button 
-                        className={`rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap ${!activated ? "hidden" : ""}`}
-                        onClick={subscribe}
-                    >
-                        Subscribe for $7/month
-                    </button>
-                    <button 
-                        className={`rounded-xl p-2 text-black m-2 bottom-0 left-1/2 transform -translate-x-1/2 absolute subscribe-button whitespace-nowrap ${activated ? "hidden" : ""}`}
-                        onClick={verifyEmail}
-                    >
-                        Verify Email to Buy Subscription
-                    </button>
+                <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
+                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                        <div>
+                            <button 
+                                className={`rounded-xl p-2 text-black m-2 subscribe-button ${!activated ? "hidden" : ""}`}
+                                onClick={subscribe}
+                            >
+                                Subscribe for $7/month
+                            </button>
+                            <button 
+                                className={`rounded-xl p-2 text-black m-2 subscribe-button ${activated ? "hidden" : ""}`}
+                                onClick={verifyEmail}
+                            >
+                                Verify Email to Buy Subscription
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -161,8 +171,12 @@ export default function PricingForm() {
                     </ul>
                 </div>
                 <div>
-                    <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${!activated ? "hidden" : ""}`} onClick={buyCredits}>Buy 5 credits for $5</button>
-                    <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${activated ? "hidden" : ""}`} onClick={verifyEmail}>Verify Email to Buy Credits</button>
+                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                        <div>
+                            <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${!activated ? "hidden" : ""}`} onClick={buyCredits}>Buy 5 credits for $5</button>
+                            <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${activated ? "hidden" : ""}`} onClick={verifyEmail}>Verify Email to Buy Credits</button>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card-mobile relative"> 
@@ -178,8 +192,12 @@ export default function PricingForm() {
                     </ul>
                 </div>
                 <div>
-                    <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${!activated ? "hidden" : ""}`} onClick={subscribe}>Subscribe for $7/month</button>
-                    <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${activated ? "hidden" : ""}`} onClick={verifyEmail}>Verify Email to Buy Subscription</button>
+                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                        <div>
+                            <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${!activated ? "hidden" : ""}`} onClick={subscribe}>Subscribe for $7/month</button>
+                            <button className={`rounded-xl p-2 text-black m-2 mb-0 subscribe-button ${activated ? "hidden" : ""}`} onClick={verifyEmail}>Verify Email to Buy Subscription</button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

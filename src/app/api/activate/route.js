@@ -6,6 +6,7 @@ export async function POST(req) {
     try {
         // create user
         const { verificationTokenID } = await req.json();
+        console.log('verificationTokenID: ', verificationTokenID);
 
         await connectMongoDB();
 

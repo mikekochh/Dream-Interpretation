@@ -31,7 +31,7 @@ export default function ActivationForm() {
     });
 
     return (
-        <div className="text-white text-3xl text-center p-4">
+        <div className="text-white text-3xl text-center p-4 main-content">
             {status}
             {error && <div className="text-red-500">You might have clicked an old activation email. If you continue to have issues, please contact for support.</div> }
             <ContactAndPrivacyButtons />
