@@ -20,13 +20,16 @@ export default function JournalForm() {
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [selectedOracles, setSelectedOracles] = useState({});
-    const [short, setShort] = useState(true);
+    const [short, setShort] = useState(false);
     const [newDreamID, setNewDreamID] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
+    const [creditCost, setCreditCost] = useState(0);
 
     useEffect(() => {
+
+        setCreditCost(Object.keys(selectedOracles).length);
 
         if (Object.keys(selectedOracles).length) {
             let anyChecked = false;
@@ -35,7 +38,7 @@ export default function JournalForm() {
                     anyChecked = true;
                 }
             }
-            setButtonText(anyChecked ? "Journal Dream and Interpret" : "Journal Dream");
+            setButtonText(anyChecked ? "Journal and Interpret Dream" : "Journal Dream");
         }
         else {
             setButtonText("Journal Dream");
@@ -184,7 +187,7 @@ export default function JournalForm() {
             ) : (
                 <div>
                     {!subscribed && (<div className="absolute right-0 top-0 p-2 main-content">Dream Credits: {user?.credits}</div>)}
-                    <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>{buttonText}</button>
+                    <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>{buttonText} ({creditCost} credits)</button>
                     <div>
                         <HowItWorksPopup />
                         <div className="flex flex-col">
