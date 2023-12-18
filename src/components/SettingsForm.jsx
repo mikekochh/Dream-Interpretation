@@ -10,6 +10,7 @@ const SettingsForm = () => {
     const router = useRouter();
     const { data: session } = useSession();
     const [user, setUser] = useState({});
+    const [subscribed, setSubscribed] = useState(false);
 
     useEffect(() => {
         async function setUserData() {
@@ -28,6 +29,7 @@ const SettingsForm = () => {
         if (session) {
             setUserData().then(userData => {
                 setUser(userData);
+                setSubscribed(userData.subscribed);
             }).catch(err => {
                 console.log('err: ', err);
             });
@@ -40,9 +42,7 @@ const SettingsForm = () => {
     }
 
     const subscription = async () => {
-        const userID = user._id;
-        const subscriptionID = user.subscriptionID;
-        const res = await axios.post('api/user/cancelSubscription', { userID, subscriptionID });
+        window.location.href = '/cancelSubscription';
     }
     
     console.log('user: ', user);
@@ -54,7 +54,7 @@ const SettingsForm = () => {
             <p>Name: {user.name}</p>
             <div className="logout absolute bottom-0 right-0 p-4">
                 <button onClick={logout} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
-                <button onClick={subscription} className="text-sm mt-3 text-right bg-blue-500 text-white p-2 rounded-lg">Subscription</button>
+                {subscribed && <button onClick={subscription} className="text-sm mt-3 text-right bg-blue-500 text-white p-2 rounded-lg">Cancel Subscription</button>}
             </div>
         </div>
     )

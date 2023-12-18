@@ -27,7 +27,7 @@ const NavBar = () => {
                     {/* Section for logo and ability to change based off of screen size */}
                     <Link href="https://www.michaelgkoch.com">
                         <div className="flex items-center cursor-pointer">
-                            <Image src="/dream_icon.png" className="rounded-lg" objectFit="contain" width={32} height={32} alt="logo" />
+                            <Image src="/dream_icon.png" className="rounded-lg" width={32} height={32} alt="logo" />
                             <p className="text-black font-semibold text-lg ml-1">Dream Oracles</p>
                         </div>
                     </Link>
@@ -56,7 +56,6 @@ const NavBar = () => {
                         {isOpen ? (
                             <FontAwesomeIcon
                                 icon={faX}
-                                objectFit="contain"
                                 size="2x"
                                 alt="close"
                                 onClick={() => setIsOpen(false)}
@@ -64,7 +63,6 @@ const NavBar = () => {
                             ) : (
                             <FontAwesomeIcon
                                 icon={faListDots}
-                                objectFit="contain"
                                 size="2x"
                                 alt="menu"
                                 onClick={() => setIsOpen(true)}
