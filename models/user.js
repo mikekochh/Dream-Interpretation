@@ -33,6 +33,9 @@ const userSchema = new Schema({
     subscribed: {
         type: Boolean,
     },
+    subscriptionID: {
+        type: String,
+    },
 
 }, {timestamps: true});
 

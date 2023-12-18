@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { connectMongoDB } from '../../../../lib/mongodb';
-import User from '../../../../models/user';
-import PaymentType from '../../../../models/paymentTypes';
-import Payment from '../../../../models/payments';
+import { connectMongoDB } from '../../../../../lib/mongodb';
+import User from '../../../../../models/user';
+import PaymentType from '../../../../../models/paymentTypes';
+import Payment from '../../../../../models/payments';
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST);
 
@@ -60,6 +60,8 @@ export async function POST(req) {
         else {
             throw new Error("Invalid payment type!");
         }
+
+        console.log('session form new page: ', session);
 
         const newPayment = await Payment.create({
             paymentTypeID,

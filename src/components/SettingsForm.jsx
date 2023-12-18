@@ -41,8 +41,8 @@ const SettingsForm = () => {
 
     const subscription = async () => {
         const userID = user._id;
-        const subscribed = user.subscribed;
-        const res = await axios.post('api/user/subscribe', { userID, subscribed });
+        const subscriptionID = user.subscriptionID;
+        const res = await axios.post('api/user/cancelSubscription', { userID, subscriptionID });
     }
     
     console.log('user: ', user);
@@ -52,7 +52,7 @@ const SettingsForm = () => {
             <h1 className="text-3xl text-white text-center">Settings</h1>
             <p>Email: {user.email}</p>
             <p>Name: {user.name}</p>
-            <div className="logout absolute bottom-0 left-0 p-4">
+            <div className="logout absolute bottom-0 right-0 p-4">
                 <button onClick={logout} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
                 <button onClick={subscription} className="text-sm mt-3 text-right bg-blue-500 text-white p-2 rounded-lg">Subscription</button>
             </div>

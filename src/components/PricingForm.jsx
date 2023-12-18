@@ -37,8 +37,7 @@ export default function PricingForm() {
     }, [session]);
 
     async function buyCredits () {
-        console.log("buy credits");
-        const res = await axios.post("/api/purchase", {
+        const res = await axios.post("/api/user/purchase", {
             userID: user._id,
             paymentTypeID: 1,
             quantity: 1
@@ -52,8 +51,7 @@ export default function PricingForm() {
     }
 
     async function subscribe () {
-        console.log("subscribe");
-        const res = await axios.post("/api/purchase", {
+        const res = await axios.post("/api/user/purchase", {
             userID: user._id,
             paymentTypeID: 2,
             quantity: 1

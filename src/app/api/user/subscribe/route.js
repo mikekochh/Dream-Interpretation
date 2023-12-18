@@ -8,6 +8,8 @@ export async function POST(req) {
         // create user
         const { userID, subscribed } = await req.json();
 
+        console.log("subscribed: ", subscribed);
+
         await connectMongoDB();
 
         const userSubscription = await User.findOneAndUpdate({ _id: userID }, { $set: { subscribed: !subscribed }}, { new: true });
