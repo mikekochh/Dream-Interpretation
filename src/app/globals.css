@@ -166,7 +166,7 @@ nav {
 }
 
 .main-content {
-  padding-top: 60px; /* Add a top padding to avoid content overlay */
+  padding-top: 70px; /* Add a top padding to avoid content overlay */
   overflow-y: auto;
   max-height: 100vh; 
 }
@@ -251,6 +251,21 @@ nav {
 .dream-button:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.back-button {
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+
+.back-button:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 
 

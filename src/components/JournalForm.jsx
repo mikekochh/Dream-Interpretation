@@ -257,7 +257,7 @@ export default function JournalForm() {
                                             >
                                                 <b>Short</b><br/>
                                                 If you are looking for a simple interpretation, we recommend checking short. This will speed up interpretation time,
-                                                and give you a more concise answer. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.<br/>
+                                                and give you a quick answer. Oracles may sacrifice accuracy for speed. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.
                                             </Popup>
                                         </div>
                                     </div>

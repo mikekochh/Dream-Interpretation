@@ -81,7 +81,7 @@ export default function DreamsForm() {
     return (
         <div className="flex flex-col main-content h-screen text-white">
             <h1 className="text-5xl text-center font-bold pb-5">Dream Details</h1>
-            <div className="flex flex-row relative">
+            <div className="flex md:flex-row flex-col relative">
                 <div className="md:w-2/3 text-white border-white border rounded-xl">
                     <h1 className="text-3xl text-center font-bold pb-5">Interpretations</h1>
                     {loadingInterpretations && (
@@ -112,7 +112,7 @@ export default function DreamsForm() {
                     ))}
                 </div>
                 <div className="md:w-1/3">
-                    <div className="border border-white rounded-xl text-white mr-2 ml-2 p-2">
+                    <div className="border border-white rounded-xl text-white  p-2">
                         <h1 className="text-3xl text-center font-bold pb-5">Dream Notes</h1>
                         {loadingNotes && (
                             <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
@@ -127,14 +127,14 @@ export default function DreamsForm() {
                             style={{ minHeight: '100px' }}
                         />
                     </div>
-                    <div className="relative">
-                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2" onClick={backToDreams}>Back</button>
+                    <div className="flex justify-end items-end md:relative">
+                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2 back-button" onClick={backToDreams}>Back</button>
                         {saving ? (
                             <div className="flex right-0 absolute m-2 top-0">
                                 <div className="loader"></div>
                             </div>
                         ) : (
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 absolute m-2" onClick={saveNotes}>Save</button>
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 justify-end m-2 bottom-0 dream-button" onClick={saveNotes}>Save</button>
                         )}
                     </div>
                 </div>
