@@ -13,8 +13,6 @@ export default function HomePageForm() {
     const { data: session } = useSession();
     const router = useRouter();
 
-    const video = document.getElementById("cosmic-video");
-
     useEffect(() => {
         console.log("session: ", session);
         if (session) {
@@ -35,10 +33,12 @@ export default function HomePageForm() {
     }, []);
 
     useEffect(() => {
+        const video = document.getElementById("cosmic-video");
+
         if(video) {
             video.play();
         }
-    }, [video]);
+    }, []);
 
     return (
         <div className="home-page">
