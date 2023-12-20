@@ -1,10 +1,11 @@
 "use client";
-import HomeForm from "@/components/HomeForm"
-
+import HomePageForm from "@/components/HomePageForm"
+import StarBackground from "@/components/StarBackground";
 
 export default function HomePage() {
     return (
-            <HomeForm />
+        <StarBackground>
+            <HomePageForm />
+        </StarBackground>
     )
 }
-

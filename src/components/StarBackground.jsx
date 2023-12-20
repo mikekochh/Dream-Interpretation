@@ -2,12 +2,14 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 
 const StarBackground = ({ children }) => {
 
     const pathname = usePathname();
     const [showFeedbackButton, setShowFeedbackButton] = useState(true);
+    const { data: session } = useSession();
 
     useEffect(() => {
 
@@ -32,13 +34,13 @@ const StarBackground = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        if (pathname === "/feedback") {
+        if (pathname === "/feedback" || !session) {
             setShowFeedbackButton(false);
         }
         else {
             setShowFeedbackButton(true);
         }
-    }, [pathname]);
+    }, [pathname, session]);
 
     const feedback = function() {
         window.location.href = "/feedback";
