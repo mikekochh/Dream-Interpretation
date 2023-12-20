@@ -187,7 +187,9 @@ export default function JournalForm() {
             ) : (
                 <div>
                     {!subscribed && (<div className="absolute right-0 top-0 p-2 main-content">Dream Credits: {user?.credits}</div>)}
-                    <button className="rounded-xl bg-blue-600 p-2 m-2" onClick={journalDream}>{buttonText} ({creditCost} credits)</button>
+                        <button className="dream-button" onClick={journalDream}>
+                            {buttonText} {subscribed ? '' : `(${creditCost} credits)`}
+                        </button>
                     <div>
                         <HowItWorksPopup />
                         <div className="flex flex-col">
@@ -251,12 +253,12 @@ export default function JournalForm() {
                                             <label htmlFor="short">Short</label>
                                         </div>
                                     </div>
-                                    <button className="rounded-xl bg-blue-600 p-2 m-2 absolute right-0" onClick={journalDream}>{buttonText}</button><br />
+                                    <button className="dream-button absolute right-0 bottom-0" onClick={journalDream}>{buttonText} {subscribed ? '' : `(${creditCost} credits)`}</button><br />
                                 </div>
                                 {user?.credits === 0 && !subscribed && (
                                     <div className="absolute inset-0 flex flex-col md:justify-center items-center">
                                         <span className="text-3xl font-semibold text-center mt-5 md:mt-0">You must buy more credits or start a subscription to interpret your dreams</span>
-                                        <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={() => window.location.href = '/pricing'}>See Pricing</button>
+                                        <button className="rounded-xl bg-blue-600 dream-button m-2 pl-4 pr-4 justify-center item p-10" onClick={() => window.location.href = '/pricing'}>See Pricing</button>
                                     </div>
                                 )}
                             </div>

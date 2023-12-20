@@ -26,9 +26,14 @@ const StarBackground = ({ children }) => {
         return () => clearInterval(interval);
     }, []);
 
+    const feedback = function() {
+        window.location.href = "/feedback";
+    }
+
     return (
         <div className="star-background relative">
             {children}
+            <button className="absolute left-0 bottom-0 dream-button" onClick={feedback}>Feedback</button>
         </div>
     );
 }

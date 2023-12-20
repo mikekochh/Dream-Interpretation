@@ -50,7 +50,7 @@ export default function CancelSubscriptionForm() {
             <p className="pb-5">Would you mind telling us a bit about why you are deciding to cancel? Any feedback about the website would also be greatly appreciated, thank you!</p>
             <textarea className="w-full h-32 p-2 rounded-lg DreamBox" rows={20} placeholder="Canceling Reason"></textarea>
             <textarea className="w-full h-32 p-2 rounded-lg DreamBox" rows={20} placeholder="Feedback"></textarea>
-            <button className="bg-red-700 hover:bg-red-800 font-bold py-2 px-4 rounded mt-10 text-black" onClick={cancelSubscription}>Cancel Subscription</button>
+            <button className="bg-red-600 hover:bg-red-500 font-bold py-2 px-4 rounded mt-10 text-black" onClick={cancelSubscription}>Cancel Subscription</button>
         </div>
     )
 }
