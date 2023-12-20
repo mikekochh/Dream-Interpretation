@@ -4,8 +4,13 @@
 
 body {
   background-color: #000011;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  font-family:cursive;
 }
+
+/* body {
+  background-color: #000011;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+} */
 
 
 .star-background {
