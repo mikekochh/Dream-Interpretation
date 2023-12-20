@@ -46,7 +46,7 @@ export default function CancelSubscriptionForm() {
     return (
         <div className="text-white text-xl text-center p-4 main-content">
             <h1 className="text-3xl pb-5">Cancel Subscription</h1>
-            <p>We're sad to see you go :(</p>
+            <p>We&apos;re sad to see you go :(</p>
             <p className="pb-5">Would you mind telling us a bit about why you are deciding to cancel? Any feedback about the website would also be greatly appreciated, thank you!</p>
             <textarea className="w-full h-32 p-2 rounded-lg DreamBox" rows={20} placeholder="Canceling Reason"></textarea>
             <textarea className="w-full h-32 p-2 rounded-lg DreamBox" rows={20} placeholder="Feedback"></textarea>
