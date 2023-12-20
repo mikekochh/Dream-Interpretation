@@ -4,7 +4,7 @@ import User from '../../../../../models/user';
 import PaymentType from '../../../../../models/paymentTypes';
 import Payment from '../../../../../models/payments';
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
     try {
