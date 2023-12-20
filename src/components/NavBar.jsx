@@ -6,12 +6,14 @@ import Image from 'next/image';
 import { faX, faListDots } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 const NavBar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [noNavBarPage, setNoNavBarPage] = useState(false);
     const { data: session } = useSession();
+    const pathname = usePathname();
 
     useEffect(() => {
         if (session) {
@@ -35,19 +37,19 @@ const NavBar = () => {
                     {/* Section on the right */}
                     <div className="justify-end items-center text-black md:flex hidden">
                         <ul className="flex">
-                            <li className={`cursor-pointer mr-4`}>
+                            <li className={`cursor-pointer mr-4 ${pathname === '/journal' ? 'font-bold' : ''}`}>
                                 <Link href="/journal">Journal</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4`}>
+                            <li className={`cursor-pointer mr-4 ${pathname === '/dreams' ? 'font-bold' : ''}`}>
                                 <Link href="/dreams">Dreams</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4`}>
+                            <li className={`cursor-pointer mr-4 ${pathname === '/oracles' ? 'font-bold' : ''}`}>
                                 <Link href="/oracles">Oracles</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4`}>
+                            <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
                                 <Link href="/pricing">Pricing</Link>
                             </li>
-                            <li className={`cursor-pointer`}>
+                            <li className={`cursor-pointer ${pathname === '/settings' ? 'font-bold' : ''}`}>
                                 <Link href="/settings">Settings</Link>
                             </li>
                         </ul>
@@ -74,7 +76,7 @@ const NavBar = () => {
             {isOpen && (
                 <div className="fixed inset-0 top-65 bg-gray-200 z-20 flex justify-between flex-col items-center">
                     <div className="flex-1 p-4">
-                        <MenuItems setIsOpen={setIsOpen}/>
+                        <MenuItems setIsOpen={setIsOpen} pathname={pathname}/>
                     </div>
                 </div>
             )}
@@ -82,23 +84,23 @@ const NavBar = () => {
     );
 }
 
-const MenuItems = ({setIsOpen}) => {
+const MenuItems = ({setIsOpen, pathname}) => {
 
     return (
         <ul className='list-none flex flex-col h-full text-center inset-0 justify-center'>
-            <li className='cursor-pointer text-3xl p-4' onClick={() => setIsOpen(false)}>
+            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/journal' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/journal">Journal</Link>
             </li>
-            <li className='cursor-pointer text-3xl p-4' onClick={() => setIsOpen(false)}>
+            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/dreams' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/dreams">Dreams</Link>
             </li>
-            <li className='cursor-pointer text-3xl p-4' onClick={() => setIsOpen(false)}>
+            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/oracles' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/oracles">Oracles</Link>
             </li>
-            <li className='cursor-pointer text-3xl p-4' onClick={() => setIsOpen(false)}>
+            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/pricing">Pricing</Link>
             </li>
-            <li className='cursor-pointer text-3xl p-4' onClick={() => setIsOpen(false)}>
+            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/settings">Settings</Link>
             </li>
       </ul>

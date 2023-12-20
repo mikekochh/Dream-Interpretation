@@ -1,8 +1,13 @@
 "use client";
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+
 
 const StarBackground = ({ children }) => {
+
+    const pathname = usePathname();
+    const [showFeedbackButton, setShowFeedbackButton] = useState(true);
 
     useEffect(() => {
 
@@ -26,6 +31,15 @@ const StarBackground = ({ children }) => {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        if (pathname === "/feedback") {
+            setShowFeedbackButton(false);
+        }
+        else {
+            setShowFeedbackButton(true);
+        }
+    }, [pathname]);
+
     const feedback = function() {
         window.location.href = "/feedback";
     }
@@ -33,7 +47,7 @@ const StarBackground = ({ children }) => {
     return (
         <div className="star-background relative">
             {children}
-            <button className="absolute left-0 bottom-0 dream-button" onClick={feedback}>Feedback</button>
+            {showFeedbackButton && <button className="absolute left-0 bottom-0 dream-button" onClick={feedback}>Feedback</button>}
         </div>
     );
 }

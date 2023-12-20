@@ -239,7 +239,6 @@ export default function JournalForm() {
                                                 </div>
                                         )})}
                                     </div>
-                                    <ResponseTypePopup />
                                     <div className="justify-center flex">
                                         <div className="flex justify-center p-5">
                                             <input 
@@ -251,6 +250,15 @@ export default function JournalForm() {
                                                 checked={short}
                                             ></input>
                                             <label htmlFor="short">Short</label>
+                                            <Popup 
+                                                trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
+                                                position="top right center"
+                                                contentStyle={{width: "50%"}}
+                                            >
+                                                <b>Short</b><br/>
+                                                If you are looking for a simple interpretation, we recommend checking short. This will speed up interpretation time,
+                                                and give you a more concise answer. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.<br/>
+                                            </Popup>
                                         </div>
                                     </div>
                                     <button className="dream-button absolute right-0 bottom-0" onClick={journalDream}>{buttonText} {subscribed ? '' : `(${creditCost} credits)`}</button><br />
@@ -312,37 +320,20 @@ const OracleSelectionPopup = () => {
     )
 }
 
-const ResponseTypePopup = () => {
+// const ResponseTypePopup = () => {
 
-    return (
-        <div className="flex justify-center text-3xl pt-5">
-            Select Response Type
-            <Popup 
-                trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-                position="top right center"
-                contentStyle={{width: "50%"}}
-            >
-                <b>Short</b><br/>
-                If you are looking for a simple interpretation, we recommend checking short. This will speed up interpretation time,
-                and give you a more concise answer. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.<br/>
-                <b>Simplify</b><br/>
-                Some of our oracles, especially Carl and Freud can be a bit wordy and hard to understand for beginners. If you aren't as familiar with
-                with some of their work, we recommend checking this box. This will simplify their interpretations to be more beginner friendly.<br/>
-                <b>Expert</b><br/>
-                If you are looking for a more advanced interpretation, we recommend checking this box. All of our oracles are more than happy to go into 
-                full detail about your dream and draw upon their knowledge extensively. This is great for people who are interested in going deeper and want 
-                more information about their dream as it relates to the oracles dream knowledge.<br/>
-                <b>Educate</b><br/>
-                If you're a beginner and want to learn more about dream interpretation, we recommend checking this box. Our oracles will take a more educational 
-                approach and provide lessons and ideas from their work to fill you in on their dream interpretation process. If you're more curious about learning about
-                a particular oracles work, we recommend checking this box.<br/>
-                <b>Entertain</b><br/>
-                If you're looking for a more entertaining interpretation, we recommend checking this box. Our oracles will take a more creative and fun apporach to
-                your dream. <br/><br/>
-                <b>Warning</b><br/>
-                What you select will impact the speed and accuracy of your interpretations. Longer, more detailed interpreations can take up to 2 minutes, while shorten
-                interpretations should only take a couple seconds.
-            </Popup>
-        </div>
-    )
-}
+//     return (
+//         <div className="flex justify-center text-3xl pt-5">
+//             Select Response Type
+//             <Popup 
+//                 trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
+//                 position="top right center"
+//                 contentStyle={{width: "50%"}}
+//             >
+//                 <b>Short</b><br/>
+//                 If you are looking for a simple interpretation, we recommend checking short. This will speed up interpretation time,
+//                 and give you a more concise answer. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.<br/>
+//             </Popup>
+//         </div>
+//     )
+// }
