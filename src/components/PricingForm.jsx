@@ -79,6 +79,7 @@ export default function PricingForm() {
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
+                        <li>• Ability to take notes on dreams</li>
                     </ul>
                 </div>
             </div>
@@ -87,11 +88,9 @@ export default function PricingForm() {
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
-                        <li>• Ability to interpret dreams</li>
-                        <li>• Ability to customize interpretations</li>
+                        <li>• Expert interpretations from our Dream Oracles</li>
                         <li>• Ability to take notes on dreams</li>
                         <li>• Each <b>interpretation</b> costs 1 credit</li>
-                        <li>• Interpretation customizations costs an additional credit</li>
                     </ul>
                 </div>
                 <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
@@ -118,11 +117,9 @@ export default function PricingForm() {
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
-                        <li>• Ability to interpret dreams</li>
-                        <li>• Ability to customize interpretations</li>
+                        <li>• Expert interpretations from our Dream Oracles</li>
                         <li>• Ability to take notes on dreams</li>
                         <li>• Unlimited interpretations</li>
-                        <li>• Freely use all interpretation customizations</li>
                     </ul>
                 </div>
                 <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
@@ -132,7 +129,7 @@ export default function PricingForm() {
                                 className={`rounded-xl p-2 text-black m-2 subscribe-button ${!activated ? "hidden" : ""}`}
                                 onClick={subscribe}
                             >
-                                Subscribe for $7/month
+                                Subscribe for $5/month
                             </button>
                             <button 
                                 className={`rounded-xl p-2 text-black m-2 subscribe-button ${activated ? "hidden" : ""}`}

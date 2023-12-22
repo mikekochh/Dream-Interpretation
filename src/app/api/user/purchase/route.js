@@ -49,8 +49,7 @@ export async function POST(req) {
                 mode: paymentType.paymentTypeName,
                 line_items: [
                     {
-                        // price: paymentType.paymentTypePriceID,
-                        price: "price_1OOSGYLbl7BCsE9K5Mza20XY",
+                        price: paymentType.paymentTypePriceID,
                         quantity: quantity,
                     },
                 ],
