@@ -19,32 +19,13 @@ export default function JournalForm() {
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
-    const [selectedOracles, setSelectedOracles] = useState({});
     const [short, setShort] = useState(false);
     const [newDreamID, setNewDreamID] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
     const [creditCost, setCreditCost] = useState(0);
-
-    useEffect(() => {
-
-        setCreditCost(Object.keys(selectedOracles).length);
-
-        if (Object.keys(selectedOracles).length) {
-            let anyChecked = false;
-            for (let oracleSelected in selectedOracles) {
-                if (selectedOracles[oracleSelected]) {
-                    anyChecked = true;
-                }
-            }
-            setButtonText(anyChecked ? "Journal and Interpret Dream" : "Journal Dream");
-        }
-        else {
-            setButtonText("Journal Dream");
-        }
-
-    }, [selectedOracles]);
+    const [oracleSelected, setOracleSelected] = useState(false);
 
     useEffect(() => {
         async function setUserData() {
@@ -68,31 +49,38 @@ export default function JournalForm() {
         }
     }, [session]);
 
+    useEffect(() => {
+        for (const oracle of oracles) {
+            if (oracle.selected) {
+                setOracleSelected(true);
+                setButtonText("Journal Dream and Interpret");
+                return;
+            }
+        }
+        setOracleSelected(false);
+        setButtonText("Journal Dream");
+    }, [oracles]);
+    
+
 
     useEffect(() => {
         async function getOracles() {
             const res = await axios.get('/api/oracles');
             const oracles = res.data.sort((a, b) => a.oracleID - b.oracleID);
+            console.log('oracles: ', oracles);
             setOracles(oracles);
         }
 
         getOracles();
     }, []);
 
-    function handleSelectionChange(oracleID) {
-        setSelectedOracles(prev => {
-            const isSelected = prev[oracleID];
-    
-            if (isSelected) {
-                const updatedOracles = { ...prev };
-                delete updatedOracles[oracleID];
-                return updatedOracles;
-            }
-    
-            return {
-                ...prev,
-                [oracleID]: true
-            };
+    function handleSelectionChange(selected, oracleID) {
+        setCreditCost(prevCost => selected ? prevCost - 1 : prevCost + 1);
+        setOracles(prev => {
+            const updatedOracles = [...prev];
+            const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
+            updatedOracles[oracleIndex].selected = !selected;
+            return updatedOracles;
         });
     }
 
@@ -104,40 +92,23 @@ export default function JournalForm() {
         }
         setSavingDream(true);
         const userID = user._id;
-        let interpretDream = false;
-        if (Object.keys(selectedOracles).length > user.credits && !subscribed) {
+        if (!subscribed && creditCost > user.credits) {
             setError("You don't have enough credits to get this many interpretations. Please select less oracles or buy more credits");
             setSavingDream(false);
             return;
         }
-        if (Object.keys(selectedOracles).length) {
-            for (let oracleSelected in selectedOracles) {
-                if (selectedOracles[oracleSelected]) {
-                    interpretDream = true;
-                    setSaveMessage("Your dream has been saved and is currently being interpreted.");
-                    break;
-                }
-            }
-        }
         try {
-            const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream });
+            const resJournal = await axios.post('/api/dream/journal', { userID, dream, oracleSelected });
             setNewDreamID(resJournal.data._id);
-            if (interpretDream) {
+            console.log("oracleSelected: ", oracleSelected);
+            if (oracleSelected) {
+                setSaveMessage("Your dream has been saved and is currently being interpreted.");
                 setInterpretingDream(true);
                 const dreamID = resJournal.data._id;
-                console.log('selectedOracles: ', selectedOracles);
-                for (let oracleSelected in selectedOracles) {
-                    console.log('oracleSelected: ', oracleSelected);
-                    console.log('selectedOracles[oracleSelected]: ', selectedOracles[oracleSelected]);
-                    console.log('selectedOracles: ', selectedOracles);
-                    if (selectedOracles[oracleSelected]) {
-                        console.log('oracles: ', oracles);
-                        console.log('oracleSelected: ', oracleSelected.toInteger());
-                        const oracle = oracles.find(oracle => oracle.oracleID === oracleSelected);
-                        console.log('oracle: ', oracle);
-                        const dreamPrompt = oracles[oracleSelected].prompt + "\n\n" + dream;
-                        
-                        console.log("Here we go!");
+                for (let i = 0; i < oracles.length; i++) {
+                    if (oracles[i].selected) {
+                        const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
+                        console.log("dreamPrompt: ", dreamPrompt);
                         const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
                         {
                             params: {
@@ -145,48 +116,37 @@ export default function JournalForm() {
                             }
                         });
 
-                        console.log('How about here?');
-
                         if (resInterpret.status !== 200) {
                             setError("Error Interpreting Dream");
                             return;
                         }
 
-                        console.log('And then here?');
-
                         const resUpdateDatabase = await axios.post('/api/dream/interpret', 
                         { 
                             dreamID, 
                             interpretation: resInterpret.data[0].message.content,
-                            oracleID: oracleSelected, 
+                            oracleID: oracles[i].oracleID, 
                             user
                         });
-
-                        console.log("And perhaps what is this?");
 
                         if (resUpdateDatabase.status !== 200) {
                             setError("Error Saving Interpretation");
                             return;
                         }
-
-                        console.log("And perhaps maybe this?");
                     }
                 }
-                console.log("Are we ever getting here?");
                 setInterpretingDream(false);
                 setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
             }
         }
         catch (error) {
             setError("Error Journaling Dream");
+            console.log("error: ", error);
         }   
     }
 
     const resetPage = () => {
-        setSavingDream(false);
-        setSelectedOracles({});
-        setError('');
-        window.location.href = '/journal';
+        window.location.reload();
     }
 
     const goToDreamDetails = () => {
@@ -243,8 +203,6 @@ export default function JournalForm() {
                                     <OracleSelectionPopup />
                                     <div className="justify-center flex md:flex-row flex-col">
                                         {oracles.map((oracle) => {
-                                        
-                                            let isSelected = selectedOracles[oracle.oracleID];
 
                                             return (
                                                 <div key={oracle._id} className="flex flex-col justify-center items-center p-5">
@@ -255,8 +213,8 @@ export default function JournalForm() {
                                                             height={100}
                                                             src={oracle.oraclePicture} 
                                                             alt={oracle.oracleName} 
-                                                            className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-8 border-gold' : ''}`}
-                                                            onClick={() => handleSelectionChange(oracle.oracleID)} 
+                                                            className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
+                                                            onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
                                                             htmlFor={oracle.oracleID}
                                                         />
                                                     </div>
@@ -267,12 +225,12 @@ export default function JournalForm() {
                                                             height={100}
                                                             src={oracle.oraclePicture} 
                                                             alt={oracle.oracleName} 
-                                                            className={`rounded-xl text-center cursor-pointer ${isSelected ? 'border-4 border-gold' : ''}`}
-                                                            onClick={() => handleSelectionChange(oracle.oracleID)} 
+                                                            className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-4 border-gold' : ''}`}
+                                                            onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
                                                             htmlFor={oracle.oracleID}
                                                         />
                                                     </div>
-                                                    <label htmlFor={oracle.oracleID} className={`${isSelected ? "text-gold" : ""}`}>{oracle.oracleName}</label>
+                                                    <label htmlFor={oracle.oracleID} className={`${oracle.selected ? "text-gold" : ""}`}>{oracle.oracleName}</label>
                                                 </div>
                                         )})}
                                     </div>
@@ -356,21 +314,3 @@ const OracleSelectionPopup = () => {
         </div>
     )
 }
-
-// const ResponseTypePopup = () => {
-
-//     return (
-//         <div className="flex justify-center text-3xl pt-5">
-//             Select Response Type
-//             <Popup 
-//                 trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-//                 position="top right center"
-//                 contentStyle={{width: "50%"}}
-//             >
-//                 <b>Short</b><br/>
-//                 If you are looking for a simple interpretation, we recommend checking short. This will speed up interpretation time,
-//                 and give you a more concise answer. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.<br/>
-//             </Popup>
-//         </div>
-//     )
-// }
