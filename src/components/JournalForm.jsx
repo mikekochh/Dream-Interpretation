@@ -72,7 +72,8 @@ export default function JournalForm() {
     useEffect(() => {
         async function getOracles() {
             const res = await axios.get('/api/oracles');
-            setOracles(res.data);
+            const oracles = res.data.sort((a, b) => a.oracleID - b.oracleID);
+            setOracles(oracles);
         }
 
         getOracles();
@@ -124,18 +125,54 @@ export default function JournalForm() {
             if (interpretDream) {
                 setInterpretingDream(true);
                 const dreamID = resJournal.data._id;
+                console.log('selectedOracles: ', selectedOracles);
                 for (let oracleSelected in selectedOracles) {
+                    console.log('oracleSelected: ', oracleSelected);
+                    console.log('selectedOracles[oracleSelected]: ', selectedOracles[oracleSelected]);
+                    console.log('selectedOracles: ', selectedOracles);
                     if (selectedOracles[oracleSelected]) {
-                        const resInterpret = await axios.post('/api/dream/interpret', 
+                        console.log('oracles: ', oracles);
+                        console.log('oracleSelected: ', oracleSelected.toInteger());
+                        const oracle = oracles.find(oracle => oracle.oracleID === oracleSelected);
+                        console.log('oracle: ', oracle);
+                        const dreamPrompt = oracles[oracleSelected].prompt + "\n\n" + dream;
+                        
+                        console.log("Here we go!");
+                        const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
+                        {
+                            params: {
+                                dreamPrompt: dreamPrompt
+                            }
+                        });
+
+                        console.log('How about here?');
+
+                        if (resInterpret.status !== 200) {
+                            setError("Error Interpreting Dream");
+                            return;
+                        }
+
+                        console.log('And then here?');
+
+                        const resUpdateDatabase = await axios.post('/api/dream/interpret', 
                         { 
                             dreamID, 
-                            dream, 
+                            interpretation: resInterpret.data[0].message.content,
                             oracleID: oracleSelected, 
-                            user,
-                            short
+                            user
                         });
+
+                        console.log("And perhaps what is this?");
+
+                        if (resUpdateDatabase.status !== 200) {
+                            setError("Error Saving Interpretation");
+                            return;
+                        }
+
+                        console.log("And perhaps maybe this?");
                     }
                 }
+                console.log("Are we ever getting here?");
                 setInterpretingDream(false);
                 setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
             }

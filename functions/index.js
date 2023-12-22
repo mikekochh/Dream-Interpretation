@@ -14,11 +14,12 @@ const openai = new OpenAI({
 exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
 
     cors(req, res, async () => {
-        const { dream, prompt } = req.query;
-        const chatGPTPrompt = prompt + "\n\n" + dream;
+        const { dreamPrompt } = req.query;
     
         try {
-            const dreamData = await interpretDream(chatGPTPrompt);
+            logger.info('dreamPrompt: ', dreamPrompt);
+            const dreamData = await interpretDream(dreamPrompt);
+            logger.info('dreamData: ', dreamData);
             res.status(200).json(dreamData);
         } catch (error) {
             logger.error('Error: ', error);
@@ -31,9 +32,10 @@ exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 
 
 async function interpretDream(dream) {
     const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4",
         messages: [{role: "user", content: dream}],
     })
+    logger.info('chatCompletion: ', chatCompletion);
 
     return chatCompletion.choices;
 }

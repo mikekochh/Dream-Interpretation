@@ -14,25 +14,11 @@ export async function POST(req) {
     try {
         await connectMongoDB();
         // create user
-        const { dreamID, dream , oracleID, user, short } = await req.json();
-
-        console.log("oracleID: ", oracleID);
-
-        const oracle = await Oracle.findOne({ oracleID });
-        const prompt = oracle.prompt;
-
-        console.log("short: ", short);
+        const { dreamID, interpretation , oracleID, user } = await req.json();
 
         const interpretationDate = new Date();
 
-        const shorternText = short ? "\n\n" + "The interpretation should only be 5 sentences long. " : "";
-
-        const chatGPTPrompt = prompt + "\n\n" + dream + shorternText;
-
         try {
-            console.log("Waiting to interpret dream...");
-            const dreamData = await interpretDream(chatGPTPrompt);
-            const interpretation = dreamData[0].message.content;
             if (!user.subscribed) {
                 const dreamCreditsData = await reduceDreamCredits(user._id);
             }
@@ -42,7 +28,12 @@ export async function POST(req) {
                 interpretation,
                 interpretationDate
             });
-            return NextResponse.json(dreamData);
+
+            if (!newInterpretation) {
+                throw new Error('Interpretation creation failed!');
+            }
+
+            return NextResponse.json({message: "Interpretation saved successfully"}, { status: 200 });
         } catch (error) {
             console.log('error: ', error);
             return NextResponse.error(error);
@@ -51,15 +42,6 @@ export async function POST(req) {
         console.log('error: ', error);
         return NextResponse.json({message: "User activation failed!"}, { status: 500 })
     }
-}
-
-async function interpretDream(dream) {
-    const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [{role: "user", content: dream}],
-    })
-
-    return chatCompletion.choices;
 }
 
 async function reduceDreamCredits(_id) {
