@@ -177,6 +177,7 @@ nav {
   padding-top: 70px; /* Add a top padding to avoid content overlay */
   overflow-y: auto;
   max-height: 100vh; 
+  padding-bottom: 70px;
 }
 
 .middle-content {
