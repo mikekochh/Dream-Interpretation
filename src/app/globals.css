@@ -176,14 +176,14 @@ nav {
 .main-content {
   padding-top: 70px; /* Add a top padding to avoid content overlay */
   overflow-y: auto;
-  max-height: 100vh; 
+  max-height: 100%; 
 }
 
-@media screen and (max-width: 767px) {
+/* @media screen and (max-width: 767px) {
   .main-content {
     padding-bottom: 80px; /* Add bottom padding on mobile devices only */
   }
-}
+} */
 
 .middle-content {
   height: calc(100vh - 60px); /* Subtract the navbar height */
