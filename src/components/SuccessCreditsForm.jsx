@@ -19,7 +19,6 @@ export default function SuccessCreditsForm() {
                 try {
                     setIsVerified(true);
                     const res = await axios.post('/api/verifyPayment/credits', { session_id, userEmail: session.user.email });
-                    console.log("res: ", res);
                     if (res.status === 200) {
                         console.log("User credits successfully purchased and updated!");
                         setTimeout(() => {

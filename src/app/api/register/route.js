@@ -16,8 +16,8 @@ export async function POST(req) {
         newUser = await User.create({ 
             name, 
             email, 
-            password:hashedPassword, 
-            credits: 1, 
+            password: hashedPassword, 
+            credits: 2, 
             activated: false,
             verificationTokenID: null
         });

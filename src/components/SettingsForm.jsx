@@ -42,8 +42,6 @@ const SettingsForm = () => {
     const subscription = async () => {
         window.location.href = '/cancelSubscription';
     }
-    
-    console.log('user: ', user);
 
     return (
         <div className="main-content text-white">

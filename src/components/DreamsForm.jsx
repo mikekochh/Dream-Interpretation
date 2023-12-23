@@ -45,7 +45,6 @@ export default function DreamsForm() {
     }
 
     const deleteDream = async (dreamID) => {
-        console.log("deleteing dream: ", dreamID);
         const res = await axios.post('/api/dream/delete', { dreamID });
         if (res.status === 200) {
             const newDreams = dreams.filter(dream => dream._id !== dreamID);

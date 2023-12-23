@@ -36,7 +36,10 @@ export default function RegisterForm() {
         }
 
         try {
-            const res = await fetch(`api/user/${email}`, {
+
+            const emailLower = email.toLowerCase();
+
+            const res = await fetch(`api/user/${emailLower}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -56,7 +59,7 @@ export default function RegisterForm() {
                 },
                 body: JSON.stringify({
                     name,
-                    email,
+                    email: emailLower,
                     password
                 }),
             });
@@ -64,12 +67,12 @@ export default function RegisterForm() {
 
             if (resNewUser.ok) {
                 const resSignIn = await signIn("credentials", { 
-                    email,
+                    email: emailLower,
                     password, 
                     redirect: false
                 });
 
-                router.replace("/oracles");
+                router.replace("/journal");
             }
         }
         catch (error) {

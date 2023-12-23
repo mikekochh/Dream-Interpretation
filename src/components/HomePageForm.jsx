@@ -14,7 +14,6 @@ export default function HomePageForm() {
     const router = useRouter();
 
     useEffect(() => {
-        console.log("session: ", session);
         if (session) {
             router.push('/journal');
         }
@@ -24,7 +23,6 @@ export default function HomePageForm() {
 
         async function getOracles() {
             const res = await axios.get('/api/oracles');
-            console.log(res.data);
             let unorderOracles = res.data;
             unorderOracles.sort((a, b) => (a.oracleID > b.oracleID) ? 1 : -1);
             setOracles(unorderOracles);

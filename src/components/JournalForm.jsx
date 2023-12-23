@@ -67,7 +67,6 @@ export default function JournalForm() {
         async function getOracles() {
             const res = await axios.get('/api/oracles');
             const oracles = res.data.sort((a, b) => a.oracleID - b.oracleID);
-            console.log('oracles: ', oracles);
             setOracles(oracles);
         }
 
@@ -100,7 +99,6 @@ export default function JournalForm() {
         try {
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, oracleSelected });
             setNewDreamID(resJournal.data._id);
-            console.log("oracleSelected: ", oracleSelected);
             if (oracleSelected) {
                 setSaveMessage("Your dream has been saved and is currently being interpreted.");
                 setInterpretingDream(true);
@@ -108,7 +106,6 @@ export default function JournalForm() {
                 for (let i = 0; i < oracles.length; i++) {
                     if (oracles[i].selected) {
                         const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
-                        console.log("dreamPrompt: ", dreamPrompt);
                         const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
                         {
                             params: {

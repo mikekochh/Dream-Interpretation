@@ -21,7 +21,6 @@ export default function ActivationForm() {
         } catch (error) {
             setStatus("Error Activating User");
             setError(true);
-            console.log('error: ', error);
         }
     }
 

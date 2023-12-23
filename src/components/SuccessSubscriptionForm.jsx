@@ -19,7 +19,6 @@ export default function SuccessSubscriptionForm() {
                 try {
                     setIsVerified(true);
                     const res = await axios.post('/api/verifyPayment/subscription', { session_id, userEmail: session.user.email });
-                    console.log("res: ", res);
                     if (res.status === 200) {
                         console.log("User subscription successfully purchased and updated!");
                         setTimeout(() => {
