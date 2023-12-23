@@ -183,10 +183,17 @@ export default function JournalForm() {
                 </div>
             ) : (
                 <div>
-                    {!subscribed && (<div className="absolute right-0 top-0 p-2 main-content">Dream Credits: {user?.credits}</div>)}
-                        <button className="dream-button" onClick={journalDream}>
-                            {buttonText} {subscribed ? '' : `(${creditCost} credits)`}
-                        </button>
+                    {!subscribed && (
+                        <div className="absolute right-0 top-0 p-2 main-content">
+                            {!user?.activated && (
+                                <a href={`/emailVerification?email=${user?.email}`} className="underline pr-2">Verify Email for 5 dream credits</a>
+                            )}
+                            Dream Credits: {user?.credits}
+                        </div>
+                    )}
+                    <button className="dream-button" onClick={journalDream}>
+                        {buttonText} {subscribed ? '' : `(${creditCost} credits)`}
+                    </button>
                     <div>
                         <HowItWorksPopup />
                         <div className="flex flex-col">
@@ -234,7 +241,7 @@ export default function JournalForm() {
                                                 </div>
                                         )})}
                                     </div>
-                                    <div className="justify-center flex">
+                                    {/* <div className="justify-center flex">
                                         <div className="flex justify-center p-5">
                                             <input 
                                                 type="checkbox" 
@@ -255,7 +262,7 @@ export default function JournalForm() {
                                                 and give you a quick answer. Oracles may sacrifice accuracy for speed. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.
                                             </Popup>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <button className="dream-button absolute right-0 bottom-0" onClick={journalDream}>{buttonText} {subscribed ? '' : `(${creditCost} credits)`}</button><br />
                                 </div>
                                 {user?.credits === 0 && !subscribed && (

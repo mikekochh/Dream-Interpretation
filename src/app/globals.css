@@ -179,12 +179,6 @@ nav {
   max-height: 100%; 
 }
 
-/* @media screen and (max-width: 767px) {
-  .main-content {
-    padding-bottom: 80px;
-  }
-} */
-
 .middle-content {
   height: calc(100vh - 60px); /* Subtract the navbar height */
   display: flex;

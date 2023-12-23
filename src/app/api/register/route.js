@@ -18,7 +18,6 @@ export async function POST(req) {
             email, 
             password:hashedPassword, 
             credits: 1, 
-            redeemedCredits: false, 
             activated: false,
             verificationTokenID: null
         });

@@ -21,9 +21,6 @@ const userSchema = new Schema({
     characterID: {
         type: Number,
     },
-    redeemedCredits: {
-        type: Boolean,
-    },
     activated: {
         type: Boolean,
     },

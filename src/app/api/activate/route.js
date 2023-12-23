@@ -10,7 +10,15 @@ export async function POST(req) {
 
         await connectMongoDB();
 
-        const activatedUser = await User.findOneAndUpdate({ verificationTokenID }, { $set: { activated: true, credits: 4 }}, { new: true });
+        const activatedUser = await User.findOneAndUpdate(
+            { verificationTokenID },
+            {
+                $set: { activated: true },
+                $inc: { credits: 5 }
+            },
+            { new: true }
+        );
+        
 
         if (!activatedUser) {
             throw new Error("User not found!");

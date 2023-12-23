@@ -24,8 +24,6 @@ const SettingsForm = () => {
             return res.json();
         }
 
-        console.log('session: ', session);
-
         if (session) {
             setUserData().then(userData => {
                 setUser(userData);
@@ -53,7 +51,7 @@ const SettingsForm = () => {
             <p>Email: {user.email}</p>
             <p>Name: {user.name}</p>
             <div className="logout absolute bottom-0 right-0 p-4">
-                <button onClick={logout} className="text-sm mt-3 text-right bg-red-700 p-2 rounded-lg">Log Out</button>
+                <button onClick={logout} className="back-button">Log Out</button>
                 {subscribed && <button onClick={subscription} className="text-sm mt-3 text-right bg-blue-500 text-white p-2 rounded-lg">Cancel Subscription</button>}
             </div>
         </div>
