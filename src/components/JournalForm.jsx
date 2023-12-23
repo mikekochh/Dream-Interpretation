@@ -185,10 +185,10 @@ export default function JournalForm() {
                 <div>
                     {!subscribed && (
                         <div className="absolute right-0 top-0 p-2 main-content">
+                            <p className="text-right">Dream Credits: {user?.credits}</p>
                             {!user?.activated && (
-                                <a href={`/emailVerification?email=${user?.email}`} className="underline pr-2">Verify Email for 5 dream credits</a>
+                                <a href={`/emailVerification?email=${user?.email}`} className="underline">Verify Email for 5 dream credits</a>
                             )}
-                            Dream Credits: {user?.credits}
                         </div>
                     )}
                     <button className="dream-button" onClick={journalDream}>
