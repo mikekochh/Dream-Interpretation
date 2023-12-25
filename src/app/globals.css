@@ -277,3 +277,39 @@ nav {
 }
 
 
+.next-stage {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  height: 7%;
+}
+
+@keyframes fadeUpwardsOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+}
+
+.fade-upwards-out {
+  animation: fadeUpwardsOut 1.3s ease-out forwards;
+}
+
+@keyframes fadeUpwardIn {
+  from {
+    opacity: 0;
+    transform: translateY(250px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-upwards-in {
+  animation: fadeUpwardIn 1.3s ease-out forwards;
+}
+

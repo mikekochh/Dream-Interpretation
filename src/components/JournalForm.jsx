@@ -1,15 +1,13 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { signOut } from "next-auth/react";
 import { useSession } from 'next-auth/react';
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faArrowDown, faArrowDownUpLock, faArrowUp} from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import { set } from 'mongoose';
 
 export default function JournalForm() { 
 
@@ -19,13 +17,15 @@ export default function JournalForm() {
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
-    const [short, setShort] = useState(false);
     const [newDreamID, setNewDreamID] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
     const [creditCost, setCreditCost] = useState(0);
     const [oracleSelected, setOracleSelected] = useState(false);
+    const journalSectionRef = useRef(null);
+    const interpretationSectionRef = useRef(null);
+
 
     useEffect(() => {
         async function setUserData() {
@@ -150,12 +150,20 @@ export default function JournalForm() {
         window.location.href = `/dreamDetails?dreamID=${newDreamID}`;
     }
 
-    const handleCheckboxChange = (event) => {
-        setShort(event.target.checked);
-    };
+    const goToSelectOracles = () => {
+        if (journalSectionRef.current) {
+            journalSectionRef.current.classList.add("fade-upwards-out");
+            journalSectionRef.current.classList.add("hidden");
+        }
+
+        if (interpretationSectionRef.current) {
+            interpretationSectionRef.current.classList.add("fade-upwards-in");
+            interpretationSectionRef.current.classList.remove("hidden");
+        }
+    }
 
     return (
-        <div className="text-white main-content relative">
+        <div className="text-white main-content relative h-full">
             {savingDream ? (
                 <div className="flex justify-center items-center middle-content">
                     <div className="flex justify-center items-center flex-col">
@@ -188,21 +196,48 @@ export default function JournalForm() {
                             )}
                         </div>
                     )}
-                    <button className="dream-button" onClick={journalDream}>
+                    {/* <button className="dream-button" onClick={journalDream}>
                         {buttonText} {subscribed ? '' : `(${creditCost} credits)`}
-                    </button>
+                    </button> */}
                     <div>
-                        <HowItWorksPopup />
-                        <div className="flex flex-col">
-                            <div className="flex justify-center">
-                                <textarea type="text" rows={15} placeholder='Enter Dream' className="DreamBox border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" />
+                        <div className="journal-section" ref={journalSectionRef}>
+                            {user && (
+                                <p className="text-3xl text-center">Welcome back {user?.name}</p>
+                            )}
+                            <HowItWorksPopup />
+                            <div className="flex flex-col">
+                                <div className="flex justify-center">
+                                    <textarea type="text" rows={15} placeholder='Enter Dream' className="DreamBox border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" />
+                                </div>
                             </div>
-                        </div>
-                        <div>
                             {error && (
                                 <div className="bg-red-500 w-max p-1 text-black font-bold rounded-xl">{error}</div>
                             )}  
-                            <div id="interpretation-section" className="relative">
+                            <div className="flex justify-center absolute bottom-0 left-1/2 transform -translate-x-1/2 text-3xl items-center m-2">
+                                <div className="text-center w-fit p-1 rounded-xl next-stage" onClick={goToSelectOracles}>
+                                    <FontAwesomeIcon icon={faArrowDown} className="mr-2"/>
+                                    <FontAwesomeIcon icon={faArrowDown} className="mr-2"/>
+                                    <FontAwesomeIcon icon={faArrowDown} className="mr-2"/>
+                                    Next Stage: Select Oracles
+                                    <FontAwesomeIcon icon={faArrowDown} className="ml-2"/>
+                                    <FontAwesomeIcon icon={faArrowDown} className="ml-2"/>
+                                    <FontAwesomeIcon icon={faArrowDown} className="ml-2"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div id="interpretation-section" className="relative hidden" ref={interpretationSectionRef}>
+                                <div className="flex justify-center text-3xl items-center">
+                                    <div className="text-center w-fit p-1 rounded-xl next-stage" onClick={journalDream}>
+                                        <FontAwesomeIcon icon={faArrowUp} className="mr-2"/>
+                                        <FontAwesomeIcon icon={faArrowUp} className="mr-2"/>
+                                        <FontAwesomeIcon icon={faArrowUp} className="mr-2"/>
+                                        Previous Stage: Enter Dream Description
+                                        <FontAwesomeIcon icon={faArrowUp} className="ml-2"/>
+                                        <FontAwesomeIcon icon={faArrowUp} className="ml-2"/>
+                                        <FontAwesomeIcon icon={faArrowUp} className="ml-2"/>
+                                    </div>
+                                </div>
                                 <div className={`${user?.credits === 0 && !subscribed ? 'blur pointer-events-none' : ''}`}>
                                     <OracleSelectionPopup />
                                     <div className="justify-center flex md:flex-row flex-col">
@@ -260,7 +295,7 @@ export default function JournalForm() {
                                             </Popup>
                                         </div>
                                     </div> */}
-                                    <button className="dream-button absolute right-0 bottom-0" onClick={journalDream}>{buttonText} {subscribed ? '' : `(${creditCost} credits)`}</button><br />
+                                    {/* <button className="dream-button absolute right-0 bottom-0" onClick={journalDream}>{buttonText} {subscribed ? '' : `(${creditCost} credits)`}</button><br /> */}
                                 </div>
                                 {user?.credits === 0 && !subscribed && (
                                     <div className="absolute inset-0 flex flex-col md:justify-center items-center">
@@ -268,6 +303,17 @@ export default function JournalForm() {
                                         <button className="rounded-xl bg-blue-600 dream-button m-2 pl-4 pr-4 justify-center item p-10" onClick={() => window.location.href = '/pricing'}>See Pricing</button>
                                     </div>
                                 )}
+                                <div className="flex justify-center absolute bottom-0 left-1/2 transform -translate-x-1/2 text-3xl items-center m-2">
+                                    <div className="text-center w-fit p-1 rounded-xl next-stage" onClick={goToSelectOracles}>
+                                        <FontAwesomeIcon icon={faArrowDown} className="mr-2"/>
+                                        <FontAwesomeIcon icon={faArrowDown} className="mr-2"/>
+                                        <FontAwesomeIcon icon={faArrowDown} className="mr-2"/>
+                                        Next Stage: Interpret Dream
+                                        <FontAwesomeIcon icon={faArrowDown} className="ml-2"/>
+                                        <FontAwesomeIcon icon={faArrowDown} className="ml-2"/>
+                                        <FontAwesomeIcon icon={faArrowDown} className="ml-2"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
