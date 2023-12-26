@@ -33,14 +33,14 @@ const StarBackground = ({ children }) => {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        if (pathname === "/feedback" || !session) {
-            setShowFeedbackButton(false);
-        }
-        else {
-            setShowFeedbackButton(true);
-        }
-    }, [pathname, session]);
+    // useEffect(() => {
+    //     if (pathname === "/feedback" || !session) {
+    //         setShowFeedbackButton(false);
+    //     }
+    //     else {
+    //         setShowFeedbackButton(true);
+    //     }
+    // }, [pathname, session]);
 
     const feedback = function() {
         window.location.href = "/feedback";
