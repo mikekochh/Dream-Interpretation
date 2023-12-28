@@ -36,7 +36,7 @@ const SettingsForm = () => {
 
     const logout = async () => {
         await signOut({ redirect: false });
-        router.push("/home");
+        router.push("/createAccount");
     }
 
     const subscription = async () => {

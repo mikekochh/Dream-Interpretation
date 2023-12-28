@@ -177,6 +177,7 @@ nav {
   padding-top: 70px; /* Add a top padding to avoid content overlay */
   overflow-y: auto;
   max-height: 100%; 
+  min-height: 80%;
 }
 
 .middle-content {
@@ -277,3 +278,73 @@ nav {
 }
 
 
+.next-stage {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  height: 7%;
+}
+
+.next-stage:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes fadeUpwardsOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+}
+
+.fade-upwards-out {
+  animation: fadeUpwardsOut 1.3s ease-out forwards;
+}
+
+@keyframes fadeUpwardsIn {
+  from {
+    opacity: 0;
+    transform: translateY(250px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-upwards-in {
+  animation: fadeUpwardsIn 1.3s ease-out forwards;
+}
+
+
+@keyframes fadeDownwardsIn {
+  from {
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-downwards-in {
+  animation: fadeDownwardsIn 1.3s ease-out forwards;
+}
+
+@keyframes fadeDownwardsOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(250px);
+  }
+}
+
+.fade-downwards-out {
+  animation: fadeDownwardsOut 1.3s ease-out forwards;
+}

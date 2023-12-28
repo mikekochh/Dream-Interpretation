@@ -17,12 +17,12 @@ export async function POST(req) {
             name, 
             email, 
             password: hashedPassword, 
-            credits: 2, 
+            credits: 5, 
             activated: false,
             verificationTokenID: null
         });
 
-        return NextResponse.json({message: "User registered successfully!"}, { status: 200 })
+        return NextResponse.json({newUser}, { status: 200 });
     } catch (error) {
         console.log('error during registration: ', error);
 
