@@ -4,7 +4,6 @@ import { useState } from "react";
 import validator from 'validator';
 import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
-import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 import axios from "axios";
 
 export default function RegisterForm() {
@@ -63,7 +62,20 @@ export default function RegisterForm() {
                     password
                 }),
             });
-            
+
+            const newUser = await resNewUser.json();
+            const userID = newUser.newUser._id;
+
+            const dreamID = localStorage.getItem('dreamID');
+
+            console.log('dreamID: ', dreamID);
+
+            if (dreamID) {
+                const resNewUser = await axios.post('api/dream/newUser', {
+                    userID,
+                    dreamID
+                });
+            }
 
             if (resNewUser.ok) {
                 const resSignIn = await signIn("credentials", { 

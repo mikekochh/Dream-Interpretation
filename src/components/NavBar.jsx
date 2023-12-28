@@ -50,7 +50,12 @@ const NavBar = () => {
                     <div className="flex items-center cursor-pointer">
                         <Image src="/dream_icon.png" className="rounded-lg" width={32} height={32} alt="logo" />
                         <p className="text-black font-semibold text-lg ml-1 w-fit">Dream Oracles</p>
-                        {noNavBarElements && (<a className="md:hidden absolute font-bold underline right-0 p-1 whitespace-nowrap" href="/createAccount">Create account</a>)}
+                        {noNavBarElements && (
+                            <div className="md:hidden absolute font-bold underline right-0 p-1 whitespace-nowrap flex flex-col text-right">
+                                <a href="/createAccount">Create account</a>
+                                <a href="/login">Log In</a>
+                            </div>
+                        )}
                     </div>
                 </Link>
 
@@ -73,7 +78,12 @@ const NavBar = () => {
                             <Link href="/settings">Settings</Link>
                         </li>
                     </ul>
-                    {noNavBarElements && (<a className="absolute font-bold underline" href="/createAccount">Create an account for full features</a>)}
+                    {noNavBarElements && (
+                        <div className="absolute font-bold underline flex flex-col text-right">
+                                <a href="/createAccount">Create an account for full features</a>
+                                <a href="/login">Log In</a>
+                            </div>
+                    )}
                 </div>
                 <div className="md:hidden ml-2 relative">
                     {isOpen ? (
