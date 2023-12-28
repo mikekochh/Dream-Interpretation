@@ -283,6 +283,10 @@ nav {
   height: 7%;
 }
 
+.next-stage:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
 @keyframes fadeUpwardsOut {
   from {
     opacity: 1;
@@ -298,7 +302,7 @@ nav {
   animation: fadeUpwardsOut 1.3s ease-out forwards;
 }
 
-@keyframes fadeUpwardIn {
+@keyframes fadeUpwardsIn {
   from {
     opacity: 0;
     transform: translateY(250px);
@@ -310,6 +314,36 @@ nav {
 }
 
 .fade-upwards-in {
-  animation: fadeUpwardIn 1.3s ease-out forwards;
+  animation: fadeUpwardsIn 1.3s ease-out forwards;
 }
 
+
+@keyframes fadeDownwardsIn {
+  from {
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-downwards-in {
+  animation: fadeDownwardsIn 1.3s ease-out forwards;
+}
+
+@keyframes fadeDownwardsOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(250px);
+  }
+}
+
+.fade-downwards-out {
+  animation: fadeDownwardsOut 1.3s ease-out forwards;
+}
