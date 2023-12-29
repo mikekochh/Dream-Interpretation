@@ -28,14 +28,14 @@ export default function RootLayout({ children }) {
             </div>
         </AuthProvider>
       </body>
-      <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-D4RDHQ3FZP"/>
+      <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-1TF2VESNGX"/>
       <Script strategy="afterInteractive" id="google-analytics">
         {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-D4RDHQ3FZP');
+            gtag('config', 'G-1TF2VESNGX');
         `}
       </Script>
 
