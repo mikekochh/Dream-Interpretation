@@ -84,7 +84,13 @@ export default function JournalForm() {
 
 
     useEffect(() => {
-        if (!user?.name) {
+        if (user?.name) {
+            dreamButtonTopRef.current.classList.remove("blur");
+            dreamButtonTopRef.current.classList.remove("pointer-events-none");
+            dreamButtonBottomRef.current.classList.remove("blur");
+            dreamButtonBottomRef.current.classList.remove("pointer-events-none");
+        }
+        else {
             if (oracleSelected) {
                 dreamButtonTopRef.current.classList.remove("blur");
                 dreamButtonTopRef.current.classList.remove("pointer-events-none");
@@ -98,7 +104,7 @@ export default function JournalForm() {
                 dreamButtonBottomRef.current.classList.add("pointer-events-none");
             }
         }
-    }, [oracleSelected]);
+    }, [oracleSelected, user]);
     
 
 
