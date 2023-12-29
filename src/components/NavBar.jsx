@@ -47,18 +47,18 @@ const NavBar = () => {
             <nav className="flex justify-between items-center w-full p-4 border-b bg-white">
                 {/* Section for logo and ability to change based off of screen size */}
                 <Link href="https://www.michaelgkoch.com">
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex flex-row items-center">
                         <Image src="/dream_icon.png" className="rounded-lg" width={32} height={32} alt="logo" />
                         <p className="text-black font-semibold text-lg ml-1 w-fit">Dream Oracles</p>
-                        {noNavBarElements && (
-                            <div className="md:hidden absolute font-bold underline right-0 p-1 whitespace-nowrap flex flex-col text-right">
-                                <a href="/createAccount">Create account</a>
-                                <a href="/login">Log In</a>
-                            </div>
-                        )}
                     </div>
                 </Link>
 
+                {noNavBarElements && (
+                    <div className="md:hidden absolute font-bold underline right-0 p-1 whitespace-nowrap flex flex-col text-right">
+                        <a href="/createAccount">Create account</a>
+                        <a href="/login">Log In</a>
+                    </div>
+                )}
                 {/* Section on the right */}
                 <div className="relative justify-end items-center text-black md:flex hidden">
                     <ul className="flex">
