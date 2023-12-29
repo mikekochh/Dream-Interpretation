@@ -3,6 +3,7 @@ import './globals.css'
 import { AuthProvider } from './Providers'
 import NavBar from '../components/NavBar'
 import Head from 'next/head';
+import Script from 'next/script';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Head>
         <link rel="icon" href="/favicon.ico" />
+        
       </Head>
       <body>
         <AuthProvider>
@@ -25,7 +27,18 @@ export default function RootLayout({ children }) {
               {children}
             </div>
         </AuthProvider>
-        </body>
+      </body>
+      <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-D4RDHQ3FZP"/>
+      <Script strategy="afterInteractive" id="google-analytics">
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-D4RDHQ3FZP');
+        `}
+      </Script>
+
     </html>
   )
 }
