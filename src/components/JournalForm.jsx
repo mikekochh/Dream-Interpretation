@@ -31,6 +31,31 @@ export default function JournalForm() {
     const dreamButtonBottomRef = useRef(null);
 
     useEffect(() => {
+        // Function to load the Google Tag Manager script
+        const loadGTag = () => {
+            const script = document.createElement('script');
+            script.src = "https://www.googletagmanager.com/gtag/js?id=G-1TF2VESNGX";
+            script.async = true;
+            document.head.appendChild(script);
+
+            script.onload = () => {
+                window.dataLayer = window.dataLayer || [];
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+                gtag('js', new Date());
+                gtag('config', 'G-1TF2VESNGX');
+            };
+        };
+
+        // Load the script if it's not already loaded
+        if (!window.gtag) {
+            loadGTag();
+        }
+
+    }, []);
+
+    useEffect(() => {
         async function setUserData() {
             const email = session?.user?.email;
             const res = await fetch(`api/user/${email}`, {
@@ -208,12 +233,11 @@ export default function JournalForm() {
                     return;
                 }
 
-                console.log('user._id: ', user._id);
-
                 if (user._id === undefined) {
                     setLocalInterpretation(resInterpret.data[0].message.content);
                     setInterpretingDream(false);
                     setSaveMessage("Here is your interpretation:");
+                    journalDreamNoAccount();
                     return;
                 }
             }
@@ -221,6 +245,19 @@ export default function JournalForm() {
 
         setInterpretingDream(false);
         setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
+    }
+
+    const journalDreamNoAccount = () => {
+        console.log("user is dreaming without an account");
+        if (window.gtag) {
+            window.gtag('event', 'interpret_dream_no_account', {
+                'event_category': 'Dream Activity',
+                'event_label': 'No Account'
+            });
+        }
+        else {
+            console.error('GTaf script not laoded yet');
+        }
     }
 
     const resetPage = () => {
@@ -264,6 +301,7 @@ export default function JournalForm() {
                                 <div className="">
                                     {localInterpretation ? (
                                         <div className="text-center">
+                                            <a href="/createAccount" className="underline">Create a free account to continue interpreting dreams and unlock all features</a>
                                             <p className="rounded-xl p-2 border border-white m-2 overflow-auto">{insertLineBreaks(localInterpretation)}</p>
                                             <a href="/createAccount" className="underline">Create a free account to continue interpreting dreams and unlock all features</a>
                                         </div>
