@@ -37,15 +37,17 @@ export default function DreamsForm() {
 
                 // Calculate the start and end dates for the week
                 if (sortType === 1) {
-                    setWeekOffset(0);
                     const today = new Date();
                     const dayOfWeek = today.getDay(); // Sunday - 0, Monday - 1, etc.
                     const startOfWeek = new Date(today);
                     startOfWeek.setDate(today.getDate() - dayOfWeek + (weekOffset * 7));
+                    startOfWeek.setHours(0, 0, 0, 0);
                     setFirstDayOfWeek(startOfWeek);
+                    console.log('startOfWeek: ', startOfWeek);
                     const endOfWeek = new Date(startOfWeek);
                     endOfWeek.setDate(startOfWeek.getDate() + 7);
                     setLastDayOfWeek(endOfWeek);
+                    console.log('endOfWeek: ', endOfWeek);
 
                     // Filter dreams within the week
                     const filteredDreams = res.data.filter(dream => {
