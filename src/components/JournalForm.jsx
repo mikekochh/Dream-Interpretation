@@ -337,7 +337,11 @@ export default function JournalForm() {
                         {user?.name ? (
                             <p className="text-3xl text-center">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
                         ) : (
-                            <p className="text-3xl text-center">Welcome to Dream Oracles 🌠</p>
+                            <div>
+                                <p className="text-3xl text-center">Welcome to Dream Oracles</p>
+                                <p className="text-2xl text-center">Dream interpretation using a wide range of interpretation styles</p>
+                            </div>
+
                         )}
                         <HowItWorksPopup />
                         <div className="flex flex-col">
