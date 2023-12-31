@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faStarAndCrescent } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 
 export default function JournalForm() { 
@@ -25,6 +25,7 @@ export default function JournalForm() {
     const [oracleSelected, setOracleSelected] = useState(false);
     const [localInterpretation, setLocalInterpretation] = useState("");
     const [dream, setDream] = useState("");
+    const [justJournal, setJustJournal] = useState(false);
 
     const localCreditsGiven = useRef(false);
     const dreamButtonTopRef = useRef(null);
@@ -181,6 +182,9 @@ export default function JournalForm() {
                 if (oracleSelected) {
                     interpretDreams(dreamID);
                 }
+                else {
+                    setJustJournal(true);
+                }
             }
             // if there is no user, interpret the dream and display it to the screen. Save dream to database for if user creates an account
             else {
@@ -308,7 +312,7 @@ export default function JournalForm() {
                                     ) : (
                                         <div>
                                             <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={resetPage}>Journal New Dream</button>
-                                            <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={goToDreamDetails}>Go To Dream Details</button>
+                                            {!justJournal && (<button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={goToDreamDetails}>Go To Dream Details</button>)}
                                         </div>
                                     )}
                                 </div>
@@ -328,11 +332,10 @@ export default function JournalForm() {
                     )}
                     <button className="dream-button" ref={dreamButtonTopRef} onClick={journalDream}>
                         {buttonText}
-                        {/* {buttonText} {subscribed ? '' : `(${creditCost} credits)`} */}
                     </button>
                     <div>
                         {user?.name ? (
-                            <p className="text-3xl text-center">Welcome back {user?.name} 🌠</p>
+                            <p className="text-3xl text-center">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
                         ) : (
                             <p className="text-3xl text-center">Welcome to Dream Oracles 🌠</p>
                         )}

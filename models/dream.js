@@ -21,6 +21,11 @@ const dreamSchema = new Schema({
         type: Boolean,
         default: false,
         required: [true, "Is dream being interpreted?!"]
+    },
+    starred: {
+        type: Boolean,
+        default: false,
+        required: [true, "Is dream starred?!"]    
     }
 });
 
