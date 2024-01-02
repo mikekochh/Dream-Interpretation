@@ -422,7 +422,7 @@ const HowItWorksPopup = () => {
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
                 <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
-                    <p className="text-xl">
+                    <p className="text-xl select-none">
                         <b>Describing your dream</b><br/>
                         Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream,
                         and instead describe their relationship to you.
@@ -443,7 +443,7 @@ const OracleSelectionPopup = () => {
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
                 <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
-                    <p className="text-xl">
+                    <p className="text-xl select-none">
                         <b>Choosing Dream Oracles</b><br/>
                         Here, you can select as many oracles as you would like to interpret your dreams.
                         Click on the info icon next to each oracle to learn about their interpretation style.
@@ -486,7 +486,7 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
                 />
             </div>
             <label htmlFor={oracle.oracleID} className={`${oracle.selected ? "text-gold" : ""}`}>
-                {oracle.oracleName}<FontAwesomeIcon icon={faInfoCircle} className="ml-2" onClick={() => setOpen(o => !o)} />
+                {oracle.oracleName}<FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)} />
                 <div className={`whitespace-pre-wrap ${open ? 'oracle-menu-active' : 'oracle-menu'}`}>
                     <p className="text-md">
                         <b>Specialty: </b>{oracle.oracleSpecialty}<br/><br/>
