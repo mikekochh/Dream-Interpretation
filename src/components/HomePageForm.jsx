@@ -11,6 +11,7 @@ export default function HomePageForm() {
 
     const [oracles, setOracles] = useState([]);
     const { data: session } = useSession();
+    const [divHeight, setDivHeight] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
@@ -18,6 +19,15 @@ export default function HomePageForm() {
             router.push('/journal');
         }
     }, [session]);
+
+    useEffect(() => {
+        const topPosition = document.querySelector('.scrollable-div').getBoundingClientRect().top;
+        console.log(topPosition);
+        console.log(window.innerHeight);
+        const dynamicHeight = window.innerHeight - topPosition - 16;
+        console.log(dynamicHeight);
+        setDivHeight(dynamicHeight);
+    }, []);
 
     useEffect(() => {
 
@@ -40,58 +50,91 @@ export default function HomePageForm() {
 
     return (
         <div className="home-page">
-            <div className="video-container h-96">
-                <video autoPlay loop muted playsInline preload='auto' className="cosmic-video h-96 rounded-3xl p-4">
+            <div className="video-container">
+                <video autoPlay loop muted playsInline preload='auto' className="cosmic-video">
                     <source src="/cosmic_background.mp4" type="video/mp4" />
                 </video>
-                <div className="text-white text-container text-5xl md:pr-52 p-4">
-                    <h1 className="md:text-5xl text-3xl pb-2">Dream Oracles</h1>
-                    <h2 className="md:text-3xl text-xl">Interpret your dreams using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
-                </div>
-                <div className="place-items-center register-form hidden md:block">
+                <div className="place-items-center hidden register-form md:block">
                     <RegisterForm />
                 </div>
-                <div className="register-form md:hidden">
-                    <button className="text-white text-3xl rounded-2xl p-2 mt-5 ml-5 bg-blue-500 hover:bg-blue-700" onClick={() => window.location.href = "/register"}>Sign Up</button>
-                </div>
             </div>
-            <div className="text-white text-3xl md:text-5xl p-4 text-center">
-                Meet the crew!
-                {oracles.map((oracle) => (
-                    <div key={oracle.oracleID} className="character-container">
-                    <Image 
-                        width={320} 
-                        height={320} 
-                        src={oracle.oraclePicture}
-                        alt={oracle.oracleFullName}
-                        className="rounded-3xl oracle-image"
-                    />
-                        <p className="pb-4">{oracle.oracleFullName}</p>
-                        <p className="text-2xl whitespace-pre-line">{oracle.oracleDescription}</p>
+            <div className="text-white text-container hidden text-5xl m-2">
+                <h1 className="md:text-5xl text-3xl pb-2">Dream Oracles</h1>
+                <h2 className="text-xl pb-10">Interpret your dreams any way you&apos;d like using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
+                <div className="text-lg">
+                    <p className="py-2">
+                        <span className="font-bold">🌌 Discover the mysteries of your dreams</span> with diverse interpreations, from 
+                        scientific psychoanalysis to Islamic religious perspectives (5 different interpretation styles in total).
+                    </p>
+                    <p className="py-2">
+                        <span className="font-bold">🌌 Capture your nocturnal adventures</span> within our specialized dream journal (easy dream logging, secure interpretation storage,
+                        and comprehensive note-taking for all your dream explorations).
+                    </p>
+                    <p className="py-2">
+                        <span className="font-bold">🌌 Support the development of Dream Oracles 😄</span>
+                    </p>
+                    <div className="py-2">
+                        <span className="font-bold">🌌 Unlimited access to our expert Dream Oracles 👇</span> 
+                        <div>
+                        {oracles.map((oracle) => (
+                            <div key={oracle.oracleID} className="character-container">
+                            <Image 
+                                width={125} 
+                                height={125} 
+                                src={oracle.oraclePicture}
+                                alt={oracle.oracleFullName}
+                                className="rounded-3xl oracle-image"
+                            />
+                                <p className="text-xl font-bold pb-4">{oracle.oracleFullName}</p>
+                                <p className="whitespace-pre-line">{oracle.oracleDescriptionShort}</p>
+                            </div>
+                        ))}
+                        </div>
                     </div>
-                ))}
-                <div className="md:pr-20 md:pl-20">
-                    <p className="p-3">
-                        And many more oracles to come in the future!
-                    </p>
-                    <p className="md:p-3 pt-10 text-xl md:text-3xl">
-                        Each Oracle provides a unique perspective that helps you understand your dreams in a new light. We recommend asking 
-                        each of them what they think about your dream to gain a more comprehensive understanding of your dream&apos;s meaning as well
-                        as seeing which character&apos;s style resonates with you the most. Sometimes, Jung might hit it right on the nose, while other times
-                        Luna might bring up a point that strikes a cosmic cord in your soul. 
-                    </p>
-                    <p className="md:p-3 pt-10 text-xl md:text-3xl">
-                        Whether you are interested in self-reflection, self-development, spirituality, psychology, philosophical thinking 
-                        about human nature, or whatever brings you to dig deeper into your dreams, we got it all at Dream Oracles. Register 
-                        now to speak to our Oracles and start your journey of self-discovery and enlightenment!
-                    </p>
                 </div>
             </div>
-            <div className="grid place-items-center pb-40 md:pb-10">
-                <RegisterForm />
+            <div className="relative">
+                <div className="register-form-mobile">
+                    <RegisterForm />
+                </div>
+                <div className="scrollable-div text-white z-10 fixed top-72">
+                    <div className="overflow-y-auto mx-auto overflow-auto p-2" style={{ height: `${divHeight}px`}}>
+                        <h1 className="text-4xl font-bold pb-2">Dream Oracles</h1>
+                        <h2 className="text-xl pb-10">Interpret your dreams any way you&apos;d like using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
+                        <div className="text-lg">
+                            <p className="py-2">
+                                <span className="font-bold">🌌 Discover the mysteries of your dreams</span> with diverse interpreations, from 
+                                scientific psychoanalysis to Islamic religious perspectives (5 different interpretation styles in total).
+                            </p>
+                            <p className="py-2">
+                                <span className="font-bold">🌌 Capture your nocturnal adventures</span> within our specialized dream journal (easy dream logging, secure interpretation storage,
+                                and comprehensive note-taking for all your dream explorations).
+                            </p>
+                            <div className="py-2">
+                                <span className="font-bold">🌌 Unlimited access to our expert Dream Oracles 👇</span> 
+                                <div>
+                                {oracles.map((oracle) => (
+                                    <div key={oracle.oracleID} className="character-container">
+                                    <Image 
+                                        width={125} 
+                                        height={125} 
+                                        src={oracle.oraclePicture}
+                                        alt={oracle.oracleFullName}
+                                        className="rounded-3xl oracle-image"
+                                    />
+                                        <p className="text-xl font-bold pb-4">{oracle.oracleFullName}</p>
+                                        <p className="whitespace-pre-line">{oracle.oracleDescriptionShort}</p>
+                                    </div>
+                                ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="text-white absolute text-5xl m-2">
+
+                </div>
             </div>
         </div>
-
-
     )
 }
