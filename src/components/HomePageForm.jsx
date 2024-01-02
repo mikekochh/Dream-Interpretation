@@ -24,7 +24,7 @@ export default function HomePageForm() {
         const topPosition = document.querySelector('.scrollable-div').getBoundingClientRect().top;
         console.log(topPosition);
         console.log(window.innerHeight);
-        const dynamicHeight = window.innerHeight - topPosition - 16;
+        const dynamicHeight = window.innerHeight - topPosition;
         console.log(dynamicHeight);
         setDivHeight(dynamicHeight);
     }, []);
@@ -91,6 +91,9 @@ export default function HomePageForm() {
                         ))}
                         </div>
                     </div>
+                    <p className="py-2">
+                        <span className="font-bold">🌌 83% of clinical therapists</span> use dream interpretation as apart of their practice.
+                    </p>
                 </div>
             </div>
             <div className="relative">
@@ -100,7 +103,7 @@ export default function HomePageForm() {
                 <div className="scrollable-div text-white z-10 fixed top-72">
                     <div className="overflow-y-auto mx-auto overflow-auto p-2" style={{ height: `${divHeight}px`}}>
                         <h1 className="text-4xl font-bold pb-2">Dream Oracles</h1>
-                        <h2 className="text-xl pb-10">Interpret your dreams any way you&apos;d like using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
+                        <h2 className="text-xl pb-8">Interpret your dreams any way you&apos;d like using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
                         <div className="text-lg">
                             <p className="py-2">
                                 <span className="font-bold">🌌 Discover the mysteries of your dreams</span> with diverse interpreations, from 

@@ -343,6 +343,7 @@ export default function JournalForm() {
                             </div>
 
                         )}
+                        
                         <HowItWorksPopup />
                         <div className="flex flex-col">
                             <div className="flex justify-center">
@@ -417,11 +418,11 @@ const HowItWorksPopup = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center text-3xl pb-5 p-3 text-center">
+        <div className="justify-center items-center flex flex-col text-3xl pb-5 p-3 text-center">
             Enter Dream Description Below
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
-                <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
+                <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none">
                         <b>Describing your dream</b><br/>
                         Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream,
