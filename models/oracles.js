@@ -32,7 +32,15 @@ const oracleSchema = new Schema({
     selected: {
         type: Boolean,
         required: [true, "Please enter oracle selected status!"]
-    }
+    },
+    oracleShortDescription: {
+        type: String,
+        required: [true, "Please enter oracle short description!"]
+    },
+    oracleSpecialty: {
+        type: String,
+        required: [true, "Please enter oracle specialty!"]
+    },
 });
 
 const Oracle = models.Oracle || mongoose.model("Oracle", oracleSchema);

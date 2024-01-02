@@ -1,4 +1,4 @@
-"use client";
+"use client";Popup
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
@@ -361,33 +361,9 @@ export default function JournalForm() {
 
                                             return (
                                                 <div key={oracle._id} className="flex flex-col justify-center items-center p-5">
-                                                    <div className="w-full relative max-w-sm hidden md:block">
-                                                        <Image 
-                                                            layout="responsive"
-                                                            width={100}
-                                                            height={100}
-                                                            src={oracle.oraclePicture} 
-                                                            alt={oracle.oracleName} 
-                                                            className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
-                                                            onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
-                                                            htmlFor={oracle.oracleID}
-                                                        />
-                                                    </div>
-                                                    <div className="w-full relative max-w-sm md:hidden oracle-image-mobile">
-                                                        <Image 
-                                                            layout="responsive"
-                                                            width={100}
-                                                            height={100}
-                                                            src={oracle.oraclePicture} 
-                                                            alt={oracle.oracleName} 
-                                                            className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-4 border-gold' : ''}`}
-                                                            onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
-                                                            htmlFor={oracle.oracleID}
-                                                        />
-                                                    </div>
-                                                    <label htmlFor={oracle.oracleID} className={`${oracle.selected ? "text-gold" : ""}`}>{oracle.oracleName}</label>
+                                                    <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                                 </div>
-                                        )})}
+                                            )})}
                                     </div>
                                     {/* <div className="justify-center flex">
                                         <div className="flex justify-center p-5">
@@ -438,36 +414,87 @@ export default function JournalForm() {
 
 const HowItWorksPopup = () => {
 
+    const [open, setOpen] = useState(false);
+
     return (
-        <div className="flex flex-col md:flex-row justify-center text-3xl pb-5 p-3 text-center">
+        <div className="justify-center text-3xl pb-5 p-3 text-center">
             Enter Dream Description Below
-            <Popup 
-                trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-                position="bottom right center"
-                contentStyle={{width: "50%"}}
-            >
-                <b>Describing your dream</b><br/>
-                Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the 
-                dream, and instead describe their relationship to you.
-            </Popup>
+            <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
+                <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
+                    <p className="text-xl">
+                        <b>Describing your dream</b><br/>
+                        Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream,
+                        and instead describe their relationship to you.
+                    </p>
+                </div>
+            </div>
         </div>
     )
 }
 
 const OracleSelectionPopup = () => {
 
+    const [open, setOpen] = useState(false);
+
     return (
-        <div className="flex flex-col md:flex-row justify-center text-3xl pt-5 p-3 text-center">
+        <div className="justify-center text-3xl pt-5 p-3 text-center">
             Select Oracles to Interpret Your Dreams
-            <Popup 
-                trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-                position="bottom right center"
-                contentStyle={{width: "50%"}}
-            >
-                <b>Selecting oracles</b><br/>
-                Here, you can select which oracles you would like to interpret your dream. You can select as
-                many as you&apos;d like, or none at all. Their interpretations will appear under the dream details page.
-            </Popup>
+            <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
+                <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
+                    <p className="text-xl">
+                        <b>Choosing Dream Oracles</b><br/>
+                        Here, you can select as many oracles as you would like to interpret your dreams.
+                        Click on the info icon next to each oracle to learn about their interpretation style.
+                        Full oracle descriptions can be seen on the <a href="/oracles" className="underline">oracles page</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const OracleSection = ({ oracle, handleSelectionChange }) => {
+
+    const [open, setOpen] = useState(false);
+    
+    return (
+        <div className="text-center whitespace-nowrap relative">
+            <div className="w-full relative max-w-sm hidden md:block">
+                <Image 
+                    layout="responsive"
+                    width={100}
+                    height={100}
+                    src={oracle.oraclePicture} 
+                    alt={oracle.oracleName} 
+                    className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
+                    onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
+                    htmlFor={oracle.oracleID}
+                />
+            </div>
+            <div className="w-full relative max-w-sm md:hidden oracle-image-mobile">
+                <Image 
+                    layout="responsive"
+                    width={100}
+                    height={100}
+                    src={oracle.oraclePicture} 
+                    alt={oracle.oracleName} 
+                    className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-4 border-gold' : ''}`}
+                    onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
+                    htmlFor={oracle.oracleID}
+                />
+            </div>
+            <label htmlFor={oracle.oracleID} className={`${oracle.selected ? "text-gold" : ""}`}>
+                {oracle.oracleName}<FontAwesomeIcon icon={faInfoCircle} className="ml-2" onClick={() => setOpen(o => !o)} />
+                <div className={`whitespace-pre-wrap ${open ? 'oracle-menu-active' : 'oracle-menu'}`}>
+                    <p className="text-md">
+                        <b>Specialty: </b>{oracle.oracleSpecialty}<br/><br/>
+                        {oracle.oracleDescriptionShort}
+                    </p>
+                </div>
+            </label>
+            
         </div>
     )
 }

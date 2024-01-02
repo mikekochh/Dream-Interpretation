@@ -238,7 +238,6 @@ nav {
 
 .text-gold {
   color: gold;
-  font-weight: bold;
 }
 
 .border-gold {
@@ -366,6 +365,69 @@ nav {
   pointer-events: none;
   transform: translateY(-10px);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+}
+
+.popup-menu {
+  position: absolute;
+  bottom: calc(100% + .25rem);
+  background-color: #222242;
+  right: 0;
+  padding: 0.5rem;
+  text-align: left;
+  border-radius: .25rem;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+}
+
+.popup-menu-active {
+  position: absolute;
+  bottom: calc(100% + .25rem);
+  background-color: #222242;
+  right: 0;
+  text-align: left;
+  border-radius: .25rem;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+  z-index: 10;
+  padding: 0.5rem;
+}
+
+
+.oracle-menu {
+  position: absolute;
+  top: calc(100% + .25rem);
+  background-color: #222242;
+  right: 0;
+  padding: 0.5rem;
+  text-align: left;
+  border-radius: .25rem;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+}
+
+.oracle-menu-active {
+  position: absolute;
+  top: calc(100% + .25rem);
+  background-color: #222242;
+  right: 0;
+  text-align: left;
+  border-radius: .25rem;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+  z-index: 10;
+  padding: 0.5rem;
 }
 
 .dropdown-menu.active {
