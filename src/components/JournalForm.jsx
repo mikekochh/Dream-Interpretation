@@ -346,7 +346,7 @@ export default function JournalForm() {
                         <HowItWorksPopup />
                         <div className="flex flex-col">
                             <div className="flex justify-center">
-                                <textarea type="text" rows={15} placeholder='Dream description here' className="DreamBox border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" onChange={(event) => setDream(event.target.value)}  />
+                                <textarea type="text" rows={5} placeholder='Dream description here' className="DreamBox border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" onChange={(event) => setDream(event.target.value)}  />
                             </div>
                         </div>
                         <div>
