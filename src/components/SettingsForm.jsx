@@ -99,7 +99,7 @@ const SettingsForm = () => {
             </div>
             <div className="logout absolute bottom-0 right-0 p-4">
                 <button onClick={logout} className="back-button">Log Out</button>
-                {subscribed && <button onClick={subscription} className="text-sm mt-3 text-right bg-blue-500 text-white p-2 rounded-lg">Cancel Subscription</button>}
+                {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>}
             </div>
         </div>
     )
