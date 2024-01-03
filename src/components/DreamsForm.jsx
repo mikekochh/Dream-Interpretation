@@ -145,9 +145,14 @@ export default function DreamsForm() {
         dropdown();
     }
 
+    const metaAnalysis = () => {
+        const res = axios.post('/api/dream/metaAnalysis', { email: session.user.email });
+    }
+
     return (
         <div className="text-white main-content">
             <h1 className="text-5xl text-center font-bold pb-5">Dreams</h1>  
+            {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
             <div className="flex justify-between">
                 <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none" onClick={dropdown}>
                     Sort by: <span className="font-bold ml-1">{selectedSort}</span>
