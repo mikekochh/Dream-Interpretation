@@ -6,8 +6,6 @@ export async function POST(req) {
     try {
         // create user
         const { userID, dreamID } = await req.json();
-        console.log('userID: ', userID);
-        console.log('dreamID: ', dreamID);
 
         await connectMongoDB();
 
@@ -20,6 +18,6 @@ export async function POST(req) {
         return NextResponse.json({message: "Local dream added to user account!"}, { status: 200 })
     } catch (error) {
         console.log('error: ', error);
-        return NextResponse.json({message: "User activation failed!"}, { status: 500 })
+        return NextResponse.json({message: "Local dream was not added to user account!"}, { status: 200 })
     }
 }

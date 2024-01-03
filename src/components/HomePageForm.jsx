@@ -58,7 +58,7 @@ export default function HomePageForm() {
                     <RegisterForm />
                 </div>
             </div>
-            <div className="text-white text-container hidden text-5xl m-2">
+            <div className="text-white text-container hidden text-5xl m-2 md:block">
                 <h1 className="md:text-5xl text-3xl pb-2">Dream Oracles</h1>
                 <h2 className="text-xl pb-10">Interpret your dreams any way you&apos;d like using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
                 <div className="text-lg">
@@ -96,7 +96,7 @@ export default function HomePageForm() {
                     </p>
                 </div>
             </div>
-            <div className="relative">
+            <div className="relative md:hidden">
                 <div className="register-form-mobile">
                     <RegisterForm />
                 </div>

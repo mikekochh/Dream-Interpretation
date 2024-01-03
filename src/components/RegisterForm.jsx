@@ -68,7 +68,7 @@ export default function RegisterForm() {
 
             const dreamID = localStorage.getItem('dreamID');
 
-            console.log('dreamID: ', dreamID);
+            console.log("dreamID: ", dreamID);
 
             if (dreamID) {
                 const resNewUser = await axios.post('api/dream/newUser', {
@@ -77,14 +77,18 @@ export default function RegisterForm() {
                 });
             }
 
+            console.log("we getting here?");
+
             if (resNewUser.ok) {
+                gtagCreateAccount();
+
                 const resSignIn = await signIn("credentials", { 
                     email: emailLower,
                     password, 
                     redirect: false
                 });
 
-                router.replace("/journal");
+                router.push('/journal');
             }
         }
         catch (error) {
@@ -92,6 +96,18 @@ export default function RegisterForm() {
             setRegisteringUser(false);
             console.log("error: ", error);
             return;
+        }
+    }
+
+    const gtagCreateAccount = () => {
+        if (window.gtag) {
+            window.gtag('event', 'created_account', {
+                'event_category': 'Account Activity',
+                'event_label': 'Create Account'
+            });
+        }
+        else {
+            console.error('gtag script not loaded yet');
         }
     }
 

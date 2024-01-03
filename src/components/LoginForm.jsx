@@ -39,7 +39,8 @@ export default function LoginForm() {
         }
 
         try {
-            const resUserActivated = await axios.get('api/login/' + email);
+            const emailLower = email.toLowerCase();
+            const resUserActivated = await axios.get('api/login/' + emailLower);
 
             if (resUserActivated.data == null || resUserActivated.data == undefined || resUserActivated.data == false) {
                 setError("Please register first");
@@ -48,7 +49,7 @@ export default function LoginForm() {
             }
 
             const res = await signIn("credentials", { 
-                email,
+                email: emailLower,
                 password, 
                 redirect: false
             });
@@ -60,7 +61,7 @@ export default function LoginForm() {
                 return;
             }
 
-            router.replace("/journal");            
+            router.push('/journal');  
         } catch (error) {
             setError("Login failed!");
             setLogginIn(false);

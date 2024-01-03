@@ -252,7 +252,6 @@ export default function JournalForm() {
     }
 
     const journalDreamNoAccount = () => {
-        console.log("user is dreaming without an account");
         if (window.gtag) {
             window.gtag('event', 'interpret_dream_no_account', {
                 'event_category': 'Dream Activity',
@@ -260,7 +259,7 @@ export default function JournalForm() {
             });
         }
         else {
-            console.error('GTaf script not laoded yet');
+            console.error('gtag script not loaded yet');
         }
     }
 

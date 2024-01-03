@@ -11,6 +11,8 @@ const SettingsForm = () => {
     const { data: session } = useSession();
     const [user, setUser] = useState({});
     const [subscribed, setSubscribed] = useState(false);
+    const [oracleUpdated, setOracleUpdated] = useState(false);
+    const [metaAnalysisOracleID, setMetaAnalysisOracleID] = useState(0);
 
     useEffect(() => {
         async function setUserData() {
@@ -28,6 +30,7 @@ const SettingsForm = () => {
             setUserData().then(userData => {
                 setUser(userData);
                 setSubscribed(userData.subscribed);
+                setMetaAnalysisOracleID(userData.metaAnalysisOracleID);
             }).catch(err => {
                 console.log('err: ', err);
             });
@@ -43,11 +46,57 @@ const SettingsForm = () => {
         window.location.href = '/cancelSubscription';
     }
 
+    const updateMetaAnalysisOracleID = async (oracleID) => {
+        const res = await axios.post('/api/user/updateMetaAnalysisOracleID', {
+            oracleID,
+            userID: user._id
+        });
+        setMetaAnalysisOracleID(oracleID);
+        setOracleUpdated(true);
+    }
+
     return (
         <div className="main-content text-white">
             <h1 className="text-3xl text-white text-center">Settings</h1>
-            <p>Email: {user.email}</p>
-            <p>Name: {user.name}</p>
+            <p className="text-xl font-bold">Email: <span className="text-md font-normal">{user.email}</span></p>
+            <p className="text-xl font-bold">Name: <span className="text-md font-normal">{user.name}</span></p>
+            <div className="flex items-center">
+                <span className="text-xl font-bold mr-4">Meta Analysis Oracle: </span>
+                <div className="flex items-center space-x-4">
+                    <label className="flex items-center">
+                        Carl Jung:
+                        <input 
+                            type="radio" 
+                            name="option" 
+                            value={1} 
+                            checked={metaAnalysisOracleID === 1} 
+                            onChange={() => updateMetaAnalysisOracleID(1)}
+                            className="form-rad"
+                        />
+                    </label>
+                    <label className="flex items-center">
+                        Sigmund Freud:
+                        <input 
+                            type="radio" 
+                            name="option" 
+                            value={2} 
+                            checked={metaAnalysisOracleID === 2}
+                            onChange={() => updateMetaAnalysisOracleID(2)}
+                        />
+                    </label>
+                    <label className="flex items-center">
+                        Ruya:
+                        <input 
+                            type="radio" 
+                            name="option" 
+                            value={3} 
+                            checked={metaAnalysisOracleID === 3}
+                            onChange={() => updateMetaAnalysisOracleID(3)}
+                        />
+                    </label>
+                </div>
+                {oracleUpdated && <p className="text-green-500">Oracle updated!</p>}
+            </div>
             <div className="logout absolute bottom-0 right-0 p-4">
                 <button onClick={logout} className="back-button">Log Out</button>
                 {subscribed && <button onClick={subscription} className="text-sm mt-3 text-right bg-blue-500 text-white p-2 rounded-lg">Cancel Subscription</button>}

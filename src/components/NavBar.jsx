@@ -17,15 +17,6 @@ const NavBar = () => {
     const [noNavBar, setNoNavBar] = useState(false);
 
     useEffect(() => {
-
-        if (pathname === '/register' || pathname === '/login' || pathname === '/createAccount') {
-            setNoNavBar(true);
-            return;
-        }
-        else {
-            setNoNavBar(false);
-        }
-
         if (session) {
             setNoNavBarElements(false);
             const liElements = document.querySelectorAll('ul.flex li');
@@ -37,7 +28,7 @@ const NavBar = () => {
 
             const menuIcon = document.getElementById('menu');
 
-            menuIcon.classList.remove('blur', 'pointer-events-none');
+            menuIcon?.classList.remove('blur', 'pointer-events-none');
         } else {
             setNoNavBarElements(true);
             const liElements = document.querySelectorAll('ul.flex li');
@@ -49,9 +40,22 @@ const NavBar = () => {
 
             const menuIcon = document.getElementById('menu');
 
-            menuIcon.classList.add('blur', 'pointer-events-none');
+            menuIcon?.classList.add('blur', 'pointer-events-none');
         }
     }, [session]);
+
+    useEffect(() => {
+        if (pathname === '/register' || pathname === '/login' || pathname === '/createAccount') {
+            setNoNavBar(true);
+            return;
+        }
+        else {
+            setNoNavBar(false);
+        }
+    }
+    , [pathname]);
+
+
     return (
         <div>
             {!noNavBar && (
@@ -86,7 +90,7 @@ const NavBar = () => {
                             <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
                                 <Link href="/pricing">Pricing</Link>
                             </li>
-                            <li className={`cursor-pointer ${pathname === '/settings' ? 'font-bold' : ''}`}>
+                            <li className={`cursor-pointer ${pathname === '/settings' || pathname === '/cancelSubscription' ? 'font-bold' : ''}`}>
                                 <Link href="/settings">Settings</Link>
                             </li>
                         </ul>

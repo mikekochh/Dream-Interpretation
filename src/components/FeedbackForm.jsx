@@ -16,6 +16,19 @@ export default function FeedbackForm() {
         var userEmail = session.user.email;
         const res = await axios.post('/api/feedback', { feedback, userEmail });
         setFeedbackSuccessful(true);
+        gtagFeedback();
+    }
+
+    const gtagFeedback = () => {
+        if (window.gtag) {
+            window.gtag('event', 'feedback', {
+                'event_category': 'Feedback',
+                'event_label': 'Feedback'
+            });
+        }
+        else {
+            console.error('gtag script not loaded yet');
+        }
     }
 
     return (

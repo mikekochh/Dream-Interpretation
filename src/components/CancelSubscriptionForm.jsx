@@ -43,6 +43,10 @@ export default function CancelSubscriptionForm() {
         }
     }
 
+    const staySubscribed = async function() {
+        router.push('/journal');
+    }
+
     return (
         <div className="text-white text-xl text-center p-4 main-content">
             <h1 className="text-3xl pb-5">Cancel Subscription</h1>
@@ -50,6 +54,7 @@ export default function CancelSubscriptionForm() {
             <p className="pb-5">Would you mind telling us a bit about why you are deciding to cancel? Any feedback about the website would also be greatly appreciated, thank you!</p>
             <textarea className="w-full h-32 p-2 rounded-lg DreamBox" rows={20} placeholder="Canceling Reason"></textarea>
             <textarea className="w-full h-32 p-2 rounded-lg DreamBox" rows={20} placeholder="Feedback"></textarea>
+            <button className="bg-blue-500 hover:bg-blue-400 font-bold py-2 px-4 rounded mt-10 text-black mr-2" onClick={staySubscribed}>Stay Subscribed :)</button>
             <button className="bg-red-600 hover:bg-red-500 font-bold py-2 px-4 rounded mt-10 text-black" onClick={cancelSubscription}>Cancel Subscription</button>
         </div>
     )
