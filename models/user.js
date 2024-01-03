@@ -33,7 +33,9 @@ const userSchema = new Schema({
     subscriptionID: {
         type: String,
     },
-
+    metaAnalysisOracleID: {
+        type: Number,
+    },
 }, {timestamps: true});
 
 const User = models.User || mongoose.model("User", userSchema);

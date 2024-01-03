@@ -16,17 +16,11 @@ export async function POST(req) {
         //find user
         const { email } = await req.json();
 
-        console.log('email: ', email);
-        console.log('Testing to make sure email is received');
-
         const verificationTokenID = `${randomUUID()}-${randomUUID()}`.replace(/-/g, '');
 
         const updatedUser = await User.findOneAndUpdate({ email }, { $set: { verificationTokenID }}, { new: true });
 
-        console.log('updatedUser: ', updatedUser);
-
         if (!updatedUser) {
-            console.log('User not found!');
             return NextResponse.json({message: "User not found!"}, { status: 404 })
         }
 
@@ -53,11 +47,7 @@ export async function POST(req) {
             `
         };
 
-        console.log("before");
         const emailResult = await sgMail.send(mailOptions);
-        console.log("after");
-
-        console.log('Email sent: ', emailResult);
 
         return NextResponse.json({message: "Verification Email Sent!"}, { status: 200 })
     } catch (error) {
