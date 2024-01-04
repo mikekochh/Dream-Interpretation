@@ -356,11 +356,12 @@ export default function JournalForm() {
                             <div id="interpretation-section" className="relative">
                                 <div className={`${user?.credits === 0 && !subscribed ? 'blur pointer-events-none' : ''}`}>
                                     <OracleSelectionPopup />
-                                    <div className="justify-center flex md:flex-row flex-col">
+                                    <div className="justify-center items-center flex md:flex-row flex-col">
                                         {oracles.map((oracle) => {
 
                                             return (
-                                                <div key={oracle._id} className="flex flex-col justify-center items-center p-5">
+                                                <div key={oracle._id} className="flex flex-col justify-center items-center oracle-wrapper m-4">
+                                                    {oracle.bannerMessage && (<div className="ribbon-2 font-bold">{oracle.bannerMessage}</div>)}
                                                     <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                                 </div>
                                             )})}

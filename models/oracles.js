@@ -45,6 +45,10 @@ const oracleSchema = new Schema({
         type: String,
         required: [true, "Please enter oracle meta analysis prompt!"]
     },
+    bannerMessage: {
+        type: String,
+        required: [true, "Please enter oracle banner message!"]
+    }
 });
 
 const Oracle = models.Oracle || mongoose.model("Oracle", oracleSchema);
