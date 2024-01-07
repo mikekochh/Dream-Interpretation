@@ -18,6 +18,10 @@ export default function DreamsForm() {
     const [saving, setSaving] = useState(false);
     const [loadingInterpretations, setLoadingInterpretations] = useState(false);
     const [loadingNotes, setLoadingNotes] = useState(false);
+    const [askQuestionInterpretationID, setAskQuestionInterpretationID] = useState(null);
+    const [dream, setDream] = useState(null);
+    const [askingQuestion, setAskingQuestion] = useState(false);
+    const [answer, setAnswer] = useState(null);
 
     useEffect(() => {
 
@@ -33,15 +37,17 @@ export default function DreamsForm() {
             if (!resNotes.data.dreamNotes.length) {
                 // textAreaRef.current.classList.remove('hidden');
                 setLoadingNotes(false);
-                return;
             } 
-            document.querySelector('.NoteBox').value = resNotes.data.dreamNotes[0].note;
-            // textAreaRef.current.classList.remove('hidden');
-            setLoadingNotes(false);
+            else {
+                document.querySelector('.NoteBox').value = resNotes.data.dreamNotes[0].note;
+                setLoadingNotes(false);
+            }
+            const resDream = await axios.get('/api/dream/' + dreamID);
+            setDream(resDream.data);
         }
 
         getDreamDetails();
-    }, []);
+    }, [dreamID]);
 
     const formatInterpretationDate = (dreamDate) => {
         const date = new Date(dreamDate);
@@ -78,6 +84,36 @@ export default function DreamsForm() {
         router.push('/dreams');
     }
 
+    const askQuestion = async (interpretationID, oracleID) => {
+        setAskingQuestion(true);
+        const question = document.querySelector('.question-box').value;
+
+        const dreamDetailElements = document.querySelectorAll('.detail-box');
+
+        let interpretationText = '';
+        dreamDetailElements.forEach((element) => {
+            if(element.getAttribute('data-id') === interpretationID) {
+                const interpretationP = element.querySelector('.interpretation-box');
+                if(interpretationP) {
+                    interpretationText = interpretationP.textContent;
+                }
+            }
+        });
+
+        const res = await axios.post('/api/dream/question/', 
+        { 
+            question, 
+            interpretation: interpretationText,
+            dream,
+            oracleID
+        });
+
+        if (res.status === 200) {
+            setAskingQuestion(false);
+            setAnswer(res.data.answerText);
+        }
+    }
+
     return (
         <div className="flex flex-col main-content h-screen text-white">
             <h1 className="text-5xl text-center font-bold pb-5">Dream Details</h1>
@@ -91,10 +127,12 @@ export default function DreamsForm() {
                         </div>
                     )}
                     {dreamDetails && oracles && (
+
                         dreamDetails.map((detail) => (
                             <div 
                                 key={detail._id} 
-                                className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl pr-2"
+                                data-id={detail._id}
+                                className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl pr-2 detail-box"
                             >
                                 <div className="pl-10">
                                     <p>
@@ -103,10 +141,41 @@ export default function DreamsForm() {
                                     <p>
                                         <span className="font-bold">Oracle: </span>{getOracleName(detail.oracleID)}
                                     </p>
-                                    <p>
+                                    <p className="interpretation-box">
                                         <span className="font-bold">Interpretation: </span>{insertLineBreaks(detail.interpretation)}
                                     </p>
                                 </div>
+                                
+                                {askQuestionInterpretationID === detail._id ? (
+                                    <div className="w-full">
+                                        <div className="flex flex-col w-full p-4">
+                                            <textarea 
+                                                className="DreamBox border-2 border-black rounded-lg text-black w-full p-2 question-box" 
+                                                placeholder="Type your question here"
+                                            />
+                                            {askingQuestion && !answer ? (
+                                            <div className="flex text-center justify-center items-center pb-5">
+                                                <p className="text-center text-3xl pr-3">Asking Question</p>
+                                                <div className="loader"></div>  
+                                            </div>
+                                            ) : (
+                                                <div className="text-center">
+                                                    <button className="dream-button" onClick={() => askQuestion(detail._id, detail.oracleID)}>Submit</button>
+                                                    <button className="back-button" onClick={() => setAskQuestionInterpretationID(null)}>Cancel</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {answer && (
+                                            <div className="flex flex-col w-full p-4">
+                                                <p className="font-bold text-center">Answer</p>
+                                                <p className="text-center DreamBox rounded-xl p-2">{insertLineBreaks(answer)}</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                ) : (
+                                    <button className="dream-button hidden" onClick={() => setAskQuestionInterpretationID(detail._id)}>Ask Question</button>
+                                )}
                             </div>
                         )
                     ))}

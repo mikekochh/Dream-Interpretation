@@ -48,7 +48,11 @@ const oracleSchema = new Schema({
     bannerMessage: {
         type: String,
         required: [true, "Please enter oracle banner message!"]
-    }
+    },
+    questionPrompt: {
+        type: String,
+        required: [true, "Please enter oracle question prompt!"]
+    },
 });
 
 const Oracle = models.Oracle || mongoose.model("Oracle", oracleSchema);
