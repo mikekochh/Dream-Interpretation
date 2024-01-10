@@ -51,9 +51,10 @@ export default function BlogForm({ blogDetails }) {
     }
 
     return (
-        <div className="main-content relative text-center">
+        <div className="main-content relative text-left">
         <meta name="description" content={blogDetails.description} />
-            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 absolute">Back</button>
+            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 md:hidden">Back</button>
+            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 hidden absolute top-15 left-0">Back</button>
             <div className="flex justify-center items-center">
                 <div className="text-white text-lg text-left w-11/12 md:w-3/4 items-center justify-center">
                     {/* Mobile */}
@@ -85,7 +86,9 @@ export default function BlogForm({ blogDetails }) {
                     <BlogContentOne />
                 </div>
             </div>
-            <button onClick={() => router.push('/journal')} className="dream-button">Interpret Your Dreams!</button>
+            <div className="text-center">
+                <button onClick={() => router.push('/journal')} className="dream-button">Interpret Your Dreams!</button>
+            </div>
             <div>
                 <div className="text-white text-right flex flex-row justify-end items-center">
                     <p className="mr-2">Likes: {likes}</p>
