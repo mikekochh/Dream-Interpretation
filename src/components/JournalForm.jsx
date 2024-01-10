@@ -449,7 +449,6 @@ const OracleSelectionPopup = () => {
                         Here, you can select as many oracles as you would like to interpret your dreams.
                         The more Oracles you select, the longer it will take to interpret your dream.
                         Click on the info icon next to each oracle to learn about their interpretation style.
-                        Full oracle descriptions can be seen on the <a href="/oracles" className="underline">oracles page</a>.
                     </p>
                 </div>
             </div>
