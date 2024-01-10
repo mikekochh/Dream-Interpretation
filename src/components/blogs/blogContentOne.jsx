@@ -38,16 +38,16 @@ export default function BlogContentOne() {
             </p>
             <p className="blog-paragraph py-2">
                 The first record of dreams being understood and interpreted comes from the first civilization in recorded history. 
-                Our first civilization, the Mesopotamian’s, left us an incredible amount of evidence suggesting that they understood 
+                Our first civilization, the Mesopotamian&apos;s, left us an incredible amount of evidence suggesting that they understood 
                 very well the significance and profound nature of dreams. Since this is the beginning of recorded history, it is 
-                hard to say whether the Mesopotamian’s were the first people to assign meaning to their dreams, but there is 
+                hard to say whether the Mesopotamian&apos;s were the first people to assign meaning to their dreams, but there is 
                 speculation that dream interpretation is as old as humanity itself, and this is just the first time it was 
                 able to be recorded in history. 
             </p>
             <p className="blog-paragraph">
                 The defining story of their culture, the Epic of Gilgamesh, is riddled with significant and symbolic dreams 
                 for the hero of the story, Gilgamesh. Throughout the story, dreams serve as conduits between the gods and men, 
-                providing visions of the future and symbolic images to Gilgamesh on his journey. Gilgamesh’s mother, Ninsun, 
+                providing visions of the future and symbolic images to Gilgamesh on his journey. Gilgamesh&apos;s mother, Ninsun, 
                 interprets the symbolic meaning of his dreams to help him understand what the gods are communicating to him. 
                 On top of this, the kings of Mesopotamia paid very close attention to their dreams, and used them as guidance 
                 for ruling and decision making.
@@ -57,7 +57,7 @@ export default function BlogContentOne() {
                 were very familiar with dreams and their significance. Dreams in these societies were considered supernatural 
                 communication with the Divine, whose messages could be interpreted by people with the spiritual power of dream 
                 interpretation. This is a common understanding of dreams we see throughout history, dreams can act as direct 
-                connections to the Divine, offering guidance on your life’s journey. 
+                connections to the Divine, offering guidance on your life&apos;s journey. 
             </p>
             <h1 className="blog-header">
                 Freudian Dream Interpretation
@@ -69,9 +69,9 @@ export default function BlogContentOne() {
                 represented symbolically in our dreams where these repressions can be made conscious.
             </p>
             <p className="blog-paragraph">
-                Freud’s theory was that while sleeping, the unconscious is finally able to express repressed aspects of oneself 
+                Freud&apos;s theory was that while sleeping, the unconscious is finally able to express repressed aspects of oneself 
                 symbolically though dreams to the conscious mind. These symbols within our dreams represent parts of ourselves 
-                that we’ve repressed for whatever reason, and are dying to see the light of day, dying to be heard and expressed.
+                that we&apos;ve repressed for whatever reason, and are dying to see the light of day, dying to be heard and expressed.
             </p>
             <p className="blog-paragraph">
                 We are all familiar with a Freudian slip, which is when an error in speech, memory, or physical action that occurs 
@@ -84,7 +84,7 @@ export default function BlogContentOne() {
                 impulses, the impulses most undesirable to society where most of us believe we have a social obligation to repress 
                 or hide these parts of ourselves. Traumatic experiences, especially those in early childhood, are another example 
                 of something that can be repressed and unresolved. The weight and pain of consciously processing something truly 
-                traumatic can be too much to handle, and instead can be repressed and stored within the unconscious. Freud’s theory 
+                traumatic can be too much to handle, and instead can be repressed and stored within the unconscious. Freud&apos;s theory 
                 argues that these type of experiences and impulses can manifest themselves within our dreams. 
             </p>
             <p className="blog-paragraph">
@@ -115,7 +115,7 @@ export default function BlogContentOne() {
                 play a huge role in Jungian dream analysis. 
             </p>
             <p className="blog-paragraph">
-                Carl Jung’s theories on dream interpretation differed from Freud in that dreams arise from both the personal unconscious 
+                Carl Jung&apos;s theories on dream interpretation differed from Freud in that dreams arise from both the personal unconscious 
                 and collective unconscious, the collective unconscious being the universal archetypes and symbols shared among all people. 
                 He also presented the idea of archetypal symbols that are present within dreams. Archetypes are ancient, universal images 
                 and themes that recur in art, stories, myths, and of course dreams, across all cultures. Examples of universal archetypes 
@@ -129,7 +129,7 @@ export default function BlogContentOne() {
                 was essential for not only healing, but for growing into the best person you can become.
             </p>
             <p className="blog-paragraph">
-                Jung didn’t just believe that the unconscious was expressing itself in dreams, but that these expressions were also pointing 
+                Jung didn&apos;t just believe that the unconscious was expressing itself in dreams, but that these expressions were also pointing 
                 at things that need to be integrated within yourself for personal development. When you sleep, your mind goes into the 
                 personal and collective unconscious realms, grabs something that should be conscious, and then brings it to the surface 
                 in a symbolic way to attempt to make it conscious. 
@@ -150,7 +150,7 @@ export default function BlogContentOne() {
             </p>
             <p className="blog-paragraph">
                 Islamic dream interpretation is widely practiced and accepted among all Muslims, and is the only religious dream 
-                interpretation style that is able to say that. Throughout it’s history, many Islamic dream interpretation theories 
+                interpretation style that is able to say that. Throughout it&apos;s history, many Islamic dream interpretation theories 
                 have been discovered and proposed by Islamic scholars, Muhammad Ibn Sirin being the most established Islamic dream 
                 interpretation scholar, which align closely with the more recent theories of dream interpretation proposed by 
                 psychologist such as Carl Jung and Sigmund Freud.
@@ -167,7 +167,7 @@ export default function BlogContentOne() {
                 types of dreams. 
             </p>
             <h1 className="blog-subheader">
-                True Dreams (Ru’yaa)
+                True Dreams (Ru&apos;yaa)
             </h1>
             <p className="blog-paragraph">
                 These dreams are regarded as divine messages from Allah, often containing guidance, wisdom, or good tidings. 
@@ -192,9 +192,9 @@ export default function BlogContentOne() {
                 Psychological Dreams (Nafsani)
             </h1>
             <p className="blog-paragraph">
-                Psychological dreams are dreams that stem from one’s own thoughts and experiences throughout the day. This is 
+                Psychological dreams are dreams that stem from one&apos;s own thoughts and experiences throughout the day. This is 
                 when things that you saw during the day manifest themselves within your dream. These dreams can be a reflection 
-                of the dreamer’s inner state and can help you to self-reflect. These type of dreams do not hold much significance 
+                of the dreamer&apos;s inner state and can help you to self-reflect. These type of dreams do not hold much significance 
                 in Islamic dream interpretation, but they can still be useful in helping the dreamer understand their current 
                 inner state. 
             </p>
@@ -205,18 +205,18 @@ export default function BlogContentOne() {
                 Dream interpretation has been around as long as humans have been around. There are many different schools of 
                 thought and theories about what dreams mean and how to assign meaning to dreams. Although you might feel the 
                 need to choose one dream interpretation style over another, or you might resonate with one more than the 
-                other, I don’t believe picking one is the correct answer. Each dream interpretation theory brings some truth 
-                to the table, and it’s important to see the bigger picture. 
+                other, I don&apos;t believe picking one is the correct answer. Each dream interpretation theory brings some truth 
+                to the table, and it&apos;s important to see the bigger picture. 
             </p>
             <p className="blog-paragraph">
-                Freud’s theory is correct that our hidden desires and repressions from our unconscious minds can be expressed 
+                Freud&apos;s theory is correct that our hidden desires and repressions from our unconscious minds can be expressed 
                 through our dreams. Carl Jung is correct that dreams present important information for our growth from the 
-                individual and collective unconsciousness. And the Muslim’s are correct in that dreams can be messages 
+                individual and collective unconsciousness. And the Muslim&apos;s are correct in that dreams can be messages 
                 directly from God, providing divine wisdom and prophetic visions. 
             </p>
             <p className="blog-paragraph">
                 Unfortunately, most dream interpretation websites and resources narrowly focus on one style of interpretation, 
-                while subsequently not using the revolutionary power of AI to interpret dreams. At Dream Oracles, we’re 
+                while subsequently not using the revolutionary power of AI to interpret dreams. At Dream Oracles, we&apos;re 
                 solving that problem. Using AI models, we have crafted 5 (with more on the way) dream oracles, each with their 
                 own interpretation style. Oracles relevant to this article include Sigmund Freud, Carl Jung, and Ruya (our Islamic 
                 dream interpretation expert). Understand your dream meaning as if you are asking Carl Jung in person. Ask an 
