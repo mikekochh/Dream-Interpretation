@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faThumbsDown, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons';
 import BlogContentOne from './blogs/blogContentOne';
 
 // &apos;
@@ -14,7 +14,10 @@ export default function BlogForm({ blogDetails }) {
 
     const router = useRouter();
     const [likes, setLikes] = useState(0);
+    const [dislikes, setDislikes] = useState(0);
     const [hasUserLiked, setHasUserLiked] = useState(false);
+    const [hasUserDisliked, setHasUserDisliked] = useState(false);
+    const [copied, setCopied] = useState(false);
 
 
     useEffect(() => {
@@ -48,6 +51,32 @@ export default function BlogForm({ blogDetails }) {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const dislikeBlog = async function() {
+        const hasUserDislikedTemp = localStorage.getItem('hasUserDisliked' + blogDetails.blogID);
+        if (hasUserDislikedTemp) {
+            return;
+        }
+        else {
+            localStorage.setItem('hasUserDisliked' + blogDetails.blogID, true);
+            setHasUserDisliked(true);
+        }
+        setDislikes(dislikes + 1);
+        try {
+            const res = await axios.post('/api/blog/dislike', {
+                blogID: blogDetails.blogID
+            });
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const copyLink = function() {
+        const link = window.location.href;
+        navigator.clipboard.writeText(link);
+        setCopied(true);
     }
 
     return (
@@ -89,14 +118,23 @@ export default function BlogForm({ blogDetails }) {
             <div className="text-center">
                 <button onClick={() => router.push('/journal')} className="dream-button">Interpret Your Dreams!</button>
             </div>
-            <div>
-                <div className="text-white text-right flex flex-row justify-end items-center">
-                    <p className="mr-2">Likes: {likes}</p>
-                    {!hasUserLiked ? (
-                        <FontAwesomeIcon icon={faThumbsUp} onClick={likeBlog} className="mr-2 wiggle" />
-                    ) : (
-                        <p className="text-green-500 mr-2">Liked!</p>
-                    )}
+            <div className="text-2xl">
+                <div className="text-white text-right flex flex-row justify-end items-center p-5">
+                    <p className="mr-2">Share Link: </p>
+                        {copied ? (
+                            <FontAwesomeIcon icon={faCheck} className="mr-6" />
+                        ) : (
+                            <FontAwesomeIcon icon={faCopy} className="mr-6 wiggle cursor-pointer" onClick={copyLink} />
+                        )}
+                        <div className="like-dislike-wrapper">
+                            <div className="like-button"> 
+                                <FontAwesomeIcon icon={faThumbsUp} onClick={likeBlog} className="wiggle mr-1" />{likes}
+                            </div>
+                            <div className="divider"></div>
+                            <div className="dislike-button">
+                                <FontAwesomeIcon icon={faThumbsDown} onClick={dislikeBlog} className="wiggle mr-1" />{dislikes}
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

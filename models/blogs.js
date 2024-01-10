@@ -17,6 +17,10 @@ const blogSchema = new Schema({
         type: Number,
         default: 0
     },
+    dislikes: {
+        type: Number,
+        default: 0
+    },
     readingTime: {
         type: Number,
         required: [true, "Please enter blog reading time in minutes!"]
