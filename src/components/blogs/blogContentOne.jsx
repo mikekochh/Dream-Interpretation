@@ -91,7 +91,7 @@ export default function BlogContentOne() {
                 Freud also believed it is important to acknowledge and deal with these repressed aspects of ourselves. Integration of 
                 these parts of ourselves is integral for our psychological health and growth. Freud used dream interpretation in his 
                 clinical practice, and found great success using these theories to help his patients with psychological issues such 
-                as anxiety, depression, OCD, and hysteria. He believed these emotions could be pointing to an repressed aspect of 
+                as anxiety, depression, OCD, and hysteria. He believed these emotions could be pointing to a repressed aspect of 
                 themselves that must be integrated consciously for psychological healing and growth. 
             </p>
             <p className="blog-paragraph">

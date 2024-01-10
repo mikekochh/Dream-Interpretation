@@ -22,6 +22,7 @@ export default function BlogForm({ blogDetails }) {
 
     useEffect(() => {
         setLikes(blogDetails.likes);
+        setDislikes(blogDetails.dislikes);
     }, [blogDetails]);
 
     useEffect(() => {
