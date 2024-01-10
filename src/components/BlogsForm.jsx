@@ -29,8 +29,21 @@ export default function BlogsForm() {
             <div className="flex flex-wrap justify-center">
                 {blogs.map((blog, index) => {
                     return (
-                        <div key={index} className="blog-box flex flex-col" onClick={() => router.push("blogPage?blogID="+ blog.blogID)}>
-                            <div className="blog-picture relative w-64 h-64 mb-4">
+                        <div key={index} className="blog-box flex flex-col w-full md:w-1/3" onClick={() => router.push("blogPage?blogID="+ blog.blogID)}>
+                            {/* Mobile */}
+                            <div className="mb-4 relative md:hidden" style={{ width: '100%' }}>
+                                <Image 
+                                    layout="responsive"
+                                    width={150}
+                                    height={150}
+                                    objectFit="contain"
+                                    src="/blog1.webp" 
+                                    alt="blog picture" 
+                                    className="rounded-xl"
+                                />
+                            </div>
+                            {/* Desktop */}
+                            <div className="blog-picture relative w-64 h-64 mb-4 hidden md:block">
                                 <Image 
                                     layout="fill"
                                     objectFit="cover"

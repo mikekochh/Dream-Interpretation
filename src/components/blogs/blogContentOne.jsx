@@ -1,12 +1,5 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-
 // &apos;
 
 export default function BlogContentOne() { 
