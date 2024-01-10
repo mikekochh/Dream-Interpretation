@@ -147,7 +147,7 @@ const MenuItems = ({setIsOpen, pathname}) => {
                 <Link href="/oracles">Oracles</Link>
             </li> */}
             <li className={`cursor-pointer text-3xl p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                <Link href="/oracles">Blog</Link>
+                <Link href="/blog">Blog</Link>
             </li>
             <li className={`cursor-pointer text-3xl p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/pricing">Pricing</Link>
