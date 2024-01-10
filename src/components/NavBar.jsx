@@ -84,8 +84,11 @@ const NavBar = () => {
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`}>
                                 <Link href="/dreams">Dreams</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4 ${pathname === '/oracles' ? 'font-bold' : ''}`}>
+                            {/* <li className={`cursor-pointer mr-4 ${pathname === '/oracles' ? 'font-bold' : ''}`}>
                                 <Link href="/oracles">Oracles</Link>
+                            </li> */}
+                            <li className={`cursor-pointer mr-4 ${pathname === '/blog' ? 'font-bold' : ''}`}>
+                                <Link href="/blog">Blog</Link>
                             </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
                                 <Link href="/pricing">Pricing</Link>
@@ -143,8 +146,11 @@ const MenuItems = ({setIsOpen, pathname}) => {
             <li className={`cursor-pointer text-3xl p-4 ${pathname === '/dreams' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/dreams">Dreams</Link>
             </li>
-            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/oracles' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+            {/* <li className={`cursor-pointer text-3xl p-4 ${pathname === '/oracles' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/oracles">Oracles</Link>
+            </li> */}
+            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <Link href="/oracles">Blog</Link>
             </li>
             <li className={`cursor-pointer text-3xl p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/pricing">Pricing</Link>

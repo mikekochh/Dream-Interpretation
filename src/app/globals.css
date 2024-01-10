@@ -511,6 +511,36 @@ nav {
   box-shadow: 0 calc(-1*var(--f)) 0 inset #0005;
 }
 
+.blog-box {
+  border: 2px solid white;
+  box-shadow: inset 0 0 10px #000000;
+  max-height: calc(100vh - 240px); 
+  height: 100%;
+  padding-top: 1rem/* 16px */;
+  padding-bottom: 1rem/* 16px */;
+  padding-left: 0.5rem/* 8px */;
+  padding-right: 0.5rem/* 8px */;
+  width: 30%;
+  position: relative;
+  cursor: pointer;
+  border-radius: 0.75rem/* 12px */;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.blog-box:hover {
+  border: 2px solid gold;
+  opacity: 1;
+  background-color: #33334D;
+}
+
 .dream-card {
   border: 2px solid white;
   box-shadow: inset 0 0 10px #000000;
@@ -562,4 +592,25 @@ nav {
   margin-right: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.blog-paragraph {
+  padding-top: 0.5rem/* 8px */;
+  padding-bottom: 0.5rem/* 8px */;
+}
+
+.blog-header {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.blog-subheader {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
