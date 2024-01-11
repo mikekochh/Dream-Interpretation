@@ -153,6 +153,9 @@ export default function DreamsForm() {
         if (dream.length > 150) {
             return dream.substring(0, 150) + '...';
         }
+        else {
+            return dream;
+        }
     }
 
     return (
@@ -216,6 +219,9 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
     const dreamLength = (dream) => {
         if (dream.length > 150) {
             return dream.substring(0, 150) + '...';
+        }
+        else {
+            return dream;
         }
     }
 

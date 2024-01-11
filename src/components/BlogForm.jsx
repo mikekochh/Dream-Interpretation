@@ -7,8 +7,7 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons';
 import BlogContentOne from './blogs/blogContentOne';
-
-// &apos;
+import Head from 'next/head';
 
 export default function BlogForm({ blogDetails }) { 
 
@@ -82,7 +81,10 @@ export default function BlogForm({ blogDetails }) {
 
     return (
         <div className="main-content relative text-left">
-        <meta name="description" content={blogDetails.description} />
+            <Head>
+                <title>{blogDetails.blogTitle}</title>
+                <meta name="description" content={blogDetails.description} />
+            </Head>
             <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 md:hidden">Back</button>
             <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 hidden absolute top-15 left-0">Back</button>
             <div className="flex justify-center items-center">
