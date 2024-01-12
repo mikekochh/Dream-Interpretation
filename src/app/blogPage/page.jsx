@@ -1,14 +1,11 @@
 "use client";
 import BlogForm from "@/components/blogForm";
 import StarBackground from "@/components/StarBackground";
-import { usePathname } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function BlogsPage() {
-
-    const [blogID, setBlogID] = useState(0);
     const [blogDetails, setBlogDetails] = useState({});
 
     const searchParams = useSearchParams();
@@ -16,8 +13,6 @@ export default function BlogsPage() {
 
     useEffect(() => {
         const blogId = searchParams.get('blogID');
-
-        console.log("blogId: " + blogId);
 
         const getBlogDetails = async function() {
             try {
@@ -30,7 +25,6 @@ export default function BlogsPage() {
 
         if (blogId !== undefined) {
             getBlogDetails();
-            setBlogID(Number(blogId));
         }
 
     }, [searchParams]);

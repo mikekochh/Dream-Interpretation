@@ -63,7 +63,7 @@ export default function BlogContentOne() {
             </p>
             <p className="blog-paragraph">
                 Freud&apos;s theory was that while sleeping, the unconscious is finally able to express repressed aspects of oneself 
-                symbolically though dreams to the conscious mind. These symbols within our dreams represent parts of ourselves 
+                symbolically through dreams to the conscious mind. These symbols within our dreams represent parts of ourselves 
                 that we&apos;ve repressed for whatever reason, and are dying to see the light of day, dying to be heard and expressed.
             </p>
             <p className="blog-paragraph">
