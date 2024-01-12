@@ -1,5 +1,5 @@
 "use client";
-import BlogForm from "@/components/blogForm";
+import BlogForm from "@/components/BlogForm";
 import StarBackground from "@/components/StarBackground";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
