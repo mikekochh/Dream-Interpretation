@@ -17,7 +17,7 @@ export async function POST(req) {
             name, 
             email, 
             password: hashedPassword, 
-            credits: 5, 
+            credits: 2, 
             activated: false,
             verificationTokenID: null
         });

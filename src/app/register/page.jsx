@@ -10,7 +10,7 @@ export default async function Register() {
     const session = await getServerSession(authOptions);
 
     if (session) {
-        redirect("/journal");
+        redirect("/interpret");
     }
 
     return (

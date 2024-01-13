@@ -68,8 +68,6 @@ export default function RegisterForm() {
 
             const dreamID = localStorage.getItem('dreamID');
 
-            console.log("dreamID: ", dreamID);
-
             if (dreamID) {
                 const resNewUser = await axios.post('api/dream/newUser', {
                     userID,
@@ -88,7 +86,7 @@ export default function RegisterForm() {
                     redirect: false
                 });
 
-                router.push('/journal');
+                router.push('/interpret');
             }
         }
         catch (error) {

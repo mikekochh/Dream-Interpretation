@@ -22,7 +22,7 @@ export default function SuccessSubscriptionForm() {
                     if (res.status === 200) {
                         console.log("User subscription successfully purchased and updated!");
                         setTimeout(() => {
-                            window.location.href = "/journal";
+                            window.location.href = "/interpret";
                         }, 1500);
                     }
                 } catch (error) {
@@ -40,7 +40,7 @@ export default function SuccessSubscriptionForm() {
             {error ? (
                 <div>
                     <p className="text-red-500 pt-10">Error: {error}</p>
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-10" onClick={() => window.location.href = "/journal"}>Return Home</button>
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-10" onClick={() => window.location.href = "/interpret"}>Return Home</button>
                 </div>
                 
             ) : (

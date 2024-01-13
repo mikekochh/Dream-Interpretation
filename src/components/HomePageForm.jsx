@@ -16,7 +16,7 @@ export default function HomePageForm() {
 
     useEffect(() => {
         if (session) {
-            router.push('/journal');
+            router.push('/interpret');
         }
     }, [session]);
 

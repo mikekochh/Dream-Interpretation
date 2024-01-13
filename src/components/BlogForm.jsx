@@ -119,7 +119,7 @@ export default function BlogForm({ blogDetails }) {
                 </div>
             </div>
             <div className="text-center">
-                <button onClick={() => router.push('/journal')} className="dream-button">Interpret Your Dreams!</button>
+                <button onClick={() => router.push('/interpret')} className="dream-button">Interpret Your Dreams!</button>
             </div>
             <div className="text-2xl">
                 <div className="text-white text-right flex flex-row justify-end items-center p-5">

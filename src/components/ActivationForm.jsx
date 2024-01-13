@@ -17,7 +17,7 @@ export default function ActivationForm() {
     const activateUser = async function() {
         try {
             const res = await axios.post('api/activate', { verificationTokenID });
-            router.push('/journal');
+            router.push('/interpret');
         } catch (error) {
             setStatus("Error Activating User");
             setError(true);

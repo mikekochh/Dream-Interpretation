@@ -78,11 +78,11 @@ const NavBar = () => {
                     {/* Section on the right */}
                     <div className="relative justify-end items-center text-black md:flex hidden">
                         <ul className="flex">
-                            <li className={`cursor-pointer mr-4 ${pathname === '/journal' ? 'font-bold' : ''}`}>
-                                <Link href="/journal">Journal</Link>
+                            <li className={`cursor-pointer mr-4 ${pathname === '/interpret' ? 'font-bold' : ''}`}>
+                                <Link href="/interpret">Interpret</Link>
                             </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`}>
-                                <Link href="/dreams">Dreams</Link>
+                                <Link href="/dreams">Journal</Link>
                             </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/blog' || pathname === '/blogPage' ? 'font-bold' : ''}`}>
                                 <Link href="/blog">Blog</Link>
@@ -137,11 +137,11 @@ const MenuItems = ({setIsOpen, pathname}) => {
 
     return (
         <ul className='list-none flex flex-col h-full text-center inset-0 justify-center'>
-            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/journal' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                <Link href="/journal">Journal</Link>
+            <li className={`cursor-pointer text-3xl p-4 ${pathname === '/interpret' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <Link href="/interpret">Interpret</Link>
             </li>
             <li className={`cursor-pointer text-3xl p-4 ${pathname === '/dreams' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                <Link href="/dreams">Dreams</Link>
+                <Link href="/dreams">Journal</Link>
             </li>
             {/* <li className={`cursor-pointer text-3xl p-4 ${pathname === '/oracles' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                 <Link href="/oracles">Oracles</Link>

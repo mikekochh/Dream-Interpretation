@@ -37,14 +37,14 @@ export default function CancelSubscriptionForm() {
             const userID = user._id;
             const subscriptionID = user.subscriptionID;
             const res = await axios.post('api/user/cancelSubscription', { userID, subscriptionID });
-            router.push('/journal');
+            router.push('/interpret');
         } catch (error) {
             console.log('error: ', error);
         }
     }
 
     const staySubscribed = async function() {
-        router.push('/journal');
+        router.push('/interpret');
     }
 
     return (

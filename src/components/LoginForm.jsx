@@ -61,7 +61,7 @@ export default function LoginForm() {
                 return;
             }
 
-            router.push('/journal');  
+            router.push('/interpret');  
         } catch (error) {
             setError("Login failed!");
             setLogginIn(false);

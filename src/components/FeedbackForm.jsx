@@ -42,7 +42,7 @@ export default function FeedbackForm() {
         ) : (
             <div className="flex flex-col middle-content">
                 <p className="p-2">Thank you for your feedback!</p>
-                <button className="dream-button" onClick={() => router.push('/journal')}>Home</button>
+                <button className="dream-button" onClick={() => router.push('/interpret')}>Home</button>
             </div>
         )}
 

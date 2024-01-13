@@ -164,7 +164,7 @@ export default function DreamsForm() {
             <div className="text-center text-5xl font-bold">
                 Dream Journal
             </div>
-            <div className="justify-center text-5xl font-bold pb-5 relative">
+            <div className="justify-center text-3xl font-bold pb-5 relative">
                     <InfoTag />
             </div>  
             {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
@@ -281,7 +281,7 @@ const InfoTag = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center text-5xl text-center">
+        <div className="justify-center text-4xl pt-1 text-center">
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
                 <div className={` ${open ? 'popup-menu-bottom-active' : 'popup-menu-bottom'}`}>
