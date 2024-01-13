@@ -12,8 +12,7 @@ export async function POST(req) {
         const activatedUser = await User.findOneAndUpdate(
             { verificationTokenID },
             {
-                $set: { activated: true },
-                $inc: { credits: 5 }
+                $set: { activated: true }
             },
             { new: true }
         );
