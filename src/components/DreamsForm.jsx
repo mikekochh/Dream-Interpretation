@@ -6,6 +6,7 @@ import 'reactjs-popup/dist/index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { faTrash, faStar, faStarHalfStroke, faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 export default function DreamsForm() { 
 
@@ -159,8 +160,13 @@ export default function DreamsForm() {
     }
 
     return (
-        <div className="text-white main-content">
-            <h1 className="text-5xl text-center font-bold pb-5">Dreams</h1>  
+        <div className="text-white main-content relative">
+            <div className="text-center text-5xl font-bold">
+                Dream Journal
+            </div>
+            <div className="justify-center text-5xl font-bold pb-5 relative">
+                    <InfoTag />
+            </div>  
             {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
             <div className="flex justify-between">
                 <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
@@ -265,6 +271,30 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
                     onClick={() => starDream(dream._id, dream.starred)}
                 />
             )}
+        </div>
+    )
+}
+
+
+const InfoTag = () => {
+
+    const [open, setOpen] = useState(false);
+
+    return (
+        <div className="justify-center text-5xl text-center">
+            <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
+                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
+                <div className={` ${open ? 'popup-menu-bottom-active' : 'popup-menu-bottom'}`}>
+                    <p className="text-xl select-none text-center">
+                        <b className="font-bold text-2xl">Dream Journal</b><br/>
+                        <p className="text-left">
+                            Each of your dreams are stored here. Click on a dream to see the full dream description, interpretations, and any notes you may have added.<br/><br/>
+                            You can filter dreams by week, starred, or all dreams. You can star dreams by clicking on the half star icon. You can delete dreams by clicking on the trash icon.
+                        </p>
+                        
+                    </p>
+                </div>
+            </div>
         </div>
     )
 }
