@@ -4,7 +4,11 @@ import User from '../../../../../models/user';
 import PaymentType from '../../../../../models/paymentTypes';
 import Payment from '../../../../../models/payments';
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const isLocalEnvironment = process.env.NODE_ENV === 'development';
+console.log('process.env.NODE_ENV: ', process.env.NODE_ENV);
+console.log('isLocalEnvironment: ', isLocalEnvironment);
+const stripeSecretKey = isLocalEnvironment ? process.env.STRIPE_SECRET_KEY_TEST : process.env.STRIPE_SECRET_KEY;
+const stripe = require('stripe')(stripeSecretKey);
 
 export async function POST(req) {
     try {

@@ -12,6 +12,7 @@ export default function PricingForm() {
     const [activated, setActivated] = useState(false);
     const [user, setUser] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         async function setUserData() {
@@ -37,10 +38,15 @@ export default function PricingForm() {
     }, [session]);
 
     async function buyCredits () {
+        const quantity = document.querySelector(".credit-quantity").value;
+        if (quantity < 5) {
+            setError(true);
+            return;
+        }
         const res = await axios.post("/api/user/purchase", {
             userID: user._id,
             paymentTypeID: 1,
-            quantity: 1
+            quantity: quantity
         });
         if (res.status === 200) {
             window.location.href = res.data.sessionID;
@@ -84,36 +90,32 @@ export default function PricingForm() {
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
-                <h2 className="text-3xl pb-5">Buy Credits</h2>
+                <h2 className="text-3xl pb-5">Pay As You Go</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
                         <li>• Expert interpretations from our Dream Oracles</li>
                         <li>• Ability to take notes on dreams</li>
                         <li>• Each <b>interpretation</b> costs 1 credit</li>
+                        <li>• $2 per credit, no less than 5</li>
                     </ul>
                 </div>
                 <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
                     {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
                         <div>
-                            <button 
-                                className={`rounded-xl p-2 text-black m-2 subscribe-button ${!activated ? "hidden" : ""}`}
-                                onClick={buyCredits}
-                            >
-                                Buy 5 credits for $5
-                            </button>
-                            <button 
-                                className={`rounded-xl p-2 text-black m-2 subscribe-button ${activated ? "hidden" : ""}`}
-                                onClick={verifyEmail}
-                            >
-                                Verify Email to Buy Credits
+                            <input type="number" className="rounded-xl p-2 text-black m-2 credit-quantity" placeholder="Enter number of credits to buy" />
+                            <button className='rounded-xl p-2 text-black m-2 subscribe-button' onClick={buyCredits}>
+                                Buy credits
                             </button>
                         </div>
+                    )}
+                    {error && (
+                        <p className="text-red-500">You must buy at least 5 credits!</p>
                     )}
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
-                <h2 className="text-3xl pb-5">Subscription</h2>
+                <h2 className="text-3xl pb-5">Annual Subscription</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
@@ -126,16 +128,10 @@ export default function PricingForm() {
                     {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
                         <div>
                             <button 
-                                className={`rounded-xl p-2 text-black m-2 subscribe-button ${!activated ? "hidden" : ""}`}
+                                className='rounded-xl p-2 text-black m-2 subscribe-button'
                                 onClick={subscribe}
                             >
-                                Subscribe for $5/month
-                            </button>
-                            <button 
-                                className={`rounded-xl p-2 text-black m-2 subscribe-button ${activated ? "hidden" : ""}`}
-                                onClick={verifyEmail}
-                            >
-                                Verify Email to Buy Subscription
+                                Subscribe for $79/year
                             </button>
                         </div>
                     )}

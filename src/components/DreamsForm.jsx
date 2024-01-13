@@ -165,7 +165,7 @@ export default function DreamsForm() {
                 Dream Journal
             </div>
             <div className="justify-center text-3xl font-bold pb-5 relative">
-                    <InfoTag />
+                <InfoTag />
             </div>  
             {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
             <div className="flex justify-between">
@@ -285,14 +285,13 @@ const InfoTag = () => {
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
                 <div className={` ${open ? 'popup-menu-bottom-active' : 'popup-menu-bottom'}`}>
-                    <p className="text-xl select-none text-center">
+                    <div className="text-xl select-none text-center">
                         <b className="font-bold text-2xl">Dream Journal</b><br/>
                         <p className="text-left">
                             Each of your dreams are stored here. Click on a dream to see the full dream description, interpretations, and any notes you may have added.<br/><br/>
                             You can filter dreams by week, starred, or all dreams. You can star dreams by clicking on the half star icon. You can delete dreams by clicking on the trash icon.
                         </p>
-                        
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
