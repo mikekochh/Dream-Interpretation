@@ -15,6 +15,7 @@ export async function POST(req) {
         // create user
         //find user
         const { email } = await req.json();
+        console.log("Are we getting the email? ", email);
 
         const verificationTokenID = `${randomUUID()}-${randomUUID()}`.replace(/-/g, '');
 

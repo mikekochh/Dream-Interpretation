@@ -60,7 +60,7 @@ const SettingsForm = () => {
             <h1 className="text-3xl text-white text-center">Settings</h1>
             <p className="text-xl font-bold">Email: <span className="text-md font-normal">{user.email}</span></p>
             <p className="text-xl font-bold">Name: <span className="text-md font-normal">{user.name}</span></p>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
                 <span className="text-xl font-bold mr-4">Meta Analysis Oracle: </span>
                 <div className="flex items-center space-x-4">
                     <label className="flex items-center">
@@ -96,7 +96,7 @@ const SettingsForm = () => {
                     </label>
                 </div>
                 {oracleUpdated && <p className="text-green-500">Oracle updated!</p>}
-            </div>
+            </div> */}
             <div className="logout absolute bottom-0 right-0 p-4">
                 <button onClick={logout} className="back-button">Log Out</button>
                 {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>}

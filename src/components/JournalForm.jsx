@@ -338,7 +338,7 @@ export default function JournalForm() {
                         ) : (
                             <div>
                                 <p className="text-3xl text-center">Welcome to Dream Oracles</p>
-                                <p className="text-2xl text-center">Dream interpretation using a wide range of interpretation styles</p>
+                                <p className="text-2xl text-center">Diverse and powerful dream interpretation</p>
                             </div>
 
                         )}

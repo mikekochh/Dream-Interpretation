@@ -35,18 +35,24 @@ export default function SuccessCreditsForm() {
 
         async function sendVerificationEmail() {
             try {
-                setEmailSent(true);
-                const email = session.user.email;
-                const res = await axios.post('api/sendVerificationEmail', { email });
+                const paymentVerified = await verifyPayment();
+                console.log('paymentVerified: ', paymentVerified);
+                console.log('session: ', session);
+                console.log('emailSent: ', emailSent);
+                if (session && !emailSent && paymentVerified) {
+                    console.log('sending verification email...');
+                    setEmailSent(true);
+                    const email = session.user.email;
+                    console.log('email: ', email);  
+                    const res = await axios.post('/api/sendVerificationEmail', { email });
+                    console.log('res: ', res);
+                }
             } catch (error) {
                 console.log('error: ', error);
             }
         }
 
-        const paymentVerified = verifyPayment();
-        if (session && !emailSent && paymentVerified) {
-            sendVerificationEmail();
-        }
+        sendVerificationEmail();
     }, [session, session_id, isVerified]);
     
 
@@ -59,7 +65,7 @@ export default function SuccessCreditsForm() {
                 </div>
                 
             ) : (
-                <p>Success! Your credits have been added to your account! Redirecting to home screen...</p>
+                <p>Success! Your credits have been added to your account!</p>
             )}
             {emailSent && (
                 <div className="text-xl pt-5">
