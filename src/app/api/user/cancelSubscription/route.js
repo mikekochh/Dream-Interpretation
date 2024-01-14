@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import User from '../../../../../models/user';
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const isLocalEnvironment = process.env.NODE_ENV === 'development';
+const stripeSecretKey = isLocalEnvironment ? process.env.STRIPE_SECRET_KEY_TEST : process.env.STRIPE_SECRET_KEY;
+const stripe = require('stripe')(stripeSecretKey);
 
 export async function POST(req) {
     try {

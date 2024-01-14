@@ -29,6 +29,10 @@ const paymentSchema = new Schema({
         type: String,
         required: [true, "Please enter stripe session ID!"]
     }, 
+    quantity: {
+        type: Number,
+        required: [true, "Please enter quantity!"]
+    }
 });
 
 const Payment = models.Payment || mongoose.model("Payment", paymentSchema);
