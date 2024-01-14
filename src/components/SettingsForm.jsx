@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import ContactAndPrivacyButtons from './ContactAndPrivacyButtons';
 
 const SettingsForm = () => {
 
@@ -101,6 +102,7 @@ const SettingsForm = () => {
                 <button onClick={logout} className="back-button">Log Out</button>
                 {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>}
             </div>
+            <ContactAndPrivacyButtons />
         </div>
     )
 

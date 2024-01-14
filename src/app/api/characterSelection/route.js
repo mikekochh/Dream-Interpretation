@@ -27,8 +27,6 @@ export async function GET(req) {
         await connectMongoDB();
         const user = await User.findOne({ email }).select("characterID"); 
         const character = await Character.findOne({ characterID: user.characterID });
-
-        console.log('character: ', character);
         return NextResponse.json(character);
     }
     catch (error) {

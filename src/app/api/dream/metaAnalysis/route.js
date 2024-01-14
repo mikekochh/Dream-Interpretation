@@ -12,8 +12,6 @@ export async function POST(req) {
     try {
         const { email } = await req.json();
 
-        console.log("email: ", email);
-
         await connectMongoDB();
         const user = await User.findOne({ email: email });
         const oracle = await Oracle.findOne({ oracleID: user.metaAnalysisOracleID });

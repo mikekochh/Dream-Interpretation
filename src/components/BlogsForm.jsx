@@ -15,7 +15,6 @@ export default function BlogsForm() {
             try {
                 const res = await axios.get('/api/blogs');
                 setBlogs(res.data.blogs);
-                console.log(res.data.blogs);
             } catch (error) {
                 console.log(error);
             }

@@ -8,7 +8,6 @@ const stripe = require('stripe')(stripeSecretKey);
 
 export async function POST(req) {
     try {
-        console.log("Canceling subscription...");
         await connectMongoDB();
         const { userID, subscriptionID } = await req.json();
         const canceledSubscription = await stripe.subscriptions.cancel(

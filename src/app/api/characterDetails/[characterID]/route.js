@@ -7,10 +7,8 @@ export async function GET(request) {
         const pathname = request.nextUrl.pathname;
         const characterID = pathname.split('/').pop();
         await connectMongoDB();
-        console.log("characterID: ", characterID);
 
         const characterDetails = await Character.findOne({ characterID: characterID });
-        console.log("characterDetails: ", characterDetails);
 
         return NextResponse.json({characterDetails});
     }

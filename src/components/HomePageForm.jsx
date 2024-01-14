@@ -22,10 +22,7 @@ export default function HomePageForm() {
 
     useEffect(() => {
         const topPosition = document.querySelector('.scrollable-div').getBoundingClientRect().top;
-        console.log(topPosition);
-        console.log(window.innerHeight);
         const dynamicHeight = window.innerHeight - topPosition;
-        console.log(dynamicHeight);
         setDivHeight(dynamicHeight);
     }, []);
 

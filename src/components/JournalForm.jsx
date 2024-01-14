@@ -71,7 +71,6 @@ export default function JournalForm() {
         if (session) {
             setUserData().then(userData => {
                 setSubscribed(userData.subscribed);
-                console.log('userData: ', userData);
                 setUser(userData);
             }).catch(err => {
                 console.log('err: ', err);

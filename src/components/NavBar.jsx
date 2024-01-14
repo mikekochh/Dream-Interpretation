@@ -34,7 +34,6 @@ const NavBar = () => {
             const liElements = document.querySelectorAll('ul.flex li');
 
             liElements.forEach((li) => {
-                console.log('li: ', li);
                 const linkText = li.textContent.trim();
                 if (linkText !== 'Interpret' && linkText !== 'Blog') {
                     li.classList.add('blur');
@@ -137,7 +136,6 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
             const liElementsMobile = document.querySelectorAll('ul.mobile-list li');
 
             liElementsMobile.forEach((li) => {
-                console.log('li: ', li);
                 const linkText = li.textContent.trim();
                 if (linkText !== 'Interpret' && linkText !== 'Blog') {
                     li.classList.add('blur');

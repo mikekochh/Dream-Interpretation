@@ -11,18 +11,19 @@ export default function ContactMeForm() {
     const router = useRouter();
 
     function exit () {
-        router.push('/interpret');
+        router.push('/settings');
     }
 
     return (
-    <div className="text-white text-center p-4">
-        <a href="https://twitter.com/MichaelKochDev" className="p-4" target="_blank" rel="nonreferrer">
+    <div className="text-white text-center p-4 main-content">
+        <div className="text-3xl">Socials/Contact Me</div>
+        <a href="https://twitter.com/Dream_Oracles" className="p-4" target="_blank" rel="nonreferrer">
             <FontAwesomeIcon icon={faXTwitter} size="2x" />
         </a>
         <a href="mailto:mkoch@michaelgkoch.com" className="p-4" target="_blank" rel="nonreferrer">
             <FontAwesomeIcon icon={faEnvelope} size="2x" />
         </a>
-        <a href="https://www.youtube.com/shorts/po8l4r0K6MY" className="p-4" target="_blank" rel="nonreferrer">
+        <a href="https://www.youtube.com/channel/UCDm9f0kvrix1zDsDB9clafQ" className="p-4" target="_blank" rel="nonreferrer">
             <FontAwesomeIcon icon={faYoutube} size="2x" />
         </a>
         <div>

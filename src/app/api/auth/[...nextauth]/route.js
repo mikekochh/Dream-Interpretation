@@ -11,13 +11,11 @@ export const authOptions = {
             credentials: {},
 
             async authorize(credentials) {
-                console.log("credentials: ", credentials);
                 const { email, password } = credentials;
 
                 try {
                     await connectMongoDB();
                     const user = await User.findOne({ email });
-                    console.log("user from nextauth function: ", user);
 
                     if (!user) {
                         return null;

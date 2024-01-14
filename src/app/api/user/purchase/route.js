@@ -62,8 +62,6 @@ export async function POST(req) {
             throw new Error("Invalid payment type!");
         }
 
-        console.log('session form new page: ', session);
-
         const newPayment = await Payment.create({
             paymentTypeID,
             paymentTypeName: paymentType.paymentTypeName,

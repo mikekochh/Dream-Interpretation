@@ -38,11 +38,9 @@ export async function POST(req) {
             }
             return NextResponse.json({message: "User credits successfully purchased and updated!"}, { status: 200 });
         } catch (error) {
-            // console.log('error before the thing: ', error);
             return NextResponse.json({message: "There was an error processing your payment. Please try again or contact support if the problem persists."}, { status: 500 });
         }
     } catch (error) {
-        // console.log('error after the thing: ', error);
         return NextResponse.json({message: "User activation failed!"}, { status: 500 })
     }
 }

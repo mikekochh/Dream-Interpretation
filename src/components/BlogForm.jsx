@@ -47,7 +47,6 @@ export default function BlogForm({ blogDetails }) {
             const res = await axios.post('/api/blog/like', {
                 blogID: blogDetails.blogID
             });
-            console.log(res);
         } catch (error) {
             console.log(error);
         }
@@ -67,7 +66,6 @@ export default function BlogForm({ blogDetails }) {
             const res = await axios.post('/api/blog/dislike', {
                 blogID: blogDetails.blogID
             });
-            console.log(res);
         } catch (error) {
             console.log(error);
         }

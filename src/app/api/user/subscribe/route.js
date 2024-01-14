@@ -4,11 +4,8 @@ import User from "../../../../../models/user";
 
 export async function POST(req) {
     try {
-        console.log("Are we getting here?");
         // create user
         const { userID, subscribed } = await req.json();
-
-        console.log("subscribed: ", subscribed);
 
         await connectMongoDB();
 

@@ -6,7 +6,6 @@ export async function POST(req) {
     try {
         // create user
         const { blogID } = await req.json();
-        console.log('blogID: ', blogID);   
 
         await connectMongoDB();
 

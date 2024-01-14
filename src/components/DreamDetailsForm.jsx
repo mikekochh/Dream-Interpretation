@@ -29,7 +29,6 @@ export default function DreamsForm() {
             setLoadingInterpretations(true);
             setLoadingNotes(true);
             const res = await axios.get('api/dream/details/' + dreamID);
-            console.log("testing: ", res.data.dreamDetails);
             setDreamDetails(res.data.dreamDetails);
             const resOracles = await axios.get('/api/oracles');
             setOracles(resOracles.data);

@@ -30,7 +30,6 @@ export default function DreamsForm() {
                 const res = await axios.get('api/dream/user/' + session.user.email);
                 let sortedDreams;
                 if (res.data.length === 0) {
-                    console.log('no dreams');
                     setNoDreams(true);
                     setLoading(false);
                     return;
@@ -44,11 +43,9 @@ export default function DreamsForm() {
                     startOfWeek.setDate(today.getDate() - dayOfWeek + (weekOffset * 7));
                     startOfWeek.setHours(0, 0, 0, 0);
                     setFirstDayOfWeek(startOfWeek);
-                    console.log('startOfWeek: ', startOfWeek);
                     const endOfWeek = new Date(startOfWeek);
                     endOfWeek.setDate(startOfWeek.getDate() + 7);
                     setLastDayOfWeek(endOfWeek);
-                    console.log('endOfWeek: ', endOfWeek);
 
                     // Filter dreams within the week
                     const filteredDreams = res.data.filter(dream => {

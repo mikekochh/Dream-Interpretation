@@ -20,8 +20,6 @@ export async function POST(req) {
 
         const passwordResetUser = await User.findOneAndUpdate({ email }, { $set: { verificationTokenID }}, { new: true });
 
-        console.log('passwordResetUser: ', passwordResetUser);
-
         if (!passwordResetUser) {
             console.log('User not found!');
             return NextResponse.json({message: "User not found!"}, { status: 404 })
@@ -52,7 +50,6 @@ export async function POST(req) {
 
         const emailResult = await sgMail.send(mailOptions);
 
-        console.log('Email sent: ', emailResult);
 
         return NextResponse.json({message: "Password Reset Email Sent Successfully!"}, { status: 200 })
     } catch (error) {

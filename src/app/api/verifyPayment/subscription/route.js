@@ -14,8 +14,6 @@ export async function POST(req) {
         const { session_id, userEmail } = await req.json();
         try {
             const session = await stripe.checkout.sessions.retrieve(session_id);
-            console.log("session from stripe: ", session);
-            console.log("subscription ID: ", session.subscription);
             const subscriptionID = session.subscription;
             if (!session) {
                 throw new Error("Session not found!");

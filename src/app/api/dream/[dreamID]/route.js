@@ -7,7 +7,6 @@ export async function GET(req) {
     try {
         const pathname = req.nextUrl.pathname;
         const dreamID = pathname.split('/').pop();
-        console.log('dreamID we are getting: ', dreamID);
         await connectMongoDB();
         const dream = await Dream.findById(dreamID);
         if (!dream) {

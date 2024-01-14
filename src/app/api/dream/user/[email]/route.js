@@ -8,15 +8,11 @@ export async function GET(request) {
         const pathname = request.nextUrl.pathname;
         const email = pathname.split('/').pop();
         await connectMongoDB();
-        console.log("email: ", email);
 
         const user = await User.findOne({ email: email });
         const userID = user._id.toString();
 
-        console.log('userID: ', userID);
-
         const userDreams = await Dream.find({ userID: userID });
-        console.log("User Dreams: ", userDreams);
 
         return NextResponse.json(userDreams);
     }

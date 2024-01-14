@@ -75,8 +75,6 @@ export default function RegisterForm() {
                 });
             }
 
-            console.log("we getting here?");
-
             if (resNewUser.ok) {
                 gtagCreateAccount();
 

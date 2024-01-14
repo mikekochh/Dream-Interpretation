@@ -6,8 +6,6 @@ import Dream from '../../../../../models/dream';
 export async function POST(req) {
     try {
         const { dreamID, starredStatus } = await req.json();
-        console.log('dreamID: ', dreamID);
-        console.log('starredStatus: ', starredStatus);
 
         await connectMongoDB();
 
@@ -18,8 +16,6 @@ export async function POST(req) {
             },
             { new: true }
         );
-
-        console.log('updatedDream: ', updatedDream);
         
 
         if (!updatedDream) {

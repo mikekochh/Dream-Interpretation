@@ -7,8 +7,6 @@ export async function POST(req) {
     try {
         const { dreamID } = await req.json();
 
-        console.log("DreamID: ", dreamID);
-
         await connectMongoDB();
         await Interpretation.deleteMany({ dreamID: dreamID });
         await Dream.findByIdAndDelete({ _id: dreamID });

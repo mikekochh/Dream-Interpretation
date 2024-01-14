@@ -39,15 +39,12 @@ export default function PricingForm() {
 
     async function buyCredits () {
         const quantity = document.querySelector(".credit-quantity").value;
-        console.log("quantity: ", quantity);
         const quantityMobile = document.querySelector(".credit-quantity-mobile").value;
-        console.log("quantityMobile: ", quantityMobile);
         if (quantity < 5 && quantityMobile < 5) {
             setError(true);
             return;
         }
         const realQuantity = quantity ? quantity : quantityMobile;
-        console.log("realQuantity: ", realQuantity);
         const res = await axios.post("/api/user/purchase", {
             userID: user._id,
             paymentTypeID: 1,

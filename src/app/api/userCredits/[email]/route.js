@@ -21,7 +21,6 @@ export async function POST(req) {
         const email = pathname.split('/').pop();
         const { action } = await req.json();
         await connectMongoDB();
-        console.log('action: ', action);
 
         if (action === "redeemCredits") {
             const updatedUser = await User.findOneAndUpdate({ email }, { $set: { credits: 3 } }, { new: true });
@@ -34,7 +33,6 @@ export async function POST(req) {
             }
         }
         else {
-            console.log('else');
             const updatedUser = await User.findOneAndUpdate({ email }, { $inc: { credits: -1 } }, { new: true });
             if (!updatedUser) {
                 throw new Error("User not found!");

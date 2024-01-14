@@ -8,8 +8,6 @@ export async function GET(request) {
 
         const blogs = await Blog.find({});
 
-        console.log("blogs: ", blogs);  
-
         return NextResponse.json({blogs});
     }
     catch (error) {

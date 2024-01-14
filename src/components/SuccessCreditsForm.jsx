@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
+import { set } from 'mongoose';
 
 export default function SuccessCreditsForm() { 
 
@@ -13,17 +14,15 @@ export default function SuccessCreditsForm() {
     const [isVerified, setIsVerified] = useState(false);
     const [error, setError] = useState(null);
     const [emailSent, setEmailSent] = useState(false);
-    const [user, setUser] = useState(null);
+    const [redirectHome, setRedirectHome] = useState(false);
 
     useEffect(() => {
         const verifyPayment = async () => {
-            console.log("Verifying payment..."); 
             if (session && session_id && !isVerified) {
                 try {
                     setIsVerified(true);
                     const res = await axios.post('/api/verifyPayment/credits', { session_id, userEmail: session.user.email });
                     if (res.status === 200) {
-                        console.log("User credits successfully purchased and updated!");
                         return true;
                     }
                 } catch (error) {
@@ -36,16 +35,23 @@ export default function SuccessCreditsForm() {
         async function sendVerificationEmail() {
             try {
                 const paymentVerified = await verifyPayment();
-                console.log('paymentVerified: ', paymentVerified);
-                console.log('session: ', session);
-                console.log('emailSent: ', emailSent);
-                if (session && !emailSent && paymentVerified) {
-                    console.log('sending verification email...');
+                const email = session.user.email;
+                const userRes = await fetch(`/api/user/${email}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                const user = await userRes.json();
+                if (session && !emailSent && paymentVerified && !user.activated) {
                     setEmailSent(true);
-                    const email = session.user.email;
-                    console.log('email: ', email);  
                     const res = await axios.post('/api/sendVerificationEmail', { email });
-                    console.log('res: ', res);
+                }
+                else if (emailSent && paymentVerified) {
+                    setRedirectHome(true);
+                    setTimeout(() => {
+                        window.location.href = "/interpret";
+                    }, 1500);
                 }
             } catch (error) {
                 console.log('error: ', error);
@@ -71,6 +77,11 @@ export default function SuccessCreditsForm() {
                 <div className="text-xl pt-5">
                     We&apos;ve sent a verification email to the address of {session.user.email}<br/><br/>
                     If you do not see the email, please check your spam/junk folder.
+                </div>
+            )}
+            {redirectHome && (
+                <div className="text-xl pt-5">
+                    Redirecting to home page...
                 </div>
             )}
         </div>

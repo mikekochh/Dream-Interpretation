@@ -7,10 +7,8 @@ export async function GET(request) {
         const pathname = request.nextUrl.pathname;
         const dreamID = pathname.split('/').pop();
         await connectMongoDB();
-        console.log("dreamID: ", dreamID);
 
         const dreamNotes = await Note.find({ dreamID: dreamID });
-        console.log("dreamNotes: ", dreamNotes);
 
         return NextResponse.json({dreamNotes});
     }
@@ -22,14 +20,11 @@ export async function GET(request) {
 
 export async function POST(request) {
     try {
-        console.log("We getting here?");
         const pathname = request.nextUrl.pathname;
         const dreamID = pathname.split('/').pop();
         await connectMongoDB();
-        console.log("dreamID: ", dreamID);
 
         const { note } = await request.json();
-        console.log("note: ", note);
 
         const existingNote = await Note.findOne({ dreamID: dreamID });
 
@@ -37,7 +32,6 @@ export async function POST(request) {
             existingNote.note = note;
             existingNote.lastUpdated = new Date();
             await existingNote.save();
-            console.log("Note updated for dreamID: ", dreamID);
         }
         else {
             const newNote = await Note.create({ dreamID: dreamID, note: note, lastUpdated: new Date() });
