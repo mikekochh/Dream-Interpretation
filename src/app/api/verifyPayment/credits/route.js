@@ -9,6 +9,11 @@ const stripe = require('stripe')(stripeSecretKey);
 
 export async function POST(req) {
     try {
+
+        if (isLocalEnvironment) {
+            return NextResponse.json({message: "User credits successfully purchased and updated!"}, { status: 200 });
+        }
+
         await connectMongoDB();
         // create user
         const { session_id, userEmail } = await req.json();

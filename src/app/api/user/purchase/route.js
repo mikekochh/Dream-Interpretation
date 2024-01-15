@@ -62,19 +62,21 @@ export async function POST(req) {
             throw new Error("Invalid payment type!");
         }
 
-        const newPayment = await Payment.create({
-            paymentTypeID,
-            paymentTypeName: paymentType.paymentTypeName,
-            userID,
-            paymentDate: new Date(),
-            paymentAmount: paymentType.paymentTypePrice,
-            paymentCompleted: false,
-            stripeSessionID: session.id,
-            quantity
-        });
-        
-        if (!newPayment) {
-            throw new Error("Failed to create new payment");
+        if (!isLocalEnvironment) {
+            const newPayment = await Payment.create({
+                paymentTypeID,
+                paymentTypeName: paymentType.paymentTypeName,
+                userID,
+                paymentDate: new Date(),
+                paymentAmount: paymentType.paymentTypePrice,
+                paymentCompleted: false,
+                stripeSessionID: session.id,
+                quantity
+            });
+            
+            if (!newPayment) {
+                throw new Error("Failed to create new payment");
+            }
         }
 
         return NextResponse.json({sessionID: session.url}, { status: 200 });

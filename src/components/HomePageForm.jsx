@@ -57,21 +57,26 @@ export default function HomePageForm() {
             </div>
             <div className="text-white text-container hidden text-5xl m-2 md:block">
                 <h1 className="md:text-5xl text-3xl pb-2">Dream Oracles</h1>
-                <h2 className="text-xl pb-10">Interpret your dreams any way you&apos;d like using the most cutting-edge, intelligent, and diverse dream interpretation tool available.</h2>
+                <h2 className="text-2xl pb-10">Diverse and powerful dream interpretation</h2>
+                {/* <h3 className="text-2xl pb-10">&quot;Dreams shed light on the dim places where reason itself has yet to voyage&quot; - Jordan Peterson</h3> */}
+                <p className="text-3xl">Everything you need to interpret your dreams 👇</p>
                 <div className="text-lg">
                     <p className="py-2">
-                        <span className="font-bold">🌌 Discover the mysteries of your dreams</span> with diverse interpreations, from 
-                        scientific psychoanalysis to Islamic religious perspectives (5 different interpretation styles in total).
+                        🖐️ The ONLY dream interpretation tool with <span className="font-bold">5 Dream Oracles</span>, each with their own unique interpretation style,
+                        from scientific psychoanalysis to Islamic religious perspectives (Jungian, Freudian, Islamic, and more!).
                     </p>
                     <p className="py-2">
-                        <span className="font-bold">🌌 Capture your nocturnal adventures</span> within our specialized dream journal (easy dream logging, secure interpretation storage,
-                        and comprehensive note-taking for all your dream explorations).
+                        <span className="font-bold">📓 Advanced Dream journaling</span> for easy logging, secure interpretation 
+                        storage, and comprehensive note-taking for all your dream explorations.
                     </p>
                     <p className="py-2">
-                        <span className="font-bold">🌌 Support the development of Dream Oracles 😄</span>
+                        <span className="font-bold">🧑‍🤝‍🧑 Join our exclusive telegram community!</span> Share dreams and interpretations 
+                        with others, and dive deep into fascinating conversations about dream interpretation theories with fellow dream enthusiasts!
                     </p>
                     <div className="py-2">
-                        <span className="font-bold">🌌 Unlimited access to our expert Dream Oracles 👇</span> 
+                        <div className="text-center">
+                            <span className="font-bold text-2xl">👇 Meet our expert Dream Oracles 👇</span> 
+                        </div>
                         <div>
                         {oracles.map((oracle) => (
                             <div key={oracle.oracleID} className="character-container">
@@ -88,8 +93,19 @@ export default function HomePageForm() {
                         ))}
                         </div>
                     </div>
+                    <p className="text-3xl">Why you should interpret your dreams ❓</p>
                     <p className="py-2">
                         <span className="font-bold">🌌 83% of clinical therapists</span> use dream interpretation as apart of their practice.
+                    </p>
+                    <p className="py-2">
+                        🌌 Keeping a dream journal helps dream recall, <span className="font-bold">improving creativity, problem-solving, and memory.</span>
+                    </p>
+                    <p className="py-2">
+                        🌌 Dreams provide insights into our emotions and deeper mental state. Understanding our dreams can result in 
+                        <span className="font-bold"> improvements in mental health and emotional maturity.</span>
+                    </p>
+                    <p className="py-2">
+                        🌌 <span className="font-bold">Deepen your spirituality and connection with yourself</span> by exploring the profound meaning of your dreams.
                     </p>
                 </div>
             </div>

@@ -1,14 +1,10 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import Interpretation from "../../../../../models/interpretation";
-import Oracle from '../../../../../models/oracles';
+import InterpretationCounter from '../../../../../models/interpretationCounter';
 import User from "../../../../../models/user";
-import OpenAI from 'openai';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
+const isLocal = process.env.NODE_ENV === 'development';
 
 export async function POST(req) {
     try {
@@ -31,6 +27,14 @@ export async function POST(req) {
 
             if (!newInterpretation) {
                 throw new Error('Interpretation creation failed!');
+            }
+
+            if (!isLocal) {
+                const interpretationCounter = await InterpretationCounter.findByIdAndUpdate("65a58ab10d04881df7e5a2a7", { $inc: { interpretationCount: 1 } }, { new: true });
+            
+                if (!interpretationCounter) {
+                    console.log('Interpretation counter update failed!');
+                }
             }
 
             return NextResponse.json({message: "Interpretation saved successfully"}, { status: 200 });

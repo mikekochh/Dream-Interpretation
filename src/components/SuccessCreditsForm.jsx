@@ -34,24 +34,33 @@ export default function SuccessCreditsForm() {
 
         async function sendVerificationEmail() {
             try {
+                console.log("Hello");
                 const paymentVerified = await verifyPayment();
-                const email = session.user.email;
-                const userRes = await fetch(`/api/user/${email}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-                const user = await userRes.json();
-                if (session && !emailSent && paymentVerified && !user.activated) {
-                    setEmailSent(true);
-                    const res = await axios.post('/api/sendVerificationEmail', { email });
-                }
-                else if (emailSent && paymentVerified) {
-                    setRedirectHome(true);
-                    setTimeout(() => {
-                        window.location.href = "/interpret";
-                    }, 1500);
+                const email = session?.user.email;
+                if (email) {
+                    console.log("Hello2");
+                    const userRes = await fetch(`/api/user/${email}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    const user = await userRes.json();
+
+                    if (paymentVerified) {
+                        if (!user.activated && !emailSent) {
+                            setEmailSent(true);
+                            console.log("Hello3");
+                            const res = await axios.post('/api/sendVerificationEmail', { email });
+                        }
+                        else if (user.activated || emailSent) {
+                            console.log("Hello4");
+                            setRedirectHome(true);
+                            setTimeout(() => {
+                                window.location.href = "/interpret";
+                            }, 2000);
+                        }
+                    }
                 }
             } catch (error) {
                 console.log('error: ', error);

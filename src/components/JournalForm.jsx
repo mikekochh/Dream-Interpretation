@@ -39,8 +39,13 @@ export default function JournalForm() {
             const interval = setInterval(() => {
                 setInterpretationProgressArray(prevArray => {
                     const updatedArray = [...prevArray];
-                    updatedArray[interpretationProgressIndex] += .10;
-                    return updatedArray;
+                    if (updatedArray[interpretationProgressIndex] <= 95) {
+                        updatedArray[interpretationProgressIndex] += .10;
+                        return updatedArray;
+                    }
+                    else {
+                        return updatedArray;
+                    }
                 });
             }, 25);
             return () => clearInterval(interval);
@@ -125,6 +130,7 @@ export default function JournalForm() {
 
 
     useEffect(() => {
+        if (dreamButtonBottomRef.current === null) return;
         if (user?.name) {
             dreamButtonTopRef.current.classList.remove("blur");
             dreamButtonTopRef.current.classList.remove("pointer-events-none");
@@ -146,8 +152,6 @@ export default function JournalForm() {
             }
         }
     }, [oracleSelected, user]);
-    
-
 
     useEffect(() => {
         async function getOracles() {
@@ -273,8 +277,6 @@ export default function JournalForm() {
                 }
             }
         }
-
-        console.log("Goodbye");
 
         setInterpretingDream(false);
         setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
