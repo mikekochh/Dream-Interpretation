@@ -7,6 +7,7 @@ import Popup from 'reactjs-popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStarAndCrescent } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
+import { set } from 'mongoose';
 
 export default function JournalForm() { 
 
@@ -26,10 +27,25 @@ export default function JournalForm() {
     const [localInterpretation, setLocalInterpretation] = useState("");
     const [dream, setDream] = useState("");
     const [justJournal, setJustJournal] = useState(false);
+    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
+    const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
 
     const localCreditsGiven = useRef(false);
     const dreamButtonTopRef = useRef(null);
     const dreamButtonBottomRef = useRef(null);
+
+    useEffect(() => {
+        if (interpretingDream) {
+            const interval = setInterval(() => {
+                setInterpretationProgressArray(prevArray => {
+                    const updatedArray = [...prevArray];
+                    updatedArray[interpretationProgressIndex] += .10;
+                    return updatedArray;
+                });
+            }, 25);
+            return () => clearInterval(interval);
+        }
+    }, [interpretingDream, interpretationProgressArray.length, interpretationProgressIndex])
 
     useEffect(() => {
         // Function to load the Google Tag Manager script
@@ -211,12 +227,15 @@ export default function JournalForm() {
         for (let i = 0; i < oracles.length; i++) {
             if (oracles[i].selected) {
                 const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
+
                 const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
                 {
                     params: {
                         dreamPrompt: dreamPrompt
                     }
                 });
+
+                console.log("resInterpret: ", resInterpret);
 
                 if (resInterpret.status !== 200) {
                     setError("Error Interpreting Dream");
@@ -236,6 +255,15 @@ export default function JournalForm() {
                     return;
                 }
 
+                // await delay(10000);
+
+                setInterpretationProgressArray(prevArray => {
+                    const updatedArray = [...prevArray];
+                    updatedArray[i] = 100;
+                    return updatedArray;
+                });
+                setInterpretationProgressIndex(i+1);
+
                 if (user._id === undefined) {
                     setLocalInterpretation(resInterpret.data[0].message.content);
                     setInterpretingDream(false);
@@ -246,9 +274,13 @@ export default function JournalForm() {
             }
         }
 
+        console.log("Goodbye");
+
         setInterpretingDream(false);
         setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
     }
+
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const journalDreamNoAccount = () => {
         if (window.gtag) {
@@ -295,10 +327,29 @@ export default function JournalForm() {
                         </p>
                         <div className="flex justify-center">
                             {interpretingDream ? (
-                                <div className="flex flex-row text-center items-center justify-center inset-0">
-                                    <p className="text-2xl p-4">Please wait while we interpret your dream...</p>
-                                    <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+                                <div>
+                                    <div className="flex flex-row text-center items-center justify-center inset-0">
+                                        <p className="text-2xl p-4">Please wait while we interpret your dream...</p>
+                                        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+                                    </div>
+                                    <div>
+                                        {oracles.map((oracle, index) => {
+
+                                            if (oracle.selected) {
+
+                                                return (
+                                                    <div key={oracle._id}>
+                                                        <div>{oracle.oracleName}</div>
+                                                        <div data-label="Interpreting..." className="progress-bar">
+                                                            <div className="progress-bar-inside" style={{width: `${interpretationProgressArray[index]}%`}}>Interpreting...</div>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })}
+                                    </div>
                                 </div>
+
                             ) : (
                                 <div className="">
                                     {localInterpretation ? (

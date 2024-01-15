@@ -675,4 +675,38 @@ nav {
   cursor: pointer;
 }
 
+
+.progress-bar {
+  width: 98%;
+  height: 2em;
+  background-color: #D3D3D3;
+  border-radius: 1.5em;
+  position: relative;
+  color: black;
+  display: flex;
+  align-items: center;
+  padding-left: 1em;
+  margin: 5px;
+}
+
+.progress-bar-inside {
+  content: attr(data-label);
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: .25em;
+  top: .25em;
+  bottom: .25em;
+  min-width: .25rem;
+  max-width: calc(100% - .5em);
+  background-color: #069;
+  border-radius: 1rem;
+  color: white;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+
+
+
 /* Add styles for the wiggle effect here, if you have them */
