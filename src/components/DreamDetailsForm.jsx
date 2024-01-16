@@ -121,7 +121,7 @@ export default function DreamsForm() {
                 <h1 className="text-center text-3xl">The Dream</h1>
                 <p>{dream}</p>
             </div>
-            <div className="flex md:flex-row flex-col relative">
+            <div className="flex md:flex-row flex-col relative pb-12">
 
                 <div className="md:w-2/3 text-white border-white border rounded-xl">
                     <h1 className="text-3xl text-center font-bold pb-5">Interpretations</h1>
