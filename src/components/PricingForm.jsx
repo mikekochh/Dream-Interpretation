@@ -42,6 +42,7 @@ export default function PricingForm() {
         const getSale = async () => {
             const res = await fetch('/api/sale', {
                 method: 'GET',
+                cache: 'no-cache',
                 headers: {
                     'Cache-Control': 'no-cache'
                 }
