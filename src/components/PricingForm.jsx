@@ -40,13 +40,19 @@ export default function PricingForm() {
 
     useEffect(() => {
         const getSale = async () => {
-            const res = await fetch('/api/sale');
+            const res = await fetch('/api/sale', {
+                method: 'GET',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            });
             const sale = await res.json();
             setSale(sale[0]);
         }
-
+    
         getSale();
     }, []);
+    
 
     async function buyCredits () {
         const quantity = document.querySelector(".credit-quantity").value;
