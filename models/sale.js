@@ -33,6 +33,10 @@ const saleSchema = new Schema({
         type: String,
         required: [true, "Please enter subscription text!"]
     },
+    bannerMessage: {
+        type: String,
+        required: [true, "Please enter banner message!"]
+    },
 });
 
 const Sale = models.Sale || mongoose.model("Sale", saleSchema);

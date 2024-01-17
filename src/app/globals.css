@@ -247,6 +247,26 @@ nav {
   margin: 1.25rem;
   margin-bottom: 0;
   transition: transform 0.5s ease-in-out;
+  position: relative;
+  width: 33.333333%;
+  border-radius: 0.75rem;
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+  border-width: 1px;
+}
+
+.pricing-card-sale {
+  height: calc(100vh - 220px);
+  padding: 1.25rem;
+  margin: 1.25rem;
+  margin-bottom: 0;
+  transition: transform 0.5s ease-in-out;
+  position: relative;
+  width: 33.333333%;
+  border-radius: 0.75rem;
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+  border-width: 1px;
 }
 
 .pricing-card:hover {
@@ -738,4 +758,15 @@ nav {
   padding-top: 1rem;
   padding-bottom: 1rem;
   color: gold;
+}
+
+.sale-top-banner {
+  background-color: #00FFFF;
+  border-radius: 0.5rem;
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+  margin-top: 0.5rem;
+  padding: 0.25rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }

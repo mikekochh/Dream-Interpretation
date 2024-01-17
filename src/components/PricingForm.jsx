@@ -111,11 +111,16 @@ export default function PricingForm() {
 
     return (
     <div className="text-white text-center p-4 main-content text-xl">
-        <h1 className="text-4xl">Pricing</h1>
+        <h1 className="text-4xl">Shop</h1>
+        {sale && (
+            <div className="sale-top-banner rounded-lg text-black mt-2 p-1 mx-4">
+                {sale.bannerMessage}
+            </div>
+        )}
 
         {/* Desktop view */}
         <div className="flex-row lg:flex hidden mb-5">
-            <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
+            <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
                 <h2 className="text-3xl pb-5">Telegram Chat</h2>
                 <div className="text-left">
                     <ul>
@@ -137,7 +142,7 @@ export default function PricingForm() {
                     </div>
                 </div>
             </div>
-            <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
+            <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
                 <h2 className="text-3xl pb-5">Pay As You Go</h2>
                 <div className="text-left">
                     <ul>
@@ -167,7 +172,7 @@ export default function PricingForm() {
                     )}
                 </div>
             </div>
-            <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
+            <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
                 <h2 className="text-3xl pb-5">Annual Subscription</h2>
                 <div className="text-left">
                     <ul>
