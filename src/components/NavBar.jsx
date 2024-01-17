@@ -79,7 +79,7 @@ const NavBar = () => {
                             <p className="text-black font-semibold text-lg ml-1 w-fit">Dream Oracles</p>
                         </div>
                     </Link>
-                    {/* {sale && (
+                    {sale && (
                         <div>
                             <div 
                                 className="sale-banner font-bold text-xl text-white bg-red-500 p-2 rounded shadow-lg animate-pulse cursor-pointer hidden md:block" 
@@ -94,7 +94,7 @@ const NavBar = () => {
                                 {sale.saleDescriptionMobile}
                             </div>
                         </div>
-                    )} */}
+                    )}
 
                     {/* Section on the right */}
                     <div className="relative justify-end items-center text-black md:flex hidden">
