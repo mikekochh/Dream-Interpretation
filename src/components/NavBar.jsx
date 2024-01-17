@@ -79,7 +79,7 @@ const NavBar = () => {
                             <p className="text-black font-semibold text-lg ml-1 w-fit">Dream Oracles</p>
                         </div>
                     </Link>
-                    {sale && (
+                    {/* {sale && (
                         <div>
                             <div 
                                 className="sale-banner font-bold text-xl text-white bg-red-500 p-2 rounded shadow-lg animate-pulse cursor-pointer hidden md:block" 
@@ -94,7 +94,7 @@ const NavBar = () => {
                                 {sale.saleDescriptionMobile}
                             </div>
                         </div>
-                    )}
+                    )} */}
 
                     {/* Section on the right */}
                     <div className="relative justify-end items-center text-black md:flex hidden">
@@ -109,7 +109,7 @@ const NavBar = () => {
                                 <Link href="/blog">Blog</Link>
                             </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
-                                <Link href="/pricing">Pricing</Link>
+                                <Link href="/pricing">Shop</Link>
                             </li>
                             <li className={`cursor-pointer ${pathname === '/settings' || pathname === '/cancelSubscription' ? 'font-bold' : ''}`}>
                                 <Link href="/settings">Settings</Link>
@@ -193,7 +193,7 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                     <Link href="/blog">Blog</Link>
                 </li>
                 <li className={`cursor-pointer text-3xl p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                    <Link href="/pricing">Pricing</Link>
+                    <Link href="/pricing">Shop</Link>
                 </li>
                 <li className={`cursor-pointer text-3xl p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/settings">Settings</Link>
