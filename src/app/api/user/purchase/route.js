@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
-import User from '../../../../../models/user';
 import PaymentType from '../../../../../models/paymentTypes';
 import Payment from '../../../../../models/payments';
+import Sale from '../../../../../models/sale';
 
 const isLocalEnvironment = process.env.NODE_ENV === 'development';
 const stripeSecretKey = isLocalEnvironment ? process.env.STRIPE_SECRET_KEY_TEST : process.env.STRIPE_SECRET_KEY;
@@ -13,6 +13,8 @@ export async function POST(req) {
         const { userID, paymentTypeID, quantity } = await req.json();
         await connectMongoDB();
         const paymentTypeObject = await PaymentType.findOne({ paymentTypeID });
+
+        const sale = await Sale.findOne({isSale: true});
 
         if (!paymentTypeObject) {
             throw new Error("Payment type not found!");
@@ -26,40 +28,127 @@ export async function POST(req) {
 
         let session = null;
 
-        if (paymentType.paymentTypeID === 1) {
-            session = await stripe.checkout.sessions.create({
-                payment_method_types: ['card'],
-                mode: paymentType.paymentTypeName,
-                line_items: [
-                    {
-                        price_data: {
-                            currency: 'usd',
-                            product_data: {
-                                name: paymentType.paymentTypeDescription,
+        if (sale) {
+            const couponID = isLocalEnvironment ? sale.couponIDTest : sale.couponID;
+            if (paymentType.paymentTypeID === 1) {
+                session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    mode: paymentType.paymentTypeName,
+                    line_items: [
+                        {
+                            price_data: {
+                                currency: 'usd',
+                                product_data: {
+                                    name: paymentType.paymentTypeDescription,
+                                },
+                                unit_amount: paymentType.paymentTypePrice,
                             },
-                            unit_amount: paymentType.paymentTypePrice,
+                            quantity: quantity,
                         },
-                        quantity: quantity,
-                    },
-                ],
-                success_url: process.env.DOMAIN + '/success/credits?session_id={CHECKOUT_SESSION_ID}',
-            });
-        }
-        else if (paymentType.paymentTypeID === 2) {
-            session = await stripe.checkout.sessions.create({
-                payment_method_types: ['card'],
-                mode: paymentType.paymentTypeName,
-                line_items: [
-                    {
-                        price: paymentType.paymentTypePriceID,
-                        quantity: quantity,
-                    },
-                ],
-                success_url: process.env.DOMAIN + '/success/subscription?session_id={CHECKOUT_SESSION_ID}',
-            });
+                    ],
+                    discounts: [{
+                        coupon: couponID
+                    }],
+                    success_url: process.env.DOMAIN + '/success/credits?session_id={CHECKOUT_SESSION_ID}',
+                });
+            }
+            else if (paymentType.paymentTypeID === 2) {
+                session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    mode: paymentType.paymentTypeName,
+                    line_items: [
+                        {
+                            price: isLocalEnvironment ? paymentType.paymentTypePriceIDTest : paymentType.paymentTypePriceID,
+                            quantity: quantity,
+                        },
+                    ],
+                    discounts: [{
+                        coupon: couponID
+                    }],
+                    success_url: process.env.DOMAIN + '/success/subscription?session_id={CHECKOUT_SESSION_ID}',
+                });
+            }
+            else if (paymentType.paymentTypeID === 4) {
+                session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    mode: paymentType.paymentTypeName,
+                    line_items: [
+                        {
+                            price_data: {
+                                currency: 'usd',
+                                product_data: {
+                                    name: paymentType.paymentTypeDescription,
+                                },
+                                unit_amount: paymentType.paymentTypePrice,
+                            },
+                            quantity: quantity,
+                        },
+                    ],
+                    discounts: [{
+                        coupon: couponID
+                    }],
+                    success_url: process.env.DOMAIN + '/success/telegram?session_id={CHECKOUT_SESSION_ID}',
+                });
+            }
+            else {
+                throw new Error("Invalid payment type!");
+            }
         }
         else {
-            throw new Error("Invalid payment type!");
+            if (paymentType.paymentTypeID === 1) {
+                session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    mode: paymentType.paymentTypeName,
+                    line_items: [
+                        {
+                            price_data: {
+                                currency: 'usd',
+                                product_data: {
+                                    name: paymentType.paymentTypeDescription,
+                                },
+                                unit_amount: paymentType.paymentTypePrice,
+                            },
+                            quantity: quantity,
+                        },
+                    ],
+                    success_url: process.env.DOMAIN + '/success/credits?session_id={CHECKOUT_SESSION_ID}',
+                });
+            }
+            else if (paymentType.paymentTypeID === 2) {
+                session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    mode: paymentType.paymentTypeName,
+                    line_items: [
+                        {
+                            price: paymentType.paymentTypePriceID,
+                            quantity: quantity,
+                        },
+                    ],
+                    success_url: process.env.DOMAIN + '/success/subscription?session_id={CHECKOUT_SESSION_ID}',
+                });
+            }
+            else if (paymentType.paymentTypeID === 4) {
+                session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    mode: paymentType.paymentTypeName,
+                    line_items: [
+                        {
+                            price_data: {
+                                currency: 'usd',
+                                product_data: {
+                                    name: paymentType.paymentTypeDescription,
+                                },
+                                unit_amount: paymentType.paymentTypePrice,
+                            },
+                            quantity: quantity,
+                        },
+                    ],
+                    success_url: process.env.DOMAIN + '/success/telegram?session_id={CHECKOUT_SESSION_ID}',
+                });
+            }
+            else {
+                throw new Error("Invalid payment type!");
+            }
         }
 
         if (!isLocalEnvironment) {

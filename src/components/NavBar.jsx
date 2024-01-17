@@ -15,6 +15,7 @@ const NavBar = () => {
     const { data: session } = useSession();
     const pathname = usePathname();
     const [noNavBar, setNoNavBar] = useState(false);
+    const [sale, setSale] = useState(null);
 
     useEffect(() => {
         if (session) {
@@ -55,6 +56,16 @@ const NavBar = () => {
     }
     , [pathname]);
 
+    useEffect(() => {
+        const getSale = async () => {
+            const res = await fetch('/api/sale');
+            const sale = await res.json();
+            setSale(sale[0]);
+        }
+
+        getSale();
+    }, []);
+
 
     return (
         <div>
@@ -68,6 +79,23 @@ const NavBar = () => {
                             <p className="text-black font-semibold text-lg ml-1 w-fit">Dream Oracles</p>
                         </div>
                     </Link>
+                    {sale && (
+                        <div>
+                            <div 
+                                className="sale-banner font-bold text-xl text-white bg-red-500 p-2 rounded shadow-lg animate-pulse cursor-pointer hidden md:block" 
+                                onClick={() => window.location.href = '/pricing'}
+                            >
+                                {sale.saleDescriptionDesktop}
+                            </div>
+                            <div 
+                                className="sale-banner font-bold text-xl text-white bg-red-500 p-2 rounded shadow-lg animate-pulse cursor-pointer md:hidden" 
+                                onClick={() => window.location.href = '/pricing'}
+                            >
+                                {sale.saleDescriptionMobile}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Section on the right */}
                     <div className="relative justify-end items-center text-black md:flex hidden">
                         <ul className="flex">

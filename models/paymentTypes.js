@@ -20,6 +20,10 @@ const paymentTypeSchema = new Schema({
     paymentTypePriceID: {
         type: String,
         required: [true, "Please enter a payment type price id!"]
+    },
+    paymentTypePriceIDTest: {
+        type: String,
+        required: [true, "Please enter a payment type price id for test!"]
     }
 });
 

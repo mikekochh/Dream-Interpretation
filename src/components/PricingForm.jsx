@@ -12,7 +12,8 @@ export default function PricingForm() {
     const [activated, setActivated] = useState(false);
     const [user, setUser] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState("");
+    const [sale, setSale] = useState(null);
 
     useEffect(() => {
         async function setUserData() {
@@ -37,13 +38,24 @@ export default function PricingForm() {
         }
     }, [session]);
 
+    useEffect(() => {
+        const getSale = async () => {
+            const res = await fetch('/api/sale');
+            const sale = await res.json();
+            setSale(sale[0]);
+        }
+
+        getSale();
+    }, []);
+
     async function buyCredits () {
         const quantity = document.querySelector(".credit-quantity").value;
         const quantityMobile = document.querySelector(".credit-quantity-mobile").value;
-        if (quantity < 5 && quantityMobile < 5) {
-            setError(true);
+        if ((sale && quantity < 8 && quantityMobile < 8) || (!sale && quantity < 5 && quantityMobile < 5)) {
+            setError(sale ? "You must buy at least 8 credits!" : "You must buy at least 5 credit!");
             return;
         }
+        setError("");
         const realQuantity = quantity ? quantity : quantityMobile;
         const res = await axios.post("/api/user/purchase", {
             userID: user._id,
@@ -72,6 +84,20 @@ export default function PricingForm() {
         }
     }
 
+    async function joinCommunity () {
+        const res = await axios.post("/api/user/purchase", {
+            userID: user._id,
+            paymentTypeID: 4,
+            quantity: 1
+        });
+        if (res.status === 200) {
+            window.location.href = res.data.sessionID;
+        }
+        else {
+            console.log("failure");
+        }
+    }
+
     function verifyEmail () {
         window.location.href = `/emailVerification?email=${session.user.email}`;
     }
@@ -82,13 +108,26 @@ export default function PricingForm() {
 
         {/* Desktop view */}
         <div className="flex-row lg:flex hidden mb-5">
-            <div className="border border-white rounded-xl pricing-card w-1/3"> 
-                <h2 className="text-3xl pb-5">Free</h2>
+            <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
+                <h2 className="text-3xl pb-5">Telegram Chat</h2>
                 <div className="text-left">
                     <ul>
-                        <li>• Ability to journal dreams</li>
-                        <li>• Ability to take notes on dreams</li>
+                        <li>• Meet other dreamers</li>
+                        <li>• Share dreams and interpretations</li>
+                        <li>• Make life long friends revolving around dreams</li>
+                        <li>• Partake in discussions about dream interpretation theories</li>
+                        {sale ? (
+                            <div>
+                                <li className="line-through">• $20 for admission</li>
+                                <li className="sale-text">{sale.telegramText}</li>
+                            </div>
+                        ) : (<li>• $20 for admission</li>)}
                     </ul>
+                </div>
+                <div>
+                    <div className="bottom-0 absolute left-1/2 transform -translate-x-1/2 p-2">
+                        <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
+                    </div>
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card w-1/3 relative"> 
@@ -99,7 +138,12 @@ export default function PricingForm() {
                         <li>• Expert interpretations from our Dream Oracles</li>
                         <li>• Ability to take notes on dreams</li>
                         <li>• Each <b>interpretation</b> costs 1 credit</li>
-                        <li>• $2.99 per credit, no less than 5</li>
+                        {sale ? (
+                            <div>
+                                <li className="line-through">• $2.99 per credit, no less than 5</li>
+                                <li className="sale-text">{sale.creditText}</li>
+                            </div>
+                        ) : (<li>• $2.99 per credit, no less than 5</li>)}
                     </ul>
                 </div>
                 <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
@@ -112,7 +156,7 @@ export default function PricingForm() {
                         </div>
                     )}
                     {error && (
-                        <p className="text-red-500">You must buy at least 5 credits!</p>
+                        <p className="text-red-500">{error}</p>
                     )}
                 </div>
             </div>
@@ -124,6 +168,14 @@ export default function PricingForm() {
                         <li>• Expert interpretations from our Dream Oracles</li>
                         <li>• Ability to take notes on dreams</li>
                         <li>• Unlimited interpretations</li>
+                        <li>• Access to Telegram Chat for life</li>
+                        <li>• All future services included</li>
+                        {sale ? (
+                            <div>
+                                <li className="line-through">• $79/year</li>
+                                <li className="sale-text">{sale.subscriptionText}</li>
+                            </div>
+                        ) : (<li>• $79/year</li>)}
                     </ul>
                 </div>
                 <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
@@ -133,7 +185,7 @@ export default function PricingForm() {
                                 className='rounded-xl p-2 text-black m-2 subscribe-button'
                                 onClick={subscribe}
                             >
-                                Subscribe for $79/year
+                                Subscribe
                             </button>
                         </div>
                     )}
@@ -143,12 +195,30 @@ export default function PricingForm() {
 
         {/* Mobile view */}
         <div className="flex-col lg:hidden flex">
-            <div className="border border-white rounded-xl pricing-card-mobile"> 
-                <h2 className="text-2xl pb-5">Free</h2>
+            <div className="border border-white rounded-xl pricing-card-mobile relative"> 
+                <h2 className="text-2xl pb-5">Annual Subscription</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
+                        <li>• Expert interpretations from our Dream Oracles</li>
+                        <li>• Ability to take notes on dreams</li>
+                        <li>• Unlimited interpretations</li>
+                        <li>• Access to Telegram Chat for life</li>
+                        <li>• All future services included</li>
+                        {sale ? (
+                            <div>
+                                <li className="line-through">• $79/year</li>
+                                <li className="sale-text">{sale.subscriptionText}</li>
+                            </div>
+                        ) : (<li>• $79/year</li>)}
                     </ul>
+                </div>
+                <div>
+                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                        <div>
+                            <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={subscribe}>Subscribe</button>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card-mobile relative"> 
@@ -159,7 +229,12 @@ export default function PricingForm() {
                         <li>• Expert interpretations from our Dream Oracles</li>
                         <li>• Ability to take notes on dreams</li>
                         <li>• Each <b>interpretation</b> costs 1 credit</li>
-                        <li>• $2.99 per credit, no less than 5</li>
+                        {sale ? (
+                            <div>
+                                <li className="line-through">• $2.99 per credit, no less than 5</li>
+                                <li className="sale-text">{sale.creditText}</li>
+                            </div>
+                        ) : (<li>• $2.99 per credit, no less than 5</li>)}
                     </ul>
                 </div>
                 <div>
@@ -174,26 +249,29 @@ export default function PricingForm() {
                     )}
                 </div>
             </div>
-            <div className="border border-white rounded-xl pricing-card-mobile relative"> 
-                <h2 className="text-2xl pb-5">Annual Subscription</h2>
+            <div className="border border-white rounded-xl pricing-card-mobile"> 
+                <h2 className="text-2xl pb-5">Telegram Chat</h2>
                 <div className="text-left">
                     <ul>
-                        <li>• Ability to journal dreams</li>
-                        <li>• Expert interpretations from our Dream Oracles</li>
-                        <li>• Ability to take notes on dreams</li>
-                        <li>• Unlimited interpretations</li>
+                        <li>• Meet other dreamers</li>
+                        <li>• Share dreams and interpretations</li>
+                        <li>• Make life long friends revolving around dreams</li>
+                        <li>• Partake in discussions about dream interpretation theories</li>
+                        {sale ? (
+                            <div>
+                                <li className="line-through">• $20 for admission</li>
+                                <li className="sale-text">{sale.telegramText}</li>
+                            </div>
+                        ) : (<li>• $20 for admission</li>)}
                     </ul>
                 </div>
                 <div>
-                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
-                        <div>
-                            <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={subscribe}>Subscribe for $79/year</button>
-                        </div>
-                    )}
+                    <div>
+                        <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     )
-
 }

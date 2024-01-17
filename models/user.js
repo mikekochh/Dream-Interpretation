@@ -36,6 +36,9 @@ const userSchema = new Schema({
     metaAnalysisOracleID: {
         type: Number,
     },
+    communityAccess: {
+        type: Boolean,
+    }
 }, {timestamps: true});
 
 const User = models.User || mongoose.model("User", userSchema);

@@ -20,8 +20,8 @@ export default function SuccessCreditsForm() {
         const verifyPayment = async () => {
             if (session && session_id && !isVerified) {
                 try {
-                    setIsVerified(true);
                     const res = await axios.post('/api/verifyPayment/credits', { session_id, userEmail: session.user.email });
+                    setIsVerified(true);
                     if (res.status === 200) {
                         return true;
                     }

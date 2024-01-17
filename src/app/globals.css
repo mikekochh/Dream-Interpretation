@@ -706,7 +706,36 @@ nav {
   padding-right: 1em;
 }
 
+.sale-banner {
+  /* Your custom styles here */
+  background-color: #ff4500; /* Bright orange-red */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+}
 
+@keyframes pulse {
+  0% {
+      transform: scale(1);
+      opacity: 1;
+  }
+  50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+  }
+  100% {
+      transform: scale(1);
+      opacity: 1;
+  }
+}
 
-
-/* Add styles for the wiggle effect here, if you have them */
+.sale-text {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: gold;
+}
