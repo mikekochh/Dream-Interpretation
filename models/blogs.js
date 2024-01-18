@@ -28,7 +28,11 @@ const blogSchema = new Schema({
     description: {
         type: String,
         required: [true, "Please enter blog description!"]
-    }
+    },
+    active: {
+        type: Boolean,
+        default: true
+    },
 });
 
 const Blog = models.Blog || mongoose.model("Blog", blogSchema);

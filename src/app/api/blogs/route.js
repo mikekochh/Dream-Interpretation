@@ -6,7 +6,7 @@ export async function GET(request) {
     try {
         await connectMongoDB();
 
-        const blogs = await Blog.find({});
+        const blogs = await Blog.find({active: true});
 
         return NextResponse.json({blogs});
     }
