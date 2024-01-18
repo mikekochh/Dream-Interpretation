@@ -33,8 +33,12 @@ export async function POST(req) {
             subject: "Welcome to Dream Oracles!",
             html: `
                 <h1>Hi ${data.name}!</h1>
-                <p>Thank you for joining our telegram community!</p>
-                <p>Here is the link to join: <a href="https://t.me/+BMpaqL8vSzUwZjBh">https://t.me/+BMpaqL8vSzUwZjBh</a></p>
+                <p>Thank you for purchasing our subscription service!</p>
+                <p>If you are not already a member of our telegram community, please join using the link below.<p/>
+                <p>Here is the link to join: <a href="https://t.me/+BMpaqL8vSzUwZjBh">https://t.me/+BMpaqL8vSzUwZjBh</a></p><br/>
+                <p>Otherwise, welcome to Dream Oracles! We are excited to have you as a member of our community. You are now allowed access to any of our services.</p>
+                <p>If you have any questions about your subscription, please <a href="${domain}/contactMe">contact us</a> or leave us <a href="${domain}/feedback">feedback</a></p><br/>
+
                 <p>Thank you,<br/>
                 The Dream Oracles</p>
             `

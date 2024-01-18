@@ -120,7 +120,7 @@ export async function POST(req) {
                     mode: paymentType.paymentTypeName,
                     line_items: [
                         {
-                            price: paymentType.paymentTypePriceID,
+                            price: isLocalEnvironment ? paymentType.paymentTypePriceIDTest : paymentType.paymentTypePriceID,
                             quantity: quantity,
                         },
                     ],
@@ -151,21 +151,19 @@ export async function POST(req) {
             }
         }
 
-        if (!isLocalEnvironment) {
-            const newPayment = await Payment.create({
-                paymentTypeID,
-                paymentTypeName: paymentType.paymentTypeName,
-                userID,
-                paymentDate: new Date(),
-                paymentAmount: paymentType.paymentTypePrice,
-                paymentCompleted: false,
-                stripeSessionID: session.id,
-                quantity
-            });
-            
-            if (!newPayment) {
-                throw new Error("Failed to create new payment");
-            }
+        const newPayment = await Payment.create({
+            paymentTypeID,
+            paymentTypeName: paymentType.paymentTypeName,
+            userID,
+            paymentDate: new Date(),
+            paymentAmount: paymentType.paymentTypePrice,
+            paymentCompleted: false,
+            stripeSessionID: session.id,
+            quantity
+        });
+        
+        if (!newPayment) {
+            throw new Error("Failed to create new payment");
         }
 
         return NextResponse.json({sessionID: session.url}, { status: 200 });

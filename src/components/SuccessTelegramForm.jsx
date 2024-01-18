@@ -54,8 +54,12 @@ export default function SuccessTelegramForm() {
 
     return (
         <div className="main-content text-white text-center text-3xl pb-1">
-            <p>Success! You will be receiving an email from us shortly with the telegram community invite.</p>
-            <p>Redirecting to home screen...</p>
+            {error ? (<p className="text-red-500">{error}</p>) : (
+                <div>
+                    <p>Success! You will be receiving an email from us shortly with the telegram community invite.</p>
+                    <p>Redirecting to home screen...</p>
+                </div>
+            )}
         </div>
     )
  }

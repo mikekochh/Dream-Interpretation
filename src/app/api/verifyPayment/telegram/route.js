@@ -10,10 +10,6 @@ const stripe = require('stripe')(stripeSecretKey);
 export async function POST(req) {
     try {
 
-        // if (isLocalEnvironment) {
-        //     return NextResponse.json({message: "User telegram access successfully purchased!"}, { status: 200 });
-        // }
-
         await connectMongoDB();
         // create user
         const { session_id, userEmail } = await req.json();
@@ -29,10 +25,10 @@ export async function POST(req) {
             }
 
             if (session.payment_status === "paid" && !payment.paymentCompleted) {
-                const updatedUser = await User.findOneAndUpdate({ email: userEmail }, { communityAccess: true }, { new: true });
-                if (!updatedUser) {
-                    throw new Error("User not found!");
-                }
+                // const updatedUser = await User.findOneAndUpdate({ email: userEmail }, { communityAccess: true }, { new: true });
+                // if (!updatedUser) {
+                //     throw new Error("User not found!");
+                // }
                 const updatedPayment = await Payment.findOneAndUpdate({ stripeSessionID: session_id }, { paymentCompleted: true }, { new: true });
             }
             else if (payment.paymentCompleted) {
@@ -43,6 +39,7 @@ export async function POST(req) {
             }
             return NextResponse.json({message: "User successfully purchased telegram community access!"}, { status: 200 });
         } catch (error) {
+            console.log('error during telegram payment: ', error);
             return NextResponse.json({message: "There was an error processing your payment. Please try again or contact support if the problem persists."}, { status: 500 });
         }
     } catch (error) {

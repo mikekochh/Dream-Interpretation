@@ -138,7 +138,9 @@ export default function PricingForm() {
                 </div>
                 <div>
                     <div className="bottom-0 absolute left-1/2 transform -translate-x-1/2 p-2">
-                        <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
+                        {user?.communityAccess ? (<p className="text-green-500">You are already a member, thank you!</p>) : (
+                            <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -279,7 +281,9 @@ export default function PricingForm() {
                 </div>
                 <div>
                     <div>
-                        <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
+                        {user?.communityAccess ? (<p className="text-green-500">You are already a member, thank you!</p>) : (
+                            <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
+                        )}
                     </div>
                 </div>
             </div>

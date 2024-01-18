@@ -12,6 +12,7 @@ export default function SuccessSubscriptionForm() {
     const { data: session } = useSession();
     const [isVerified, setIsVerified] = useState(false);
     const [error, setError] = useState(null);
+    const [sentEmail, setSentEmail] = useState(false);
 
     useEffect(() => {
         const verifyPayment = async () => {
@@ -32,6 +33,23 @@ export default function SuccessSubscriptionForm() {
 
         verifyPayment();
     }, [session, session_id, isVerified]);
+
+    useEffect(() => {
+        const sendEmailInvite = async () => {
+            try {
+                const res = await axios.post('/api/sendSubscriptionEmail', { email: session.user.email });
+                if (res.status === 200) {
+                    setSentEmail(true);
+                }
+            } catch (error) {
+                setError(error.response.data.message);
+            }
+        }
+
+        if (isVerified && session.user.email && !sentEmail) {
+            sendEmailInvite();
+        }
+    }, [isVerified, session]);
     
 
     return (

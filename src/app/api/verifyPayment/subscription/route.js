@@ -4,11 +4,13 @@ import User from "../../../../../models/user";
 import Payment from '../../../../../models/payments';
 import Stripe from 'stripe';
 
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const isLocalEnvironment = process.env.NODE_ENV === 'development';
+const stripeSecretKey = isLocalEnvironment ? process.env.STRIPE_SECRET_KEY_TEST : process.env.STRIPE_SECRET_KEY;
+const stripe = require('stripe')(stripeSecretKey);
 
 export async function POST(req) {
     try {
+        console.log("How many times could a woodchuck chuck if a woodchuck could chuck wood?");
         await connectMongoDB();
         // create user
         const { session_id, userEmail } = await req.json();
@@ -39,9 +41,11 @@ export async function POST(req) {
             }
             return NextResponse.json({message: "User subscription successfully purchased and updated!"}, { status: 200 });
         } catch (error) {
-            return NextResponse.json({message: error.message}, { status: 500 });
+            console.log('error during user subscription payment: ', error);
+            return NextResponse.json({message: "There was an error processing your payment. Please try again or contact support if the problem persists."}, { status: 500 });
         }
     } catch (error) {
-        return NextResponse.json({message: error.message}, { status: 500 })
+        console.log('error during user subscription payment: ', error);
+        return NextResponse.json({message: "There was an error processing your payment. Please try again or contact support if the problem persists."}, { status: 500 });
     }
 }
