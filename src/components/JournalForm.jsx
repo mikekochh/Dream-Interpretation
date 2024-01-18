@@ -362,8 +362,8 @@ export default function JournalForm() {
                                         </div>
                                     ) : (
                                         <div>
-                                            <button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={resetPage}>Journal New Dream</button>
-                                            {!justJournal && (<button className="rounded-xl bg-blue-600 p-2 m-2 pl-4 pr-4 justify-center item" onClick={goToDreamDetails}>Go To Dream Details</button>)}
+                                            <button className="dream-button" onClick={resetPage}>Journal New Dream</button>
+                                            {!justJournal && (<button className="dream-button" onClick={goToDreamDetails}>Go To Dream Details</button>)}
                                         </div>
                                     )}
                                 </div>
