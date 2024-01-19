@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons';
 import BlogContentOne from './blogs/blogContentOne';
+import BlogContentTwo from './blogs/blogContentTwo';
 import Head from 'next/head';
 
 export default function BlogForm({ blogDetails }) { 
@@ -71,6 +72,7 @@ export default function BlogForm({ blogDetails }) {
             <Head>
                 <title>{blogDetails.blogTitle}</title>
                 <meta name="description" content={blogDetails.description} />
+                <meta name="robots" content="index, follow" />
             </Head>
             <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 md:hidden">Back</button>
             <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 hidden absolute top-15 left-0">Back</button>
@@ -102,7 +104,8 @@ export default function BlogForm({ blogDetails }) {
                     </div>
                     <h1 className="text-5xl text-center pb-4">{blogDetails.blogTitle}</h1>
                     <h2 className="text-xl text-center pb-4">Estimated reading time: {blogDetails.readingTime} mins</h2>
-                    <BlogContentOne />
+                    {blogDetails.blogID === 1 ? (<BlogContentOne />) : blogDetails.blogID === 2 ? (<BlogContentTwo />) : null}
+                    
                 </div>
             </div>
             <div className="text-center">

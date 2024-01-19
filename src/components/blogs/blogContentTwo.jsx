@@ -2,21 +2,21 @@
 
 // &apos;
 
-export default function BlogContentOne() { 
+export default function BlogContentTwo() { 
 
     return (
         <div>
             <p className="blog-paragraph">
                 The most popular dream symbol that people Google after awakening, in every single culture around the world, are snakes. 
-                Snake’s are a very interesting symbol, and it’s no coincidence that these animals show up in all of our dreams. Snakes 
-                have been a large part of our evolution as a species, we’ve essentially evolved with them around all the time up until 
+                Snake&apos;s are a very interesting symbol, and it&apos;s no coincidence that these animals show up in all of our dreams. Snakes 
+                have been a large part of our evolution as a species, we&apos;ve essentially evolved with them around all the time up until 
                 modern history. And because of this, we all have a very similar definition of what a snake means, so the appearance of 
                 a snake in a dream is very common. 
             </p>
             <p className="blog-paragraph">
                 Because of the popularity of snakes within our subconscious, we decided to answer the top Googled questions about snake 
                 dreams using our Dream Oracles. We will be answering the top snake dream questions using our most popular dream oracles, 
-                Carl Jung, Sigmund Freud, and our Islamic Dream Interpretation expert Ruya. Let’s see what they have to say about snakes!
+                Carl Jung, Sigmund Freud, and our Islamic Dream Interpretation expert Ruya. Let&apos;s see what they have to say about snakes!
             </p>
             <h1 className="blog-header">
                 Snake in dream meaning (answered by Carl Jung)
@@ -213,5 +213,4 @@ export default function BlogContentOne() {
             </p>
         </div>
     )
-
 }
