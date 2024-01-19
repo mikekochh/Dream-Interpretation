@@ -446,7 +446,7 @@ nav {
   pointer-events: auto;
   transform: translateY(0);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
-  z-index: 10;
+  z-index: 20;
   padding: 0.5rem;
 }
 
@@ -477,7 +477,7 @@ nav {
   pointer-events: auto;
   transform: translateY(0);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
-  z-index: 10;
+  z-index: 20;
   padding: 0.5rem;
 }
 
@@ -509,7 +509,7 @@ nav {
   pointer-events: auto;
   transform: translateY(0);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
-  z-index: 10;
+  z-index: 20;
   padding: 0.5rem;
 }
 
@@ -517,7 +517,7 @@ nav {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-  z-index: 10;
+  z-index: 20;
 }
 
 .dropdown-item {
