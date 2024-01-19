@@ -11,6 +11,8 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   title: 'Dream Oracles',
   description: 'Application using AI to interpret dreams',
+  url: 'https://dreamoracles.com',
+  robots: 'index, follow',
 }
 
 export default function RootLayout({ children }) {
