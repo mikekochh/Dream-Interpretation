@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
-import { set } from 'mongoose';
 
 export default function SuccessCreditsForm() { 
 
