@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import ContactAndPrivacyButtons from './ContactAndPrivacyButtons';
 
 export default function ActivationForm() { 
 

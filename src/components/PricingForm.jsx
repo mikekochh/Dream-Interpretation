@@ -1,15 +1,12 @@
 "use client"
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 
 
 export default function PricingForm() { 
 
-    const router = useRouter();
     const { data: session } = useSession();
-    const [activated, setActivated] = useState(false);
     const [user, setUser] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
     const [error, setError] = useState("");
@@ -29,7 +26,6 @@ export default function PricingForm() {
 
         if (session) {
             setUserData().then(userData => {
-                setActivated(userData.activated);
                 setUser(userData);
                 setSubscribed(userData.subscribed);
             }).catch(err => {

@@ -1,5 +1,4 @@
 "use client";
-import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 import { useSearchParams } from 'next/navigation'
 
 export default function PasswordResetForm() {

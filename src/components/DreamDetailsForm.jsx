@@ -10,8 +10,6 @@ export default function DreamsForm() {
  
     const dreamID = searchParams.get('dreamID');
 
-    const textAreaRef = useRef(null);
-
     const [dreamDetails, setDreamDetails] = useState([]);
     const [oracles, setOracles] = useState([]);
     const router = useRouter();

@@ -7,7 +7,6 @@ import Popup from 'reactjs-popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStarAndCrescent } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import { set } from 'mongoose';
 
 export default function JournalForm() { 
 
@@ -17,7 +16,6 @@ export default function JournalForm() {
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
-    const [short, setShort] = useState(false);
     const [newDreamID, setNewDreamID] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
@@ -239,8 +237,6 @@ export default function JournalForm() {
                     }
                 });
 
-                console.log("resInterpret: ", resInterpret);
-
                 if (resInterpret.status !== 200) {
                     setError("Error Interpreting Dream");
                     return;
@@ -418,31 +414,8 @@ export default function JournalForm() {
                                                 </div>
                                             )})}
                                     </div>
-                                    {/* <div className="justify-center flex">
-                                        <div className="flex justify-center p-5">
-                                            <input 
-                                                type="checkbox" 
-                                                id="short" 
-                                                name="short" 
-                                                value="short" 
-                                                onChange={handleCheckboxChange}
-                                                checked={short}
-                                            ></input>
-                                            <label htmlFor="short">Short</label>
-                                            <Popup 
-                                                trigger={<button><FontAwesomeIcon icon={faInfoCircle} className="ml-2"/></button>} 
-                                                position="top right center"
-                                                contentStyle={{width: "50%"}}
-                                            >
-                                                <b>Short</b><br/>
-                                                If you are looking for a simple interpretation, we recommend checking short. This will speed up interpretation time,
-                                                and give you a quick answer. Oracles may sacrifice accuracy for speed. If you are looking for a more detailed interpretation, we recommend leaving this unchecked.
-                                            </Popup>
-                                        </div>
-                                    </div> */}
                                     <button ref={dreamButtonBottomRef} className="dream-button absolute right-0 bottom-0" onClick={journalDream}>
                                         {buttonText}
-                                        {/* {buttonText} {subscribed ? '' : `(${creditCost} credits)`} */}
                                     </button><br />
                                 </div>
                                 {user?.credits === 0 && !user?.name ? (

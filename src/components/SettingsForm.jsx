@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -12,8 +11,8 @@ const SettingsForm = () => {
     const { data: session } = useSession();
     const [user, setUser] = useState({});
     const [subscribed, setSubscribed] = useState(false);
-    const [oracleUpdated, setOracleUpdated] = useState(false);
-    const [metaAnalysisOracleID, setMetaAnalysisOracleID] = useState(0);
+    // const [oracleUpdated, setOracleUpdated] = useState(false);
+    // const [metaAnalysisOracleID, setMetaAnalysisOracleID] = useState(0);
 
     useEffect(() => {
         async function setUserData() {
@@ -47,14 +46,14 @@ const SettingsForm = () => {
         window.location.href = '/cancelSubscription';
     }
 
-    const updateMetaAnalysisOracleID = async (oracleID) => {
-        const res = await axios.post('/api/user/updateMetaAnalysisOracleID', {
-            oracleID,
-            userID: user._id
-        });
-        setMetaAnalysisOracleID(oracleID);
-        setOracleUpdated(true);
-    }
+    // const updateMetaAnalysisOracleID = async (oracleID) => {
+    //     const res = await axios.post('/api/user/updateMetaAnalysisOracleID', {
+    //         oracleID,
+    //         userID: user._id
+    //     });
+    //     setMetaAnalysisOracleID(oracleID);
+    //     setOracleUpdated(true);
+    // }
 
     return (
         <div className="main-content text-white">

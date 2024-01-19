@@ -14,8 +14,6 @@ export default function BlogForm({ blogDetails }) {
     const router = useRouter();
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
-    const [hasUserLiked, setHasUserLiked] = useState(false);
-    const [hasUserDisliked, setHasUserDisliked] = useState(false);
     const [copied, setCopied] = useState(false);
 
 
@@ -24,18 +22,9 @@ export default function BlogForm({ blogDetails }) {
         setDislikes(blogDetails.dislikes);
     }, [blogDetails]);
 
-    useEffect(() => {
-        if (blogDetails) {
-            const hasUserLikedTemp = localStorage.getItem('hasUserLiked' + blogDetails.blogID);
-            if (hasUserLikedTemp) {
-                setHasUserLiked(true);
-            }
-        }
-    }, [hasUserLiked, blogDetails]);
-
     const likeBlog = async function() {
         const hasUserLikedTemp = localStorage.getItem('hasUserLiked' + blogDetails.blogID);
-        if (hasUserLiked) {
+        if (hasUserLikedTemp) {
             return;
         }
         else {
