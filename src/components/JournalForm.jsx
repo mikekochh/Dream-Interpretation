@@ -29,7 +29,6 @@ export default function JournalForm() {
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
 
     const localCreditsGiven = useRef(false);
-    const dreamButtonTopRef = useRef(null);
     const dreamButtonBottomRef = useRef(null);
 
     useEffect(() => {
@@ -125,31 +124,6 @@ export default function JournalForm() {
         setOracleSelected(false);
         setButtonText("Journal Dream");
     }, [oracles]);
-
-
-    useEffect(() => {
-        if (dreamButtonBottomRef.current === null) return;
-        if (user?.name) {
-            dreamButtonTopRef.current.classList.remove("blur");
-            dreamButtonTopRef.current.classList.remove("pointer-events-none");
-            dreamButtonBottomRef.current.classList.remove("blur");
-            dreamButtonBottomRef.current.classList.remove("pointer-events-none");
-        }
-        else {
-            if (oracleSelected) {
-                dreamButtonTopRef.current.classList.remove("blur");
-                dreamButtonTopRef.current.classList.remove("pointer-events-none");
-                dreamButtonBottomRef.current.classList.remove("blur");
-                dreamButtonBottomRef.current.classList.remove("pointer-events-none");
-            }
-            else {
-                dreamButtonTopRef.current.classList.add("blur");
-                dreamButtonTopRef.current.classList.add("pointer-events-none");
-                dreamButtonBottomRef.current.classList.add("blur");
-                dreamButtonBottomRef.current.classList.add("pointer-events-none");
-            }
-        }
-    }, [oracleSelected, user]);
 
     useEffect(() => {
         async function getOracles() {
@@ -377,7 +351,7 @@ export default function JournalForm() {
                             )}
                         </div>
                     )}
-                    <button className="dream-button" ref={dreamButtonTopRef} onClick={journalDream}>
+                    <button className="dream-button" onClick={journalDream}>
                         {buttonText}
                     </button>
                     <div>
@@ -414,7 +388,7 @@ export default function JournalForm() {
                                                 </div>
                                             )})}
                                     </div>
-                                    <button ref={dreamButtonBottomRef} className="dream-button absolute right-0 bottom-0" onClick={journalDream}>
+                                    <button className="dream-button absolute right-0 bottom-0" onClick={journalDream}>
                                         {buttonText}
                                     </button><br />
                                 </div>
