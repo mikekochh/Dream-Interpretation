@@ -135,7 +135,7 @@ const Content = () => {
                 the snakes, and the way they interact with you.
             </p>
             <p className="blog-paragraph">
-                However, it's important to remember that while there are generalized interpretations, not all symbols carry the exact same 
+                However, it&apos;s important to remember that while there are generalized interpretations, not all symbols carry the exact same 
                 meaning for every individual. My postulation merely provides an introductory guide to understanding your dream. The true 
                 understanding very much depends upon your own personal associations and experiences.”
             </p>
