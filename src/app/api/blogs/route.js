@@ -8,6 +8,10 @@ export async function GET(request) {
 
         const blogs = await Blog.find({active: true});
 
+        const blogsSorted = blogs.sort((a, b) => {
+            return b.blogID - a.blogID;
+        });
+
         return NextResponse.json({blogs});
     }
     catch (error) {
