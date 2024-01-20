@@ -28,7 +28,7 @@ export default function BlogsForm() {
             <div className="flex flex-wrap justify-center">
                 {blogs.map((blog, index) => {
                     return (
-                        <div key={index} className="blog-box flex flex-col w-full md:w-1/3" onClick={() => router.push("blog/introduction")}>
+                        <div key={index} className="blog-box flex flex-col w-full md:w-1/3" onClick={() => router.push("blog" + blog.routePath)}>
                             {/* Mobile */}
                             <div className="mb-4 relative md:hidden" style={{ width: '100%' }}>
                                 <Image 

@@ -242,5 +242,4 @@ const Content = () => {
             </p>
         </div>
     )
-
 }

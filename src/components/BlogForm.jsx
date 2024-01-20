@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons';
-import BlogContentOne from './blogs/blogContentOne';
-import BlogContentTwo from './blogs/blogContentTwo';
 import Head from 'next/head';
 
 export default function BlogForm({ blogDetails, Content }) { 
+
+    console.log("Content:", Content);
 
     const router = useRouter();
     const [likes, setLikes] = useState(0);
@@ -86,7 +86,7 @@ export default function BlogForm({ blogDetails, Content }) {
                             width={100}
                             height={100}
                             objectFit="contain"
-                            src="/blog1.webp" 
+                            src={blogDetails?.blogPicture}
                             alt="blog picture" 
                             className="rounded-xl"
                         />
@@ -98,7 +98,7 @@ export default function BlogForm({ blogDetails, Content }) {
                             width={100}
                             height={100}
                             objectFit="contain"
-                            src="/blog1.webp" 
+                            src={blogDetails?.blogPicture}
                             alt="blog picture" 
                             className="rounded-xl"
                         />

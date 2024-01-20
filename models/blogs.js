@@ -33,6 +33,10 @@ const blogSchema = new Schema({
         type: Boolean,
         default: true
     },
+    routePath: {
+        type: String,
+        required: [true, "Please enter blog route path!"]
+    },
 });
 
 const Blog = models.Blog || mongoose.model("Blog", blogSchema);
