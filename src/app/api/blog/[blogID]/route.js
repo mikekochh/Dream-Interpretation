@@ -8,7 +8,11 @@ export async function GET(request) {
         const blogID = pathname.split('/').pop();
         await connectMongoDB();
 
+        console.log('blogID:', blogID);
+
         const blogDetails = await Blog.findOne({ blogID: blogID });
+
+        console.log('blogDetails:', blogDetails);
 
         if (!blogDetails) {
             throw new Error("Blog not found!");

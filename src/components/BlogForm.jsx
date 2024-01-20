@@ -10,7 +10,7 @@ import BlogContentOne from './blogs/blogContentOne';
 import BlogContentTwo from './blogs/blogContentTwo';
 import Head from 'next/head';
 
-export default function BlogForm({ blogDetails }) { 
+export default function BlogForm({ blogDetails, Content }) { 
 
     const router = useRouter();
     const [likes, setLikes] = useState(0);
@@ -19,8 +19,11 @@ export default function BlogForm({ blogDetails }) {
 
 
     useEffect(() => {
-        setLikes(blogDetails.likes);
-        setDislikes(blogDetails.dislikes);
+        if (blogDetails) {
+            setLikes(blogDetails.likes);
+            setDislikes(blogDetails.dislikes);
+        }
+        
     }, [blogDetails]);
 
     const likeBlog = async function() {
@@ -49,7 +52,6 @@ export default function BlogForm({ blogDetails }) {
         }
         else {
             localStorage.setItem('hasUserDisliked' + blogDetails.blogID, true);
-            setHasUserDisliked(true);
         }
         setDislikes(dislikes + 1);
         try {
@@ -70,9 +72,8 @@ export default function BlogForm({ blogDetails }) {
     return (
         <div className="main-content relative text-left">
             <Head>
-                <title>{blogDetails.blogTitle}</title>
-                <meta name="description" content={blogDetails.description} />
-                <meta name="robots" content="index, follow" />
+                <title>{blogDetails?.blogTitle}</title>
+                <meta name="description" content={blogDetails?.description} />
             </Head>
             <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 md:hidden">Back</button>
             <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 hidden absolute top-15 left-0">Back</button>
@@ -102,10 +103,9 @@ export default function BlogForm({ blogDetails }) {
                             className="rounded-xl"
                         />
                     </div>
-                    <h1 className="text-5xl text-center pb-4">{blogDetails.blogTitle}</h1>
-                    <h2 className="text-xl text-center pb-4">Estimated reading time: {blogDetails.readingTime} mins</h2>
-                    {blogDetails.blogID === 1 ? (<BlogContentOne />) : blogDetails.blogID === 2 ? (<BlogContentTwo />) : null}
-                    
+                    <h1 className="text-5xl text-center pb-4">{blogDetails?.blogTitle}</h1>
+                    <h2 className="text-xl text-center pb-4">Estimated reading time: {blogDetails?.readingTime} mins</h2>    
+                    <Content />                
                 </div>
             </div>
             <div className="text-center">
