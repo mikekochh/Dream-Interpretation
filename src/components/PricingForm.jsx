@@ -126,10 +126,10 @@ export default function PricingForm() {
                         <li>• Partake in discussions about dream interpretation theories</li>
                         {sale ? (
                             <div>
-                                <li className="line-through">• $20 for admission</li>
+                                <li className="line-through">• $6 for admission</li>
                                 <li className="sale-text">{sale.telegramText}</li>
                             </div>
-                        ) : (<li>• $20 for admission</li>)}
+                        ) : (<li>• $6 for admission</li>)}
                     </ul>
                 </div>
                 <div>
@@ -150,10 +150,10 @@ export default function PricingForm() {
                         <li>• Each <b>interpretation</b> costs 1 credit</li>
                         {sale ? (
                             <div>
-                                <li className="line-through">• $2.99 per credit, no less than 5</li>
+                                <li className="line-through">• $1.99 per credit, no less than 5</li>
                                 <li className="sale-text">{sale.creditText}</li>
                             </div>
-                        ) : (<li>• $2.99 per credit, no less than 5</li>)}
+                        ) : (<li>• $1.99 per credit, no less than 5</li>)}
                     </ul>
                 </div>
                 <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
@@ -182,10 +182,10 @@ export default function PricingForm() {
                         <li>• All future services included</li>
                         {sale ? (
                             <div>
-                                <li className="line-through">• $79/year</li>
+                                <li className="line-through">• $37/year</li>
                                 <li className="sale-text">{sale.subscriptionText}</li>
                             </div>
-                        ) : (<li>• $79/year</li>)}
+                        ) : (<li>• $37/year</li>)}
                     </ul>
                 </div>
                 <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
@@ -217,10 +217,10 @@ export default function PricingForm() {
                         <li>• All future services included</li>
                         {sale ? (
                             <div>
-                                <li className="line-through">• $79/year</li>
+                                <li className="line-through">• $37/year</li>
                                 <li className="sale-text">{sale.subscriptionText}</li>
                             </div>
-                        ) : (<li>• $79/year</li>)}
+                        ) : (<li>• $37/year</li>)}
                     </ul>
                 </div>
                 <div>
@@ -241,10 +241,10 @@ export default function PricingForm() {
                         <li>• Each <b>interpretation</b> costs 1 credit</li>
                         {sale ? (
                             <div>
-                                <li className="line-through">• $2.99 per credit, no less than 5</li>
+                                <li className="line-through">• $1.99 per credit, no less than 5</li>
                                 <li className="sale-text">{sale.creditText}</li>
                             </div>
-                        ) : (<li>• $2.99 per credit, no less than 5</li>)}
+                        ) : (<li>• $1.99 per credit, no less than 5</li>)}
                     </ul>
                 </div>
                 <div>
@@ -269,10 +269,10 @@ export default function PricingForm() {
                         <li>• Partake in discussions about dream interpretation theories</li>
                         {sale ? (
                             <div>
-                                <li className="line-through">• $20 for admission</li>
+                                <li className="line-through">• $6 for admission</li>
                                 <li className="sale-text">{sale.telegramText}</li>
                             </div>
-                        ) : (<li>• $20 for admission</li>)}
+                        ) : (<li>• $6 for admission</li>)}
                     </ul>
                 </div>
                 <div>
