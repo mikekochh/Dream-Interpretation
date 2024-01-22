@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp} from '@fortawesome/free-solid-svg-icons';
+import { set } from 'mongoose';
 
 export default function DreamnetForm() { 
 
@@ -89,6 +90,13 @@ export default function DreamnetForm() {
 
 const DreamBox = ({ dream, formatDate, mainUserID, liked }) => {
 
+    const [likedDream, setLikedDream] = useState(liked);
+    const [likes, setLikes] = useState(dream.likes);
+
+    useEffect(() => {
+        setLikedDream(liked);
+    }, [liked]);
+
     const likeDream = async (dreamID, userID) => {
         try {
             const res = await axios.post('/api/dreamnet/like', 
@@ -97,6 +105,8 @@ const DreamBox = ({ dream, formatDate, mainUserID, liked }) => {
                 giverID: mainUserID, 
                 receiverID: userID
             });
+            setLikedDream(true);
+            setLikes(likes + 1);
             console.log(res);
         } catch (error) {
             console.log(error);
@@ -111,6 +121,8 @@ const DreamBox = ({ dream, formatDate, mainUserID, liked }) => {
                 giverID: mainUserID, 
                 receiverID: userID
             });
+            setLikedDream(false);
+            setLikes(likes - 1);
             console.log(res);
         } catch (error) {
             console.log(error);
@@ -121,11 +133,10 @@ const DreamBox = ({ dream, formatDate, mainUserID, liked }) => {
         <div className="flex justify-center">
             <div className="dream-box flex flex-col md:w-3/4 w-full m-1">
                 <div className="dream">{dream.dream}</div>
-                <div className="interpretation">{dream.interpretation}</div>
                 <div className="dream-date">{formatDate(dream.dreamDate)}</div>
-                <div className="likes">Likes: {dream.likes}</div>
+                <div className="likes">Likes: {likes}</div>
                 <div className="like-container flex justify-end">
-                {liked ? (
+                {likedDream ? (
                     <div className="border border-1 rounded-md w-fit p-1 text-right cursor-pointer dreamnet-liked-button" onClick={() => removeLike(dream._id, dream.userID)}>
                         Liked <FontAwesomeIcon icon={faThumbsUp} />
                     </div>
