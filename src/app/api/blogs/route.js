@@ -12,7 +12,7 @@ export async function GET(request) {
             return b.blogID - a.blogID;
         });
 
-        return NextResponse.json({blogs});
+        return NextResponse.json({blogsSorted});
     }
     catch (error) {
         console.log('error: ', error);

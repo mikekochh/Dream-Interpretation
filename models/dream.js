@@ -26,6 +26,16 @@ const dreamSchema = new Schema({
         type: Boolean,
         default: false,
         required: [true, "Is dream starred?!"]    
+    },
+    publicDream: {
+        type: Boolean,
+        default: false,
+        required: [true, "Is dream public?!"]
+    },
+    likes: {
+        type: Number,
+        default: 0,
+        required: [true, "How many likes?!"]
     }
 });
 

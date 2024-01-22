@@ -167,7 +167,8 @@ export default function JournalForm() {
         try {
             // if there is a user, save the dream to their account, interpret the dream, and save the interpretation to their account.
             if (userID) {
-                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected });
+                const publicDream = document.getElementById('publicDream').checked;
+                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, publicDream });
                 const dreamID = resJournal.data._id;
                 setNewDreamID(dreamID);
                 if (oracleSelected) {
@@ -229,8 +230,6 @@ export default function JournalForm() {
                     return;
                 }
 
-                // await delay(10000);
-
                 setInterpretationProgressArray(prevArray => {
                     const updatedArray = [...prevArray];
                     updatedArray[i] = 100;
@@ -251,8 +250,6 @@ export default function JournalForm() {
         setInterpretingDream(false);
         setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
     }
-
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const journalDreamNoAccount = () => {
         if (window.gtag) {
@@ -290,6 +287,9 @@ export default function JournalForm() {
 
     return (
         <div className="text-white main-content relative">
+            <div className="leaderboard">
+                leaderboard
+            </div>
             {savingDream ? (
                 <div className="flex justify-center">
                 {/* usually have these classNames above: justify-center items-center middle-content */}
@@ -372,6 +372,9 @@ export default function JournalForm() {
                             </div>
                         </div>
                         <div>
+                            <MakeDreamPublicPopup />
+                        </div>
+                        <div>
                             {error && (
                                 <div className="bg-red-500 w-max p-1 text-black font-bold rounded-xl whitespace-nowrap">{error}</div>
                             )}  
@@ -417,10 +420,9 @@ const HowItWorksPopup = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center items-center flex flex-col text-3xl pb-5 p-3 text-center">
-            Enter Dream Description Below
+        <div className="justify-center items-center text-3xl pb-5 p-3 text-center">
+            Enter Dream Description Below <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
-                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
                 <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none">
                         <b>Describing your dream</b><br/>
@@ -439,20 +441,44 @@ const OracleSelectionPopup = () => {
 
     return (
         <div className="justify-center text-3xl pt-5 p-3 text-center">
-            Select Oracles to Interpret Your Dreams
+            Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
-                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
                 <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none">
                         <b>Choosing Dream Oracles</b><br/>
                         Here, you can select as many oracles as you would like to interpret your dreams.
-                        The more Oracles you select, the longer it will take to interpret your dream.
                         Click on the info icon next to each oracle to learn about their interpretation style.
                     </p>
                 </div>
             </div>
         </div>
     )
+}
+
+const MakeDreamPublicPopup = () => {
+    
+        const [open, setOpen] = useState(false);
+    
+        return (
+            <div className="flex flex-col items-center justify-center text-md pb-5 p-3 text-center">
+                <div className="z-10">
+                    Public Dream (Free Credit)
+                    <input type="checkbox" id="publicDream" className="m-1" />
+                    <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer ml-1" onClick={() => setOpen(o => !o)}/>
+                </div>
+                <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
+                    <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
+                        <p className="text-md select-none">
+                            <b>Public Dreams</b><br/>
+                            Receive a free dream credit for making your dream public!
+                            This will allow other users to view and interpret your dream 
+                            and will qualify you for the dream of the week contest. User interpretations
+                            will be displayed on the dream details page.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        )
 }
 
 const OracleSection = ({ oracle, handleSelectionChange }) => {

@@ -421,7 +421,7 @@ nav {
 
 .popup-menu {
   position: absolute;
-  bottom: calc(100% + .25rem);
+  top: calc(100% + .25rem);
   background-color: #222242;
   right: 0;
   padding: 0.5rem;
@@ -430,13 +430,13 @@ nav {
   box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-10px);
+  transform: translateY(0px);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
 }
 
 .popup-menu-active {
   position: absolute;
-  bottom: calc(100% + .25rem);
+  top: calc(100% + .25rem);
   background-color: #222242;
   right: 0;
   text-align: left;
@@ -444,7 +444,7 @@ nav {
   box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateY(-10px);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
   z-index: 20;
   padding: 0.5rem;
@@ -461,7 +461,7 @@ nav {
   box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-10px);
+  transform: translateY(60px);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
 }
 
@@ -475,7 +475,38 @@ nav {
   box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateY(75px);
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+  z-index: 20;
+  padding: 0.5rem;
+}
+
+.popup-menu-public-dream {
+  position: absolute;
+  top: calc(100% + .25rem);
+  background-color: #222242;
+  right: 0;
+  padding: 0.5rem;
+  text-align: left;
+  border-radius: .25rem;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+}
+
+.popup-menu-public-dream-active {
+  position: absolute;
+  top: calc(100% + .25rem);
+  background-color: #222242;
+  right: 0;
+  text-align: left;
+  border-radius: .25rem;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0px);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
   z-index: 20;
   padding: 0.5rem;
@@ -769,4 +800,49 @@ nav {
   padding: 0.25rem;
   margin-left: 1rem;
   margin-right: 1rem;
+}
+
+.dream-box {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  background-color: #33334D;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.dreamnet-like-button {
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+}
+
+.dreamnet-like-button:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.dreamnet-liked-button {
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.dreamnet-liked-button:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
 }

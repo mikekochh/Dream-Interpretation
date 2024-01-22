@@ -6,7 +6,7 @@ import Dream from "../../../../../models/dream";
 export async function POST(req) {
     try {
         // create user
-        const { dream, userID, interpretDream } = await req.json();
+        const { dream, userID, interpretDream, publicDream } = await req.json();
         const dreamDate = new Date();
 
         await connectMongoDB();
@@ -16,7 +16,8 @@ export async function POST(req) {
             userID, 
             interpretationID: 0, 
             dreamDate,
-            interpretation: interpretDream
+            interpretation: interpretDream,
+            publicDream
         });
 
         return NextResponse.json(newDream);

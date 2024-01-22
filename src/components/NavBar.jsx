@@ -73,7 +73,7 @@ const NavBar = () => {
                 <div>
                     <nav className="flex justify-between items-center w-full p-4 border-b bg-white">
                     {/* Section for logo and ability to change based off of screen size */}
-                    <Link href="https://www.michaelgkoch.com">
+                    <Link href="https://www.dreamoracles.co">
                         <div className="flex flex-row items-center">
                             <Image src="/dream_icon.png" className="rounded-lg" width={32} height={32} alt="logo" />
                             <p className="text-black font-semibold text-lg ml-1 w-fit">Dream Oracles</p>
@@ -102,14 +102,17 @@ const NavBar = () => {
                             <li className={`cursor-pointer mr-4 ${pathname === '/interpret' ? 'font-bold' : ''}`}>
                                 <Link href="/interpret">Interpret</Link>
                             </li>
+                            <li className={`cursor-pointer mr-4 ${pathname === '/dreamnet' ? 'font-bold' : ''}`}>
+                                <Link href="/dreamnet">Dreamnet</Link>
+                            </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`}>
                                 <Link href="/dreams">Journal</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4 ${pathname === '/blog' || pathname === '/blogPage' ? 'font-bold' : ''}`}>
-                                <Link href="/blog">Blog</Link>
-                            </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
                                 <Link href="/pricing">Shop</Link>
+                            </li>
+                            <li className={`cursor-pointer mr-4 ${pathname === '/blog' || pathname === '/blogPage' ? 'font-bold' : ''}`}>
+                                <Link href="/blog">Blog</Link>
                             </li>
                             <li className={`cursor-pointer ${pathname === '/settings' || pathname === '/cancelSubscription' ? 'font-bold' : ''}`}>
                                 <Link href="/settings">Settings</Link>
@@ -186,14 +189,17 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                 <li className={`cursor-pointer text-3xl p-4 ${pathname === '/interpret' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/interpret">Interpret</Link>
                 </li>
+                <li className={`cursor-pointer text-3xl p-4 ${pathname === '/dreamnet' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                    <Link href="/dreamnet">Dreamnet</Link>
+                </li>
                 <li className={`cursor-pointer text-3xl p-4 ${pathname === '/dreams' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/dreams">Journal</Link>
                 </li>
-                <li className={`cursor-pointer text-3xl p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                    <Link href="/blog">Blog</Link>
-                </li>
                 <li className={`cursor-pointer text-3xl p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/pricing">Shop</Link>
+                </li>
+                <li className={`cursor-pointer text-3xl p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                    <Link href="/blog">Blog</Link>
                 </li>
                 <li className={`cursor-pointer text-3xl p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/settings">Settings</Link>

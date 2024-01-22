@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../../lib/mongodb';
-import Interpretation from '../../../../../../models/interpretation';
+import Like from '../../../../../../models/likes';
 
 export async function GET(request) {
     try {
         const pathname = request.nextUrl.pathname;
-        const dreamID = pathname.split('/').pop();
+        const userID = pathname.split('/').pop();
         await connectMongoDB();
 
-        const dreamDetails = await Interpretation.find({ dreamID: dreamID });
+        const likes = await Like.find({ giverID: userID });
 
-        return NextResponse.json({dreamDetails});
+        return NextResponse.json({likes});
     }
     catch (error) {
         console.log('error: ', error);

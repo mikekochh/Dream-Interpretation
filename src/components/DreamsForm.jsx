@@ -159,11 +159,8 @@ export default function DreamsForm() {
     return (
         <div className="text-white main-content relative">
             <div className="text-center text-5xl font-bold">
-                Dream Journal
-            </div>
-            <div className="justify-center text-3xl font-bold pb-5 relative">
                 <InfoTag />
-            </div>  
+            </div> 
             {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
             <div className="flex justify-between">
                 <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
@@ -272,25 +269,23 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
     )
 }
 
-
 const InfoTag = () => {
 
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center text-4xl pt-1 text-center">
+        <div className="justify-center text-3xl pt-5 p-3 text-center">
+            Dream Journal <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
-                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
-                <div className={` ${open ? 'popup-menu-bottom-active' : 'popup-menu-bottom'}`}>
-                    <div className="text-xl select-none text-center">
-                        <b className="font-bold text-2xl">Dream Journal</b><br/>
-                        <p className="text-left">
-                            Each of your dreams are stored here. Click on a dream to see the full dream description, interpretations, and any notes you may have added.<br/><br/>
-                            You can filter dreams by week, starred, or all dreams. You can star dreams by clicking on the half star icon. You can delete dreams by clicking on the trash icon.
-                        </p>
-                    </div>
+                <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
+                    <p className="text-xl select-none">
+                        <b>Dream Journal</b><br/>
+                        Each of your dreams are stored here. Click on a dream card to see the full dream, interpretations, and any notes you may have added.<br/><br/>
+                        You can filter dreams by week, starred, or all dreams. You can star dreams by clicking on the half star icon. You can delete dreams by clicking on the trash icon.
+                    </p>
                 </div>
             </div>
         </div>
     )
+
 }
