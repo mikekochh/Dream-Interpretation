@@ -252,8 +252,6 @@ export default function JournalForm() {
         setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
     }
 
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
     const journalDreamNoAccount = () => {
         if (window.gtag) {
             window.gtag('event', 'interpret_dream_no_account', {
@@ -273,10 +271,6 @@ export default function JournalForm() {
     const goToDreamDetails = () => {
         window.location.href = `/dreamDetails?dreamID=${newDreamID}`;
     }
-
-    const handleCheckboxChange = (event) => {
-        setShort(event.target.checked);
-    };
 
     const insertLineBreaks = (text) => {
         const lines = text.split('\n');
@@ -344,23 +338,19 @@ export default function JournalForm() {
             ) : (
                 <div>
                     {!subscribed && (
-                        <div className="absolute right-0 top-0 p-2 main-content">
-                            <p className="text-right">Dream Credits: {user?.credits}</p>
+                        <div className="right-0">
+                            <p className="text-right golden-ratio-2"><span className="font-bold">{user?.credits}</span> Dream Credits</p>
                             {!user?.name && (
                                 <a href='/createAccount' className="underline font-bold hidden md:block">Create an account for 5 dream credits</a>
                             )}
                         </div>
                     )}
-                    <button className="dream-button" onClick={journalDream}>
-                        {buttonText}
-                    </button>
                     <div>
                         {user?.name ? (
-                            <p className="text-3xl text-center">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
+                            <p className="text-center golden-ratio-3">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
                         ) : (
                             <div>
-                                <p className="text-3xl text-center">Welcome to Dream Oracles</p>
-                                <p className="text-2xl text-center">Diverse and powerful dream interpretation</p>
+                                <p className="text-center golden-ratio-3">Welcome to Dream Oracles</p>
                             </div>
 
                         )}
@@ -368,7 +358,7 @@ export default function JournalForm() {
                         <HowItWorksPopup />
                         <div className="flex flex-col">
                             <div className="flex justify-center">
-                                <textarea type="text" rows={5} placeholder='Dream description here' className="DreamBox border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" onChange={(event) => setDream(event.target.value)}  />
+                                <textarea type="text" rows={5} placeholder='Dream description here' className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full" onChange={(event) => setDream(event.target.value)}  />
                             </div>
                         </div>
                         <div>
@@ -382,15 +372,17 @@ export default function JournalForm() {
                                         {oracles.map((oracle) => {
 
                                             return (
-                                                <div key={oracle._id} className="flex flex-col justify-center items-center oracle-wrapper m-4">
+                                                <div key={oracle._id} className="flex flex-col justify-center items-center oracle-wrapper mx-2">
                                                     {oracle.bannerMessage && (<div className="ribbon-2 font-bold">{oracle.bannerMessage}</div>)}
                                                     <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                                 </div>
                                             )})}
                                     </div>
-                                    <button className="dream-button absolute right-0 bottom-0" onClick={journalDream}>
-                                        {buttonText}
-                                    </button><br />
+                                    <div className="flex justify-end">
+                                        <button className="dream-button" onClick={journalDream}>
+                                            {buttonText}
+                                        </button><br />
+                                    </div>
                                 </div>
                                 {user?.credits === 0 && !user?.name ? (
                                     <div className="absolute inset-0 flex flex-col md:justify-center items-center">
@@ -417,10 +409,9 @@ const HowItWorksPopup = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center items-center flex flex-col text-3xl pb-5 p-3 text-center">
-            Enter Dream Description Below
+        <div className="justify-center golden-ratio-2 text-center leading-none">
+            Enter Dream Description Below <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer" onClick={() => setOpen(o => !o)}/>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
-                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
                 <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none">
                         <b>Describing your dream</b><br/>
@@ -438,10 +429,9 @@ const OracleSelectionPopup = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center text-3xl pt-5 p-3 text-center">
-            Select Oracles to Interpret Your Dreams
+        <div className="justify-center text-3xl pt-5 leading-none text-center">
+            Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer" onClick={() => setOpen(o => !o)}/>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
-                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
                 <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none">
                         <b>Choosing Dream Oracles</b><br/>

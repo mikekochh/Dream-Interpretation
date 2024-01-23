@@ -421,7 +421,7 @@ nav {
 
 .popup-menu {
   position: absolute;
-  bottom: calc(100% + .25rem);
+  top: calc(100% + .25rem);
   background-color: #222242;
   right: 0;
   padding: 0.5rem;
@@ -430,13 +430,13 @@ nav {
   box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-10px);
+  transform: translateY(0px);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
 }
 
 .popup-menu-active {
   position: absolute;
-  bottom: calc(100% + .25rem);
+  top: calc(100% + .25rem);
   background-color: #222242;
   right: 0;
   text-align: left;
@@ -444,7 +444,7 @@ nav {
   box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.1);
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateY(-10px);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
   z-index: 20;
   padding: 0.5rem;
@@ -769,4 +769,25 @@ nav {
   padding: 0.25rem;
   margin-left: 1rem;
   margin-right: 1rem;
+}
+
+.golden-ratio-1 {
+  font-size: 14px;
+}
+
+.golden-ratio-2 {
+  font-size: 22.65px;
+}
+
+.golden-ratio-3 {
+  font-size: 36.65px;
+  line-height: 1.2;
+}
+
+.golden-ratio-4 {
+  font-size: 59.3px;
+}
+
+.golden-ratio-5 {
+  font-size: 95.95px;
 }
