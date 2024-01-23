@@ -149,7 +149,7 @@ export default function DreamsForm() {
 
     return (
         <div className="text-white main-content relative golden-ratio-2">
-            <InfoTag /> 
+            <InfoTag name={session?.user.name} /> 
             {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
             <div className="flex justify-between">
                 <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
@@ -258,13 +258,13 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
     )
 }
 
-const InfoTag = () => {
+const InfoTag = ({ name }) => {
 
     const [open, setOpen] = useState(false);
 
     return (
         <div className="golden-ratio-3 leading-none pb-2 text-center">
-            <p className="text-center flex items-center justify-center font-bold">Dream Journal <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer ml-2 golden-ratio-2" onClick={() => setOpen(o => !o)}/></p>
+            <p className="text-center flex items-center justify-center font-bold">{name}&apos;s Dream Journal <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer ml-2 golden-ratio-2" onClick={() => setOpen(o => !o)}/></p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none golden-ratio-2">

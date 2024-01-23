@@ -57,7 +57,7 @@ const SettingsForm = () => {
 
     return (
         <div className="main-content text-white">
-            <h1 className="text-3xl text-white text-center">Settings</h1>
+            <h1 className="text-3xl text-white text-center golden-ratio-4">Settings</h1>
             <p className="text-xl font-bold">Email: <span className="text-md font-normal">{user.email}</span></p>
             <p className="text-xl font-bold">Name: <span className="text-md font-normal">{user.name}</span></p>
             {/* <div className="flex items-center">
