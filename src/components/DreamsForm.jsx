@@ -6,7 +6,7 @@ import 'reactjs-popup/dist/index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { faTrash, faStar, faStarHalfStroke, faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 export default function DreamsForm() { 
 
@@ -230,7 +230,7 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
             <p className="absolute left-0 top-0 p-1">
                 <span className="font-bold"></span>{formatDreamDate(dream.dreamDate)}
             </p>
-            <p className="absolute bottom-0 left-0 font-bold underline p-1">
+            <p className="absolute bottom-0 left-0 font-bold p-2 text-gold">
                 {dream.interpretation ? 'Interpretations' : ''}
             </p>
             <FontAwesomeIcon 
@@ -264,7 +264,7 @@ const InfoTag = () => {
 
     return (
         <div className="golden-ratio-3 leading-none pb-2 text-center">
-            <p className="text-center flex items-center justify-center font-bold">Dream Journal <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer ml-2" onClick={() => setOpen(o => !o)}/></p>
+            <p className="text-center flex items-center justify-center font-bold">Dream Journal <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer ml-2 golden-ratio-2" onClick={() => setOpen(o => !o)}/></p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none golden-ratio-2">

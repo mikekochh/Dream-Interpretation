@@ -107,7 +107,7 @@ export default function PricingForm() {
 
     return (
     <div className="text-white text-center p-4 main-content text-xl">
-        <h1 className="text-4xl">Shop</h1>
+        <h1 className="golden-ratio-4">Shop</h1>
         {sale && (
             <div className="sale-top-banner rounded-lg text-black mt-2 p-1 mx-4">
                 {sale.bannerMessage}
@@ -115,9 +115,9 @@ export default function PricingForm() {
         )}
 
         {/* Desktop view */}
-        <div className="flex-row lg:flex hidden mb-5">
+        <div className="flex-row lg:flex hidden mb-5 golden-ratio-2">
             <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
-                <h2 className="text-3xl pb-5">Telegram Chat</h2>
+                <h2 className="golden-ratio-3 pb-5">Telegram Chat</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Meet other dreamers</li>
@@ -141,7 +141,7 @@ export default function PricingForm() {
                 </div>
             </div>
             <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
-                <h2 className="text-3xl pb-5">Pay As You Go</h2>
+                <h2 className="golden-ratio-3 pb-5">Pay As You Go</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
@@ -171,7 +171,7 @@ export default function PricingForm() {
                 </div>
             </div>
             <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
-                <h2 className="text-3xl pb-5">Annual Subscription</h2>
+                <h2 className="golden-ratio-3 pb-5">Annual Subscription</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
@@ -204,9 +204,9 @@ export default function PricingForm() {
         </div>
 
         {/* Mobile view */}
-        <div className="flex-col lg:hidden flex">
+        <div className="flex-col lg:hidden flex golden-ratio-2">
             <div className="border border-white rounded-xl pricing-card-mobile relative"> 
-                <h2 className="text-2xl pb-5">Annual Subscription</h2>
+                <h2 className="pb-5 golden-ratio-3">Subscription</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
@@ -232,7 +232,7 @@ export default function PricingForm() {
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card-mobile relative"> 
-                <h2 className="text-2xl pb-5">Pay As You Go</h2>
+                <h2 className="text-2xl pb-5 golden-ratio-3">Pay As You Go</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Ability to journal dreams</li>
@@ -260,7 +260,7 @@ export default function PricingForm() {
                 </div>
             </div>
             <div className="border border-white rounded-xl pricing-card-mobile"> 
-                <h2 className="text-2xl pb-5">Telegram Chat</h2>
+                <h2 className="golden-ratio-3 pb-5">Telegram Chat</h2>
                 <div className="text-left">
                     <ul>
                         <li>• Meet other dreamers</li>

@@ -376,7 +376,7 @@ export default function JournalForm() {
 
                                             return (
                                                 <div key={oracle._id} className="flex flex-col justify-center items-center oracle-wrapper mx-2">
-                                                    {oracle.bannerMessage && (<div className="ribbon-2 font-bold">{oracle.bannerMessage}</div>)}
+                                                    {oracle.bannerMessage && (<div className="ribbon-2 golden-ratio-1 font-bold">{oracle.bannerMessage}</div>)}
                                                     <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                                 </div>
                                             )})}
