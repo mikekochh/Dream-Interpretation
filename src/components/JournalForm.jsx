@@ -339,7 +339,6 @@ export default function JournalForm() {
                 <div>
                     {!subscribed && (
                         <div className="right-0 flex flex-row justify-between">
-                            <p className="text-right right-0 golden-ratio-2"><span className="font-bold">{user?.credits}</span> Dream Credits</p>
                             {!user?.name && (
                                 <p className="golden-ratio-2">
                                     <a href='/createAccount' className="underline font-bold hidden md:block">Create an account for 5 dream credits</a>
@@ -370,7 +369,8 @@ export default function JournalForm() {
                             )}  
                             <div id="interpretation-section" className="relative">
                                 <div className={`${user?.credits === 0 && !subscribed ? 'blur pointer-events-none' : ''}`}>
-                                    <OracleSelectionPopup />
+                                    <OracleSelectionPopup credits={user?.credits} />
+                                    
                                     <div className="justify-center items-center flex md:flex-row flex-col">
                                         {oracles.map((oracle) => {
 
@@ -427,16 +427,17 @@ const HowItWorksPopup = () => {
     )
 }
 
-const OracleSelectionPopup = () => {
+const OracleSelectionPopup = ({ credits }) => {
 
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center text-3xl pt-5 leading-none text-center">
+        <div className="justify-center golden-ratio-3 pt-5 leading-none text-center">
             Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer" onClick={() => setOpen(o => !o)}/>
+            <p className="text-center golden-ratio-2"><span className="font-bold">{credits}</span> Dream Credits</p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
-                    <p className="text-xl select-none">
+                    <p className="golden-ratio-2 select-none">
                         <b>Choosing Dream Oracles</b><br/>
                         Here, you can select as many oracles as you would like to interpret your dreams.
                         The more Oracles you select, the longer it will take to interpret your dream.
