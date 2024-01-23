@@ -10,8 +10,6 @@ import Head from 'next/head';
 
 export default function BlogForm({ blogDetails, Content }) { 
 
-    console.log("Content:", Content);
-
     const router = useRouter();
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
@@ -75,8 +73,8 @@ export default function BlogForm({ blogDetails, Content }) {
                 <title>{blogDetails?.blogTitle}</title>
                 <meta name="description" content={blogDetails?.description} />
             </Head>
-            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 md:hidden">Back</button>
-            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 hidden absolute top-15 left-0">Back</button>
+            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 md:hidden">Back Mobile</button>
+            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 hidden md:flex">Back</button>
             <div className="flex justify-center items-center">
                 <div className="text-white text-lg text-left w-11/12 md:w-3/4 items-center justify-center">
                     {/* Mobile */}
@@ -88,7 +86,7 @@ export default function BlogForm({ blogDetails, Content }) {
                             objectFit="contain"
                             src={blogDetails?.blogPicture}
                             alt="blog picture" 
-                            className="rounded-xl"
+                            className="rounded-xl border border-white"
                         />
                     </div>
                     {/* Desktop */}
@@ -100,7 +98,7 @@ export default function BlogForm({ blogDetails, Content }) {
                             objectFit="contain"
                             src={blogDetails?.blogPicture}
                             alt="blog picture" 
-                            className="rounded-xl"
+                            className="rounded-xl border border-white"
                         />
                     </div>
                     <h1 className="text-5xl text-center pb-4">{blogDetails?.blogTitle}</h1>
