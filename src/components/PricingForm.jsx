@@ -101,189 +101,198 @@ export default function PricingForm() {
         }
     }
 
-    function verifyEmail () {
-        window.location.href = `/emailVerification?email=${session.user.email}`;
+    const createAccount = () => {
+        window.location.href = '/createAccount';
     }
 
     return (
-    <div className="text-white text-center p-4 main-content text-xl">
-        <h1 className="golden-ratio-4">Shop</h1>
-        {sale && (
-            <div className="sale-top-banner rounded-lg text-black mt-2 p-1 mx-4">
-                {sale.bannerMessage}
-            </div>
-        )}
-
-        {/* Desktop view */}
-        <div className="flex-row lg:flex hidden mb-5 golden-ratio-2">
-            <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
-                <h2 className="golden-ratio-3 pb-5">Telegram Chat</h2>
-                <div className="text-left">
-                    <ul>
-                        <li>• Meet other dreamers</li>
-                        <li>• Share dreams and interpretations</li>
-                        <li>• Make life long friends revolving around dreams</li>
-                        <li>• Partake in discussions about dream interpretation theories</li>
-                        {sale ? (
-                            <div>
-                                <li className="line-through">• $6 for admission</li>
-                                <li className="sale-text">{sale.telegramText}</li>
-                            </div>
-                        ) : (<li>• $6 for admission</li>)}
-                    </ul>
+        <div>
+            {!session && (
+                <div className="overlay-message w-full md:w-fit golden-ratio-3">
+                    <p>Create an account to join community</p>
+                    <button className="create-account-button" onClick={createAccount}>Create Account</button>
                 </div>
-                <div>
-                    <div className="bottom-0 absolute left-1/2 transform -translate-x-1/2 p-2">
-                        {user?.communityAccess ? (<p className="text-green-500">You are already a member, thank you!</p>) : (
-                            <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
-                        )}
+            )}
+            <div className={`text-white text-center p-4 main-content text-xl ${!session && "blur-effect"}`}>
+                <h1 className="golden-ratio-4">Shop</h1>
+                {sale && (
+                    <div className="sale-top-banner rounded-lg text-black mt-2 p-1 mx-4">
+                        {sale.bannerMessage}
+                    </div>
+                )}
+
+                {/* Desktop view */}
+                <div className="flex-row lg:flex hidden mb-5 golden-ratio-2">
+                    <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
+                        <h2 className="golden-ratio-3 pb-5">Telegram Chat</h2>
+                        <div className="text-left">
+                            <ul>
+                                <li>• Meet other dreamers</li>
+                                <li>• Share dreams and interpretations</li>
+                                <li>• Make life long friends revolving around dreams</li>
+                                <li>• Partake in discussions about dream interpretation theories</li>
+                                {sale ? (
+                                    <div>
+                                        <li className="line-through">• $6 for admission</li>
+                                        <li className="sale-text">{sale.telegramText}</li>
+                                    </div>
+                                ) : (<li>• $6 for admission</li>)}
+                            </ul>
+                        </div>
+                        <div>
+                            <div className="bottom-0 absolute left-1/2 transform -translate-x-1/2 p-2">
+                                {user?.communityAccess ? (<p className="text-green-500">You are already a member, thank you!</p>) : (
+                                    <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
+                        <h2 className="golden-ratio-3 pb-5">Pay As You Go</h2>
+                        <div className="text-left">
+                            <ul>
+                                <li>• Ability to journal dreams</li>
+                                <li>• Expert interpretations from our Dream Oracles</li>
+                                <li>• Ability to take notes on dreams</li>
+                                <li>• Each <b>interpretation</b> costs 1 credit</li>
+                                {sale ? (
+                                    <div>
+                                        <li className="line-through">• $1.99 per credit, no less than 5</li>
+                                        <li className="sale-text">{sale.creditText}</li>
+                                    </div>
+                                ) : (<li>• $1.99 per credit, no less than 5</li>)}
+                            </ul>
+                        </div>
+                        <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
+                            {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                                <div>
+                                    <input type="number" className="rounded-xl p-2 text-black m-2 credit-quantity" placeholder="Enter # of credits" />
+                                    <button className='rounded-xl p-2 text-black m-2 subscribe-button' onClick={buyCredits}>
+                                        Buy credits
+                                    </button>
+                                </div>
+                            )}
+                            {error && (
+                                <p className="text-red-500">{error}</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
+                        <h2 className="golden-ratio-3 pb-5">Annual Subscription</h2>
+                        <div className="text-left">
+                            <ul>
+                                <li>• Ability to journal dreams</li>
+                                <li>• Expert interpretations from our Dream Oracles</li>
+                                <li>• Ability to take notes on dreams</li>
+                                <li>• Unlimited interpretations</li>
+                                <li>• Access to Telegram Chat for life</li>
+                                <li>• All future services included</li>
+                                {sale ? (
+                                    <div>
+                                        <li className="line-through">• $37/year</li>
+                                        <li className="sale-text">{sale.subscriptionText}</li>
+                                    </div>
+                                ) : (<li>• $37/year</li>)}
+                            </ul>
+                        </div>
+                        <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
+                            {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                                <div>
+                                    <button 
+                                        className='rounded-xl p-2 text-black m-2 subscribe-button'
+                                        onClick={subscribe}
+                                    >
+                                        Subscribe
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
-                <h2 className="golden-ratio-3 pb-5">Pay As You Go</h2>
-                <div className="text-left">
-                    <ul>
-                        <li>• Ability to journal dreams</li>
-                        <li>• Expert interpretations from our Dream Oracles</li>
-                        <li>• Ability to take notes on dreams</li>
-                        <li>• Each <b>interpretation</b> costs 1 credit</li>
-                        {sale ? (
-                            <div>
-                                <li className="line-through">• $1.99 per credit, no less than 5</li>
-                                <li className="sale-text">{sale.creditText}</li>
-                            </div>
-                        ) : (<li>• $1.99 per credit, no less than 5</li>)}
-                    </ul>
-                </div>
-                <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
-                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
-                        <div>
-                            <input type="number" className="rounded-xl p-2 text-black m-2 credit-quantity" placeholder="Enter # of credits" />
-                            <button className='rounded-xl p-2 text-black m-2 subscribe-button' onClick={buyCredits}>
-                                Buy credits
-                            </button>
+
+                {/* Mobile view */}
+                <div className="flex-col lg:hidden flex golden-ratio-2">
+                    <div className="border border-white rounded-xl pricing-card-mobile relative"> 
+                        <h2 className="pb-5 golden-ratio-3">Subscription</h2>
+                        <div className="text-left">
+                            <ul>
+                                <li>• Ability to journal dreams</li>
+                                <li>• Expert interpretations from our Dream Oracles</li>
+                                <li>• Ability to take notes on dreams</li>
+                                <li>• Unlimited interpretations</li>
+                                <li>• Access to Telegram Chat for life</li>
+                                <li>• All future services included</li>
+                                {sale ? (
+                                    <div>
+                                        <li className="line-through">• $37/year</li>
+                                        <li className="sale-text">{sale.subscriptionText}</li>
+                                    </div>
+                                ) : (<li>• $37/year</li>)}
+                            </ul>
                         </div>
-                    )}
-                    {error && (
-                        <p className="text-red-500">{error}</p>
-                    )}
-                </div>
-            </div>
-            <div className={`${sale ? 'pricing-card-sale' : 'pricing-card'}`}> 
-                <h2 className="golden-ratio-3 pb-5">Annual Subscription</h2>
-                <div className="text-left">
-                    <ul>
-                        <li>• Ability to journal dreams</li>
-                        <li>• Expert interpretations from our Dream Oracles</li>
-                        <li>• Ability to take notes on dreams</li>
-                        <li>• Unlimited interpretations</li>
-                        <li>• Access to Telegram Chat for life</li>
-                        <li>• All future services included</li>
-                        {sale ? (
-                            <div>
-                                <li className="line-through">• $37/year</li>
-                                <li className="sale-text">{sale.subscriptionText}</li>
-                            </div>
-                        ) : (<li>• $37/year</li>)}
-                    </ul>
-                </div>
-                <div className="bottom-0 left-1/2 transform -translate-x-1/2 absolute whitespace-nowrap">
-                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
                         <div>
-                            <button 
-                                className='rounded-xl p-2 text-black m-2 subscribe-button'
-                                onClick={subscribe}
-                            >
-                                Subscribe
-                            </button>
+                            {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                                <div>
+                                    <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={subscribe}>Subscribe</button>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
+                    <div className="border border-white rounded-xl pricing-card-mobile relative"> 
+                        <h2 className="text-2xl pb-5 golden-ratio-3">Pay As You Go</h2>
+                        <div className="text-left">
+                            <ul>
+                                <li>• Ability to journal dreams</li>
+                                <li>• Expert interpretations from our Dream Oracles</li>
+                                <li>• Ability to take notes on dreams</li>
+                                <li>• Each <b>interpretation</b> costs 1 credit</li>
+                                {sale ? (
+                                    <div>
+                                        <li className="line-through">• $1.99 per credit, no less than 5</li>
+                                        <li className="sale-text">{sale.creditText}</li>
+                                    </div>
+                                ) : (<li>• $1.99 per credit, no less than 5</li>)}
+                            </ul>
+                        </div>
+                        <div>
+                            {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
+                                <div>
+                                    <input type="number" className="rounded-xl p-2 text-black m-2 credit-quantity-mobile" placeholder="Enter # of credits" />
+                                    <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={buyCredits}>Buy credits</button>
+                                </div>
+                            )}
+                            {error && (
+                                <p className="text-red-500">You must buy at least 5 credits!</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="border border-white rounded-xl pricing-card-mobile"> 
+                        <h2 className="golden-ratio-3 pb-5">Telegram Chat</h2>
+                        <div className="text-left">
+                            <ul>
+                                <li>• Meet other dreamers</li>
+                                <li>• Share dreams and interpretations</li>
+                                <li>• Make life long friends revolving around dreams</li>
+                                <li>• Partake in discussions about dream interpretation theories</li>
+                                {sale ? (
+                                    <div>
+                                        <li className="line-through">• $6 for admission</li>
+                                        <li className="sale-text">{sale.telegramText}</li>
+                                    </div>
+                                ) : (<li>• $6 for admission</li>)}
+                            </ul>
+                        </div>
+                        <div>
+                            <div>
+                                {user?.communityAccess ? (<p className="text-green-500">You are already a member, thank you!</p>) : (
+                                    <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {/* Mobile view */}
-        <div className="flex-col lg:hidden flex golden-ratio-2">
-            <div className="border border-white rounded-xl pricing-card-mobile relative"> 
-                <h2 className="pb-5 golden-ratio-3">Subscription</h2>
-                <div className="text-left">
-                    <ul>
-                        <li>• Ability to journal dreams</li>
-                        <li>• Expert interpretations from our Dream Oracles</li>
-                        <li>• Ability to take notes on dreams</li>
-                        <li>• Unlimited interpretations</li>
-                        <li>• Access to Telegram Chat for life</li>
-                        <li>• All future services included</li>
-                        {sale ? (
-                            <div>
-                                <li className="line-through">• $37/year</li>
-                                <li className="sale-text">{sale.subscriptionText}</li>
-                            </div>
-                        ) : (<li>• $37/year</li>)}
-                    </ul>
-                </div>
-                <div>
-                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
-                        <div>
-                            <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={subscribe}>Subscribe</button>
-                        </div>
-                    )}
-                </div>
-            </div>
-            <div className="border border-white rounded-xl pricing-card-mobile relative"> 
-                <h2 className="text-2xl pb-5 golden-ratio-3">Pay As You Go</h2>
-                <div className="text-left">
-                    <ul>
-                        <li>• Ability to journal dreams</li>
-                        <li>• Expert interpretations from our Dream Oracles</li>
-                        <li>• Ability to take notes on dreams</li>
-                        <li>• Each <b>interpretation</b> costs 1 credit</li>
-                        {sale ? (
-                            <div>
-                                <li className="line-through">• $1.99 per credit, no less than 5</li>
-                                <li className="sale-text">{sale.creditText}</li>
-                            </div>
-                        ) : (<li>• $1.99 per credit, no less than 5</li>)}
-                    </ul>
-                </div>
-                <div>
-                    {subscribed ? (<p className="text-green-500">You are subscribed, thank you!</p>) : (
-                        <div>
-                            <input type="number" className="rounded-xl p-2 text-black m-2 credit-quantity-mobile" placeholder="Enter # of credits" />
-                            <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={buyCredits}>Buy credits</button>
-                        </div>
-                    )}
-                    {error && (
-                        <p className="text-red-500">You must buy at least 5 credits!</p>
-                    )}
-                </div>
-            </div>
-            <div className="border border-white rounded-xl pricing-card-mobile"> 
-                <h2 className="golden-ratio-3 pb-5">Telegram Chat</h2>
-                <div className="text-left">
-                    <ul>
-                        <li>• Meet other dreamers</li>
-                        <li>• Share dreams and interpretations</li>
-                        <li>• Make life long friends revolving around dreams</li>
-                        <li>• Partake in discussions about dream interpretation theories</li>
-                        {sale ? (
-                            <div>
-                                <li className="line-through">• $6 for admission</li>
-                                <li className="sale-text">{sale.telegramText}</li>
-                            </div>
-                        ) : (<li>• $6 for admission</li>)}
-                    </ul>
-                </div>
-                <div>
-                    <div>
-                        {user?.communityAccess ? (<p className="text-green-500">You are already a member, thank you!</p>) : (
-                            <button className='rounded-xl p-2 text-black m-2 mb-0 subscribe-button' onClick={joinCommunity}>Join Community</button>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     )
 }

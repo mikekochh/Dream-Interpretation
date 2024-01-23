@@ -18,34 +18,6 @@ const NavBar = () => {
     const [sale, setSale] = useState(null);
 
     useEffect(() => {
-        if (session) {
-            setNoNavBarElements(false);
-            const liElements = document.querySelectorAll('ul.flex li');
-
-            liElements.forEach((li) => {
-                li.classList.remove('blur');
-                li.classList.remove('pointer-events-none');
-            });
-
-            const menuIcon = document.getElementById('menu');
-
-            menuIcon?.classList.remove('blur', 'pointer-events-none');
-        } else {
-            setNoNavBarElements(true);
-            const liElements = document.querySelectorAll('ul.flex li');
-
-            liElements.forEach((li) => {
-                const linkText = li.textContent.trim();
-                if (linkText !== 'Interpret' && linkText !== 'Blog') {
-                    li.classList.add('blur');
-                    li.classList.add('pointer-events-none');
-                }
-            });
-
-        }
-    }, [session]);
-
-    useEffect(() => {
         if (pathname === '/register' || pathname === '/login' || pathname === '/createAccount') {
             setNoNavBar(true);
             return;
@@ -112,17 +84,9 @@ const NavBar = () => {
                                 <Link href="/pricing">Shop</Link>
                             </li>
                             <li className={`cursor-pointer ${pathname === '/settings' || pathname === '/cancelSubscription' ? 'font-bold' : ''}`}>
-                                <Link href="/settings">Settings</Link>
+                                <Link href="/settings">Profile</Link>
                             </li>
                         </ul>
-                        {noNavBarElements && (
-                            <div className="flex flex-row relative justify-center items-center">
-                                <div className="font-bold underline flex flex-col text-right">
-                                    <a href="/createAccount">Create an account for full features</a>
-                                    <a href="/login">Log In</a>
-                                </div>
-                            </div>
-                        )}
                     </div>
                     <div className="md:hidden ml-2 relative">
                         {isOpen ? (
@@ -158,26 +122,10 @@ const NavBar = () => {
 
 const MenuItems = ({setIsOpen, pathname, createAccount}) => {
 
-    useEffect(() => {
-
-        if (createAccount) {
-            const liElementsMobile = document.querySelectorAll('ul.mobile-list li');
-
-            liElementsMobile.forEach((li) => {
-                const linkText = li.textContent.trim();
-                if (linkText !== 'Interpret' && linkText !== 'Blog') {
-                    li.classList.add('blur');
-                    li.classList.add('pointer-events-none');
-                }
-            });
-        }
-
-    }, []);
-
     return (
         <div className="h-full golden-ratio-3">
             {createAccount && (
-                <div className="font-bold text-right underline flex flex-col main-content absolute top-0 right-0 pr-2 h-fit golden-ratio-2">
+                <div className="font-bold text-right underline flex flex-col main-content absolute top-0 right-0 pr-2 h-fit">
                     <a href="/createAccount">Create an account for full features</a>
                     <a href="/login">Log In</a>
                 </div>
@@ -196,7 +144,7 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                     <Link href="/pricing">Shop</Link>
                 </li>
                 <li className={`cursor-pointer p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                    <Link href="/settings">Settings</Link>
+                    <Link href="/settings">Profile</Link>
                 </li>
             </ul>
         </div>

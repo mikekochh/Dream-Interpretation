@@ -147,57 +147,69 @@ export default function DreamsForm() {
         }
     }
 
+    const createAccount = () => {
+        window.location.href = '/createAccount';
+    }
+
     return (
-        <div className="text-white main-content relative golden-ratio-2">
-            <InfoTag name={session?.user.name} /> 
-            {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
-            <div className="flex justify-between">
-                <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
-                    Sort by: <span className="font-bold ml-1">{selectedSort}</span>
-                    <div ref={dropdownMenuRef} className="dropdown-menu">
-                        <p className="dropdown-item" onClick={() => updateSortType(1)}>Week</p>
-                        <p className="dropdown-item" onClick={() => updateSortType(2)}>Starred</p>
-                        <p className="dropdown-item" onClick={() => updateSortType(3)}>All</p>
-                    </div>
+        <div>
+            {!session && (
+                <div className="overlay-message w-full md:w-fit golden-ratio-3">
+                    <p>Create an account to start a dream journal</p>
+                    <button className="create-account-button" onClick={createAccount}>Create Account</button>
                 </div>
-                {lastDayOfWeek && sortType === 1 && (
-                    <div className="flex justify-center items-center text-center golden-ratio-2">
-                        <FontAwesomeIcon icon={faArrowLeft} className="p-2 wiggle cursor-pointer" onClick={goToPreviousWeek} />
-                        <span>{formatDreamDate(firstDayOfWeek)} - {formatDreamDate(lastDayOfWeek)}</span>
-                        <FontAwesomeIcon icon={faArrowRight} className="p-2 wiggle cursor-pointer mr-1" onClick={goToNextWeek} />
+            )}
+            <div className={`text-white main-content relative golden-ratio-2 ${!session && "blur-effect"}`}>
+                <InfoTag name={session?.user.name} /> 
+                {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
+                <div className="flex justify-between">
+                    <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
+                        Sort by: <span className="font-bold ml-1">{selectedSort}</span>
+                        <div ref={dropdownMenuRef} className="dropdown-menu">
+                            <p className="dropdown-item" onClick={() => updateSortType(1)}>Week</p>
+                            <p className="dropdown-item" onClick={() => updateSortType(2)}>Starred</p>
+                            <p className="dropdown-item" onClick={() => updateSortType(3)}>All</p>
+                        </div>
+                    </div>
+                    {lastDayOfWeek && sortType === 1 && (
+                        <div className="flex justify-center items-center text-center golden-ratio-2">
+                            <FontAwesomeIcon icon={faArrowLeft} className="p-2 wiggle cursor-pointer" onClick={goToPreviousWeek} />
+                            <span>{formatDreamDate(firstDayOfWeek)} - {formatDreamDate(lastDayOfWeek)}</span>
+                            <FontAwesomeIcon icon={faArrowRight} className="p-2 wiggle cursor-pointer mr-1" onClick={goToNextWeek} />
+                        </div>
+                    )}
+                </div>  
+                {loading && (
+                    <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
+                        <p className="text-center text-3xl pr-3">Loading Dreams</p>
+                        <div className="loader"></div>  
                     </div>
                 )}
-            </div>  
-            {loading && (
-                <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
-                    <p className="text-center text-3xl pr-3">Loading Dreams</p>
-                    <div className="loader"></div>  
-                </div>
-            )}
-            {noDreams && (
-                <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
-                    <p className="text-center text-3xl pr-3">You have no saved dreams. Get dreaming!</p>
-                </div>
-            )}
-            {session && (
-                <div>
-                    <div className="flex flex-wrap justify-center">
-                        {dreams.map((dream) => (
-                            <div key={dream._id} className="dream-card-mobile md:hidden">
-                                <DreamCard dream={dream} deleteDream={deleteDream} starDream={starDream} formatDreamDate={formatDreamDate} />
-                            </div>
-                        ))}
+                {noDreams && (
+                    <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
+                        <p className="text-center text-3xl pr-3">You have no saved dreams. Get dreaming!</p>
                     </div>
+                )}
+                {session && (
+                    <div>
+                        <div className="flex flex-wrap justify-center">
+                            {dreams.map((dream) => (
+                                <div key={dream._id} className="dream-card-mobile md:hidden">
+                                    <DreamCard dream={dream} deleteDream={deleteDream} starDream={starDream} formatDreamDate={formatDreamDate} />
+                                </div>
+                            ))}
+                        </div>
 
-                    <div className="flex-wrap justify-center hidden md:flex">
-                        {dreams.map((dream) => (
-                            <div key={dream._id} className="dream-card">
-                                <DreamCard dream={dream} deleteDream={deleteDream} starDream={starDream} formatDreamDate={formatDreamDate} />
-                            </div>
-                        ))}
+                        <div className="flex-wrap justify-center hidden md:flex">
+                            {dreams.map((dream) => (
+                                <div key={dream._id} className="dream-card">
+                                    <DreamCard dream={dream} deleteDream={deleteDream} starDream={starDream} formatDreamDate={formatDreamDate} />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     )
 }

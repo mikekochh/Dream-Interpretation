@@ -792,3 +792,32 @@ nav {
 .golden-ratio-5 {
   font-size: 95.95px;
 }
+
+.blur-effect {
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.overlay-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  z-index: 10;
+  border: 1px solid white;
+}
+
+.create-account-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

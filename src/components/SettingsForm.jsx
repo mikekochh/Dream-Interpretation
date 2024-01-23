@@ -54,55 +54,68 @@ const SettingsForm = () => {
     //     setMetaAnalysisOracleID(oracleID);
     //     setOracleUpdated(true);
     // }
+    
+    const createAccount = () => {
+        router.push("/createAccount");
+    }
 
     return (
-        <div className="main-content text-white">
-            <h1 className="text-3xl text-white text-center golden-ratio-4">Settings</h1>
-            <p className="text-xl font-bold">Email: <span className="text-md font-normal">{user.email}</span></p>
-            <p className="text-xl font-bold">Name: <span className="text-md font-normal">{user.name}</span></p>
-            {/* <div className="flex items-center">
-                <span className="text-xl font-bold mr-4">Meta Analysis Oracle: </span>
-                <div className="flex items-center space-x-4">
-                    <label className="flex items-center">
-                        Carl Jung:
-                        <input 
-                            type="radio" 
-                            name="option" 
-                            value={1} 
-                            checked={metaAnalysisOracleID === 1} 
-                            onChange={() => updateMetaAnalysisOracleID(1)}
-                            className="form-rad"
-                        />
-                    </label>
-                    <label className="flex items-center">
-                        Sigmund Freud:
-                        <input 
-                            type="radio" 
-                            name="option" 
-                            value={2} 
-                            checked={metaAnalysisOracleID === 2}
-                            onChange={() => updateMetaAnalysisOracleID(2)}
-                        />
-                    </label>
-                    <label className="flex items-center">
-                        Ruya:
-                        <input 
-                            type="radio" 
-                            name="option" 
-                            value={3} 
-                            checked={metaAnalysisOracleID === 3}
-                            onChange={() => updateMetaAnalysisOracleID(3)}
-                        />
-                    </label>
+        <div>
+            {!session && (
+                <div className="overlay-message w-full md:w-fit golden-ratio-3">
+                    <p>Create an account to update profile</p>
+                    <button className="create-account-button" onClick={createAccount}>Create Account</button>
                 </div>
-                {oracleUpdated && <p className="text-green-500">Oracle updated!</p>}
-            </div> */}
-            <div className="logout absolute bottom-0 right-0 p-4">
-                <button onClick={logout} className="back-button">Log Out</button>
-                {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>}
+            )}
+            <div className={`main-content text-white ${!session && "blur-effect"}`}>
+                <h1 className="text-3xl text-white text-center golden-ratio-4">Settings</h1>
+                <p className="text-xl font-bold">Email: <span className="text-md font-normal">{user.email}</span></p>
+                <p className="text-xl font-bold">Name: <span className="text-md font-normal">{user.name}</span></p>
+                {/* <div className="flex items-center">
+                    <span className="text-xl font-bold mr-4">Meta Analysis Oracle: </span>
+                    <div className="flex items-center space-x-4">
+                        <label className="flex items-center">
+                            Carl Jung:
+                            <input 
+                                type="radio" 
+                                name="option" 
+                                value={1} 
+                                checked={metaAnalysisOracleID === 1} 
+                                onChange={() => updateMetaAnalysisOracleID(1)}
+                                className="form-rad"
+                            />
+                        </label>
+                        <label className="flex items-center">
+                            Sigmund Freud:
+                            <input 
+                                type="radio" 
+                                name="option" 
+                                value={2} 
+                                checked={metaAnalysisOracleID === 2}
+                                onChange={() => updateMetaAnalysisOracleID(2)}
+                            />
+                        </label>
+                        <label className="flex items-center">
+                            Ruya:
+                            <input 
+                                type="radio" 
+                                name="option" 
+                                value={3} 
+                                checked={metaAnalysisOracleID === 3}
+                                onChange={() => updateMetaAnalysisOracleID(3)}
+                            />
+                        </label>
+                    </div>
+                    {oracleUpdated && <p className="text-green-500">Oracle updated!</p>}
+                </div> */}
+                <div className="logout absolute bottom-0 right-0 p-4">
+                    <button onClick={logout} className="back-button">Log Out</button>
+                    {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>}
+                </div>
+                <ContactAndPrivacyButtons />
             </div>
-            <ContactAndPrivacyButtons />
         </div>
+        
     )
 
 }
