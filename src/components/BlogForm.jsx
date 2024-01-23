@@ -101,7 +101,7 @@ export default function BlogForm({ blogDetails, Content }) {
                             className="rounded-xl border border-white"
                         />
                     </div>
-                    <h1 className="text-5xl text-center pb-4">{blogDetails?.blogTitle}</h1>
+                    <h1 className="golden-ratio-4 text-center pb-4">{blogDetails?.blogTitle}</h1>
                     <h2 className="text-xl text-center pb-4">Estimated reading time: {blogDetails?.readingTime} mins</h2>    
                     <Content />                
                 </div>

@@ -649,28 +649,6 @@ nav {
   margin-bottom: 10px;
 }
 
-.blog-paragraph {
-  padding-top: 0.5rem/* 8px */;
-  padding-bottom: 0.5rem/* 8px */;
-}
-
-.blog-header {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-  font-weight: 700;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
-.blog-subheader {
-  font-size: 1.5rem;
-  line-height: 2rem;
-  font-weight: 700;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
-
 .like-dislike-wrapper {
   display: flex;
   align-items: center;
@@ -771,6 +749,28 @@ nav {
   margin-right: 1rem;
 }
 
+.blog-paragraph {
+  padding-top: 0.5rem/* 8px */;
+  padding-bottom: 0.5rem/* 8px */;
+  font-size: 22.65px;
+}
+
+.blog-header {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 36.65px;
+}
+
+.blog-subheader {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 .golden-ratio-1 {
   font-size: 14px;
 }
@@ -786,6 +786,7 @@ nav {
 
 .golden-ratio-4 {
   font-size: 59.3px;
+  line-height: 1;
 }
 
 .golden-ratio-5 {

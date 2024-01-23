@@ -24,7 +24,7 @@ export default function BlogsForm() {
 
     return (
         <div className="text-white text-3xl text-center p-4 main-content">
-            Blogs
+            <h1 className="golden-ratio-4 font-bold py-3">Blogs</h1>
             <div className="flex flex-wrap justify-center">
                 {blogs.map((blog, index) => {
                     return (
@@ -51,8 +51,8 @@ export default function BlogsForm() {
                                     className="rounded-xl"
                                 />
                             </div>
-                            <div>{blog.blogTitle}</div>
-                            <div className="text-xl">Estimated reading time: {blog.readingTime} mins.</div>
+                            <div className="golden-ratio-3">{blog.blogTitle}</div>
+                            <div className="golden-ratio-2">Estimated reading time: {blog.readingTime} mins.</div>
                         </div>
                     )
                 })}

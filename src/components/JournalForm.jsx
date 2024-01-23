@@ -338,10 +338,13 @@ export default function JournalForm() {
             ) : (
                 <div>
                     {!subscribed && (
-                        <div className="right-0">
-                            <p className="text-right golden-ratio-2"><span className="font-bold">{user?.credits}</span> Dream Credits</p>
+                        <div className="right-0 flex flex-row justify-between">
+                            <p className="text-right right-0 golden-ratio-2"><span className="font-bold">{user?.credits}</span> Dream Credits</p>
                             {!user?.name && (
-                                <a href='/createAccount' className="underline font-bold hidden md:block">Create an account for 5 dream credits</a>
+                                <p className="golden-ratio-2">
+                                    <a href='/createAccount' className="underline font-bold hidden md:block">Create an account for 5 dream credits</a>
+                                    <a href='/createAccount' className="underline font-bold md:hidden text-left">Create account</a>
+                                </p>
                             )}
                         </div>
                     )}

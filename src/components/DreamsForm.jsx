@@ -119,9 +119,9 @@ export default function DreamsForm() {
         dropdown();
     }
 
-    const metaAnalysis = () => {
-        const res = axios.post('/api/dream/metaAnalysis', { email: session.user.email });
-    }
+    // const metaAnalysis = () => {
+    //     const res = axios.post('/api/dream/metaAnalysis', { email: session.user.email });
+    // }
 
     const deleteDream = async (dreamID) => {
         const res = await axios.post('/api/dream/delete', { dreamID });
@@ -147,23 +147,9 @@ export default function DreamsForm() {
         }
     }
 
-    const dreamLength = (dream) => {
-        if (dream.length > 150) {
-            return dream.substring(0, 150) + '...';
-        }
-        else {
-            return dream;
-        }
-    }
-
     return (
-        <div className="text-white main-content relative">
-            <div className="text-center text-5xl font-bold">
-                Dream Journal
-            </div>
-            <div className="justify-center text-3xl font-bold pb-5 relative">
-                <InfoTag />
-            </div>  
+        <div className="text-white main-content relative golden-ratio-2">
+            <InfoTag /> 
             {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
             <div className="flex justify-between">
                 <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
@@ -175,7 +161,7 @@ export default function DreamsForm() {
                     </div>
                 </div>
                 {lastDayOfWeek && sortType === 1 && (
-                    <div className="flex justify-center items-center text-center">
+                    <div className="flex justify-center items-center text-center golden-ratio-2">
                         <FontAwesomeIcon icon={faArrowLeft} className="p-2 wiggle cursor-pointer" onClick={goToPreviousWeek} />
                         <span>{formatDreamDate(firstDayOfWeek)} - {formatDreamDate(lastDayOfWeek)}</span>
                         <FontAwesomeIcon icon={faArrowRight} className="p-2 wiggle cursor-pointer mr-1" onClick={goToNextWeek} />
@@ -235,18 +221,18 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
                 query: { dreamID: dream._id },
             
             }}>
-                <div className="px-10 relative">
+                <div className="p-5 relative">
                     <p>
-                        <span className="font-bold">Dream Date: </span>{formatDreamDate(dream.dreamDate)}
-                    </p>
-                    <p>
-                        <span className="font-bold">Interpretations: </span>{dream.interpretation ? 'Yes' : 'No'}
-                    </p>
-                    <p>
-                        <span className="font-bold">Dream Description: </span>{dreamLength(dream.dream)}
+                        <span className="font-bold"></span>{dreamLength(dream.dream)}
                     </p>
                 </div>
             </Link>
+            <p className="absolute left-0 top-0 p-1">
+                <span className="font-bold"></span>{formatDreamDate(dream.dreamDate)}
+            </p>
+            <p className="absolute bottom-0 left-0 font-bold underline p-1">
+                {dream.interpretation ? 'Interpretations' : ''}
+            </p>
             <FontAwesomeIcon 
                         icon={faTrash} 
                         size="x" 
@@ -272,23 +258,20 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
     )
 }
 
-
 const InfoTag = () => {
 
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center text-4xl pt-1 text-center">
+        <div className="golden-ratio-3 leading-none pb-2 text-center">
+            <p className="text-center flex items-center justify-center font-bold">Dream Journal <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer ml-2" onClick={() => setOpen(o => !o)}/></p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
-                <FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)}/>
-                <div className={` ${open ? 'popup-menu-bottom-active' : 'popup-menu-bottom'}`}>
-                    <div className="text-xl select-none text-center">
-                        <b className="font-bold text-2xl">Dream Journal</b><br/>
-                        <p className="text-left">
-                            Each of your dreams are stored here. Click on a dream to see the full dream description, interpretations, and any notes you may have added.<br/><br/>
-                            You can filter dreams by week, starred, or all dreams. You can star dreams by clicking on the half star icon. You can delete dreams by clicking on the trash icon.
-                        </p>
-                    </div>
+                <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
+                    <p className="text-xl select-none golden-ratio-2">
+                        <b>Dream Journal</b><br/>
+                        Each of your dreams are stored here. You can see the beginning of each dream, the date it was recorded, and whether or not it has been interpreted.<br/><br/>
+                        You can filter dreams by week, starred, or all dreams. You can star dreams by clicking on the half star icon. You can delete dreams by clicking on the trash icon.
+                    </p>
                 </div>
             </div>
         </div>
