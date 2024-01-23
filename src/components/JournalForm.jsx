@@ -341,8 +341,14 @@ export default function JournalForm() {
                         <div className="right-0 flex flex-row justify-center">
                             {!user?.name && (
                                 <p className="golden-ratio-2">
-                                    <a href='/createAccount' className="underline hidden md:block text-gold">Create an account for 5 dream credits here</a>
-                                    <a href='/createAccount' className="underline md:hidden text-gold">Create account here</a>
+                                    <p className="hidden md:flex">
+                                        <a href='/createAccount' className="underline text-gold mr-2">Create an account for 5 dream credits here</a><span className="text-gold"> or </span>
+                                        <a href='/login' className="underline hidden md:block text-gold ml-2">Log In</a>
+                                    </p>
+                                    <p className="md:hidden">
+                                        <a href='/createAccount' className="underline  text-gold">Create account here</a><span className="text-gold"> or </span>
+                                        <a href='/login' className="underline md:hidden text-gold">Log In</a>
+                                    </p>
                                 </p>
                             )}
                         </div>
