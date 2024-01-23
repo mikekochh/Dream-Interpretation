@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faStarAndCrescent } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faStarAndCrescent, faQuestion, faQuestionCircle, faCircleQuestion, faClipboardQuestion, faFileCircleQuestion, faPersonCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 
 export default function JournalForm() { 
@@ -413,7 +413,7 @@ const HowItWorksPopup = () => {
 
     return (
         <div className="justify-center golden-ratio-2 text-center leading-none">
-            <p>Enter Dream Description Below <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer" onClick={() => setOpen(o => !o)}/></p>
+            <p>Enter Dream Description Below <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/></p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none">
@@ -433,7 +433,7 @@ const OracleSelectionPopup = ({ credits }) => {
 
     return (
         <div className="justify-center golden-ratio-3 pt-5 leading-none text-center">
-            Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer" onClick={() => setOpen(o => !o)}/>
+            Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/>
             <p className="text-center golden-ratio-2"><span className="font-bold">{credits}</span> Dream Credits</p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
