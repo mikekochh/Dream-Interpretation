@@ -73,7 +73,7 @@ export default function BlogForm({ blogDetails, Content }) {
                 <title>{blogDetails?.blogTitle}</title>
                 <meta name="description" content={blogDetails?.description} />
             </Head>
-            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 md:hidden">Back Mobile</button>
+            <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 md:hidden">Back</button>
             <button onClick={() => router.push('/blog')} className="bg-white rounded-xl p-2 text-black m-2 hidden md:flex">Back</button>
             <div className="flex justify-center items-center">
                 <div className="text-white text-lg text-left w-11/12 md:w-3/4 items-center justify-center">
