@@ -72,7 +72,7 @@ export default function DreamnetForm() {
 
     return (
         <div className='main-content text-white'>
-            <h1 className="text-center text-3xl">Dreamnet</h1>
+            <h1 className="text-center text-3xl">DreamFeed</h1>
             <div className="flex flex-col justify-center">
                 {dreams.map((dream, index) => {
 

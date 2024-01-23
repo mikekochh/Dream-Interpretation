@@ -103,7 +103,7 @@ const NavBar = () => {
                                 <Link href="/interpret">Interpret</Link>
                             </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreamnet' ? 'font-bold' : ''}`}>
-                                <Link href="/dreamnet">Dreamnet</Link>
+                                <Link href="/dreamnet">DreamFeed</Link>
                             </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`}>
                                 <Link href="/dreams">Journal</Link>
@@ -190,7 +190,7 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                     <Link href="/interpret">Interpret</Link>
                 </li>
                 <li className={`cursor-pointer text-3xl p-4 ${pathname === '/dreamnet' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                    <Link href="/dreamnet">Dreamnet</Link>
+                    <Link href="/dreamnet">DreamFeed</Link>
                 </li>
                 <li className={`cursor-pointer text-3xl p-4 ${pathname === '/dreams' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/dreams">Journal</Link>

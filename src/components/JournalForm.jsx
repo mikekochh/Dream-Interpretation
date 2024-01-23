@@ -287,8 +287,8 @@ export default function JournalForm() {
 
     return (
         <div className="text-white main-content relative">
-            <div className="leaderboard">
-                leaderboard
+            <div className="leaderboard text-center">
+                🎉Dream Of the Week: <a href="/dreamDetails?dreamID=60f9b4b3e4b0c3b4b4f1b3a5" className="underline">The Dream of the Week</a>🎉
             </div>
             {savingDream ? (
                 <div className="flex justify-center">
