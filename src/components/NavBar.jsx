@@ -68,7 +68,7 @@ const NavBar = () => {
 
 
     return (
-        <div>
+        <div className="golden-ratio-2">
             {!noNavBar && (
                 <div>
                     <nav className="flex justify-between items-center w-full p-4 border-b bg-white">
@@ -76,19 +76,19 @@ const NavBar = () => {
                     <Link href="https://www.dreamoracles.co">
                         <div className="flex flex-row items-center">
                             <Image src="/dream_icon.png" className="rounded-lg" width={32} height={32} alt="logo" />
-                            <p className="text-black font-semibold text-lg ml-1 w-fit">Dream Oracles</p>
+                            <p className="text-black font-semibold ml-1 w-fit">Dream Oracles</p>
                         </div>
                     </Link>
                     {sale && (
                         <div>
                             <div 
-                                className="sale-banner font-bold text-xl text-white bg-red-500 p-2 rounded shadow-lg animate-pulse cursor-pointer hidden md:block" 
+                                className="sale-banner font-bold text-white bg-red-500 p-2 rounded shadow-lg animate-pulse cursor-pointer hidden md:block" 
                                 onClick={() => window.location.href = '/pricing'}
                             >
                                 {sale.saleDescriptionDesktop}
                             </div>
                             <div 
-                                className="sale-banner font-bold text-xl text-white bg-red-500 p-2 rounded shadow-lg animate-pulse cursor-pointer md:hidden" 
+                                className="sale-banner font-bold text-white bg-red-500 p-2 rounded shadow-lg animate-pulse cursor-pointer md:hidden" 
                                 onClick={() => window.location.href = '/pricing'}
                             >
                                 {sale.saleDescriptionMobile}
@@ -175,27 +175,27 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
     }, []);
 
     return (
-        <div className="h-full">
+        <div className="h-full golden-ratio-3">
             {createAccount && (
-                <div className="font-bold text-right underline flex flex-col main-content absolute top-0 right-0 pr-2 text-xl h-fit">
+                <div className="font-bold text-right underline flex flex-col main-content absolute top-0 right-0 pr-2 h-fit golden-ratio-2">
                     <a href="/createAccount">Create an account for full features</a>
                     <a href="/login">Log In</a>
                 </div>
             )}
             <ul className='list-none flex flex-col h-full text-center inset-0 justify-center mobile-list' style={{ position: 'relative', zIndex: 1000 }}>
-                <li className={`cursor-pointer text-3xl p-4 ${pathname === '/interpret' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <li className={`cursor-pointer p-4 ${pathname === '/interpret' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/interpret">Interpret</Link>
                 </li>
-                <li className={`cursor-pointer text-3xl p-4 ${pathname === '/dreams' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <li className={`cursor-pointer p-4 ${pathname === '/dreams' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/dreams">Journal</Link>
                 </li>
-                <li className={`cursor-pointer text-3xl p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <li className={`cursor-pointer p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/blog">Blog</Link>
                 </li>
-                <li className={`cursor-pointer text-3xl p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <li className={`cursor-pointer p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/pricing">Shop</Link>
                 </li>
-                <li className={`cursor-pointer text-3xl p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <li className={`cursor-pointer p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/settings">Settings</Link>
                 </li>
             </ul>

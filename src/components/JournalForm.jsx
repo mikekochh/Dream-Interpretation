@@ -338,11 +338,11 @@ export default function JournalForm() {
             ) : (
                 <div>
                     {!subscribed && (
-                        <div className="right-0 flex flex-row justify-between">
+                        <div className="right-0 flex flex-row justify-center">
                             {!user?.name && (
                                 <p className="golden-ratio-2">
-                                    <a href='/createAccount' className="underline font-bold hidden md:block">Create an account for 5 dream credits</a>
-                                    <a href='/createAccount' className="underline font-bold md:hidden text-left">Create account</a>
+                                    <a href='/createAccount' className="underline hidden md:block text-gold">Create an account for 5 dream credits here</a>
+                                    <a href='/createAccount' className="underline md:hidden text-gold">Create account here</a>
                                 </p>
                             )}
                         </div>
@@ -381,8 +381,8 @@ export default function JournalForm() {
                                                 </div>
                                             )})}
                                     </div>
-                                    <div className="flex justify-end">
-                                        <button className="dream-button" onClick={journalDream}>
+                                    <div className="flex justify-center">
+                                        <button className="dream-button golden-ratio-2" onClick={journalDream}>
                                             {buttonText}
                                         </button><br />
                                     </div>
