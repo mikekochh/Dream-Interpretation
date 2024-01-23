@@ -453,7 +453,7 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
     const [open, setOpen] = useState(false);
     
     return (
-        <div className="text-center whitespace-nowrap relative">
+        <div className="text-center whitespace-nowrap relative golden-ratio-1">
             <div className="w-full relative max-w-sm hidden md:block">
                 <Image 
                     layout="responsive"
@@ -481,7 +481,7 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
             <label htmlFor={oracle.oracleID} className={`${oracle.selected ? "text-gold" : ""}`}>
                 {oracle.oracleName}<FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)} />
                 <div className={`whitespace-pre-wrap ${open ? 'oracle-menu-active' : 'oracle-menu'}`}>
-                    <p className="text-md">
+                    <p>
                         <b>Specialty: </b>{oracle.oracleSpecialty}<br/><br/>
                         {oracle.oracleDescriptionShort}
                     </p>
