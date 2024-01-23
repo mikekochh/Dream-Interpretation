@@ -413,7 +413,7 @@ const HowItWorksPopup = () => {
 
     return (
         <div className="justify-center golden-ratio-2 text-center leading-none">
-            Enter Dream Description Below <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer" onClick={() => setOpen(o => !o)}/>
+            <p>Enter Dream Description Below <FontAwesomeIcon icon={faInfoCircle} className="cursor-pointer" onClick={() => setOpen(o => !o)}/></p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none">
