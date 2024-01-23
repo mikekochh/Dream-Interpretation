@@ -34,7 +34,7 @@ const StarBackground = ({ children }) => {
     return (
         <div className="star-background relative">
             {children}
-            <button className="absolute left-0 bottom-0 dream-button" onClick={feedback}>Feedback</button>
+            <button className="absolute left-0 bottom-0 dream-button golden-ratio-1" onClick={feedback}>Feedback or Feature?</button>
         </div>
     );
 }

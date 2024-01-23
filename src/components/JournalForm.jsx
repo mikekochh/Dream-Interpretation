@@ -340,7 +340,7 @@ export default function JournalForm() {
                     {!subscribed && (
                         <div className="right-0 flex flex-row justify-center">
                             {!user?.name && (
-                                <p className="golden-ratio-2">
+                                <div className="golden-ratio-2">
                                     <p className="hidden md:flex">
                                         <a href='/createAccount' className="underline text-gold mr-2">Create an account for 5 dream credits here</a><span className="text-gold"> or </span>
                                         <a href='/login' className="underline hidden md:block text-gold ml-2">Log In</a>
@@ -349,7 +349,7 @@ export default function JournalForm() {
                                         <a href='/createAccount' className="underline  text-gold">Create account here</a><span className="text-gold"> or </span>
                                         <a href='/login' className="underline md:hidden text-gold">Log In</a>
                                     </p>
-                                </p>
+                                </div>
                             )}
                         </div>
                     )}

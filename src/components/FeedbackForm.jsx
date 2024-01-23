@@ -32,10 +32,10 @@ export default function FeedbackForm() {
     }
 
     return (
-        <div className="text-white text-3xl text-center p-4 main-content">
+        <div className="text-white text-center p-4 main-content golden-ratio-2">
         {!feedbackSuccessful ? (
             <div>
-                <p className="p-2">Drop your feedback below! Thank you for taking the time to give feedback</p>
+                <p className="p-2 golden-ratio-3">If you have an idea for a new feature for the site or some constructive feedback, I would love to hear it!</p>
                 <textarea className="DreamBox w-full rounded-xl p-2" rows={10} placeholder="Feedback"></textarea>
                 <button className="dream-button" onClick={submitFeedback}>Submit</button>
             </div>

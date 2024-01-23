@@ -38,7 +38,11 @@ const userSchema = new Schema({
     },
     communityAccess: {
         type: Boolean,
-    }
+    },
+    dreamCount: {
+        type: Number,
+        default: 0,
+    },
 }, {timestamps: true});
 
 const User = models.User || mongoose.model("User", userSchema);

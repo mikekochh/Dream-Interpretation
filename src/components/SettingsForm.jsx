@@ -67,10 +67,19 @@ const SettingsForm = () => {
                     <button className="create-account-button" onClick={createAccount}>Create Account</button>
                 </div>
             )}
-            <div className={`main-content text-white ${!session && "blur-effect"}`}>
-                <h1 className="text-3xl text-white text-center golden-ratio-4">Settings</h1>
-                <p className="text-xl font-bold">Email: <span className="text-md font-normal">{user.email}</span></p>
-                <p className="text-xl font-bold">Name: <span className="text-md font-normal">{user.name}</span></p>
+            <div className={`main-content golden-ratio-2 text-white ${!session && "blur-effect"}`}>
+                <h1 className="text-white text-center golden-ratio-4 p-0">Profile</h1>
+                <p className="font-bold golden-ratio-3 pl-4">{user.name}</p>
+                <p className="pl-4">{user.email}</p>
+                <div className="pl-4">
+                    {user.dreamCount === 1 ? (
+                        <p>1 dream journaled</p>
+                    ) : user.dreamCount ? (
+                        <p>{user.dreamCount} dream&apos;s journaled</p>
+                    ) : (
+                        <p>0 Dream&apos;s Journaled</p>
+                    )}
+                </div>
                 {/* <div className="flex items-center">
                     <span className="text-xl font-bold mr-4">Meta Analysis Oracle: </span>
                     <div className="flex items-center space-x-4">
