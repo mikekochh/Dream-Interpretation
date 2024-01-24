@@ -15,7 +15,6 @@ export default function Snakes() {
         const getBlogDetails = async function() {
             try {
                 const res = await axios.get('/api/blog/2');
-                console.log('res:', res);
                 setBlogDetails(res.data.blogDetails);
             } catch (error) {
                 console.log(error);
