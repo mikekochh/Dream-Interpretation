@@ -1,11 +1,11 @@
 "use client";
 import StarBackground from "@/components/StarBackground";
-import Snakes from "@/components/blogs/snakes";
+import Islam from "@/components/blogs/islam";
 
-export default function SnakePage() {
+export default function IslamPage() {
     return (
         <StarBackground>
-            <Snakes />
+            <Islam />
         </StarBackground>
     )
 }
