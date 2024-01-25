@@ -297,6 +297,12 @@ nav {
   border-width: 5px;
 }
 
+.border-gold-small {
+  border: 1px solid gold;
+  border-width: 2px;
+  background-color: #33334D;
+}
+
 
 .dream-button {
   color: white;

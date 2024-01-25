@@ -114,15 +114,15 @@ export default function DreamsForm() {
 
     return (
         <div className="flex flex-col main-content h-screen text-white">
-            <h1 className="text-5xl text-center font-bold pb-5">Dream Details</h1>
-            <div className='border border-white border-1 rounded-xl p-2 mb-2'>
-                <h1 className="text-center text-3xl">The Dream</h1>
-                <p>{dream}</p>
+            <div className="flex justify-center border rounded-xl m-2 border-gold-small">
+                <div className='p-2 mb-2 w-11/12'>
+                    <h1 className="text-center golden-ratio-3 text-gold">The Dream</h1>
+                    <p className="golden-ratio-2 text-gold">{dream}</p>
+                </div>
             </div>
             <div className="flex md:flex-row flex-col relative pb-12">
 
-                <div className="md:w-2/3 text-white border-white border rounded-xl">
-                    <h1 className="text-3xl text-center font-bold pb-5">Interpretations</h1>
+                <div className="md:w-2/3 text-white">
                     {loadingInterpretations && (
                         <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
                             <p className="text-center text-3xl pr-3">Loading Interpretations</p>
@@ -137,15 +137,10 @@ export default function DreamsForm() {
                                 data-id={detail._id}
                                 className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl pr-2 detail-box"
                             >
-                                <div className="pl-10">
-                                    <p>
-                                        <span className="font-bold">Interpretation Date: </span>{formatInterpretationDate(detail.interpretationDate)}
-                                    </p>
-                                    <p>
-                                        <span className="font-bold">Oracle: </span>{getOracleName(detail.oracleID)}
-                                    </p>
+                                <div className=" pl-2">
+                                    <p className="golden-ratio-2 text-center font-bold">Interpretation by {getOracleName(detail.oracleID)} on {formatInterpretationDate(detail.interpretationDate)}</p>
                                     <p className="interpretation-box">
-                                        <span className="font-bold">Interpretation: </span>{insertLineBreaks(detail.interpretation)}
+                                        <span className="font-bold"></span>{insertLineBreaks(detail.interpretation)}
                                     </p>
                                 </div>
                                 
@@ -184,8 +179,7 @@ export default function DreamsForm() {
                     ))}
                 </div>
                 <div className="md:w-1/3">
-                    <div className="border border-white rounded-xl text-white  p-2">
-                        <h1 className="text-3xl text-center font-bold pb-5">Dream Notes</h1>
+                    <div className="p-2 text-white">
                         {loadingNotes && (
                             <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
                                 <p className="text-center text-3xl pr-3">Loading Notes</p>
@@ -197,6 +191,7 @@ export default function DreamsForm() {
                             rows={20}
                             className="DreamBox NoteBox border-2 border-black rounded-lg text-black w-full h-full p-2"
                             style={{ minHeight: '100px' }}
+                            placeholder='Notes on dream or interpretations go here'
                         />
                     </div>
                     <div className="flex justify-end items-end md:relative">
