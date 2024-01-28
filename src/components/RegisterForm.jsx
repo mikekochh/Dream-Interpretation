@@ -84,7 +84,10 @@ export default function RegisterForm() {
                     redirect: false
                 });
 
-                router.push('/interpret');
+                if (!dreamID) {
+                    router.push('/interpret');
+                }
+                
             }
         }
         catch (error) {
@@ -110,23 +113,24 @@ export default function RegisterForm() {
     return (
         <div className='text-white'>
             <div className="p-5 rounded-lg border-t-4 border-white-400 border">
-                <h1 className="text-xl font-bold my-4">Register Below</h1>
+                <h1 className="golden-ratio-2 font-bold my-4">Create Account</h1>
                 <form className="flex flex-col gap-3" onSubmit={register}>
-                    <input type="text" placeholder="Name" className="LoginInput rounded-lg text-black" onChange={(e) => setName(e.target.value)} />
-                    <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
+                    <input type="text" placeholder="Name" className="LoginInput golden-ratio-1 rounded-lg text-black" onChange={(e) => setName(e.target.value)} />
+                    <input type="text" placeholder="Email" className="LoginInput golden-ratio-1 rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
                     {/* <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} /> */}
                     { registeringUser && (
-                        <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                        <div className="bg-blue-500 text-white w-fit py-1 px-3 rounded-md mt-2 golden-ratio-1">
                             Registering user...
                         </div>
                     )}
-                    <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center">Register</button>
+                    <div className="flex justify-center"><button className="dream-button font-bold golden-ratio-2">Register</button></div>
+                    
                     { error && (
                         <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
                             {error}
                         </div>
                     )}
-                    <Link href={'/login'} className="text-sm mt-3 text-right">
+                    <Link href={'/login'} className="mt-3 text-right golden-ratio-1">
                         Already have an account? <span className="underline">Log In</span>
                     </Link>
                 </form>

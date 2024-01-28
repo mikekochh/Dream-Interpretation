@@ -39,7 +39,7 @@ const SettingsForm = () => {
 
     const logout = async () => {
         await signOut({ redirect: false });
-        router.push("/createAccount");
+        router.push("/interpret");
     }
 
     const subscription = async () => {

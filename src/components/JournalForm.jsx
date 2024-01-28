@@ -5,8 +5,10 @@ import { useSession } from 'next-auth/react';
 import 'reactjs-popup/dist/index.css';
 import Popup from 'reactjs-popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faStarAndCrescent, faQuestion, faQuestionCircle, faCircleQuestion, faClipboardQuestion, faFileCircleQuestion, faPersonCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faStarAndCrescent, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
+import RegisterForm from './RegisterForm';
+
 
 export default function JournalForm() { 
 
@@ -167,9 +169,6 @@ export default function JournalForm() {
         try {
             // if there is a user, save the dream to their account, interpret the dream, and save the interpretation to their account.
             if (userID) {
-                console.log("Are we getting here?");
-                console.log("UserID type", typeof userID);
-                console.log("userID", userID);
                 const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected });
                 const dreamID = resJournal.data._id;
                 setNewDreamID(dreamID);
@@ -182,7 +181,6 @@ export default function JournalForm() {
             }
             // if there is no user, interpret the dream and display it to the screen. Save dream to database for if user creates an account
             else {
-                console.log("or here?");
                 const resJournal = await axios.post('/api/dream/journal', { dream, userID: null, interpretDream: oracleSelected });
                 const dreamID = resJournal.data._id;
                 localStorage.setItem('dreamID', dreamID);
@@ -233,8 +231,6 @@ export default function JournalForm() {
                     setError("Error Saving Interpretation");
                     return;
                 }
-
-                // await delay(10000);
 
                 setInterpretationProgressArray(prevArray => {
                     const updatedArray = [...prevArray];
@@ -319,15 +315,29 @@ export default function JournalForm() {
                                             }
                                         })}
                                     </div>
+                                    {!user?.name && 
+                                        (
+                                            <div>
+                                                <div className="golden-ratio-2 text-center font-bold text-gold">Create an account below to ensure immediate access to your dream interpretation once its ready</div>
+                                                <div className="text-center flex justify-center">
+                                                    <RegisterForm />
+                                                </div>
+                                            </div>
+                                        )}
                                 </div>
 
                             ) : (
                                 <div className="">
                                     {localInterpretation ? (
                                         <div className="text-center">
-                                            <a href="/createAccount" className="underline">Create a free account to continue interpreting dreams and unlock all features</a>
-                                            <p className="rounded-xl p-2 border border-white m-2 overflow-auto">{insertLineBreaks(localInterpretation)}</p>
-                                            <a href="/createAccount" className="underline">Create a free account to continue interpreting dreams and unlock all features</a>
+                                            <p className={`rounded-xl p-2 border border-white m-2 overflow-auto ${!user?.name ? 'blur select-none' : ''}`}>{insertLineBreaks(localInterpretation)}</p>
+                                            {!user?.name && (
+                                                <div className="overlay-message">
+                                                    <p className="golden-ratio-2 text-gold">Create an account to view your interpretation</p>
+                                                    <RegisterForm />
+                                                </div>
+                                                
+                                            )}
                                         </div>
                                     ) : (
                                         <div>

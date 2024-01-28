@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import Dream from '../../../../../models/dream';
+import User from '../../../../../models/user';
 
 export async function POST(req) {
     try {
@@ -13,6 +14,12 @@ export async function POST(req) {
         
         if (!updateDream) {
             throw new Error("Dream not found!");
+        }
+
+        const updatedUser = await User.findOneAndUpdate({ _id: userID }, { $inc: { dreamCount }}, { new: true });
+
+        if (!updatedUser) {
+            throw new Error("User not found!");
         }
 
         return NextResponse.json({message: "Local dream added to user account!"}, { status: 200 })
