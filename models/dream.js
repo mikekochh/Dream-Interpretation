@@ -3,7 +3,6 @@ import mongoose, { Schema, models } from "mongoose";
 const dreamSchema = new Schema({
     userID: {
         type: String,
-        required: [true, "Please enter user ID!"]
     },
     dream: {
         type: String,

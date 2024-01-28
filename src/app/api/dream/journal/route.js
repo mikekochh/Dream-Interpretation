@@ -12,25 +12,43 @@ export async function POST(req) {
 
         await connectMongoDB();
 
-        const newDream = await Dream.create({ 
-            dream, 
-            userID, 
-            interpretationID: 0, 
-            dreamDate,
-            interpretation: interpretDream
-        });
+        if (userID) {
+            const newDream = await Dream.create({ 
+                dream, 
+                userID, 
+                interpretationID: 0, 
+                dreamDate,
+                interpretation: interpretDream
+            });
 
-        if (!newDream) {
-            return NextResponse.json({message: "Dream creation failed!"}, { status: 500 })
+            if (!newDream) {
+                return NextResponse.json({message: "Dream creation failed!"}, { status: 500 })
+            }
+
+            const user = await User.findByIdAndUpdate(userID, { $inc: { dreamCount: 1 } });
+
+            if (!user) {
+                return NextResponse.json({message: "User not found!"}, { status: 500 })
+            }
+
+            return NextResponse.json(newDream);
         }
+        else {
+            const newDream = await Dream.create({ 
+                dream,
+                interpretationID: 0, 
+                dreamDate,
+                interpretation: interpretDream
+            });
 
-        const user = await User.findByIdAndUpdate(userID, { $inc: { dreamCount: 1 } })
+            if (!newDream) {
+                return NextResponse.json({message: "Dream creation failed!"}, { status: 500 })
+            }
 
-        if (!user) {
-            return NextResponse.json({message: "User not found!"}, { status: 500 })
-        }
+            return NextResponse.json(newDream);
+        }       
 
-        return NextResponse.json(newDream);
+        
     } catch (error) {
         console.log('error: ', error);
         return NextResponse.json({message: "User activation failed!"}, { status: 500 })

@@ -167,6 +167,9 @@ export default function JournalForm() {
         try {
             // if there is a user, save the dream to their account, interpret the dream, and save the interpretation to their account.
             if (userID) {
+                console.log("Are we getting here?");
+                console.log("UserID type", typeof userID);
+                console.log("userID", userID);
                 const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected });
                 const dreamID = resJournal.data._id;
                 setNewDreamID(dreamID);
@@ -179,7 +182,8 @@ export default function JournalForm() {
             }
             // if there is no user, interpret the dream and display it to the screen. Save dream to database for if user creates an account
             else {
-                const resJournal = await axios.post('/api/dream/journal', { userID: 0, dream, interpretDream: oracleSelected });
+                console.log("or here?");
+                const resJournal = await axios.post('/api/dream/journal', { dream, userID: null, interpretDream: oracleSelected });
                 const dreamID = resJournal.data._id;
                 localStorage.setItem('dreamID', dreamID);
                 interpretDreams(dreamID);
@@ -201,6 +205,7 @@ export default function JournalForm() {
         }
         setInterpretingDream(true);
         for (let i = 0; i < oracles.length; i++) {
+            console.log('how many times is this running?');
             if (oracles[i].selected) {
                 const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
 
