@@ -152,14 +152,14 @@ export default function DreamsForm() {
     }
 
     return (
-        <div>
+        <div className='text-white main-content relative golden-ratio-2'>
             {!session && (
                 <div className="overlay-message w-full md:w-fit golden-ratio-3">
                     <p>Create an account to start a dream journal</p>
                     <button className="create-account-button" onClick={createAccount}>Create Account</button>
                 </div>
             )}
-            <div className={`text-white main-content relative golden-ratio-2 ${!session && "blur-effect"}`}>
+            <div className={`${!session && "blur-effect"}`}>
                 <InfoTag name={session?.user.name} /> 
                 {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
                 <div className="flex justify-between">
