@@ -28,7 +28,8 @@ export default function DreamsForm() {
             setLoadingNotes(true);
             const res = await axios.get('api/dream/details/' + dreamID);
             setDreamDetails(res.data.dreamDetails);
-            const resOracles = await axios.get('/api/oracles');
+            const resOracles = await axios.get('/api/allOracles');
+            console.log('resOracles: ', resOracles);
             setOracles(resOracles.data);
             setLoadingInterpretations(false);
             const resNotes = await axios.get('/api/dream/note/' + dreamID);
