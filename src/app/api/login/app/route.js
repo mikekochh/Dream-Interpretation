@@ -13,16 +13,16 @@ export async function POST(request) {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
+      return NextResponse.json({ message: 'There is no account associated with this email address' }, { status: 401 });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
+      return NextResponse.json({ message: 'Invalid password' }, { status: 401 });
     }
 
-    return NextResponse.json({ name: user.name }, { status: 200 });
+    return NextResponse.json({ name: user.name, email: user.email }, { status: 200 });
   } catch (error) {
     console.log('Error during login:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
