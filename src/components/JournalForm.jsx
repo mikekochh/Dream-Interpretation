@@ -249,8 +249,8 @@ export default function JournalForm() {
             }
         }
 
-        setInterpretingDream(false);
-        setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
+        // setInterpretingDream(false);
+        // setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
     }
 
     const journalDreamNoAccount = () => {
@@ -300,30 +300,14 @@ export default function JournalForm() {
                                         <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
                                     </div>
                                     <div>
-                                        {oracles.map((oracle, index) => {
-
+                                        {oracles.map((oracle) => {
                                             if (oracle.selected) {
-
                                                 return (
-                                                    <div key={oracle._id}>
-                                                        <div>{oracle.oracleName}</div>
-                                                        <div data-label="Interpreting..." className="progress-bar">
-                                                            <div className="progress-bar-inside" style={{width: `${interpretationProgressArray[index]}%`}}>Interpreting...</div>
-                                                        </div>
-                                                    </div>
+                                                    <div>{oracle.oracleName}</div>
                                                 )
                                             }
                                         })}
                                     </div>
-                                    {!user?.name && 
-                                        (
-                                            <div>
-                                                <div className="golden-ratio-2 text-center font-bold text-gold">Create an account below to ensure immediate access to your dream interpretation once its ready</div>
-                                                <div className="text-center flex justify-center">
-                                                    <RegisterForm />
-                                                </div>
-                                            </div>
-                                        )}
                                 </div>
 
                             ) : (
