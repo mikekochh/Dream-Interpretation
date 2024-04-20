@@ -22,7 +22,7 @@ export async function POST(request) {
       return NextResponse.json({ message: 'Invalid password' }, { status: 401 });
     }
 
-    return NextResponse.json({ name: user.name, email: user.email }, { status: 200 });
+    return NextResponse.json({ name: user.name, email: user.email, id: user.id }, { status: 200 });
   } catch (error) {
     console.log('Error during login:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
