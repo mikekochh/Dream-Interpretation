@@ -303,7 +303,7 @@ export default function JournalForm() {
                                         {oracles.map((oracle) => {
                                             if (oracle.selected) {
                                                 return (
-                                                    <div>{oracle.oracleName}</div>
+                                                    <div key={oracle._id}>{oracle.oracleName}</div>
                                                 )
                                             }
                                         })}
