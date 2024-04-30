@@ -47,7 +47,7 @@ const NavBar = () => {
                     {/* Section for logo and ability to change based off of screen size */}
                     <Link href="https://www.dreamoracles.co">
                         <div className="flex flex-row items-center">
-                            <Image src="/dream_icon.png" className="rounded-lg" width={32} height={32} alt="logo" />
+                            <Image src="/dream_icon.jpeg" className="rounded-lg" width={32} height={32} alt="logo" />
                             <p className="text-black font-semibold ml-1 w-fit">Dream Oracles</p>
                         </div>
                     </Link>

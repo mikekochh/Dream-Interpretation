@@ -15,12 +15,12 @@ export default function JournalForm() {
     const { data: session } = useSession();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
-    const [savingDream, setSavingDream] = useState(false);
+    const [savingDream, setSavingDream] = useState(true);
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [newDreamID, setNewDreamID] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
-    const [interpretingDream, setInterpretingDream] = useState(false);
+    const [interpretingDream, setInterpretingDream] = useState(true);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
     const [creditCost, setCreditCost] = useState(0);
     const [oracleSelected, setOracleSelected] = useState(false);
