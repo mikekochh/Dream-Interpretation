@@ -1,9 +1,8 @@
-"use client";Popup
+"use client";
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import 'reactjs-popup/dist/index.css';
-import Popup from 'reactjs-popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStarAndCrescent, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -15,12 +14,12 @@ export default function JournalForm() {
     const { data: session } = useSession();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
-    const [savingDream, setSavingDream] = useState(true);
+    const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [newDreamID, setNewDreamID] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
-    const [interpretingDream, setInterpretingDream] = useState(true);
+    const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
     const [creditCost, setCreditCost] = useState(0);
     const [oracleSelected, setOracleSelected] = useState(false);
@@ -38,7 +37,7 @@ export default function JournalForm() {
             const interval = setInterval(() => {
                 setInterpretationProgressArray(prevArray => {
                     const updatedArray = [...prevArray];
-                    if (updatedArray[interpretationProgressIndex] <= 95) {
+                    if (updatedArray[interpretationProgressIndex] <= 99) {
                         updatedArray[interpretationProgressIndex] += .10;
                         return updatedArray;
                     }
@@ -203,7 +202,6 @@ export default function JournalForm() {
         }
         setInterpretingDream(true);
         for (let i = 0; i < oracles.length; i++) {
-            console.log('how many times is this running?');
             if (oracles[i].selected) {
                 const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
 
@@ -237,6 +235,7 @@ export default function JournalForm() {
                     updatedArray[i] = 100;
                     return updatedArray;
                 });
+
                 setInterpretationProgressIndex(i+1);
 
                 if (user._id === undefined) {
@@ -247,6 +246,9 @@ export default function JournalForm() {
                     return;
                 }
             }
+
+            console.log("setInterpretationProgressIndex being set to: ", i+1);
+            setInterpretationProgressIndex(i+1);
         }
 
         setInterpretingDream(false);
@@ -295,9 +297,13 @@ export default function JournalForm() {
                         <div className="flex justify-center">
                             {interpretingDream ? (
                                 <div>
-                                    <div className="flex flex-row text-center items-center justify-center inset-0">
-                                        <p className="text-2xl p-4">Please wait while we interpret your dream...</p>
-                                        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+                                    <div className='loadingContainer'>
+                                        <p className='loadingText'>Please wait while we interpret your dream</p>
+                                        <div className='dotsContainer'>
+                                            <div className='dot delay200'></div>
+                                            <div className='dot delay400'></div>
+                                            <div className='dot'></div>
+                                        </div>
                                     </div>
                                     <div>
                                         {oracles.map((oracle, index) => {
