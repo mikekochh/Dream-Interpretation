@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function DreamsForm() { 
 
@@ -14,12 +16,14 @@ export default function DreamsForm() {
     const [oracles, setOracles] = useState([]);
     const router = useRouter();
     const [saving, setSaving] = useState(false);
+    const [updatingDream, setUpdatingDream] = useState(false);
     const [loadingInterpretations, setLoadingInterpretations] = useState(false);
     const [loadingNotes, setLoadingNotes] = useState(false);
     const [askQuestionInterpretationID, setAskQuestionInterpretationID] = useState(null);
     const [dream, setDream] = useState(null);
     const [askingQuestion, setAskingQuestion] = useState(false);
     const [answer, setAnswer] = useState(null);
+    const [edittingDream, setEdittingDream] = useState(true);
 
     useEffect(() => {
 
@@ -28,6 +32,7 @@ export default function DreamsForm() {
             setLoadingNotes(true);
             const res = await axios.get('api/dream/details/' + dreamID);
             setDreamDetails(res.data.dreamDetails);
+            console.log("dream details: ", res.data.dreamDetails);
             const resOracles = await axios.get('/api/allOracles');
             console.log('resOracles: ', resOracles);
             setOracles(resOracles.data);
@@ -83,6 +88,17 @@ export default function DreamsForm() {
         router.push('/dreams');
     }
 
+    const endDreamUpdate = async () => {
+        setEdittingDream(false);
+        const res = await axios.post('api/dream/update', {
+            newDream: dream,
+            dreamID
+        })
+
+        console.log('res: ', res);
+        // need to update dream in the database
+    }
+
     const askQuestion = async (interpretationID, oracleID) => {
         setAskingQuestion(true);
         const question = document.querySelector('.question-box').value;
@@ -113,12 +129,44 @@ export default function DreamsForm() {
         }
     }
 
+    const editDream = () => {
+        console.log("editting dream");
+        setEdittingDream(true);
+    }
+
     return (
         <div className="flex flex-col main-content h-screen text-white">
             <div className="flex justify-center border rounded-xl m-2 border-gold-small">
                 <div className='p-2 mb-2 w-11/12'>
                     <h1 className="text-center golden-ratio-3 text-gold">The Dream</h1>
-                    <p className="golden-ratio-2 text-gold">{dream}</p>
+                    {!edittingDream ? (
+                        <div>
+                            <p className="golden-ratio-2 text-gold">{dream}</p>
+                            <p className="golden-ratio-2 text-right cursor-pointer" onClick={editDream}>Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2"/></p>
+                        </div>
+                    ) : (
+                        <div>
+                            <textarea 
+                                type="text" 
+                                rows={5}
+                                className="DreamBox NoteBox border-2 border-black rounded-lg text-black w-full h-full p-2"
+                                style={{ minHeight: '100px' }}
+                                placeholder='Notes on dream or interpretations go here'
+                                value={dream}
+                                onChange={(e) => setDream(e.target.value)}
+                            />
+                            <div className="flex justify-end items-end md:relative">
+                                {updatingDream ? (
+                                    <div className="flex right-0 absolute m-2 top-0">
+                                        <div className="loader"></div>
+                                    </div>
+                                ) : (
+                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 justify-end m-2 bottom-0 dream-button" onClick={endDreamUpdate}>Done</button>
+                                )}
+                            </div>
+                        </div>
+
+                    )}
                 </div>
             </div>
             <div className="flex md:flex-row flex-col relative pb-12">
