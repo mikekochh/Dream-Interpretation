@@ -1,10 +1,12 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import OracleSection from './OracleSection';
+import { setRequestMeta } from 'next/dist/server/request-meta';
 
 export default function DreamsForm() { 
 
@@ -13,6 +15,7 @@ export default function DreamsForm() {
     const dreamID = searchParams.get('dreamID');
 
     const [dreamDetails, setDreamDetails] = useState([]);
+    const [user, setUser] = useState(null);
     const [oracles, setOracles] = useState([]);
     const router = useRouter();
     const [saving, setSaving] = useState(false);
@@ -23,18 +26,35 @@ export default function DreamsForm() {
     const [dream, setDream] = useState(null);
     const [askingQuestion, setAskingQuestion] = useState(false);
     const [answer, setAnswer] = useState(null);
-    const [edittingDream, setEdittingDream] = useState(true);
+    const [edittingDream, setEdittingDream] = useState(false);
+    const [interpretingDream, setInterpretingDream] = useState(false);
+    const [interpretButtonActive, setInterpretButtonActive] = useState(false);
 
     useEffect(() => {
+        const getUser = async () => {
+            const userDetails = await axios.get("/api/dream/getUser/" + dreamID);
+            setUser(userDetails.data.user);
+        }
 
+        getUser();
+    }, [])
+
+    useEffect(() => {
+        const isAnyOracleSelected = oracles.some(oracle => oracle.selected);
+        if (isAnyOracleSelected) {
+            setInterpretButtonActive(true);
+        } else {
+            setInterpretButtonActive(false);
+        }
+    }, [oracles]);
+
+    useEffect(() => {
         const getDreamDetails = async () => {
             setLoadingInterpretations(true);
             setLoadingNotes(true);
             const res = await axios.get('api/dream/details/' + dreamID);
             setDreamDetails(res.data.dreamDetails);
-            console.log("dream details: ", res.data.dreamDetails);
             const resOracles = await axios.get('/api/allOracles');
-            console.log('resOracles: ', resOracles);
             setOracles(resOracles.data);
             setLoadingInterpretations(false);
             const resNotes = await axios.get('/api/dream/note/' + dreamID);
@@ -78,10 +98,53 @@ export default function DreamsForm() {
     }
 
     const saveNotes = async () => {
-        setSaving(true);
-        const note = document.querySelector('.NoteBox').value;
-        const res = await axios.post('api/dream/note/' + dreamID, { note });
-        router.push('/dreams');
+        try {
+            setSaving(true);
+            const note = document.querySelector('.NoteBox').value;
+            const res = await axios.post('api/dream/note/' + dreamID, { note });
+            router.push('/dreams');
+        } catch (err) {
+            console.log("There was an error saving the note: ", err);
+        }
+    }
+
+    const interpretDream = async () => {
+        try {
+            setInterpretingDream(true);
+            for (let i = 0; i < oracles.length; i++) {
+                if (oracles[i].selected) {
+                    const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
+
+                    const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
+                    {
+                        params: {
+                            dreamPrompt: dreamPrompt
+                        }
+                    });
+
+                    if (resInterpret.status !== 200) {
+                        console.log("There was an error interpreting the dream");
+                        return;
+                    }
+
+                    const resUpdateDatabase = await axios.post('/api/dream/interpret', 
+                    {
+                        dreamID,
+                        interpretation: resInterpret.data[0].message.content,
+                        oracleID: oracles[i].oracleID,
+                        user
+                    });
+
+                    if (resUpdateDatabase.status !== 200) {
+                        console.log("There was an error saving the interpretations...");
+                        return;
+                    }
+                }
+            }
+            setInterpretingDream(false);
+        } catch (err) {
+            console.log("There was an error interpreting the dreams: ", err);
+        }
     }
 
     const backToDreams = () => {
@@ -89,14 +152,15 @@ export default function DreamsForm() {
     }
 
     const endDreamUpdate = async () => {
-        setEdittingDream(false);
-        const res = await axios.post('api/dream/update', {
-            newDream: dream,
-            dreamID
-        })
-
-        console.log('res: ', res);
-        // need to update dream in the database
+        try {
+            setEdittingDream(false);
+            const res = await axios.post('api/dream/update', {
+                newDream: dream,
+                dreamID
+            })
+        } catch (err) {
+            console.log("There was an error updating the dream: ", err);
+        }
     }
 
     const askQuestion = async (interpretationID, oracleID) => {
@@ -132,6 +196,16 @@ export default function DreamsForm() {
     const editDream = () => {
         console.log("editting dream");
         setEdittingDream(true);
+    }
+
+    function handleSelectionChange(selected, oracleID) {
+        // setCreditCost(prevCost => selected ? prevCost - 1 : prevCost + 1);
+        setOracles(prev => {
+            const updatedOracles = [...prev];
+            const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
+            updatedOracles[oracleIndex].selected = !selected;
+            return updatedOracles;
+        });
     }
 
     return (
@@ -178,7 +252,7 @@ export default function DreamsForm() {
                             <div className="loader"></div>  
                         </div>
                     )}
-                    {dreamDetails && oracles && (
+                    {dreamDetails.length > 0 && oracles ? (
 
                         dreamDetails.map((detail) => (
                             <div 
@@ -225,7 +299,60 @@ export default function DreamsForm() {
                                 )}
                             </div>
                         )
-                    ))}
+                    )) : !interpretingDream ? (
+                        <div className="h-full">
+                            <p className="golden-ratio-2 text-center font-bold">Add interpretations</p>
+                            <div className="flex flex-row justify-center items-center">
+                                <div className="flex flex-nowrap">
+                                    {oracles.filter(oracle => oracle.active).map((oracle) => (
+                                        <div key={oracle._id} className="flex-auto mx-2">
+                                            {oracle.bannerMessage && (
+                                                <div className="ribbon-2 golden-ratio-1 font-bold">{oracle.bannerMessage}</div>
+                                            )}
+                                            <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <button
+                                    className={`bg-blue-500 text-white font-bold py-2 px-4 rounded justify-center m-2 bottom-0 dream-button items-center ${
+                                        interpretButtonActive ? 'hover:bg-blue-700' : 'opacity-50 cursor-not-allowed'
+                                    }`}
+                                    onClick={interpretDream}
+                                    disabled={!interpretButtonActive}
+                                >
+                                    Interpret
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div>
+                            <div className='loadingContainer'>
+                                <p className="text-center golden-ratio-2">Interpreting Your Dream</p>
+                                <p className='loadingText'>Please wait while we interpret your dream</p>
+                                <div className='dotsContainer'>
+                                    <div className='dot delay200'></div>
+                                    <div className='dot delay400'></div>
+                                    <div className='dot'></div>
+                                </div>
+                            </div>
+                            <div>
+                                {oracles.map((oracle, index) => {
+                                    if (oracle.selected) {
+                                        return (
+                                            <div key={oracle._id}>
+                                                <div>{oracle.oracleName}</div>
+                                                <div data-label="Interpreting..." className="progress-bar">
+                                                    {/* <div className="progress-bar-inside" style={{width: `${interpretationProgressArray[index]}%`}}>Interpreting...</div> */}
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                })}
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className="md:w-1/3">
                     <div className="p-2 text-white">

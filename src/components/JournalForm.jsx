@@ -14,12 +14,12 @@ export default function JournalForm() {
     const { data: session } = useSession();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
-    const [savingDream, setSavingDream] = useState(false);
+    const [savingDream, setSavingDream] = useState(true);
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [newDreamID, setNewDreamID] = useState(null);
     const [subscribed, setSubscribed] = useState(false);
-    const [interpretingDream, setInterpretingDream] = useState(false);
+    const [interpretingDream, setInterpretingDream] = useState(true);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
     const [creditCost, setCreditCost] = useState(0);
     const [oracleSelected, setOracleSelected] = useState(false);
@@ -397,13 +397,12 @@ export default function JournalForm() {
                                     
                                     <div className="justify-center items-center flex md:flex-row flex-col">
                                         {oracles.map((oracle) => {
-
                                             return (
                                                 <div key={oracle._id} className="flex flex-col justify-center items-center oracle-wrapper mx-2">
                                                     {oracle.bannerMessage && (<div className="ribbon-2 golden-ratio-1 font-bold">{oracle.bannerMessage}</div>)}
                                                     <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                                 </div>
-                                            )})}
+                                        )})}
                                     </div>
                                     <div className="flex justify-center">
                                         <button className="dream-button golden-ratio-2" onClick={journalDream}>
