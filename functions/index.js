@@ -32,7 +32,7 @@ exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 
 
 async function interpretDream(dream) {
     const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: "gpt-4o",
         messages: [{role: "user", content: dream}],
     })
     logger.info('chatCompletion: ', chatCompletion);

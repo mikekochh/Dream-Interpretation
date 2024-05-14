@@ -28,7 +28,7 @@ export async function GET(request) {
 
 async function interpretDream(dream) {
     const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: "o",
         messages: [{role: "user", content: dream}],
     })
 
