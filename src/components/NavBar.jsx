@@ -77,12 +77,12 @@ const NavBar = () => {
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`}>
                                 <Link href="/dreams">Journal</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4 ${pathname.startsWith('/blog') ? 'font-bold' : ''}`}>
+                            {/* <li className={`cursor-pointer mr-4 ${pathname.startsWith('/blog') ? 'font-bold' : ''}`}>
                                 <Link href="/blog">Blog</Link>
                             </li>
                             <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
                                 <Link href="/pricing">Shop</Link>
-                            </li>
+                            </li> */}
                             <li className={`cursor-pointer ${pathname === '/settings' || pathname === '/cancelSubscription' ? 'font-bold' : ''}`}>
                                 <Link href="/settings">Profile</Link>
                             </li>
@@ -137,12 +137,12 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                 <li className={`cursor-pointer p-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/dreams">Journal</Link>
                 </li>
-                <li className={`cursor-pointer p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                {/* <li className={`cursor-pointer p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/blog">Blog</Link>
                 </li>
                 <li className={`cursor-pointer p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/pricing">Shop</Link>
-                </li>
+                </li> */}
                 <li className={`cursor-pointer p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/settings">Profile</Link>
                 </li>

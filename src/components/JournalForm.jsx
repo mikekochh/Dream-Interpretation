@@ -153,16 +153,16 @@ export default function JournalForm() {
             return;
         }
         
-        if (!subscribed && creditCost > user.credits) {
-            if (user.name) {
-                setError("You don't have enough credits. Please select less oracles or buy more credits");
-            }
-            else {
-                setError("You don't have enough credits. Please select less oracles or create an account");
-            }
-            setSavingDream(false);
-            return;
-        }
+        // if (!subscribed && creditCost > user.credits) {
+        //     if (user.name) {
+        //         setError("You don't have enough credits. Please select less oracles or buy more credits");
+        //     }
+        //     else {
+        //         setError("You don't have enough credits. Please select less oracles or create an account");
+        //     }
+        //     setSavingDream(false);
+        //     return;
+        // }
         setSavingDream(true);
         const userID = user._id;
         try {
@@ -392,7 +392,8 @@ export default function JournalForm() {
                                 <div className="bg-red-500 w-max p-1 text-black font-bold rounded-xl whitespace-nowrap">{error}</div>
                             )}  
                             <div id="interpretation-section" className="relative">
-                                <div className={`${user?.credits === 0 && !subscribed ? 'blur pointer-events-none' : ''}`}>
+                                {/* <div className={`${user?.credits === 0 && !subscribed ? 'blur pointer-events-none' : ''}`}> */}
+                                <div>
                                     <OracleSelectionPopup credits={user?.credits} />
                                     
                                     <div className="justify-center items-center flex md:flex-row flex-col">
@@ -410,7 +411,7 @@ export default function JournalForm() {
                                         </button><br />
                                     </div>
                                 </div>
-                                {user?.credits === 0 && !user?.name ? (
+                                {/* {user?.credits === 0 && !user?.name ? (
                                     <div className="absolute inset-0 flex flex-col md:justify-center items-center">
                                         <span className="text-3xl font-semibold text-center mt-5 md:mt-0">Create an account to continue interpreting your dreams</span>
                                         <button className="rounded-xl bg-blue-600 dream-button m-2 pl-4 pr-4 justify-center item p-10" onClick={() => window.location.href = '/pricing'}>Create Account</button>
@@ -420,7 +421,7 @@ export default function JournalForm() {
                                         <span className="text-3xl font-semibold text-center mt-5 md:mt-0">You must buy more credits or start a subscription to interpret your dreams</span>
                                         <button className="rounded-xl bg-blue-600 dream-button m-2 pl-4 pr-4 justify-center item p-10" onClick={() => window.location.href = '/pricing'}>See Pricing</button>
                                     </div>
-                                ) : null}
+                                ) : null} */}
                             </div>
                         </div>
                     </div>
@@ -457,7 +458,7 @@ const OracleSelectionPopup = ({ credits }) => {
     return (
         <div className="justify-center golden-ratio-3 pt-5 leading-none text-center">
             Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/>
-            <p className="text-center golden-ratio-2"><span className="font-bold">{credits}</span> Dream Credits</p>
+            {/* <p className="text-center golden-ratio-2"><span className="font-bold">{credits}</span> Dream Credits</p> */}
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="golden-ratio-2 select-none">
