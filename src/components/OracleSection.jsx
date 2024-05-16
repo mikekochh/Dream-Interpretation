@@ -21,6 +21,7 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
                     className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
                     onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
                     htmlFor={oracle.oracleID}
+                    draggable={false}
                 />
             </div>
             <div className="w-full relative max-w-sm md:hidden oracle-image-mobile">

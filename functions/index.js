@@ -5,6 +5,11 @@ const logger = require('firebase-functions/logger');
 const OpenAI = require('openai');
 const cors = require('cors')({ origin: true });
 
+// below command line is to update function in firebase
+// firebase login
+// firebase deploy --only functions
+
+
 admin.initializeApp();
 
 const openai = new OpenAI({
@@ -32,7 +37,7 @@ exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 
 
 async function interpretDream(dream) {
     const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4-turbo",
         messages: [{role: "user", content: dream}],
     })
     logger.info('chatCompletion: ', chatCompletion);

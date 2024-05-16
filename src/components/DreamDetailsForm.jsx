@@ -29,6 +29,9 @@ export default function DreamsForm() {
     const [edittingDream, setEdittingDream] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [interpretButtonActive, setInterpretButtonActive] = useState(false);
+    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
+    const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
+    const [interpretationComplete, setInterpretationComplete] = useState(false);
 
     useEffect(() => {
         const getUser = async () => {
@@ -38,6 +41,24 @@ export default function DreamsForm() {
 
         getUser();
     }, [])
+
+    useEffect(() => {
+        if (interpretingDream) {
+            const interval = setInterval(() => {
+                setInterpretationProgressArray(prevArray => {
+                    const updatedArray = [...prevArray];
+                    if (updatedArray[interpretationProgressIndex] <= 99) {
+                        updatedArray[interpretationProgressIndex] += .10;
+                        return updatedArray;
+                    }
+                    else {
+                        return updatedArray;
+                    }
+                });
+            }, 25);
+            return () => clearInterval(interval);
+        }
+    }, [interpretingDream, interpretationProgressArray.length, interpretationProgressIndex])
 
     useEffect(() => {
         const isAnyOracleSelected = oracles.some(oracle => oracle.selected);
@@ -71,7 +92,7 @@ export default function DreamsForm() {
         }
 
         getDreamDetails();
-    }, [dreamID]);
+    }, [dreamID, interpretationComplete]);
 
     const formatInterpretationDate = (dreamDate) => {
         const date = new Date(dreamDate);
@@ -122,6 +143,9 @@ export default function DreamsForm() {
                         }
                     });
 
+                    console.log("Are we getting a response from here?");
+                    console.log("resInterpret: ", resInterpret);
+
                     if (resInterpret.status !== 200) {
                         console.log("There was an error interpreting the dream");
                         return;
@@ -135,13 +159,25 @@ export default function DreamsForm() {
                         user
                     });
 
+                    console.log("resUpdateDatabase: ", resUpdateDatabase);
+
                     if (resUpdateDatabase.status !== 200) {
                         console.log("There was an error saving the interpretations...");
                         return;
                     }
+
+                    setInterpretationProgressArray(prevArray => {
+                        const updatedArray = [...prevArray];
+                        updatedArray[i] = 100;
+                        return updatedArray;
+                    });
+    
+                    setInterpretationProgressIndex(i+1);
                 }
             }
             setInterpretingDream(false);
+            setInterpretationComplete(true);
+            location.reload();
         } catch (err) {
             console.log("There was an error interpreting the dreams: ", err);
         }
@@ -344,7 +380,7 @@ export default function DreamsForm() {
                                             <div key={oracle._id}>
                                                 <div>{oracle.oracleName}</div>
                                                 <div data-label="Interpreting..." className="progress-bar">
-                                                    {/* <div className="progress-bar-inside" style={{width: `${interpretationProgressArray[index]}%`}}>Interpreting...</div> */}
+                                                    <div className="progress-bar-inside" style={{width: `${interpretationProgressArray[index]}%`}}>Interpreting...</div>
                                                 </div>
                                             </div>
                                         )
