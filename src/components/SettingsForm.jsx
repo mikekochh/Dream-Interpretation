@@ -10,7 +10,7 @@ const SettingsForm = () => {
     const router = useRouter();
     const { data: session } = useSession();
     const [user, setUser] = useState({});
-    const [subscribed, setSubscribed] = useState(false);
+    // const [subscribed, setSubscribed] = useState(false);
     // const [oracleUpdated, setOracleUpdated] = useState(false);
     // const [metaAnalysisOracleID, setMetaAnalysisOracleID] = useState(0);
 
@@ -29,7 +29,7 @@ const SettingsForm = () => {
         if (session) {
             setUserData().then(userData => {
                 setUser(userData);
-                setSubscribed(userData.subscribed);
+                // setSubscribed(userData.subscribed);
                 setMetaAnalysisOracleID(userData.metaAnalysisOracleID);
             }).catch(err => {
                 console.log('err: ', err);
@@ -119,7 +119,7 @@ const SettingsForm = () => {
                 </div> */}
                 <div className="logout absolute bottom-0 right-0 p-4">
                     <button onClick={logout} className="back-button">Log Out</button>
-                    {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>}
+                    {/* {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>} */}
                 </div>
                 <ContactAndPrivacyButtons />
             </div>

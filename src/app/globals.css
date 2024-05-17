@@ -408,8 +408,12 @@ nav {
 
 .dropdown {
   position: relative;
-  display: inline-block;
+  display: block; 
+  width: 100%;
+  max-width: 768px;
+  margin: auto;
 }
+
 
 .dropdown-menu {
   position: absolute;
@@ -438,6 +442,7 @@ nav {
   pointer-events: none;
   transform: translateY(0px);
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+  margin-bottom: 0; 
 }
 
 .popup-menu-active {
@@ -454,6 +459,7 @@ nav {
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
   z-index: 20;
   padding: 0.5rem;
+  margin-bottom: 0; 
 }
 
 .popup-menu-bottom {
@@ -786,7 +792,7 @@ nav {
 
 .golden-ratio-3 {
   font-size: 36.65px;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .golden-ratio-4 {
@@ -877,3 +883,12 @@ nav {
     opacity: 1;
   }
 }
+
+.disabled-oracle {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+
+

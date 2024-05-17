@@ -18,10 +18,10 @@ export default function JournalForm() {
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [newDreamID, setNewDreamID] = useState(null);
-    const [subscribed, setSubscribed] = useState(false);
+    // const [subscribed, setSubscribed] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
-    const [creditCost, setCreditCost] = useState(0);
+    // const [creditCost, setCreditCost] = useState(0);
     const [oracleSelected, setOracleSelected] = useState(false);
     const [localInterpretation, setLocalInterpretation] = useState("");
     const [dream, setDream] = useState("");
@@ -89,7 +89,7 @@ export default function JournalForm() {
 
         if (session) {
             setUserData().then(userData => {
-                setSubscribed(userData.subscribed);
+                // setSubscribed(userData.subscribed);
                 setUser(userData);
             }).catch(err => {
                 console.log('err: ', err);
@@ -98,20 +98,20 @@ export default function JournalForm() {
         // if they have never been to the website before, give them 1 free credit
         // else if they have been to the website before, but have not spent their free credit, give them 1 free credit
         // else if they have been to the website before, and they have spent their free credit, give them 0 credits
-        else if (!document.cookie.includes('visited=true')) {
-            setUser({ credits: 1 });
-            document.cookie = "visited=true; max-age=31536000";
-            document.cookie = "spentCredits=false; max-age=31536000";
-            localCreditsGiven.current = true;
-        }
-        else if (document.cookie.includes('visited=true') && !document.cookie.includes('spentCredits=true')) {
-            setUser({ credits: 1 });
-            localCreditsGiven.current = true;
-        }
-        else if (document.cookie.includes('visited=true') && document.cookie.includes('spentCredits=true')) {
-            setUser({ credits: 0 });
-            localCreditsGiven.current = true;
-        }
+        // else if (!document.cookie.includes('visited=true')) {
+        //     setUser({ credits: 1 });
+        //     document.cookie = "visited=true; max-age=31536000";
+        //     document.cookie = "spentCredits=false; max-age=31536000";
+        //     localCreditsGiven.current = true;
+        // }
+        // else if (document.cookie.includes('visited=true') && !document.cookie.includes('spentCredits=true')) {
+        //     setUser({ credits: 1 });
+        //     localCreditsGiven.current = true;
+        // }
+        // else if (document.cookie.includes('visited=true') && document.cookie.includes('spentCredits=true')) {
+        //     setUser({ credits: 0 });
+        //     localCreditsGiven.current = true;
+        // }
     }, [session, localCreditsGiven]);
 
     useEffect(() => {
@@ -137,7 +137,7 @@ export default function JournalForm() {
     }, []);
 
     function handleSelectionChange(selected, oracleID) {
-        setCreditCost(prevCost => selected ? prevCost - 1 : prevCost + 1);
+        // setCreditCost(prevCost => selected ? prevCost - 1 : prevCost + 1);
         setOracles(prev => {
             const updatedOracles = [...prev];
             const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
@@ -164,7 +164,7 @@ export default function JournalForm() {
         //     return;
         // }
         setSavingDream(true);
-        const userID = user._id;
+        const userID = user?._id;
         try {
             // if there is a user, save the dream to their account, interpret the dream, and save the interpretation to their account.
             if (userID) {
@@ -238,13 +238,13 @@ export default function JournalForm() {
 
                 setInterpretationProgressIndex(i+1);
 
-                if (user._id === undefined) {
-                    setLocalInterpretation(resInterpret.data[0].message.content);
-                    setInterpretingDream(false);
-                    setSaveMessage("Here is your interpretation:");
-                    journalDreamNoAccount();
-                    return;
-                }
+                // if (user._id === undefined) {
+                //     setLocalInterpretation(resInterpret.data[0].message.content);
+                //     setInterpretingDream(false);
+                //     setSaveMessage("Here is your interpretation:");
+                //     journalDreamNoAccount();
+                //     return;
+                // }
             }
 
             console.log("setInterpretationProgressIndex being set to: ", i+1);
@@ -252,7 +252,12 @@ export default function JournalForm() {
         }
 
         setInterpretingDream(false);
-        setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
+        if (user?._id === undefined) {
+            setSaveMessage("Dream interpretation complete! Create an account to view your interpretation.");
+        }
+        else {
+            setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
+        }
     }
 
     const journalDreamNoAccount = () => {
@@ -322,25 +327,18 @@ export default function JournalForm() {
                                     {!user?.name && 
                                     (
                                         <div>
-                                            <div className="golden-ratio-2 text-center font-bold text-gold">Create an account below to ensure immediate access to your dream interpretation once its ready</div>
-                                            <div className="text-center flex justify-center">
+                                            <div className="golden-ratio-2 text-center font-bold text-gold">Create an account below to view your dream interpretation once its ready</div>
+                                            {/* <div className="text-center flex justify-center">
                                                 <RegisterForm />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     )}
                                 </div>
                             ) : (
-                                <div className="">
-                                    {localInterpretation ? (
-                                        <div className="text-center">
-                                            <p className={`rounded-xl p-2 border border-white m-2 overflow-auto ${!user?.name ? 'blur select-none' : ''}`}>{insertLineBreaks(localInterpretation)}</p>
-                                            {!user?.name && (
-                                                <div className="overlay-message">
-                                                    <p className="golden-ratio-2 text-gold">Create an account to view your interpretation</p>
-                                                    <RegisterForm />
-                                                </div>
-                                                
-                                            )}
+                                <div>
+                                    {!user ? (
+                                        <div>
+                                            <div className="golden-ratio-2 text-center font-bold text-gold">Create an account below to view your dream interpretation</div>
                                         </div>
                                     ) : (
                                         <div>
@@ -350,36 +348,38 @@ export default function JournalForm() {
                                     )}
                                 </div>
                             )}
-                        </div>  
+                        </div> 
+                        {!user && (
+                            <div className="text-center flex justify-center">
+                                <RegisterForm />
+                            </div>
+                        )} 
                     </div>
                 </div>
             ) : (
                 <div>
-                    {!subscribed && (
-                        <div className="right-0 flex flex-row justify-center">
+                    {user?.name ? (
+                        <p className="text-center golden-ratio-3">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
+                    ) : (
+                        <div>
+                            <p className="text-center golden-ratio-3">Welcome to Dream Oracles</p>
+                        </div>
+                    )}
+                    <div className="right-0 flex flex-row justify-center">
                             {!user?.name && (
-                                <div className="golden-ratio-2">
+                                <div className="golden-ratio-2 mb-5 ">
                                     <p className="hidden md:flex">
-                                        <a href='/createAccount' className="underline text-gold mr-2">Create an account for 5 dream credits here</a><span className="text-gold"> or </span>
+                                        <a href='/createAccount' className="underline text-gold mr-2">Create an account</a><span className="text-gold"> or </span>
                                         <a href='/login' className="underline hidden md:block text-gold ml-2">Log In</a>
                                     </p>
                                     <p className="md:hidden">
-                                        <a href='/createAccount' className="underline  text-gold">Create account here</a><span className="text-gold"> or </span>
+                                        <a href='/createAccount' className="underline text-gold">Create an account</a><span className="text-gold"> or </span>
                                         <a href='/login' className="underline md:hidden text-gold">Log In</a>
                                     </p>
                                 </div>
                             )}
                         </div>
-                    )}
                     <div>
-                        {user?.name ? (
-                            <p className="text-center golden-ratio-3">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
-                        ) : (
-                            <div>
-                                <p className="text-center golden-ratio-3">Welcome to Dream Oracles</p>
-                            </div>
-
-                        )}
                         
                         <HowItWorksPopup />
                         <div className="flex flex-col">
@@ -398,10 +398,19 @@ export default function JournalForm() {
                                     
                                     <div className="justify-center items-center flex md:flex-row flex-col">
                                         {oracles.map((oracle) => {
+
+                                            const userName = user?.name
+
+                                            const isDisabled = oracle.oracleID !== 1 && !userName;
+
                                             return (
                                                 <div key={oracle._id} className="flex flex-col justify-center items-center oracle-wrapper mx-2">
                                                     {oracle.bannerMessage && (<div className="ribbon-2 golden-ratio-1 font-bold">{oracle.bannerMessage}</div>)}
-                                                    <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
+                                                    <OracleSection 
+                                                        oracle={oracle} 
+                                                        handleSelectionChange={handleSelectionChange} 
+                                                        isDisabled={isDisabled} 
+                                                    />
                                                 </div>
                                         )})}
                                     </div>
@@ -436,8 +445,8 @@ const HowItWorksPopup = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center golden-ratio-2 text-center leading-none">
-            <p>Enter Dream Description Below <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/></p>
+        <div className="justify-center golden-ratio-2 text-center">
+            <p>1. Enter Dream Description Below <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/></p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
                     <p className="text-xl select-none">
@@ -456,8 +465,8 @@ const OracleSelectionPopup = ({ credits }) => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center golden-ratio-3 pt-5 leading-none text-center">
-            Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/>
+        <div className="justify-center golden-ratio-2 pt-5 leading-none text-center pb-2">
+            2. Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/><br/>
             {/* <p className="text-center golden-ratio-2"><span className="font-bold">{credits}</span> Dream Credits</p> */}
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={` ${open ? 'popup-menu-active' : 'popup-menu'}`}>
@@ -473,12 +482,12 @@ const OracleSelectionPopup = ({ credits }) => {
     )
 }
 
-const OracleSection = ({ oracle, handleSelectionChange }) => {
+const OracleSection = ({ oracle, handleSelectionChange, isDisabled }) => {
 
     const [open, setOpen] = useState(false);
     
     return (
-        <div className="text-center whitespace-nowrap relative golden-ratio-1">
+        <div className={`text-center whitespace-nowrap relative golden-ratio-1 ${isDisabled ? 'disabled-oracle' : ''}`}>
             <div className="w-full relative max-w-sm hidden md:block">
                 <Image 
                     layout="responsive"
@@ -516,3 +525,4 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
         </div>
     )
 }
+

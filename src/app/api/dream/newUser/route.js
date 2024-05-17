@@ -16,7 +16,12 @@ export async function POST(req) {
             throw new Error("Dream not found!");
         }
 
-        const updatedUser = await User.findOneAndUpdate({ _id: userID }, { $inc: { dreamCount }}, { new: true });
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userID },
+            { $inc: { dreamCount: 1 } },
+            { new: true }
+        );
+        
 
         if (!updatedUser) {
             throw new Error("User not found!");
