@@ -253,7 +253,7 @@ export default function JournalForm() {
 
         setInterpretingDream(false);
         if (user?._id === undefined) {
-            setSaveMessage("Dream interpretation complete! Create an account to view your interpretation.");
+            setSaveMessage("Dream interpretation complete!");
         }
         else {
             setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
@@ -374,7 +374,7 @@ export default function JournalForm() {
                                     </p>
                                 </div>
                             )}
-                            {!user?.activated && (
+                            {!user?.activated && user?.name && (
                                 <div className="golden-ratio-2 mb-5 ">
                                     <p className="hidden md:flex">
                                         <a href={`/emailVerification?email=${user?.email}`} className="underline text-gold mr-2">Register your account</a>
@@ -421,11 +421,11 @@ export default function JournalForm() {
                                         <button 
                                             className="dream-button golden-ratio-2 mb-4" 
                                             onClick={journalDream}
-                                            disabled={!user?.activated}
+                                            disabled={!user?.activated && user?.name}
                                         >
                                             {buttonText}
                                         </button>
-                                        {!user?.activated && (
+                                        {!user?.activated && user?.name && (
                                             <a className="text-gold golden-ratio-1 underline cursor-pointer" href={`/emailVerification?email=${user?.email}`}>Finish registering your account to continue</a>
                                         )}
                                     </div>

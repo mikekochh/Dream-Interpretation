@@ -349,24 +349,24 @@ export default function DreamsForm() {
                                 <div className="flex flex-nowrap">
                                     {oracles.filter(oracle => oracle.active).map((oracle) => (
                                         <div key={oracle._id} className="flex-auto mx-2">
-                                            {oracle.bannerMessage && (
-                                                <div className="ribbon-2 golden-ratio-1 font-bold">{oracle.bannerMessage}</div>
-                                            )}
                                             <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                            <div className="text-center">
+                            <div className="flex flex-col items-center text-center">
                                 <button
                                     className={`bg-blue-500 text-white font-bold py-2 px-4 rounded justify-center m-2 bottom-0 dream-button items-center ${
-                                        interpretButtonActive ? 'hover:bg-blue-700' : 'opacity-50 cursor-not-allowed'
+                                        interpretButtonActive && user?.activated ? 'hover:bg-blue-700' : 'opacity-50 cursor-not-allowed'
                                     }`}
                                     onClick={interpretDream}
-                                    disabled={!interpretButtonActive}
+                                    disabled={!interpretButtonActive || !user?.activated}
                                 >
                                     Interpret
                                 </button>
+                                {!user?.activated && (
+                                    <a className="text-gold golden-ratio-1 underline cursor-pointer" href={`/emailVerification?email=${user?.email}`}>Finish registering your account to continue</a>
+                                )}
                             </div>
                         </div>
                     ) : (
