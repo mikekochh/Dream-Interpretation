@@ -88,7 +88,7 @@ export default function RegisterForm() {
                     router.push('/interpret');
                 }
                 else {
-                    router.push('dreamDetails?' + dreamID);
+                    router.push('dreamDetails?dreamID=' + dreamID);
                 }
             }
         }

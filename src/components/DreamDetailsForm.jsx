@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OracleSection from './OracleSection';
-import { setRequestMeta } from 'next/dist/server/request-meta';
+import { isIn } from 'validator';
 
 export default function DreamsForm() { 
 
@@ -34,11 +34,18 @@ export default function DreamsForm() {
     const [interpretationComplete, setInterpretationComplete] = useState(false);
 
     useEffect(() => {
+        const checkPage = () => {
+            if (!dreamID) {
+                router.push('/interpret');
+            }
+        }
+
         const getUser = async () => {
             const userDetails = await axios.get("/api/dream/getUser/" + dreamID);
             setUser(userDetails.data.user);
         }
 
+        checkPage();
         getUser();
     }, [])
 
