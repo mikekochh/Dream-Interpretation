@@ -20,6 +20,9 @@ export default function EmailVerificationForm() {
             }
         }
 
+        console.log("email: ", email);
+        console.log("emailSent: ", emailSent);
+
         if (email && !emailSent) {
             sendVerificationEmail();
         }

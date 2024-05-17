@@ -890,5 +890,12 @@ nav {
   cursor: not-allowed;
 }
 
+.dream-button:disabled {
+  background-color: #ccc; /* Grey background */
+  color: #666; /* Dimmed text color */
+  cursor: not-allowed; /* Shows a 'not allowed' cursor when hovered */
+}
+
+
 
 

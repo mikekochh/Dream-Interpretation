@@ -8,6 +8,8 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export async function POST(req) {
 
+    console.log("Are we getting here?");
+
     await connectMongoDB();
     let newUser;
 
@@ -48,6 +50,8 @@ export async function POST(req) {
         };
 
         const emailResult = await sgMail.send(mailOptions);
+
+        console.log("emailResult: ", emailResult);
 
         return NextResponse.json({message: "Verification Email Sent!"}, { status: 200 })
     } catch (error) {

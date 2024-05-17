@@ -372,9 +372,12 @@ export default function JournalForm() {
                                         <a href='/createAccount' className="underline text-gold mr-2">Create an account</a><span className="text-gold"> or </span>
                                         <a href='/login' className="underline hidden md:block text-gold ml-2">Log In</a>
                                     </p>
-                                    <p className="md:hidden">
-                                        <a href='/createAccount' className="underline text-gold">Create an account</a><span className="text-gold"> or </span>
-                                        <a href='/login' className="underline md:hidden text-gold">Log In</a>
+                                </div>
+                            )}
+                            {!user?.activated && (
+                                <div className="golden-ratio-2 mb-5 ">
+                                    <p className="hidden md:flex">
+                                        <a href={`/emailVerification?email=${user?.email}`} className="underline text-gold mr-2">Register your account</a>
                                     </p>
                                 </div>
                             )}
@@ -414,11 +417,19 @@ export default function JournalForm() {
                                                 </div>
                                         )})}
                                     </div>
-                                    <div className="flex justify-center">
-                                        <button className="dream-button golden-ratio-2" onClick={journalDream}>
+                                    <div className="flex flex-col items-center">
+                                        <button 
+                                            className="dream-button golden-ratio-2 mb-4" 
+                                            onClick={journalDream}
+                                            disabled={!user?.activated}
+                                        >
                                             {buttonText}
-                                        </button><br />
+                                        </button>
+                                        {!user?.activated && (
+                                            <a className="text-gold golden-ratio-1 underline cursor-pointer" href={`/emailVerification?email=${user?.email}`}>Finish registering your account to continue</a>
+                                        )}
                                     </div>
+
                                 </div>
                                 {/* {user?.credits === 0 && !user?.name ? (
                                     <div className="absolute inset-0 flex flex-col md:justify-center items-center">
