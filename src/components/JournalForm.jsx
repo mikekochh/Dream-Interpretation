@@ -322,7 +322,7 @@ export default function JournalForm() {
             ) : (
                 <div>
                     {user?.name ? (
-                        <p className="text-center golden-ratio-3">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
+                        <p className="text-center golden-ratio-2 mb-5">Welcome back {user?.name}</p>
                     ) : (
                         <div>
                             <p className="text-center golden-ratio-3">Welcome to Dream Oracles</p>
@@ -409,7 +409,7 @@ const HowItWorksPopup = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center golden-ratio-2 text-center">
+        <div className="justify-center golden-ratio-3 text-center">
             <p>1. Enter Dream Description Below <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/></p>
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
                 <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
@@ -429,7 +429,7 @@ const OracleSelectionPopup = ({ credits }) => {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="justify-center golden-ratio-2 pt-5 leading-none text-center pb-2">
+        <div className="justify-center golden-ratio-3 pt-5 leading-none text-center pb-2">
             2. Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)}/><br/>
             {/* <p className="text-center golden-ratio-2"><span className="font-bold">{credits}</span> Dream Credits</p> */}
             <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">

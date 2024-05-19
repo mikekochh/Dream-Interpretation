@@ -9,7 +9,7 @@ import { faTrash, faStar, faStarHalfStroke, faArrowRight, faArrowLeft} from '@fo
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 export default function DreamsForm() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [dreams, setDreams] = useState([]);
     const [loading, setLoading] = useState(true);
     const [noDreams, setNoDreams] = useState(false);
@@ -24,6 +24,10 @@ export default function DreamsForm() {
 
     useEffect(() => {
         const getDreams = async () => {
+            if (status === 'loading') {
+                return;
+            }
+
             console.log("session: ", session);
             if (session) {
                 console.log("Loading...");
@@ -175,7 +179,6 @@ export default function DreamsForm() {
             )}
             <div className={`${!session && "blur-effect"}`}>
                 <InfoTag name={session?.user.name} />
-                {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
                 <div className="flex justify-between">
                     <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
                         Sort by: <span className="font-bold ml-1">{selectedSort}</span>

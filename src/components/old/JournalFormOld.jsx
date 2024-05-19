@@ -359,7 +359,7 @@ export default function JournalForm() {
             ) : (
                 <div>
                     {user?.name ? (
-                        <p className="text-center golden-ratio-3">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
+                        <p className="text-center golden-ratio-2">Welcome back {user?.name} <FontAwesomeIcon icon={faStarAndCrescent} /></p>
                     ) : (
                         <div>
                             <p className="text-center golden-ratio-3">Welcome to Dream Oracles</p>

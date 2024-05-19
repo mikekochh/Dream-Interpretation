@@ -409,9 +409,9 @@ nav {
 .dropdown {
   position: relative;
   display: block; 
-  width: 100%;
   max-width: 768px;
-  margin: auto;
+  /* margin: auto; */
+  margin-left: 2;
 }
 
 
