@@ -226,7 +226,7 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
     }
 
     return (
-        <div className="relative p-5 border border-gray-200 rounded-lg shadow-md overflow-hidden">
+        <div className="relative p-5 border rounded-lg shadow-md overflow-hidden border-gold-small">
             <Link href={{
                 pathname: '/dreamDetails',
                 query: { dreamID: dream._id },
