@@ -24,13 +24,16 @@ export default function DreamsForm() {
 
     useEffect(() => {
         const getDreams = async () => {
+            console.log("session: ", session);
             if (session) {
+                console.log("Loading...");
                 setLoading(true);
                 const res = await axios.get('api/dream/user/' + session.user.email);
                 let sortedDreams;
                 if (res.data.length === 0) {
                     setNoDreams(true);
                     setLoading(false);
+                    console.log("Not Loading...");
                     return;
                 }
 
@@ -68,10 +71,15 @@ export default function DreamsForm() {
                 }
 
                 setDreams(sortedDreams);
+                console.log("Not Loading...");
                 setLoading(false); // Set loading to false after dreams are fetched
+            }
+            else {
+                setLoading(false);
             }
         };
 
+        console.log("Is this even running?");
         getDreams();
     }, [session, weekOffset, sortType]);
 
