@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import BlogForm from "../BlogForm";
+import BlogForm from "../old/BlogForm";
 
 //&apos;
 

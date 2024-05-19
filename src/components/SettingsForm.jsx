@@ -6,13 +6,10 @@ import { useRouter } from "next/navigation";
 import ContactAndPrivacyButtons from './ContactAndPrivacyButtons';
 
 const SettingsForm = () => {
-
     const router = useRouter();
     const { data: session } = useSession();
     const [user, setUser] = useState({});
-    // const [subscribed, setSubscribed] = useState(false);
-    // const [oracleUpdated, setOracleUpdated] = useState(false);
-    // const [metaAnalysisOracleID, setMetaAnalysisOracleID] = useState(0);
+    const [loading, setLoading] = useState(true); // New loading state
 
     useEffect(() => {
         async function setUserData() {
@@ -29,11 +26,13 @@ const SettingsForm = () => {
         if (session) {
             setUserData().then(userData => {
                 setUser(userData);
-                // setSubscribed(userData.subscribed);
-                setMetaAnalysisOracleID(userData.metaAnalysisOracleID);
+                setLoading(false); // Set loading to false after user data is loaded
             }).catch(err => {
                 console.log('err: ', err);
+                setLoading(false); // Set loading to false in case of error
             });
+        } else {
+            setLoading(false); // Set loading to false if no session
         }
     }, [session]);
 
@@ -46,17 +45,23 @@ const SettingsForm = () => {
         window.location.href = '/cancelSubscription';
     }
 
-    // const updateMetaAnalysisOracleID = async (oracleID) => {
-    //     const res = await axios.post('/api/user/updateMetaAnalysisOracleID', {
-    //         oracleID,
-    //         userID: user._id
-    //     });
-    //     setMetaAnalysisOracleID(oracleID);
-    //     setOracleUpdated(true);
-    // }
-    
     const createAccount = () => {
         router.push("/createAccount");
+    }
+
+    if (loading) {
+        return (
+            <div className="main-content text-white flex justify-center items-center h-screen">
+                <div className='loadingContainer'>
+                    <p className='loadingText'>Transporting to Dream Profile</p>
+                    <div className='dotsContainer'>
+                        <div className='dot delay200'></div>
+                        <div className='dot delay400'></div>
+                        <div className='dot'></div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -75,48 +80,11 @@ const SettingsForm = () => {
                     {user.dreamCount === 1 ? (
                         <p>1 dream journaled</p>
                     ) : user.dreamCount ? (
-                        <p>{user.dreamCount} dream&apos;s journaled</p>
+                        <p>{user.dreamCount} dream's journaled</p>
                     ) : (
-                        <p>0 Dream&apos;s Journaled</p>
+                        <p>0 Dream's Journaled</p>
                     )}
                 </div>
-                {/* <div className="flex items-center">
-                    <span className="text-xl font-bold mr-4">Meta Analysis Oracle: </span>
-                    <div className="flex items-center space-x-4">
-                        <label className="flex items-center">
-                            Carl Jung:
-                            <input 
-                                type="radio" 
-                                name="option" 
-                                value={1} 
-                                checked={metaAnalysisOracleID === 1} 
-                                onChange={() => updateMetaAnalysisOracleID(1)}
-                                className="form-rad"
-                            />
-                        </label>
-                        <label className="flex items-center">
-                            Sigmund Freud:
-                            <input 
-                                type="radio" 
-                                name="option" 
-                                value={2} 
-                                checked={metaAnalysisOracleID === 2}
-                                onChange={() => updateMetaAnalysisOracleID(2)}
-                            />
-                        </label>
-                        <label className="flex items-center">
-                            Ruya:
-                            <input 
-                                type="radio" 
-                                name="option" 
-                                value={3} 
-                                checked={metaAnalysisOracleID === 3}
-                                onChange={() => updateMetaAnalysisOracleID(3)}
-                            />
-                        </label>
-                    </div>
-                    {oracleUpdated && <p className="text-green-500">Oracle updated!</p>}
-                </div> */}
                 <div className="logout absolute bottom-0 right-0 p-4">
                     <button onClick={logout} className="back-button">Log Out</button>
                     {/* {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>} */}
@@ -124,10 +92,7 @@ const SettingsForm = () => {
                 <ContactAndPrivacyButtons />
             </div>
         </div>
-        
     )
-
 }
 
 export default SettingsForm;
-

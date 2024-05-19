@@ -8,10 +8,11 @@ import Link from 'next/link';
 import { faTrash, faStar, faStarHalfStroke, faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
-export default function DreamsForm() {
+export default function DreamsForm() { 
+
     const { data: session } = useSession();
     const [dreams, setDreams] = useState([]);
-    const [loading, setLoading] = useState(true); // Set loading to true initially
+    const [loading, setLoading] = useState(false);
     const [noDreams, setNoDreams] = useState(false);
     const [weekOffset, setWeekOffset] = useState(0); // 0 means the current week, -1 means the previous week, and so on.
     const [firstDayOfWeek, setFirstDayOfWeek] = useState(null);
@@ -56,19 +57,21 @@ export default function DreamsForm() {
                     sortedDreams = filteredDreams.sort((a, b) => {
                         return new Date(b.dreamDate) - new Date(a.dreamDate);
                     });
-                } else if (sortType === 2) {
+                }
+                else if (sortType === 2) {
                     const filteredDreams = res.data.filter(dream => dream.starred);
                     sortedDreams = filteredDreams.sort((a, b) => {
                         return new Date(b.dreamDate) - new Date(a.dreamDate);
                     });
-                } else if (sortType === 3) {
+                }
+                else if (sortType === 3) {
                     sortedDreams = res.data.sort((a, b) => {
                         return new Date(b.dreamDate) - new Date(a.dreamDate);
                     });
                 }
 
                 setDreams(sortedDreams);
-                setLoading(false); // Set loading to false after dreams are fetched
+                setLoading(false);
             }
         };
 
@@ -106,9 +109,11 @@ export default function DreamsForm() {
         if (sortTypeID === 1) {
             setWeekOffset(0);
             setSelectedSort('Week');
-        } else if (sortTypeID === 2) {
+        }
+        else if (sortTypeID === 2) {
             setSelectedSort('Starred');
-        } else if (sortTypeID === 3) {
+        }
+        else if (sortTypeID === 3) {
             setSelectedSort('All');
         }
         dropdown();
@@ -142,21 +147,6 @@ export default function DreamsForm() {
         window.location.href = '/createAccount';
     }
 
-    if (loading) {
-        return (
-            <div className="main-content text-white flex justify-center items-center h-screen">
-                <div className='loadingContainer'>
-                    <p className='loadingText'>Preparing Your Dream Journal</p>
-                    <div className='dotsContainer'>
-                        <div className='dot delay200'></div>
-                        <div className='dot delay400'></div>
-                        <div className='dot'></div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className='text-white main-content relative golden-ratio-2'>
             {!session && (
@@ -166,7 +156,7 @@ export default function DreamsForm() {
                 </div>
             )}
             <div className={`${!session && "blur-effect"}`}>
-                <InfoTag name={session?.user.name} />
+                <InfoTag name={session?.user.name} /> 
                 {/* <button className="bg-white text-black p-2 rounded-lg mb-5" onClick={metaAnalysis}>Meta Analysis</button> */}
                 <div className="flex justify-between">
                     <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
@@ -184,13 +174,19 @@ export default function DreamsForm() {
                             <FontAwesomeIcon icon={faArrowRight} className="p-2 wiggle cursor-pointer mr-1" onClick={goToNextWeek} />
                         </div>
                     )}
-                </div>
+                </div>  
+                {loading && (
+                    <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
+                        <p className="text-center text-3xl pr-3">Loading Dreams</p>
+                        <div className="loader"></div>  
+                    </div>
+                )}
                 {noDreams && (
                     <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
                         <p className="text-center text-3xl pr-3">You have no saved dreams. Get dreaming!</p>
                     </div>
                 )}
-                {session && !noDreams && (
+                {session && (
                     <div>
                         <div className="flex flex-wrap justify-center">
                             {dreams.map((dream) => (
@@ -213,7 +209,6 @@ export default function DreamsForm() {
         </div>
     )
 }
-
 
 
 const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
