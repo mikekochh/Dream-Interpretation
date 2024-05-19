@@ -799,12 +799,29 @@ nav {
   padding-bottom: 1rem;
 }
 
+/* Add this to your CSS file */
+.interpretation-box h3 {
+  margin-bottom: 0.5em; /* Adjust as necessary */
+}
+
+.interpretation-box strong {
+  margin-bottom: 0.5em; /* Adjust as necessary */
+}
+
+.interpretation-box br {
+  line-height: 0; /* Adjust as necessary */
+}
+
 .golden-ratio-1 {
   font-size: 14px;
 }
 
 .golden-ratio-2 {
   font-size: 22.65px;
+}
+
+h3.golden-ratio-2 {
+  margin-bottom: 0em; /* Adjust as necessary */
 }
 
 .golden-ratio-3 {

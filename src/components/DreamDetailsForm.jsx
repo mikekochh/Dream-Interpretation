@@ -118,14 +118,42 @@ export default function DreamsForm() {
     }
 
     const insertLineBreaks = (text) => {
-        const lines = text.split('\n');
-        return lines.map((line, index) => (
-            <React.Fragment key={index}>
-                {line}
-                {index < lines.length - 1 && <br />}
-            </React.Fragment>
-        ));
-    }
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        const formattedText = [];
+        let previousWasHeading = false;
+    
+        lines.forEach((line, index) => {
+            const headingMatch = line.match(/^### (.*)$/);
+            const boldTitleMatch = line.match(/^\*\*(.*)\*\*$/);
+    
+            if (headingMatch || boldTitleMatch) {
+                if (index !== 0 && !previousWasHeading) {
+                    // Add an extra line break before a new section
+                    formattedText.push(<br key={`extra-${index}`} />);
+                }
+                // Add the heading or bold title
+                formattedText.push(
+                    <p className="golden-ratio-2 font-bold" key={`heading-${index}`}>
+                        {headingMatch ? headingMatch[1] : boldTitleMatch[1]}
+                    </p>
+                );
+                previousWasHeading = true;
+            } else {
+                formattedText.push(
+                    <React.Fragment key={index}>
+                        {line}
+                    </React.Fragment>
+                );
+                // Add a line break after each line except the last one
+                if (index < lines.length - 1) {
+                    formattedText.push(<br key={`br-${index}`} />);
+                }
+                previousWasHeading = false;
+            }
+        });
+    
+        return formattedText;
+    };
 
     const scrollLeft = () => {
         if (scrollContainerRef.current) {
@@ -272,7 +300,7 @@ export default function DreamsForm() {
                 <div className='p-2 mb-2 w-11/12'>
                     <h1 className="text-center golden-ratio-3 text-gold">The Dream</h1>
                     {!edittingDream ? (
-                        <div>
+                        <div onClick={editDream} className="cursor-pointer">
                             <p className="golden-ratio-2 text-gold">{dream}</p>
                             <p className="golden-ratio-2 text-right cursor-pointer" onClick={editDream}>Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2" /></p>
                         </div>

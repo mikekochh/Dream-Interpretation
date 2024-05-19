@@ -9,7 +9,7 @@ import Image from 'next/image';
 import RegisterForm from './RegisterForm';
 
 export default function JournalForm() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
     const [savingDream, setSavingDream] = useState(false);
@@ -291,7 +291,7 @@ export default function JournalForm() {
                                 </div>
                             ) : (
                                 <div>
-                                    {!user ? (
+                                    {!user && status !== 'loading' ? (
                                         <div>
                                             <div className="golden-ratio-2 text-center font-bold text-gold">Create an account below to view your dream interpretation</div>
                                         </div>
