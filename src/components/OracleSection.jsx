@@ -27,8 +27,8 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
             <div className="w-full relative max-w-sm md:hidden oracle-image-mobile">
                 <Image 
                     layout="responsive"
-                    width={100}
-                    height={100}
+                    width={50}
+                    height={50}
                     src={oracle.oraclePicture} 
                     alt={oracle.oracleName} 
                     className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-4 border-gold' : ''}`}

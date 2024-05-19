@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -30,6 +30,8 @@ export default function DreamsForm() {
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
+
+    const scrollContainerRef = useRef(null);
 
     useEffect(() => {
         const checkPage = () => {
@@ -124,6 +126,18 @@ export default function DreamsForm() {
             </React.Fragment>
         ));
     }
+
+    const scrollLeft = () => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+        }
+    };
+
+    const scrollRight = () => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+        }
+    };
 
     const saveNotes = async () => {
         try {
@@ -339,16 +353,26 @@ export default function DreamsForm() {
                             </div>
                         ))
                     ) : !interpretingDream ? (
-                        <div className="h-full">
+                        <div className="h-full relative">
                             <p className="golden-ratio-2 text-center font-bold">Add interpretations</p>
-                            <div className="flex flex-row justify-center items-center">
-                                <div className="flex flex-nowrap">
+                            <div className="flex items-center justify-center relative">
+                                <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </button>
+                                <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
                                     {oracles.filter(oracle => oracle.active).map((oracle) => (
-                                        <div key={oracle._id} className="flex-auto mx-2">
+                                        <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
                                             <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                         </div>
                                     ))}
                                 </div>
+                                <button onClick={scrollRight} className="absolute right-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
                             </div>
                             <div className="flex flex-col items-center text-center">
                                 <button
