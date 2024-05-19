@@ -18,12 +18,13 @@ export default function JournalForm() {
     const [newDreamID, setNewDreamID] = useState(null);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
-    const [oracleSelected, setOracleSelected] = useState(false);
+    const [oracleSelected, setOracleSelected] = useState(true);
     const [dream, setDream] = useState("");
     const [justJournal, setJustJournal] = useState(false);
-    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
+    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
-    const [loading, setLoading] = useState(true); // New loading state
+    const [loading, setLoading] = useState(true);
+    const [progressBarClass, setProgressBarClass] = useState('progress-bar-width-mobile');
 
     const localCreditsGiven = useRef(false);
 
@@ -108,6 +109,25 @@ export default function JournalForm() {
         }
 
         getOracles();
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 768) { // Adjust the breakpoint as needed
+                setProgressBarClass('progress-bar-width-desktop');
+            } else {
+                setProgressBarClass('progress-bar-width-mobile');
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Call handleResize initially to set the class based on the initial screen size
+        handleResize();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     function handleSelectionChange(selected, oracleID) {
@@ -238,7 +258,7 @@ export default function JournalForm() {
                         <p className="text-center text-2xl">
                             {saveMessage}
                         </p>
-                        <div className="flex justify-center">
+                        <div className="flex justify-center pb-5">
                             {interpretingDream ? (
                                 <div>
                                     <div className='loadingContainer'>
@@ -249,26 +269,25 @@ export default function JournalForm() {
                                             <div className='dot'></div>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div className="flex flex-col items-center w-full">
                                         {oracles.map((oracle, index) => {
-                                            if (oracle.selected) {
+                                            // oracle.selected
+                                            if (true) {
                                                 return (
-                                                    <div key={oracle._id}>
-                                                        <div>{oracle.oracleName}</div>
-                                                        <div data-label="Interpreting..." className="progress-bar">
-                                                            <div className="progress-bar-inside" style={{width: `${interpretationProgressArray[index]}%`}}>Interpreting...</div>
+                                                    <div key={oracle._id} className="flex flex-col items-center max-w-lg w-full">
+                                                        <div className="w-full md:text-left text-center">{oracle.oracleName}</div>
+                                                        <div className="progress-bar-container w-full flex justify-center">
+                                                            <div className={`progress-bar ${progressBarClass}`}>
+                                                                <div className="progress-bar-inside" style={{ width: `${interpretationProgressArray[index]}%` }}>
+                                                                    Interpreting...
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 )
                                             }
                                         })}
                                     </div>
-                                    {!user?.name && 
-                                    (
-                                        <div>
-                                            <div className="golden-ratio-2 text-center font-bold text-gold">Create an account below to view your dream interpretation once its ready</div>
-                                        </div>
-                                    )}
                                 </div>
                             ) : (
                                 <div>
@@ -285,6 +304,14 @@ export default function JournalForm() {
                                 </div>
                             )}
                         </div> 
+                        {interpretingDream && !user?.name && 
+                        (
+                            <div className="flex justify-center">
+                                <div className="golden-ratio-2 text-center font-bold text-gold md:w-2/3 mx-5">
+                                    Create an account below to view your dream interpretation once it&apos;s ready
+                                </div>
+                            </div>
+                        )}
                         {!user && (
                             <div className="text-center flex justify-center">
                                 <RegisterForm />

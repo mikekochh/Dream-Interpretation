@@ -1,5 +1,5 @@
 "use client";
-import SuccessCreditsForm from "@/components/SuccessCreditsForm"
+import SuccessCreditsForm from "@/components/old/SuccessCreditsForm"
 import StarBackground from "@/components/StarBackground";
 
 export default function SuccessCreditsPage() {

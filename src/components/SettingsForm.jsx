@@ -80,9 +80,9 @@ const SettingsForm = () => {
                     {user.dreamCount === 1 ? (
                         <p>1 dream journaled</p>
                     ) : user.dreamCount ? (
-                        <p>{user.dreamCount} dream's journaled</p>
+                        <p>{user.dreamCount} dream&apos;s journaled</p>
                     ) : (
-                        <p>0 Dream's Journaled</p>
+                        <p>0 Dream&apos;s Journaled</p>
                     )}
                 </div>
                 <div className="logout absolute bottom-0 right-0 p-4">

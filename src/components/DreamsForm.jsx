@@ -11,7 +11,7 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 export default function DreamsForm() {
     const { data: session } = useSession();
     const [dreams, setDreams] = useState([]);
-    const [loading, setLoading] = useState(true); // Set loading to true initially
+    const [loading, setLoading] = useState(true);
     const [noDreams, setNoDreams] = useState(false);
     const [weekOffset, setWeekOffset] = useState(0); // 0 means the current week, -1 means the previous week, and so on.
     const [firstDayOfWeek, setFirstDayOfWeek] = useState(null);

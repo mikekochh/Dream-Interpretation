@@ -686,8 +686,8 @@ nav {
 }
 
 
+/* Provided CSS */
 .progress-bar {
-  width: 98%;
   height: 2em;
   background-color: #D3D3D3;
   border-radius: 1.5em;
@@ -697,6 +697,14 @@ nav {
   align-items: center;
   padding-left: 1em;
   margin: 5px;
+}
+
+.progress-bar-width-desktop {
+  width: 98%;
+}
+
+.progress-bar-width-mobile {
+  width: 75%;
 }
 
 .progress-bar-inside {
@@ -714,6 +722,13 @@ nav {
   color: white;
   padding-left: 1em;
   padding-right: 1em;
+}
+
+/* New CSS */
+.progress-bar-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .sale-banner {
@@ -895,6 +910,7 @@ nav {
   color: #666; /* Dimmed text color */
   cursor: not-allowed; /* Shows a 'not allowed' cursor when hovered */
 }
+
 
 
 

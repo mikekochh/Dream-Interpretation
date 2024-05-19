@@ -6,7 +6,7 @@ import 'reactjs-popup/dist/index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStarAndCrescent, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import RegisterForm from './RegisterForm';
+import RegisterForm from '../RegisterForm';
 
 
 export default function JournalForm() { 
