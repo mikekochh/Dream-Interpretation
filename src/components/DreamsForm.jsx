@@ -202,22 +202,12 @@ export default function DreamsForm() {
                     </div>
                 )}
                 {session && !noDreams && (
-                    <div>
-                        <div className="flex flex-wrap justify-center">
-                            {dreams.map((dream) => (
-                                <div key={dream._id} className="dream-card-mobile md:hidden">
-                                    <DreamCard dream={dream} deleteDream={deleteDream} starDream={starDream} formatDreamDate={formatDreamDate} />
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="flex-wrap justify-center hidden md:flex">
-                            {dreams.map((dream) => (
-                                <div key={dream._id} className="dream-card">
-                                    <DreamCard dream={dream} deleteDream={deleteDream} starDream={starDream} formatDreamDate={formatDreamDate} />
-                                </div>
-                            ))}
-                        </div>
+                    <div className="flex flex-wrap justify-center px-2 sm:px-0">
+                        {dreams.map((dream) => (
+                            <div key={dream._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2">
+                                <DreamCard dream={dream} deleteDream={deleteDream} starDream={starDream} formatDreamDate={formatDreamDate} />
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>
@@ -225,56 +215,52 @@ export default function DreamsForm() {
     )
 }
 
-
-
 const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
 
-    const dreamLength = (dream) => {
-        if (dream.length > 150) {
-            return dream.substring(0, 150) + '...';
-        }
-        else {
-            return dream;
+    const dreamLength = (dreamText) => {
+        if (dreamText.length > 100) {
+            return dreamText.substring(0, 100) + '...';
+        } else {
+            return dreamText;
         }
     }
 
     return (
-        <div>
+        <div className="relative p-5 border border-gray-200 rounded-lg shadow-md overflow-hidden">
             <Link href={{
                 pathname: '/dreamDetails',
                 query: { dreamID: dream._id },
-            
             }}>
-                <div className="p-5 relative">
-                    <p>
-                        <span className="font-bold"></span>{dreamLength(dream.dream)}
+                <div>
+                    <p className="p-2">
+                        {dreamLength(dream.dream)}
                     </p>
                 </div>
             </Link>
             <p className="absolute left-0 top-0 p-1">
-                <span className="font-bold"></span>{formatDreamDate(dream.dreamDate)}
+                {formatDreamDate(dream.dreamDate)}
             </p>
             <p className="absolute bottom-0 left-0 font-bold p-2 text-gold">
                 {dream.interpretation ? 'Interpretations' : ''}
             </p>
             <FontAwesomeIcon 
-                        icon={faTrash} 
-                        size="x" 
-                        className="absolute right-0 bottom-0 p-2 wiggle"
-                        onClick={() => deleteDream(dream._id)}    
+                icon={faTrash} 
+                size="x" 
+                className="absolute right-0 bottom-0 p-2 wiggle cursor-pointer"
+                onClick={() => deleteDream(dream._id)}    
             />
             {dream.starred ? (
                 <FontAwesomeIcon 
                     icon={faStar} 
                     size="x" 
-                    className="absolute right-0 top-0 p-2 wiggle"
+                    className="absolute right-0 top-0 p-2 wiggle cursor-pointer"
                     onClick={() => starDream(dream._id, dream.starred)}
                 />
             ) : (
                 <FontAwesomeIcon 
                     icon={faStarHalfStroke} 
                     size="x" 
-                    className="absolute right-0 top-0 p-2 wiggle"
+                    className="absolute right-0 top-0 p-2 wiggle cursor-pointer"
                     onClick={() => starDream(dream._id, dream.starred)}
                 />
             )}
