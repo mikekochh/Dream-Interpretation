@@ -8,7 +8,9 @@ import { faInfoCircle, faStarAndCrescent, faQuestionCircle } from '@fortawesome/
 import Image from 'next/image';
 import RegisterForm from './RegisterForm';
 
-export default function JournalForm() {
+
+export default function JournalForm() { 
+
     const { data: session } = useSession();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
@@ -16,16 +18,19 @@ export default function JournalForm() {
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [newDreamID, setNewDreamID] = useState(null);
+    // const [subscribed, setSubscribed] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
+    // const [creditCost, setCreditCost] = useState(0);
     const [oracleSelected, setOracleSelected] = useState(false);
+    const [localInterpretation, setLocalInterpretation] = useState("");
     const [dream, setDream] = useState("");
     const [justJournal, setJustJournal] = useState(false);
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
-    const [loading, setLoading] = useState(true); // New loading state
 
     const localCreditsGiven = useRef(false);
+    const dreamButtonBottomRef = useRef(null);
 
     useEffect(() => {
         if (interpretingDream) {
@@ -33,18 +38,20 @@ export default function JournalForm() {
                 setInterpretationProgressArray(prevArray => {
                     const updatedArray = [...prevArray];
                     if (updatedArray[interpretationProgressIndex] <= 99) {
-                        updatedArray[interpretationProgressIndex] += 0.10;
+                        updatedArray[interpretationProgressIndex] += .10;
                         return updatedArray;
-                    } else {
+                    }
+                    else {
                         return updatedArray;
                     }
                 });
             }, 25);
             return () => clearInterval(interval);
         }
-    }, [interpretingDream, interpretationProgressArray.length, interpretationProgressIndex]);
+    }, [interpretingDream, interpretationProgressArray.length, interpretationProgressIndex])
 
     useEffect(() => {
+        // Function to load the Google Tag Manager script
         const loadGTag = () => {
             const script = document.createElement('script');
             script.src = "https://www.googletagmanager.com/gtag/js?id=G-1TF2VESNGX";
@@ -61,9 +68,11 @@ export default function JournalForm() {
             };
         };
 
+        // Load the script if it's not already loaded
         if (!window.gtag) {
             loadGTag();
         }
+
     }, []);
 
     useEffect(() => {
@@ -80,11 +89,29 @@ export default function JournalForm() {
 
         if (session) {
             setUserData().then(userData => {
+                // setSubscribed(userData.subscribed);
                 setUser(userData);
             }).catch(err => {
                 console.log('err: ', err);
             });
         }
+        // if they have never been to the website before, give them 1 free credit
+        // else if they have been to the website before, but have not spent their free credit, give them 1 free credit
+        // else if they have been to the website before, and they have spent their free credit, give them 0 credits
+        // else if (!document.cookie.includes('visited=true')) {
+        //     setUser({ credits: 1 });
+        //     document.cookie = "visited=true; max-age=31536000";
+        //     document.cookie = "spentCredits=false; max-age=31536000";
+        //     localCreditsGiven.current = true;
+        // }
+        // else if (document.cookie.includes('visited=true') && !document.cookie.includes('spentCredits=true')) {
+        //     setUser({ credits: 1 });
+        //     localCreditsGiven.current = true;
+        // }
+        // else if (document.cookie.includes('visited=true') && document.cookie.includes('spentCredits=true')) {
+        //     setUser({ credits: 0 });
+        //     localCreditsGiven.current = true;
+        // }
     }, [session, localCreditsGiven]);
 
     useEffect(() => {
@@ -104,13 +131,13 @@ export default function JournalForm() {
             const res = await axios.get('/api/oracles');
             const oracles = res.data.sort((a, b) => a.oracleID - b.oracleID);
             setOracles(oracles);
-            setLoading(false); // Set loading to false after oracles are fetched
         }
 
         getOracles();
     }, []);
 
     function handleSelectionChange(selected, oracleID) {
+        // setCreditCost(prevCost => selected ? prevCost - 1 : prevCost + 1);
         setOracles(prev => {
             const updatedOracles = [...prev];
             const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
@@ -125,35 +152,52 @@ export default function JournalForm() {
             setError("Please enter a dream");
             return;
         }
+        
+        // if (!subscribed && creditCost > user.credits) {
+        //     if (user.name) {
+        //         setError("You don't have enough credits. Please select less oracles or buy more credits");
+        //     }
+        //     else {
+        //         setError("You don't have enough credits. Please select less oracles or create an account");
+        //     }
+        //     setSavingDream(false);
+        //     return;
+        // }
         setSavingDream(true);
         const userID = user?._id;
         try {
+            // if there is a user, save the dream to their account, interpret the dream, and save the interpretation to their account.
             if (userID) {
                 const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected });
                 const dreamID = resJournal.data._id;
                 setNewDreamID(dreamID);
                 if (oracleSelected) {
                     interpretDreams(dreamID);
-                } else {
+                }
+                else {
                     setJustJournal(true);
                 }
-            } else {
+            }
+            // if there is no user, interpret the dream and display it to the screen. Save dream to database for if user creates an account
+            else {
                 const resJournal = await axios.post('/api/dream/journal', { dream, userID: null, interpretDream: oracleSelected });
                 const dreamID = resJournal.data._id;
                 localStorage.setItem('dreamID', dreamID);
                 interpretDreams(dreamID);
                 document.cookie = "spentCredits=true; max-age=31536000";
             }
-        } catch (error) {
+        }
+        catch (error) {
             setError("Error Journaling Dream");
             console.log("error: ", error);
-        }
+        }    
     }
 
     const interpretDreams = async (dreamID) => {
         if (dreamID) {
             setSaveMessage("Your dream has been saved and is currently being interpreted.");
-        } else {
+        }
+        else {
             setSaveMessage("Your dream is currently being interpreted.");
         }
         setInterpretingDream(true);
@@ -193,6 +237,14 @@ export default function JournalForm() {
                 });
 
                 setInterpretationProgressIndex(i+1);
+
+                // if (user._id === undefined) {
+                //     setLocalInterpretation(resInterpret.data[0].message.content);
+                //     setInterpretingDream(false);
+                //     setSaveMessage("Here is your interpretation:");
+                //     journalDreamNoAccount();
+                //     return;
+                // }
             }
 
             console.log("setInterpretationProgressIndex being set to: ", i+1);
@@ -202,8 +254,21 @@ export default function JournalForm() {
         setInterpretingDream(false);
         if (user?._id === undefined) {
             setSaveMessage("Dream interpretation complete!");
-        } else {
+        }
+        else {
             setSaveMessage("Dream interpretation complete! You can now view your dream interpretation under the dream details page.");
+        }
+    }
+
+    const journalDreamNoAccount = () => {
+        if (window.gtag) {
+            window.gtag('event', 'interpret_dream_no_account', {
+                'event_category': 'Dream Activity',
+                'event_label': 'No Account'
+            });
+        }
+        else {
+            console.error('gtag script not loaded yet');
         }
     }
 
@@ -215,25 +280,21 @@ export default function JournalForm() {
         window.location.href = `/dreamDetails?dreamID=${newDreamID}`;
     }
 
-    if (loading) {
-        return (
-            <div className="main-content text-white flex justify-center items-center h-screen">
-                <div className='loadingContainer'>
-                    <p className='loadingText'>Assembling the Dream Oracles</p>
-                    <div className='dotsContainer'>
-                        <div className='dot delay200'></div>
-                        <div className='dot delay400'></div>
-                        <div className='dot'></div>
-                    </div>
-                </div>
-            </div>
-        );
+    const insertLineBreaks = (text) => {
+        const lines = text.split('\n');
+        return lines.map((line, index) => (
+          <React.Fragment key={index}>
+            {line}
+            {index < lines.length - 1 && <br />}
+          </React.Fragment>
+        ));
     }
 
     return (
         <div className="text-white main-content relative">
             {savingDream ? (
                 <div className="flex justify-center">
+                {/* usually have these classNames above: justify-center items-center middle-content */}
                     <div className="flex justify-center items-center flex-col">
                         <p className="text-center text-2xl">
                             {saveMessage}
@@ -267,6 +328,9 @@ export default function JournalForm() {
                                     (
                                         <div>
                                             <div className="golden-ratio-2 text-center font-bold text-gold">Create an account below to view your dream interpretation once its ready</div>
+                                            {/* <div className="text-center flex justify-center">
+                                                <RegisterForm />
+                                            </div> */}
                                         </div>
                                     )}
                                 </div>
@@ -367,6 +431,17 @@ export default function JournalForm() {
                                     </div>
 
                                 </div>
+                                {/* {user?.credits === 0 && !user?.name ? (
+                                    <div className="absolute inset-0 flex flex-col md:justify-center items-center">
+                                        <span className="text-3xl font-semibold text-center mt-5 md:mt-0">Create an account to continue interpreting your dreams</span>
+                                        <button className="rounded-xl bg-blue-600 dream-button m-2 pl-4 pr-4 justify-center item p-10" onClick={() => window.location.href = '/pricing'}>Create Account</button>
+                                    </div>
+                                ) : user?.credits === 0 && !subscribed ? (
+                                    <div className="absolute inset-0 flex flex-col md:justify-center items-center">
+                                        <span className="text-3xl font-semibold text-center mt-5 md:mt-0">You must buy more credits or start a subscription to interpret your dreams</span>
+                                        <button className="rounded-xl bg-blue-600 dream-button m-2 pl-4 pr-4 justify-center item p-10" onClick={() => window.location.href = '/pricing'}>See Pricing</button>
+                                    </div>
+                                ) : null} */}
                             </div>
                         </div>
                     </div>
@@ -375,7 +450,6 @@ export default function JournalForm() {
         </div>
     )
 }
-
 
 const HowItWorksPopup = () => {
 
