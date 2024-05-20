@@ -9,8 +9,8 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Dream Oracles',
-  description: 'Application using AI to interpret dreams',
+  title: 'Dream Oracles | Free Dream Interpretation AI',
+  description: 'Find out what your dreams mean using cutting-edge AI technology. Explore our Jung, Freud, and Islamic AI models for dream interpretations.',
   url: 'https://dreamoracles.com',
   robots: 'index, follow',
 }
