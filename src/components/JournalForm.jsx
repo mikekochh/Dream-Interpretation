@@ -18,7 +18,7 @@ export default function JournalForm() {
     const [newDreamID, setNewDreamID] = useState(null);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
-    const [oracleSelected, setOracleSelected] = useState(true);
+    const [oracleSelected, setOracleSelected] = useState(false);
     const [dream, setDream] = useState("");
     const [justJournal, setJustJournal] = useState(false);
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0]);

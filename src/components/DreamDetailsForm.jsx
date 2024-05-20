@@ -31,6 +31,8 @@ export default function DreamsForm() {
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
 
+    const [showFullInterpretation, setShowFullInterpretation] = useState({}); // New state
+
     const scrollContainerRef = useRef(null);
 
     useEffect(() => {
@@ -155,6 +157,13 @@ export default function DreamsForm() {
         return formattedText;
     };
 
+    const toggleFullInterpretation = (id) => {
+        setShowFullInterpretation(prevState => ({
+            ...prevState,
+            [id]: !prevState[id]
+        }));
+    };
+
     const scrollLeft = () => {
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
@@ -182,7 +191,6 @@ export default function DreamsForm() {
         try {
             setInterpretingDream(true);
             for (let i = 0; i < oracles.length; i++) {
-                // 
                 if (oracles[i].selected) {
                     const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
                     const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', {
@@ -347,8 +355,17 @@ export default function DreamsForm() {
                                 <div className="pl-2">
                                     <p className="golden-ratio-2 text-center font-bold">Interpretation by {getOracleName(detail.oracleID)} on {formatInterpretationDate(detail.interpretationDate)}</p>
                                     <p className="interpretation-box">
-                                        <span className="font-bold"></span>{insertLineBreaks(detail.interpretation)}
+                                        {!showFullInterpretation[detail._id] && (
+                                            <div>
+                                                <span className="font-bold golden-ratio-2">Summary</span><br/>
+                                            </div>
+                                        )}
+                                        
+                                        {showFullInterpretation[detail._id] ? insertLineBreaks(detail.interpretation) : detail.interpretation.split('\n\n').pop()}
                                     </p>
+                                    <button onClick={() => toggleFullInterpretation(detail._id)} className="font-bold">
+                                        {showFullInterpretation[detail._id] ? "Show Less" : "Read More"}
+                                    </button>
                                 </div>
                                 {askQuestionInterpretationID === detail._id ? (
                                     <div className="w-full">
