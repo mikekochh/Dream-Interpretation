@@ -27,7 +27,7 @@ export default function DreamsForm() {
     const [edittingDream, setEdittingDream] = useState(false);
     const [interpretingDream, setInterpretingDream] = useState(false);
     const [interpretButtonActive, setInterpretButtonActive] = useState(false);
-    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
+    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
 
@@ -182,6 +182,7 @@ export default function DreamsForm() {
         try {
             setInterpretingDream(true);
             for (let i = 0; i < oracles.length; i++) {
+                // 
                 if (oracles[i].selected) {
                     const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
                     const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', {
@@ -419,7 +420,7 @@ export default function DreamsForm() {
                         </div>
                     ) : (
                         <div>
-                            <div className='loadingContainer'>
+                            <div className='loadingContainer mb-5'>
                                 <p className="text-center golden-ratio-2">Interpreting Your Dream</p>
                                 <p className='loadingText'>Please wait while we interpret your dream</p>
                                 <div className='dotsContainer'>
@@ -433,9 +434,11 @@ export default function DreamsForm() {
                                     if (oracle.selected) {
                                         return (
                                             <div key={oracle._id}>
-                                                <div>{oracle.oracleName}</div>
-                                                <div data-label="Interpreting..." className="progress-bar">
-                                                    <div className="progress-bar-inside" style={{ width: `${interpretationProgressArray[index]}%` }}>Interpreting...</div>
+                                                <div className="text-center">{oracle.oracleName}</div>
+                                                <div className="flex justify-center">
+                                                    <div data-label="Interpreting..." className="progress-bar w-2/3"> {/* Adjust the width class as needed */}
+                                                        <div className="progress-bar-inside" style={{ width: `${interpretationProgressArray[index]}%` }}>Interpreting...</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         );
