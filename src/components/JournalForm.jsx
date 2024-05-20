@@ -29,6 +29,12 @@ export default function JournalForm() {
     const localCreditsGiven = useRef(false);
 
     useEffect(() => {
+        if (status === 'loading') {
+            setLoading(true);
+        }
+    }, [status])
+
+    useEffect(() => {
         if (interpretingDream) {
             const interval = setInterval(() => {
                 setInterpretationProgressArray(prevArray => {
