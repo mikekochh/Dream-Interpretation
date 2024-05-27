@@ -12,16 +12,42 @@ export default function ActivationForm() {
     const router = useRouter();
     const [status, setStatus] = useState("Successfully Activated! Redirecting you now...");
     const [error, setError] = useState(false);
+    const [userName, setUserName] = useState(null);
+    const [userEmail, setUserEmail] = useState(null);
 
     const activateUser = async function() {
         try {
             const res = await axios.post('api/activate', { verificationTokenID });
-            router.push('/interpret');
+
+            setUserName(res.data.activatedUser.name);
+            setUserEmail(res.data.activatedUser.email)
+
+            router.push('/settings');
         } catch (error) {
             setStatus("Error Activating User");
             setError(true);
         }
     }
+
+    useEffect(() => {
+        const sendWelcomeEmail = async function() {
+            try {
+                console.log("sending welcome email!");
+                console.log("userEmail: ", userEmail);
+                console.log("userName: ", userName);
+                const resWelcomeEmail = await axios.post('/api/user/sendWelcomeEmail', {
+                    email: userEmail,
+                    name: userName
+                })
+            } catch (error) {
+                console.log("Error sending welcome email");
+            }
+        }
+
+        if (userEmail && userName) {
+            sendWelcomeEmail();
+        }
+    }, [userEmail, userName])
 
     useEffect(() => {
         activateUser();

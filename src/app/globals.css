@@ -310,7 +310,8 @@ nav {
   color: white;
   border: 1px solid white;
   border-radius: 5px;
-  padding: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
   margin: 5px;
   --tw-bg-opacity: 1;
   background-color: rgb(37 99 235 / var(--tw-bg-opacity));
@@ -325,7 +326,8 @@ nav {
   color: white;
   border: 1px solid white;
   border-radius: 5px;
-  padding: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
   margin: 5px;
   --tw-bg-opacity: 1;
   background-color: rgb(239 68 68 / var(--tw-bg-opacity));

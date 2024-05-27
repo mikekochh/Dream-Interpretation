@@ -1,6 +1,5 @@
 import mongoose, { Schema, models } from "mongoose";
 
-
 const userSchema = new Schema({
     name: {
         type: String,
@@ -42,6 +41,15 @@ const userSchema = new Schema({
     dreamCount: {
         type: Number,
         default: 0,
+    },
+    genderID: {
+        type: Number,
+    },
+    culturalBackground: {
+        type: String,
+    },
+    spiritualPractices: {
+        type: String,
     },
 }, {timestamps: true});
 

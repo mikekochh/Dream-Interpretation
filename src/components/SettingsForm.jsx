@@ -4,12 +4,21 @@ import { useSession } from 'next-auth/react';
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ContactAndPrivacyButtons from './ContactAndPrivacyButtons';
+import axios from 'axios';
 
 const SettingsForm = () => {
     const router = useRouter();
     const { data: session } = useSession();
     const [user, setUser] = useState({});
-    const [loading, setLoading] = useState(true); // New loading state
+    const [loading, setLoading] = useState(true);
+    const [selectedGenderID, setSelectedGenderID] = useState('');
+
+    // New state variables for the form
+    const [genders, setGenders] = useState([]);
+    const [culturalBackground, setCulturalBackground] = useState('');
+    const [spiritualPractices, setSpiritualPractices] = useState('');
+    const [error, setError] = useState('');
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         async function setUserData() {
@@ -26,15 +35,34 @@ const SettingsForm = () => {
         if (session) {
             setUserData().then(userData => {
                 setUser(userData);
-                setLoading(false); // Set loading to false after user data is loaded
+                setSelectedGenderID(userData.genderID || '');
+                setCulturalBackground(userData.culturalBackground || '');
+                setSpiritualPractices(userData.spiritualPractices || '');
+                setLoading(false);
             }).catch(err => {
                 console.log('err: ', err);
-                setLoading(false); // Set loading to false in case of error
+                setLoading(false);
             });
         } else {
-            setLoading(false); // Set loading to false if no session
+            setLoading(false);
         }
     }, [session]);
+
+    useEffect(() => {
+        async function fetchGenders() {
+            const res = await fetch('/api/genders', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await res.json();
+            console.log('gender data: ', data)
+            setGenders(data);
+        }
+
+        fetchGenders();
+    }, []);
 
     const logout = async () => {
         await signOut({ redirect: false });
@@ -48,6 +76,38 @@ const SettingsForm = () => {
     const createAccount = () => {
         router.push("/createAccount");
     }
+
+    const welcomeEmailTemp = async () => {
+        const resWelcomeEmail = await axios.post('/api/user/sendWelcomeEmail', {
+            email: "mkoch@michaelgkoch.com",
+            name: 'michael koch'
+        })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSaving(true);
+        const userData = {
+            genderID: selectedGenderID,
+            culturalBackground,
+            spiritualPractices,
+            userID: user._id
+        };
+        try {
+            const response = await axios.post('/api/user/updatePersonalData', userData, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('User Data successfully updated:', response.data);
+            setError(''); // Clear any previous errors
+            router.push("/interpret");
+        } catch (error) {
+            console.error('Error updating user data:', error);
+            setError('Failed to update user data. Please try again.');
+            setSaving(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -85,7 +145,59 @@ const SettingsForm = () => {
                         <p>0 Dream&apos;s Journaled</p>
                     )}
                 </div>
+                <form onSubmit={handleSubmit} className="pl-4">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <p style={{ marginRight: '10px' }}>Gender: </p>
+                        {genders.map((gender) => (
+                            <label key={gender.genderID} style={{ marginRight: '15px' }}>
+                                <input 
+                                    type="radio" 
+                                    value={gender.genderID} 
+                                    checked={selectedGenderID === gender.genderID} 
+                                    onChange={() => setSelectedGenderID(gender.genderID)} 
+                                    style={{ marginRight: '5px' }}
+                                /> 
+                                {gender.name}
+                            </label>
+                        ))}
+                    </div>
+                    <div>
+                        <p>Cultural Background: </p>
+                        <input 
+                            type="text" 
+                            className="DreamBox rounded-md px-1"
+                            value={culturalBackground} 
+                            onChange={(e) => setCulturalBackground(e.target.value)} 
+                            placeholder="Enter your cultural background" 
+                            style={{ width: '300px' }}
+                        />
+                    </div>
+                    <div>
+                        <p>Religious/Spiritual Practices: </p>
+                        <input 
+                            type="text" 
+                            className="DreamBox rounded-md px-1"
+                            value={spiritualPractices} 
+                            onChange={(e) => setSpiritualPractices(e.target.value)} 
+                            placeholder="Enter your religious/spiritual practices" 
+                            style={{ width: '300px' }}
+                        />
+                    </div>
+                    {error && <p className="text-red-500">{error}</p>}
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        {saving ? (
+                            <div className='dotsContainer'>
+                                <div className='dot delay200'></div>
+                                <div className='dot delay400'></div>
+                                <div className='dot'></div>
+                            </div>
+                        ) : (
+                            <button type="submit" className="dream-button">Save Changes</button>
+                        )}
+                    </div>
+                </form>
                 <div className="logout absolute bottom-0 right-0 p-4">
+                    <button onClick={welcomeEmailTemp} className="dream-button">Email</button>
                     <button onClick={logout} className="back-button">Log Out</button>
                     {/* {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>} */}
                 </div>

@@ -378,7 +378,7 @@ const HowItWorksPopup = () => {
 
     return (
         <div className="justify-center golden-ratio-3 text-center">
-            <p>1. Enter Dream Description Below <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)} /></p>
+            <p>1. Share Your Dream With Us <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)} /></p>
             {open && (
                 <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row popup-menu-active">
                     <p className="text-xl select-none">

@@ -45,7 +45,7 @@ export async function POST(req) {
                 <p>Please verify your email address ${email} using the link below. If you did not request this link, you can safely ignore this email.</p>
                 <p><a href="${verificationLink}">${verificationLink}</a></p>
                 <p>Thank you,<br/>
-                The Dream Oracles</p>
+                The Dream Oracles Team</p>
             `
         };
 

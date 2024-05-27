@@ -16,13 +16,12 @@ export async function POST(req) {
             },
             { new: true }
         );
-        
 
         if (!activatedUser) {
             throw new Error("User not found!");
         }
 
-        return NextResponse.json({message: "User activated successfully!"}, { status: 200 })
+        return NextResponse.json({ activatedUser }, { status: 200 });
     } catch (error) {
         console.log('error: ', error);
         return NextResponse.json({message: "User activation failed!"}, { status: 500 })
