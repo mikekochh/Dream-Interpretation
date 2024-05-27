@@ -149,14 +149,51 @@ const JournalForm = () => {
         }
     };
 
+    async function getGenderName(genderID) {
+        try {
+          const response = await axios.get(`/api/gender`, { params: { genderID } });
+          if (response.data && response.data.name) {
+            return response.data.name;
+          }
+        } catch (error) {
+          console.error('Error fetching gender name:', error);
+          return null;
+        }
+      }
+
     const interpretDreams = async (dreamID) => {
         setSaveMessage(dreamID ? "Your dream has been saved and is currently being interpreted." : "Your dream is currently being interpreted.");
         setInterpretingDream(true);
 
+        let userDetails = [];
+
+        if (user.genderID) {
+            const genderName = await getGenderName(user.genderID);
+            if (genderName) {
+              userDetails.push(`Gender: ${genderName}`);
+            }
+        }
+        if (user.age) {
+            userDetails.push(`Age: ${user.age}`);
+        }
+        if (user.culturalBackground) {
+            userDetails.push(`Cultural Background: ${user.culturalBackground}`);
+        }
+        if (user.spiritualPractices) {
+            userDetails.push(`Spiritual Practices: ${user.spiritualPractices}`);
+        }
+
+        let additionalContext = '';
+        if (userDetails.length > 0) {
+            additionalContext = `\nIf provided, consider the following details about the dreamer to add context to the interpretation, but only if they are relevant to the dream: ${userDetails.join(', ')}. If these details do not seem relevant, feel free to disregard them.\n`;
+        }
+
         for (let i = 0; i < oracles.length; i++) {
             if (oracles[i].selected) {
                 try {
-                    const dreamPrompt = `${oracles[i].prompt}\n###\n${dream}`;
+                    // const dreamPrompt = `${oracles[i].prompt}\n###\n${dream}`;
+                    const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dream}`;
+                    console.log("dreamPrompt: ", dreamPrompt);
                     const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt } });
                     const resUpdateDatabase = await axios.post('/api/dream/interpret', { dreamID, interpretation: resInterpret.data[0].message.content, oracleID: oracles[i].oracleID, user });
                     setInterpretationProgressArray(prevArray => {

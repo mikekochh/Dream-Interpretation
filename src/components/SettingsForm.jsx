@@ -17,6 +17,7 @@ const SettingsForm = () => {
     const [genders, setGenders] = useState([]);
     const [culturalBackground, setCulturalBackground] = useState('');
     const [spiritualPractices, setSpiritualPractices] = useState('');
+    const [age, setAge] = useState('');
     const [error, setError] = useState('');
     const [saving, setSaving] = useState(false);
 
@@ -38,6 +39,7 @@ const SettingsForm = () => {
                 setSelectedGenderID(userData.genderID || '');
                 setCulturalBackground(userData.culturalBackground || '');
                 setSpiritualPractices(userData.spiritualPractices || '');
+                setAge(userData.age || '');
                 setLoading(false);
             }).catch(err => {
                 console.log('err: ', err);
@@ -58,7 +60,7 @@ const SettingsForm = () => {
             });
             const data = await res.json();
             console.log('gender data: ', data)
-            setGenders(data);
+            setGenders(Array.isArray(data) ? data : []);
         }
 
         fetchGenders();
@@ -91,6 +93,7 @@ const SettingsForm = () => {
             genderID: selectedGenderID,
             culturalBackground,
             spiritualPractices,
+            age,
             userID: user._id
         };
         try {
@@ -160,6 +163,17 @@ const SettingsForm = () => {
                                 {gender.name}
                             </label>
                         ))}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                        <p style={{ marginRight: '10px' }}>Age: </p>
+                        <input 
+                            type="number" 
+                            className="DreamBox rounded-md px-1"
+                            value={age} 
+                            onChange={(e) => setAge(e.target.value)} 
+                            placeholder="Age" 
+                            style={{ width: '100px' }}
+                        />
                     </div>
                     <div>
                         <p>Cultural Background: </p>

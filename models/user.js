@@ -51,6 +51,9 @@ const userSchema = new Schema({
     spiritualPractices: {
         type: String,
     },
+    age: {
+        type: Number,
+    }
 }, {timestamps: true});
 
 const User = models.User || mongoose.model("User", userSchema);
