@@ -5,19 +5,15 @@ import User from '../../../../../models/user';
 export async function POST(req) {
     try {
         // create user
-        const { genderID, culturalBackground, spiritualPractices, userID } = await req.json();
+        const { genderID, culturalBackground, spiritualPractices, userID, age } = await req.json();
 
         await connectMongoDB();
-
-        console.log("genderID: ", genderID);
-        console.log("culturalBackground: ", culturalBackground);
-        console.log("spiritualPractices: ", spiritualPractices);
-        console.log("userID: ", userID);
 
         const updateFields = {};
         if (genderID) updateFields.genderID = genderID;
         if (culturalBackground) updateFields.culturalBackground = culturalBackground;
         if (spiritualPractices) updateFields.spiritualPractices = spiritualPractices;
+        if (age) updateFields.age = age;
 
         const updatedUser = await User.findOneAndUpdate(
             { _id: userID },

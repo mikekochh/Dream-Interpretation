@@ -375,7 +375,7 @@ const JournalDreamView = ({
                 <textarea
                     type="text"
                     rows={5}
-                    placeholder='Dream description here'
+                    placeholder='Dream goes here'
                     className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full"
                     onChange={(event) => setDream(event.target.value)}
                 />

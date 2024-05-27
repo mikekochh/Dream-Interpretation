@@ -79,13 +79,6 @@ const SettingsForm = () => {
         router.push("/createAccount");
     }
 
-    const welcomeEmailTemp = async () => {
-        const resWelcomeEmail = await axios.post('/api/user/sendWelcomeEmail', {
-            email: "mkoch@michaelgkoch.com",
-            name: 'michael koch'
-        })
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
@@ -211,7 +204,6 @@ const SettingsForm = () => {
                     </div>
                 </form>
                 <div className="logout absolute bottom-0 right-0 p-4">
-                    <button onClick={welcomeEmailTemp} className="dream-button">Email</button>
                     <button onClick={logout} className="back-button">Log Out</button>
                     {/* {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>} */}
                 </div>

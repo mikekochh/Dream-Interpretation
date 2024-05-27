@@ -25,6 +25,11 @@ const dreamSchema = new Schema({
         type: Boolean,
         default: false,
         required: [true, "Is dream starred?!"]    
+    },
+    public: {
+        type: Boolean,
+        default: false,
+        required: [true, "Is dream publicly available?"]
     }
 });
 
