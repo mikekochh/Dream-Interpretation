@@ -180,6 +180,7 @@ export default function DreamsForm() {
         try {
             setSaving(true);
             const note = document.querySelector('.NoteBox').value;
+            console.log("note: ", note);
             await axios.post('api/dream/note/' + dreamID, { note });
             router.push('/dreams');
         } catch (err) {

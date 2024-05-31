@@ -217,7 +217,10 @@ export default function DreamsForm() {
 
 const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
 
+    console.log("dream: ", dream);
+
     const dreamLength = (dreamText) => {
+        console.log("dreamText: ", dreamText);
         if (dreamText.length > 100) {
             return dreamText.substring(0, 100) + '...';
         } else {

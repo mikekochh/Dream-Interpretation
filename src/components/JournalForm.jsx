@@ -2,11 +2,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
-import 'reactjs-popup/dist/index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faStarAndCrescent, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import RegisterForm from './RegisterForm';
+import InfoPopup from './InfoPopup'; // Import the new InfoPopup component
 
 const JournalForm = () => {
     const { data: session, status } = useSession();
@@ -25,6 +25,7 @@ const JournalForm = () => {
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [progressBarClass, setProgressBarClass] = useState('progress-bar-width-mobile');
+    const [dreamPublic, setDreamPublic] = useState(false);
 
     const localCreditsGiven = useRef(false);
 
@@ -191,7 +192,6 @@ const JournalForm = () => {
         for (let i = 0; i < oracles.length; i++) {
             if (oracles[i].selected) {
                 try {
-                    // const dreamPrompt = `${oracles[i].prompt}\n###\n${dream}`;
                     const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dream}`;
                     console.log("dreamPrompt: ", dreamPrompt);
                     const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt } });
@@ -261,6 +261,8 @@ const JournalForm = () => {
                     oracles={oracles}
                     journalDream={journalDream}
                     buttonText={buttonText}
+                    setDreamPublic={setDreamPublic}
+                    dreamPublic={dreamPublic}
                 />
             )}
         </div>
@@ -342,7 +344,7 @@ const InterpretingDreamView = ({ oracles, interpretationProgressArray, progressB
 );
 
 const JournalDreamView = ({
-    user, error, setError, dream, setDream, handleSelectionChange, oracles, journalDream, buttonText
+    user, error, setError, dream, setDream, handleSelectionChange, oracles, journalDream, buttonText, setDreamPublic, dreamPublic
 }) => (
     <div>
         {user?.name ? (
@@ -370,17 +372,19 @@ const JournalDreamView = ({
             )}
         </div>
         <HowItWorksPopup />
-        <div className="flex flex-col">
-            <div className="flex justify-center">
-                <textarea
-                    type="text"
-                    rows={5}
-                    placeholder='Dream goes here'
-                    className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full"
-                    onChange={(event) => setDream(event.target.value)}
-                />
+        <div className="flex flex-col items-center">
+            <textarea
+                type="text"
+                rows={5}
+                placeholder='Dream goes here'
+                className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full"
+                onChange={(event) => setDream(event.target.value)}
+            />
+            <div className="flex justify-center mt-2">
+                <PublicDreamSection setDreamPublic={setDreamPublic} />
             </div>
         </div>
+
         {error && <div className="bg-red-500 w-max p-1 text-black font-bold rounded-xl whitespace-nowrap">{error}</div>}
         <div id="interpretation-section" className="relative">
             <OracleSelectionPopup credits={user?.credits} />
@@ -410,74 +414,65 @@ const JournalDreamView = ({
     </div>
 );
 
-const HowItWorksPopup = () => {
-    const [open, setOpen] = useState(false);
+const HowItWorksPopup = () => (
+    <div className="justify-center golden-ratio-3 text-center">
+        <p>1. Share Your Dream With Us 
+            <InfoPopup 
+                icon={faQuestionCircle} 
+                infoText="Describing your dream: Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream, and instead describe their relationship to you." 
+            />
+        </p>
+    </div>
+);
 
-    return (
-        <div className="justify-center golden-ratio-3 text-center">
-            <p>1. Share Your Dream With Us <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)} /></p>
-            {open && (
-                <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row popup-menu-active">
-                    <p className="text-xl select-none">
-                        <b>Describing your dream</b><br />
-                        Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream,
-                        and instead describe their relationship to you.
-                    </p>
-                </div>
-            )}
+const OracleSelectionPopup = ({ credits }) => (
+    <div className="justify-center golden-ratio-3 pt-5 leading-none text-center pb-2">
+        2. Select Oracles to Interpret Your Dreams 
+        <InfoPopup 
+            icon={faQuestionCircle} 
+            infoText="Choosing Dream Oracles: Here, you can select as many oracles as you would like to interpret your dreams. The more Oracles you select, the longer it will take to interpret your dream. Click on the info icon next to each oracle to learn about their interpretation style." 
+        />
+    </div>
+);
+
+const PublicDreamSection = ({ setDreamPublic }) => (
+    <div className="flex justify-center mt-2">
+        <label className="flex items-center space-x-2">
+            {/* <input
+                type="checkbox"
+                className="form-checkbox"
+                onChange={(event) => setDreamPublic(event.target.checked)}
+            />
+            <span>Make Dream Public</span>
+            <InfoPopup 
+                icon={faInfoCircle} 
+                infoText="Making your dream public means it will be visible to other dreamers in the Dream Stream. An image will also be generated based on your dream and added to the stream. Your name and profile will remain anonymous." 
+            /> */}
+        </label>
+    </div>
+);
+
+const OracleSection = ({ oracle, handleSelectionChange, isDisabled }) => (
+    <div className={`text-center whitespace-nowrap relative golden-ratio-1 ${isDisabled ? 'disabled-oracle' : ''}`}>
+        <div className="w-full relative max-w-sm">
+            <Image
+                layout="responsive"
+                width={100}
+                height={100}
+                src={oracle.oraclePicture}
+                alt={oracle.oracleName}
+                className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
+                onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)}
+            />
         </div>
-    );
-};
-
-const OracleSelectionPopup = ({ credits }) => {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <div className="justify-center golden-ratio-3 pt-5 leading-none text-center pb-2">
-            2. Select Oracles to Interpret Your Dreams <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer golden-ratio-2" onClick={() => setOpen(o => !o)} /><br />
-            {open && (
-                <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row popup-menu-active">
-                    <p className="golden-ratio-2 select-none">
-                        <b>Choosing Dream Oracles</b><br />
-                        Here, you can select as many oracles as you would like to interpret your dreams.
-                        The more Oracles you select, the longer it will take to interpret your dream.
-                        Click on the info icon next to each oracle to learn about their interpretation style.
-                    </p>
-                </div>
-            )}
-        </div>
-    );
-};
-
-const OracleSection = ({ oracle, handleSelectionChange, isDisabled }) => {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <div className={`text-center whitespace-nowrap relative golden-ratio-1 ${isDisabled ? 'disabled-oracle' : ''}`}>
-            <div className="w-full relative max-w-sm">
-                <Image
-                    layout="responsive"
-                    width={100}
-                    height={100}
-                    src={oracle.oraclePicture}
-                    alt={oracle.oracleName}
-                    className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
-                    onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)}
-                />
-            </div>
-            <label className={`${oracle.selected ? "text-gold" : ""}`}>
-                {oracle.oracleName}<FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)} />
-                {open && (
-                    <div className="whitespace-pre-wrap oracle-menu-active">
-                        <p>
-                            <b>Specialty: </b>{oracle.oracleSpecialty}<br /><br />
-                            {oracle.oracleDescriptionShort}
-                        </p>
-                    </div>
-                )}
-            </label>
-        </div>
-    );
-};
+        <label className={`${oracle.selected ? "text-gold" : ""}`}>
+            {oracle.oracleName}
+            <InfoPopup 
+                icon={faInfoCircle} 
+                infoText={`Specialty: ${oracle.oracleSpecialty}\n\n${oracle.oracleDescriptionShort}`} 
+            />           
+        </label>
+    </div>
+);
 
 export default JournalForm;

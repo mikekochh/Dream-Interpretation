@@ -43,7 +43,7 @@ const NavBar = () => {
         <div className="golden-ratio-2">
             {!noNavBar && (
                 <div>
-                    <nav className="flex justify-between items-center w-full p-4 border-b bg-white">
+                    <nav className="flex justify-between items-center w-full p-4 border-b nav-bar-background">
                     {/* Section for logo and ability to change based off of screen size */}
                     <Link href="https://www.dreamoracles.co">
                         <div className="flex flex-row items-center">

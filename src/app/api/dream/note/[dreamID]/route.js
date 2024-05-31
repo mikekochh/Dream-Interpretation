@@ -28,6 +28,8 @@ export async function POST(request) {
 
         const existingNote = await Note.findOne({ dreamID: dreamID });
 
+        console.log("existingNote: ", existingNote);
+
         if (existingNote) {
             existingNote.note = note;
             existingNote.lastUpdated = new Date();
