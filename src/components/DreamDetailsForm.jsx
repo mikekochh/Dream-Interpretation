@@ -17,8 +17,9 @@ export default function DreamsForm() {
     const [oracles, setOracles] = useState([]);
     const [saving, setSaving] = useState(false);
     const [updatingDream, setUpdatingDream] = useState(false);
-    const [loadingInterpretations, setLoadingInterpretations] = useState(false);
-    const [loadingNotes, setLoadingNotes] = useState(false);
+    const [loadingInterpretations, setLoadingInterpretations] = useState(true); // Start as true
+    const [loadingNotes, setLoadingNotes] = useState(true); // Start as true
+    const [loadingUser, setLoadingUser] = useState(true); // New loading state for user data
     const [loading, setLoading] = useState(true); // New loading state
     const [askQuestionInterpretationID, setAskQuestionInterpretationID] = useState(null);
     const [dream, setDream] = useState(null);
@@ -43,8 +44,14 @@ export default function DreamsForm() {
         }
 
         const getUser = async () => {
-            const userDetails = await axios.get("/api/dream/getUser/" + dreamID);
-            setUser(userDetails.data.user);
+            try {
+                const userDetails = await axios.get("/api/dream/getUser/" + dreamID);
+                setUser(userDetails.data.user);
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            } finally {
+                setLoadingUser(false); // Set to false after user data is fetched
+            }
         }
 
         checkPage();
@@ -87,23 +94,30 @@ export default function DreamsForm() {
 
                 setDreamDetails(dreamDetailsRes.data.dreamDetails);
                 setOracles(oraclesRes.data);
-                setLoadingInterpretations(false);
+                setLoadingInterpretations(false); // Set to false after interpretations are fetched
 
                 if (!notesRes.data.dreamNotes.length) {
-                    setLoadingNotes(false);
+                    setLoadingNotes(false); // Set to false if no notes to load
                 } else {
                     document.querySelector('.NoteBox').value = notesRes.data.dreamNotes[0].note;
-                    setLoadingNotes(false);
+                    setLoadingNotes(false); // Set to false after notes are fetched
                 }
                 setDream(dreamRes.data);
             } catch (error) {
                 console.error("Error fetching dream details:", error);
+                setLoadingInterpretations(false); // Ensure to set these to false in case of error
+                setLoadingNotes(false);
             }
-            setLoading(false); // Set loading to false after all data is fetched
         };
 
         getDreamDetails();
     }, [dreamID, interpretationComplete]);
+
+    useEffect(() => {
+        if (!loadingUser && !loadingInterpretations && !loadingNotes) {
+            setLoading(false); // Set loading to false only after all data is fetched
+        }
+    }, [loadingUser, loadingInterpretations, loadingNotes]);
 
     const formatInterpretationDate = (dreamDate) => {
         const date = new Date(dreamDate);

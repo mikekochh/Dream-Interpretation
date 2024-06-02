@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-const InfoPopup = ({ icon, infoText }) => {
+const InfoPopup = ({ icon, infoText, infoTitle }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleToggle = () => setIsOpen(!isOpen);
@@ -19,6 +19,10 @@ const InfoPopup = ({ icon, infoText }) => {
                         >
                             <FontAwesomeIcon icon={faTimes} />
                         </button>
+                        <div 
+                            className="text-center font-bold mb-2 text-black" 
+                            dangerouslySetInnerHTML={{ __html: infoTitle }}
+                        ></div>
                         <div className="text-black">{infoText}</div>
                     </div>
                 </div>

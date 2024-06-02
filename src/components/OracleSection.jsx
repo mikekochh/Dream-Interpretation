@@ -1,16 +1,14 @@
 "use client";
 import React, { useState } from 'react';
 import 'reactjs-popup/dist/index.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
+import InfoPopup from './InfoPopup';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 const OracleSection = ({ oracle, handleSelectionChange }) => {
-
-    const [open, setOpen] = useState(false);
     
     return (
-        <div className="text-center whitespace-nowrap relative golden-ratio-1">
+        <div className="text-center relative golden-ratio-1">
             <div className="relative max-w-sm hidden md:block">
                 <Image 
                     layout="responsive"
@@ -36,15 +34,16 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
                     htmlFor={oracle.oracleID}
                 />
             </div>
-            <label htmlFor={oracle.oracleID} className={`${oracle.selected ? "text-gold" : ""}`}>
-                {oracle.oracleName}<FontAwesomeIcon icon={faInfoCircle} className="ml-2 cursor-pointer" onClick={() => setOpen(o => !o)} />
-                <div className={`whitespace-pre-wrap ${open ? 'oracle-menu-active' : 'oracle-menu'}`}>
-                    <p>
-                        <b>Specialty: </b>{oracle.oracleSpecialty}<br/><br/>
-                        {oracle.oracleDescriptionShort}
-                    </p>
-                </div>
-            </label>
+            <div className="flex items-center justify-center mt-2 golden-ratio-1">
+                <label htmlFor={oracle.oracleID} className={`${oracle.selected ? "text-gold" : ""}`}>
+                    {oracle.oracleName}            
+                </label>
+                <InfoPopup 
+                    icon={faQuestionCircle} 
+                    infoText={oracle.oracleDescriptionShort}
+                    infoTitle={`${oracle.oracleName}<br/>${oracle.oracleSpecialty}`}
+                />
+            </div>
         </div>
     )
 }
