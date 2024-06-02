@@ -7,8 +7,12 @@ const InfoPopup = ({ icon, infoText, infoTitle }) => {
 
     const handleToggle = () => setIsOpen(!isOpen);
 
+    const formatTextWithLineBreaks = (text) => {
+        return text.split('\n').join('<br/>');
+    };
+
     return (
-        <div className="relative">
+        <div className="relative inline-block">
             <FontAwesomeIcon icon={icon} className="ml-2 cursor-pointer" onClick={handleToggle} />
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -21,7 +25,7 @@ const InfoPopup = ({ icon, infoText, infoTitle }) => {
                         </button>
                         <div 
                             className="text-center font-bold mb-2 text-black" 
-                            dangerouslySetInnerHTML={{ __html: infoTitle }}
+                            dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(infoTitle) }}
                         ></div>
                         <div className="text-black">{infoText}</div>
                     </div>

@@ -478,26 +478,30 @@ const JournalDreamView = ({
 
 const HowItWorksPopup = () => (
     <div className="justify-center golden-ratio-3 text-center px-1">
-        <div className="flex items-center justify-center golden-ratio-2">
-            <p className="golden-ratio-3">1. Share Your Dream With Us</p>
-            <InfoPopup 
-                icon={faQuestionCircle} 
-                infoTitle="Describe your dream"
-                infoText="Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream, and instead describe their relationship to you." 
-            />
+        <div className="flex justify-center items-center golden-ratio-2">
+            <span className="inline-flex items-center">
+                <p className="golden-ratio-3 m-0">1. Share Your Dream With Us</p>
+                <InfoPopup 
+                    icon={faQuestionCircle} 
+                    infoTitle="Describe your dream"
+                    infoText="Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream, and instead describe their relationship to you." 
+                />
+            </span>
         </div>
     </div>
 );
 
 const OracleSelectionPopup = ({ credits }) => (
     <div className="justify-center golden-ratio-3 pt-5 leading-none text-center pb-2">
-        <div className="flex items-center justify-center golden-ratio-2">
-            <p className="golden-ratio-3">2. Select Oracles to Interpret Your Dreams</p>
-            <InfoPopup 
-                icon={faQuestionCircle} 
-                infoTitle="Choosing Dream Oracles"
-                infoText="Here, you can select as many oracles as you would like to interpret your dreams. The more Oracles you select, the longer it will take to interpret your dream. Click on the info icon next to each oracle to learn about their interpretation style." 
-            />
+        <div className="flex justify-center items-center golden-ratio-2">
+            <span className="inline-flex items-center">
+                <p className="golden-ratio-3 m-0">2. Select Oracles to Interpret Your Dreams</p>
+                <InfoPopup 
+                    icon={faQuestionCircle} 
+                    infoTitle="Choosing Dream Oracles"
+                    infoText="Here, you can select as many oracles as you would like to interpret your dreams. The more Oracles you select, the longer it will take to interpret your dream. Click on the info icon next to each oracle to learn about their interpretation style." 
+                />
+            </span>
         </div>
     </div>
 );
