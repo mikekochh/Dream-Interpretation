@@ -21,8 +21,6 @@ export async function POST(req) {
             { new: true, upsert: true }
         );
 
-        console.log("updatedUser: ", updatedUser);
-
         if (!updatedUser) {
             throw new Error("Problem with updating user!");
         }

@@ -6,7 +6,6 @@ export async function GET(req) {
     try {
         await connectMongoDB();
         const oracles = await Oracle.find();
-        console.log('oracles: ', oracles);  
         return NextResponse.json(oracles);
     } catch (error) {
         console.log('error: ', error);

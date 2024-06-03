@@ -31,6 +31,9 @@ export default function DreamsForm() {
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
+    const [dreamEmotions, setDreamEmotions] = useState([]);
+    const [emotions, setEmotions] = useState([]);
+    const [loadingEmotions, setLoadingEmotions] = useState(true);
 
     const [showFullInterpretation, setShowFullInterpretation] = useState({}); // New state
 
@@ -54,8 +57,20 @@ export default function DreamsForm() {
             }
         }
 
+        const getEmotions = async () => {
+            try {
+                const resEmotions = await axios.get("/api/emotions/getEmotions");
+                setEmotions(resEmotions.data);
+            } catch (error) {
+                console.log("Error fetching emotions: ", error);
+            } finally {
+                setLoadingEmotions(false);
+            }
+         }
+
         checkPage();
         getUser();
+        getEmotions();
     }, [])
 
     useEffect(() => {
@@ -74,6 +89,21 @@ export default function DreamsForm() {
             return () => clearInterval(interval);
         }
     }, [interpretingDream, interpretationProgressArray.length, interpretationProgressIndex]);
+
+    useEffect(() => {
+        const fetchDreamEmotions = async () => {
+            try {
+                const res = await axios.get(`/api/emotions/getDreamEmotions?dreamID=${dreamID}`);
+                setDreamEmotions(res.data);
+            } catch (error) {
+                console.log('Error fetching dream emotions:', error);
+            }
+        };
+
+        if (dreamID) {
+            fetchDreamEmotions();
+        }
+    }, [dreamID]);
 
     useEffect(() => {
         const isAnyOracleSelected = oracles.some(oracle => oracle.selected);
@@ -194,7 +224,6 @@ export default function DreamsForm() {
         try {
             setSaving(true);
             const note = document.querySelector('.NoteBox').value;
-            console.log("note: ", note);
             await axios.post('api/dream/note/' + dreamID, { note });
             router.push('/dreams');
         } catch (err) {
@@ -341,6 +370,11 @@ export default function DreamsForm() {
         });
     }
 
+    const getEmotionName = (emotionID) => {
+        const emotion = emotions.find(e => e.emotionID === emotionID);
+        return emotion ? emotion.emotionName : 'Unknown Emotion';
+    };
+
     if (loading) {
         return (
             <div className="main-content text-white flex justify-center items-center h-screen">
@@ -361,33 +395,44 @@ export default function DreamsForm() {
             <div className="flex justify-center border rounded-xl m-2 border-gold-small">
                 <div className='p-2 mb-2 w-11/12'>
                     <h1 className="text-center golden-ratio-3 text-gold">The Dream</h1>
-                    {!edittingDream ? (
-                        <div onClick={editDream} className="cursor-pointer">
-                            <p className="golden-ratio-2 text-gold">{dream}</p>
-                            <p className="golden-ratio-2 text-right cursor-pointer" onClick={editDream}>Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2" /></p>
+                    <div>
+                        <div 
+                            contentEditable={edittingDream} 
+                            suppressContentEditableWarning={true}
+                            className={`cursor-pointer golden-ratio-2 text-gold ${edittingDream ? 'border-2 border-black rounded-lg p-2' : ''}`}
+                            onClick={!edittingDream ? editDream : undefined}
+                            onBlur={edittingDream ? (e) => setDream(e.target.innerText) : undefined}
+                        >
+                            {dream}
                         </div>
-                    ) : (
-                        <div>
-                            <textarea
-                                type="text"
-                                rows={5}
-                                className="DreamBox NoteBox border-2 border-black rounded-lg text-black w-full h-full p-2"
-                                style={{ minHeight: '100px' }}
-                                placeholder='Notes on dream or interpretations go here'
-                                value={dream}
-                                onChange={(e) => setDream(e.target.value)}
-                            />
-                            <div className="flex justify-end items-end md:relative">
-                                {updatingDream ? (
-                                    <div className="flex right-0 absolute m-2 top-0">
-                                        <div className="loader"></div>
-                                    </div>
-                                ) : (
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 justify-end m-2 bottom-0 dream-button" onClick={endDreamUpdate}>Done</button>
-                                )}
-                            </div>
+
+                        <div className={`flex flex-wrap gap-2 justify-center p-4 ${edittingDream ? 'pointer-events-none' : ''}`}>
+                            {dreamEmotions.map((emotion) => (
+                                <div 
+                                    key={emotion._id} 
+                                    className="px-4 py-2 bg-gray-200 rounded-lg text-black"
+                                >
+                                    {getEmotionName(emotion.emotionID)}
+                                </div>
+                            ))}
                         </div>
-                    )}
+
+                        <div className="flex justify-end items-center">
+                            {edittingDream ? (
+                                <>
+                                    {updatingDream ? (
+                                        <div className="loader m-2"></div>
+                                    ) : (
+                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2 dream-button" onClick={endDreamUpdate}>Done</button>
+                                    )}
+                                </>
+                            ) : (
+                                <p className="golden-ratio-2 text-right cursor-pointer" onClick={editDream}>
+                                    Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2" />
+                                </p>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="flex md:flex-row flex-col relative pb-12">

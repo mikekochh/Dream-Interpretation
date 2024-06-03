@@ -33,11 +33,9 @@ export default function SuccessCreditsForm() {
 
         async function sendVerificationEmail() {
             try {
-                console.log("Hello");
                 const paymentVerified = await verifyPayment();
                 const email = session?.user.email;
                 if (email) {
-                    console.log("Hello2");
                     const userRes = await fetch(`/api/user/${email}`, {
                         method: "GET",
                         headers: {
@@ -49,11 +47,9 @@ export default function SuccessCreditsForm() {
                     if (paymentVerified) {
                         if (!user.activated && !emailSent) {
                             setEmailSent(true);
-                            console.log("Hello3");
                             const res = await axios.post('/api/sendVerificationEmail', { email });
                         }
                         else if (user.activated || emailSent) {
-                            console.log("Hello4");
                             setRedirectHome(true);
                             setTimeout(() => {
                                 window.location.href = "/interpret";

@@ -28,16 +28,13 @@ export default function DreamsForm() {
                 return;
             }
 
-            console.log("session: ", session);
             if (session) {
-                console.log("Loading...");
                 setLoading(true);
                 const res = await axios.get('api/dream/user/' + session.user.email);
                 let sortedDreams;
                 if (res.data.length === 0) {
                     setNoDreams(true);
                     setLoading(false);
-                    console.log("Not Loading...");
                     return;
                 }
 
@@ -75,7 +72,6 @@ export default function DreamsForm() {
                 }
 
                 setDreams(sortedDreams);
-                console.log("Not Loading...");
                 setLoading(false); // Set loading to false after dreams are fetched
             }
             else {
@@ -83,7 +79,6 @@ export default function DreamsForm() {
             }
         };
 
-        console.log("Is this even running?");
         getDreams();
     }, [session, weekOffset, sortType]);
 
@@ -216,11 +211,7 @@ export default function DreamsForm() {
 }
 
 const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
-
-    console.log("dream: ", dream);
-
     const dreamLength = (dreamText) => {
-        console.log("dreamText: ", dreamText);
         if (dreamText.length > 100) {
             return dreamText.substring(0, 100) + '...';
         } else {

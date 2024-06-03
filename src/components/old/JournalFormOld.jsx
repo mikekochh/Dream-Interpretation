@@ -237,17 +237,7 @@ export default function JournalForm() {
                 });
 
                 setInterpretationProgressIndex(i+1);
-
-                // if (user._id === undefined) {
-                //     setLocalInterpretation(resInterpret.data[0].message.content);
-                //     setInterpretingDream(false);
-                //     setSaveMessage("Here is your interpretation:");
-                //     journalDreamNoAccount();
-                //     return;
-                // }
             }
-
-            console.log("setInterpretationProgressIndex being set to: ", i+1);
             setInterpretationProgressIndex(i+1);
         }
 

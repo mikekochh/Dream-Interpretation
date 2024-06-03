@@ -7,12 +7,9 @@ export async function GET(request) {
     try {
         const pathname = request.nextUrl.pathname;
         const dreamID = pathname.split('/').pop();
-        console.log("dreamID: ", dreamID);
         await connectMongoDB();
 
         const dream = await Dream.findOne({ _id: dreamID });
-
-        console.log("found the dream: ", dream);
 
         if (dream) {
             const user = await User.findOne({ _id: dream.userID });

@@ -20,22 +20,4 @@ export async function GET(request) {
         console.log('error: ', error);
         return NextResponse.error(error);
     }
-
 }
-
-// export async function GET(req) {
-//     try {
-//         const pathname = req.nextUrl.pathname;
-//         const email = pathname.split('/').pop();
-//         await connectMongoDB();
-//         const user = await User.findOne({ email });
-//         console.log('user: ', user);
-//         if (!user) {
-//             return NextResponse.error(new Error('User not found!'));
-//         }
-//         return NextResponse.json(user);
-//     } catch (error) {
-//         console.log('error: ', error);
-//         return NextResponse.error(error);
-//     }
-// }

@@ -59,7 +59,6 @@ const SettingsForm = () => {
                 },
             });
             const data = await res.json();
-            console.log('gender data: ', data)
             setGenders(Array.isArray(data) ? data : []);
         }
 
@@ -95,7 +94,6 @@ const SettingsForm = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log('User Data successfully updated:', response.data);
             setError(''); // Clear any previous errors
             router.push("/interpret");
         } catch (error) {

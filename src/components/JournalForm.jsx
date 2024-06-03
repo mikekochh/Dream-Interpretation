@@ -23,16 +23,20 @@ const JournalForm = () => {
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [loadingSession, setLoadingSession] = useState(true);
     const [loadingOracles, setLoadingOracles] = useState(true);
+    const [loadingEmotions, setLoadingEmotions] = useState(true);
     const [loadingUser, setLoadingUser] = useState(true);
     const [progressBarClass, setProgressBarClass] = useState('progress-bar-width-mobile');
     const [dreamPublic, setDreamPublic] = useState(false);
+    const [emotions, setEmotions] = useState([]);
+    const [selectedEmotions, setSelectedEmotions] = useState([]);
 
     const localCreditsGiven = useRef(false);
     const scrollContainerRef = useRef(null);
 
     useEffect(() => {
-        setLoading(status === 'loading');
+        setLoadingSession(status === 'loading');
     }, [status]);
 
     useEffect(() => {
@@ -107,7 +111,7 @@ const JournalForm = () => {
                 const res = await axios.get('/api/oracles');
                 setOracles(res.data.sort((a, b) => a.oracleID - b.oracleID));
             } catch (error) {
-                console.log('Error fetching oracles:', error);
+                console.log('Error fetching oracles: ', error);
             } finally {
                 setLoadingOracles(false); // Set to false after oracles are fetched
             }
@@ -115,6 +119,21 @@ const JournalForm = () => {
 
         getOracles();
     }, []);
+
+    useEffect(() => {
+        const getEmotions = async () => {
+            try {
+                const res = await axios.get('api/emotions/getEmotions');
+                setEmotions(res.data);
+            } catch (error) {
+                console.log('Error fetching emotions: ', error);
+            } finally {
+                setLoadingEmotions(false);
+            }
+        };
+
+        getEmotions();
+    }, [])
 
     useEffect(() => {
         const handleResize = () => {
@@ -128,10 +147,10 @@ const JournalForm = () => {
     }, []);
 
     useEffect(() => {
-        if (!loadingUser && !loadingOracles) {
-            setLoading(false); // Set loading to false only after all data is fetched
+        if (!loadingUser && !loadingOracles && !loadingEmotions && !loadingSession) {
+            setLoading(false);
         }
-    }, [loadingUser, loadingOracles]);
+    }, [loadingUser, loadingOracles, loadingEmotions, loadingSession]);
 
     const handleSelectionChange = (selected, oracleID) => {
         setOracles(prev => {
@@ -151,7 +170,7 @@ const JournalForm = () => {
         setSavingDream(true);
         const userID = user?._id;
         try {
-            const resJournal = await axios.post('/api/dream/journal', { userID, dream: dreamText, interpretDream: oracleSelected });
+            const resJournal = await axios.post('/api/dream/journal', { userID, dream: dreamText, interpretDream: oracleSelected, emotions: selectedEmotions });
             const dreamID = resJournal.data._id;
             setNewDreamID(dreamID);
             if (oracleSelected) {
@@ -163,6 +182,18 @@ const JournalForm = () => {
             setError("Error Journaling Dream");
             console.log("error:", error);
         }
+    };
+
+
+    const handleEmotionClick = (emotionId) => {
+        setSelectedEmotions(prevSelectedEmotions => {
+            if (!prevSelectedEmotions) prevSelectedEmotions = [];
+            if (prevSelectedEmotions.includes(emotionId)) {
+                return prevSelectedEmotions.filter(id => id !== emotionId);
+            } else {
+                return [...prevSelectedEmotions, emotionId];
+            }
+        });
     };
 
     async function getGenderName(genderID) {
@@ -183,19 +214,19 @@ const JournalForm = () => {
 
         let userDetails = [];
 
-        if (user.genderID) {
+        if (user?.genderID) {
             const genderName = await getGenderName(user.genderID);
             if (genderName) {
                 userDetails.push(`Gender: ${genderName}`);
             }
         }
-        if (user.age) {
+        if (user?.age) {
             userDetails.push(`Age: ${user.age}`);
         }
-        if (user.culturalBackground) {
+        if (user?.culturalBackground) {
             userDetails.push(`Cultural Background: ${user.culturalBackground}`);
         }
-        if (user.spiritualPractices) {
+        if (user?.spiritualPractices) {
             userDetails.push(`Spiritual Practices: ${user.spiritualPractices}`);
         }
 
@@ -208,7 +239,6 @@ const JournalForm = () => {
             if (oracles[i].selected) {
                 try {
                     const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dream}`;
-                    console.log("dreamPrompt: ", dreamPrompt);
                     const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt } });
                     const resUpdateDatabase = await axios.post('/api/dream/interpret', { dreamID, interpretation: resInterpret.data[0].message.content, oracleID: oracles[i].oracleID, user });
                     setInterpretationProgressArray(prevArray => {
@@ -276,6 +306,7 @@ const JournalForm = () => {
                     oracles={oracles}
                     interpretationProgressArray={interpretationProgressArray}
                     progressBarClass={progressBarClass}
+                    oracleSelected={oracleSelected}
                 />
             ) : (
                 <JournalDreamView
@@ -293,6 +324,9 @@ const JournalForm = () => {
                     scrollLeft={scrollLeft}
                     scrollRight={scrollRight}
                     scrollContainerRef={scrollContainerRef}
+                    emotions={emotions}
+                    handleEmotionClick={handleEmotionClick}
+                    selectedEmotions={selectedEmotions}
                 />
             )}
         </div>
@@ -300,7 +334,16 @@ const JournalForm = () => {
 };
 
 const SavingDreamView = ({
-    saveMessage, interpretingDream, user, resetPage, justJournal, goToDreamDetails, oracles, interpretationProgressArray, progressBarClass
+    saveMessage, 
+    interpretingDream, 
+    user, 
+    resetPage, 
+    justJournal, 
+    goToDreamDetails, 
+    oracles, 
+    interpretationProgressArray, 
+    progressBarClass,
+    oracleSelected
 }) => (
     <div className="flex justify-center">
         <div className="flex justify-center items-center flex-col">
@@ -314,17 +357,22 @@ const SavingDreamView = ({
                     />
                 ) : (
                     <div>
-                        {!user && (
+                        {!user ? (
                             <div>
                                 <div className="golden-ratio-2 text-center font-bold text-gold">
-                                    Create an account below to view your dream interpretation
+                                    {oracleSelected ? (
+                                        <p>Create an account below to view your dream interpretation</p>
+                                    ) : (
+                                        <p>Create an account below to start a dream journal</p>
+                                    )}
                                 </div>
                             </div>
+                        ) : (
+                            <div>
+                                <button className="dream-button" onClick={resetPage}>Journal New Dream</button>
+                                {!justJournal && <button className="dream-button" onClick={goToDreamDetails}>Go To Dream Details</button>}
+                            </div>
                         )}
-                        <div>
-                            <button className="dream-button" onClick={resetPage}>Journal New Dream</button>
-                            {!justJournal && <button className="dream-button" onClick={goToDreamDetails}>Go To Dream Details</button>}
-                        </div>
                     </div>
                 )}
             </div>
@@ -387,7 +435,10 @@ const JournalDreamView = ({
     dreamPublic,
     scrollLeft,
     scrollRight,
-    scrollContainerRef
+    scrollContainerRef,
+    emotions,
+    handleEmotionClick,
+    selectedEmotions
 }) => (
     <div>
         {user?.name ? (
@@ -429,6 +480,20 @@ const JournalDreamView = ({
         </div>
 
         {error && <div className="bg-red-500 w-max p-1 text-black font-bold rounded-xl whitespace-nowrap">{error}</div>}
+        <div id="mood-selection-section">
+            <MoodSelectionPopup />
+            <div className="flex flex-wrap gap-2 justify-center">
+                {emotions.map(emotion => (
+                    <button 
+                        key={emotion.emotionID} 
+                        onClick={() => handleEmotionClick(emotion.emotionID)} 
+                        className={`px-4 py-2 rounded-lg transition text-black ${selectedEmotions?.includes(emotion.emotionID) ? 'border-4 border-gold bg-gray-400  hover:bg-gray-200' : 'bg-gray-200 hover:bg-gray-400'}`}
+                    >
+                        {emotion.emotionName}
+                    </button>
+                ))}
+            </div>
+        </div>
         <div id="interpretation-section" className="relative">
             <OracleSelectionPopup credits={user?.credits} />
             {/* <div className="justify-center items-center flex md:flex-row flex-col space-x-6">
@@ -480,7 +545,7 @@ const HowItWorksPopup = () => (
     <div className="justify-center golden-ratio-3 text-center px-1">
         <div className="flex justify-center items-center golden-ratio-2">
             <span className="inline-flex items-center">
-                <p className="golden-ratio-3 m-0">1. Share Your Dream With Us</p>
+                <p className="golden-ratio-3 m-0">1. Share Your Dream</p>
                 <InfoPopup 
                     icon={faQuestionCircle} 
                     infoTitle="Describe your dream"
@@ -491,11 +556,28 @@ const HowItWorksPopup = () => (
     </div>
 );
 
+const MoodSelectionPopup = ({ }) => (
+    <div className="justify-center golden-ratio-3 pt-5 leading-none text-center pb-2">
+        <div className="flex justify-center items-center golden-ratio-2">
+            <span className="inline-flex items-center">
+                <p className="golden-ratio-3 m-0">2. Moods and Feelings</p>
+                <InfoPopup 
+                    icon={faQuestionCircle} 
+                    infoTitle="How Did Your Dream Feel?"
+                    infoText="Select any feelings you might have felt during the dream or upon waking from the dream. These can help bring more context into your interpretation, as our emotions play a huge role in understanding our dreams"
+                />
+            </span>
+        </div>
+        <p className="golden-ratio-2 mt-3">How did you feel during and after your dream?</p>
+    </div>
+)
+
+
 const OracleSelectionPopup = ({ credits }) => (
     <div className="justify-center golden-ratio-3 pt-5 leading-none text-center pb-2">
         <div className="flex justify-center items-center golden-ratio-2">
             <span className="inline-flex items-center">
-                <p className="golden-ratio-3 m-0">2. Select Oracles to Interpret Your Dreams</p>
+                <p className="golden-ratio-3 m-0">3. Choose Oracles</p>
                 <InfoPopup 
                     icon={faQuestionCircle} 
                     infoTitle="Choosing Dream Oracles"
@@ -523,28 +605,5 @@ const PublicDreamSection = ({ setDreamPublic }) => (
         </label>
     </div>
 );
-
-// const OracleSection = ({ oracle, handleSelectionChange, isDisabled }) => (
-//     <div className={`text-center whitespace-nowrap relative golden-ratio-1 ${isDisabled ? 'disabled-oracle' : ''}`}>
-//         <div className="w-full relative max-w-sm">
-//             <Image
-//                 layout="responsive"
-//                 width={100}
-//                 height={100}
-//                 src={oracle.oraclePicture}
-//                 alt={oracle.oracleName}
-//                 className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
-//                 onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)}
-//             />
-//         </div>
-//         <label className={`${oracle.selected ? "text-gold" : ""}`}>
-//             {oracle.oracleName}
-//             <InfoPopup 
-//                 icon={faInfoCircle} 
-//                 infoText={`Specialty: ${oracle.oracleSpecialty}\n\n${oracle.oracleDescriptionShort}`} 
-//             />           
-//         </label>
-//     </div>
-// );
 
 export default JournalForm;

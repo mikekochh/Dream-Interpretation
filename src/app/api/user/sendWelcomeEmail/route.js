@@ -12,9 +12,6 @@ export async function POST(req) {
     try {
         const { email, name } = await req.json();
 
-        console.log("Are we getting here!");
-        console.log("email: ", email);
-
         // send email
         const fromAddress = process.env.EMAIL_FROM_ADDRESS;
         const domain = process.env.DOMAIN;
@@ -41,8 +38,6 @@ export async function POST(req) {
         };
 
         const emailResult = await sgMail.send(mailOptions);
-
-        console.log("emailResult: ", emailResult);
 
         return NextResponse.json({message: "Welcome Email Sent!"}, { status: 200 })
     } catch (error) {

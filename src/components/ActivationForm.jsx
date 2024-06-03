@@ -32,9 +32,6 @@ export default function ActivationForm() {
     useEffect(() => {
         const sendWelcomeEmail = async function() {
             try {
-                console.log("sending welcome email!");
-                console.log("userEmail: ", userEmail);
-                console.log("userName: ", userName);
                 const resWelcomeEmail = await axios.post('/api/user/sendWelcomeEmail', {
                     email: userEmail,
                     name: userName
