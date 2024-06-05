@@ -274,7 +274,6 @@ export default function DreamsForm() {
                 if (oracles[i].selected) {
                     // const dreamPrompt = oracles[i].prompt + "\n###\n" + dream;
                     const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dream}`;
-                    console.log("dreamPrompt: ", dreamPrompt);
                     const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', {
                         params: { dreamPrompt }
                     });

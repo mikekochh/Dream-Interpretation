@@ -2,7 +2,7 @@ import mongoose, { Schema, models } from "mongoose";
 
 const dreamStreakSchema = new Schema({
     userID: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
         required: [true, "Please enter the user ID!"],
         unique: true
     },
@@ -16,7 +16,7 @@ const dreamStreakSchema = new Schema({
         required: [true, "Please enter dreamed Today"],
         default: false
     }
-})
+});
 
 const DreamStreak = models.DreamStreak || mongoose.model("DreamStreak", dreamStreakSchema);
 

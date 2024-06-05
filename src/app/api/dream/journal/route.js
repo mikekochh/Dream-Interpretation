@@ -3,6 +3,7 @@ import { connectMongoDB } from '../../../../../lib/mongodb';
 import Dream from '../../../../../models/dream';
 import User from '../../../../../models/user';
 import DreamEmotion from '../../../../../models/journaledEmotions';
+import DreamStreak from '../../../../../models/dreamStreaks';
 
 export async function POST(req) {
     try {
@@ -31,6 +32,23 @@ export async function POST(req) {
             if (!user) {
                 return NextResponse.json({ message: "User not found!" }, { status: 500 });
             }
+            
+            let dreamStreak = await DreamStreak.findOne({ userID: user._id });
+            
+            if (!dreamStreak) {
+                dreamStreak = new DreamStreak({
+                    userID: user._id.toString(),
+                    streakLength: 1,
+                    dreamedToday: true
+                });
+            } else {
+                if (!dreamStreak.dreamedToday) {
+                    dreamStreak.streakLength += 1;
+                    dreamStreak.dreamedToday = true;
+                }
+            }
+            
+            await dreamStreak.save();
         } else {
             newDream = await Dream.create({
                 dream,

@@ -22,15 +22,21 @@ const JournalForm = () => {
     const [justJournal, setJustJournal] = useState(false);
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
+
     const [loading, setLoading] = useState(true);
     const [loadingSession, setLoadingSession] = useState(true);
     const [loadingOracles, setLoadingOracles] = useState(true);
     const [loadingEmotions, setLoadingEmotions] = useState(true);
+    const [loadingDreamStreak, setLoadingDreamStreak] = useState(true);
     const [loadingUser, setLoadingUser] = useState(true);
+
     const [progressBarClass, setProgressBarClass] = useState('progress-bar-width-mobile');
     const [dreamPublic, setDreamPublic] = useState(false);
     const [emotions, setEmotions] = useState([]);
     const [selectedEmotions, setSelectedEmotions] = useState([]);
+    const [errorWhileJournaling, setErrorWhileJournaling] = useState(false);
+    const [dreamStreak, setDreamStreak] = useState();
+    
 
     const localCreditsGiven = useRef(false);
     const scrollContainerRef = useRef(null);
@@ -106,6 +112,17 @@ const JournalForm = () => {
     }, [oracles]);
 
     useEffect(() => {
+        const getEmotions = async () => {
+            try {
+                const res = await axios.get('api/emotions/getEmotions');
+                setEmotions(res.data);
+            } catch (error) {
+                console.log('Error fetching emotions: ', error);
+            } finally {
+                setLoadingEmotions(false);
+            }
+        };
+
         const getOracles = async () => {
             try {
                 const res = await axios.get('/api/oracles');
@@ -118,20 +135,6 @@ const JournalForm = () => {
         };
 
         getOracles();
-    }, []);
-
-    useEffect(() => {
-        const getEmotions = async () => {
-            try {
-                const res = await axios.get('api/emotions/getEmotions');
-                setEmotions(res.data);
-            } catch (error) {
-                console.log('Error fetching emotions: ', error);
-            } finally {
-                setLoadingEmotions(false);
-            }
-        };
-
         getEmotions();
     }, [])
 
@@ -147,10 +150,34 @@ const JournalForm = () => {
     }, []);
 
     useEffect(() => {
-        if (!loadingUser && !loadingOracles && !loadingEmotions && !loadingSession) {
+        if (!loadingUser && 
+            !loadingOracles && 
+            !loadingEmotions && 
+            !loadingSession && 
+            !loadingDreamStreak
+        ) {
             setLoading(false);
         }
-    }, [loadingUser, loadingOracles, loadingEmotions, loadingSession]);
+    }, [loadingUser, loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak]);
+
+    useEffect(() => {
+        const getUserDreamStreak = async () => {
+            setLoadingDreamStreak(true);
+            try {
+                const res = await axios.get(`/api/dream/streak`, { params: { userID: user._id } });
+                console.log("res dream streak: ", res);
+                setDreamStreak(res.data.dreamStreak[0]);
+            } catch (error) {
+                console.log("Error fetching user dream streak: ", error);
+            } finally {
+                setLoadingDreamStreak(false);
+            }
+        }
+
+        if (user) {
+            getUserDreamStreak();
+        }
+    }, [user])
 
     const handleSelectionChange = (selected, oracleID) => {
         setOracles(prev => {
@@ -180,7 +207,8 @@ const JournalForm = () => {
             }
         } catch (error) {
             setError("Error Journaling Dream");
-            console.log("error:", error);
+            setSaveMessage("Error Journaling Dream. Please Try Again Later");
+            setErrorWhileJournaling(true);
         }
     };
 
@@ -248,6 +276,8 @@ const JournalForm = () => {
                     });
                 } catch (error) {
                     setError("Error Interpreting or Saving Interpretation");
+                    setSaveMessage("Error Interpreting or Saving Interpretation. Please Try Again Later");
+                    setErrorWhileJournaling(true);
                     console.log("error:", error);
                     return;
                 }
@@ -307,6 +337,7 @@ const JournalForm = () => {
                     interpretationProgressArray={interpretationProgressArray}
                     progressBarClass={progressBarClass}
                     oracleSelected={oracleSelected}
+                    errorWhileJournaling={errorWhileJournaling}
                 />
             ) : (
                 <JournalDreamView
@@ -327,6 +358,7 @@ const JournalForm = () => {
                     emotions={emotions}
                     handleEmotionClick={handleEmotionClick}
                     selectedEmotions={selectedEmotions}
+                    dreamStreak={dreamStreak}
                 />
             )}
         </div>
@@ -343,7 +375,8 @@ const SavingDreamView = ({
     oracles, 
     interpretationProgressArray, 
     progressBarClass,
-    oracleSelected
+    oracleSelected,
+    errorWhileJournaling
 }) => (
     <div className="flex justify-center">
         <div className="flex justify-center items-center flex-col">
@@ -370,7 +403,7 @@ const SavingDreamView = ({
                         ) : (
                             <div>
                                 <button className="dream-button" onClick={resetPage}>Journal New Dream</button>
-                                {!justJournal && <button className="dream-button" onClick={goToDreamDetails}>Go To Dream Details</button>}
+                                {!justJournal && !errorWhileJournaling && <button className="dream-button" onClick={goToDreamDetails}>Go To Dream Details</button>}
                             </div>
                         )}
                     </div>
@@ -438,11 +471,18 @@ const JournalDreamView = ({
     scrollContainerRef,
     emotions,
     handleEmotionClick,
-    selectedEmotions
+    selectedEmotions,
+    dreamStreak
 }) => (
     <div>
         {user?.name ? (
-            <p className="text-center golden-ratio-2 mb-5">Welcome back {user?.name}</p>
+            <div>
+                <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
+                {dreamStreak?.streakLength && (
+                    <p className="text-center golden-ratio-2">{dreamStreak?.streakLength} Day Dream Streak</p>
+                )}
+            </div>
+            
         ) : (
             <div>
                 <p className="text-center golden-ratio-3">Welcome to Dream Oracles</p>
@@ -543,7 +583,7 @@ const JournalDreamView = ({
 
 const HowItWorksPopup = () => (
     <div className="justify-center golden-ratio-3 text-center px-1">
-        <div className="flex justify-center items-center golden-ratio-2">
+        <div className="flex justify-center items-center golden-ratio-2 mt-5">
             <span className="inline-flex items-center">
                 <p className="golden-ratio-3 m-0">1. Share Your Dream</p>
                 <InfoPopup 
