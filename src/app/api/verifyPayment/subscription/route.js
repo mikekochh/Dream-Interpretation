@@ -9,6 +9,7 @@ const stripeSecretKey = isLocalEnvironment ? process.env.STRIPE_SECRET_KEY_TEST 
 const stripe = require('stripe')(stripeSecretKey);
 
 export async function POST(req) {
+    try {
         await connectMongoDB();
         // create user
         const { session_id, userEmail } = await req.json();
