@@ -47,22 +47,22 @@ exports.scheduledFunction = functions.pubsub.schedule('every day 00:00').onRun(a
     logger.info('Scheduled function running at midnight');
     await client.connect();
     const db = client.db('dreamsite');
-    const collection = db.collection('dreamStreaks');
+    const collection = db.collection('dreamstreaks');
 
     try {
-        // Update documents where dreamedToday is true to set it to false
-        await collection.updateMany(
-            { dreamedToday: true },
-            { $set: { dreamedToday: false } }
-        );
-        logger.info('Updated documents where dreamedToday was true');
-
-        // Update documents where dreamedToday is false to reset streakLength to 0
-        await collection.updateMany(
+        // Update streaks where the user has not journaled a dream today
+        const updateFalseResult = await collection.updateMany(
             { dreamedToday: false },
             { $set: { streakLength: 0 } }
         );
-        logger.info('Updated documents where dreamedToday was false');
+        logger.info('Updated documents where dreamedToday was false', updateFalseResult);
+
+        // Update documents where dreamedToday is true to set it to false
+        const updateTrueResult = await collection.updateMany(
+            { dreamedToday: true },
+            { $set: { dreamedToday: false } }
+        );
+        logger.info('Updated documents where dreamedToday was true', updateTrueResult);
 
     } catch (error) {
         logger.error('Error updating dream streaks: ', error);
@@ -72,3 +72,4 @@ exports.scheduledFunction = functions.pubsub.schedule('every day 00:00').onRun(a
 
     return null;
 });
+

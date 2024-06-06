@@ -478,11 +478,10 @@ const JournalDreamView = ({
         {user?.name ? (
             <div>
                 <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
-                {dreamStreak?.streakLength && (
-                    <p className="text-center golden-ratio-2">{dreamStreak?.streakLength} Day Dream Streak</p>
+                {dreamStreak && dreamStreak.streakLength > 0 && (
+                    <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
                 )}
             </div>
-            
         ) : (
             <div>
                 <p className="text-center golden-ratio-3">Welcome to Dream Oracles</p>
