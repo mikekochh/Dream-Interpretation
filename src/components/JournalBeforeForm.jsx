@@ -36,8 +36,6 @@ const JournalForm = () => {
     const [selectedEmotions, setSelectedEmotions] = useState([]);
     const [errorWhileJournaling, setErrorWhileJournaling] = useState(false);
     const [dreamStreak, setDreamStreak] = useState();
-
-    const [dreamStep, setDreamStep] = useState(0);
     
 
     const localCreditsGiven = useRef(false);
@@ -179,9 +177,6 @@ const JournalForm = () => {
         if (user) {
             getUserDreamStreak();
         }
-        else {
-            setLoadingDreamStreak(false);
-        }
     }, [user])
 
     const handleSelectionChange = (selected, oracleID) => {
@@ -313,14 +308,6 @@ const JournalForm = () => {
         }
     };
 
-    const incrementDreamStep = () => {
-        setDreamStep(prevStep => prevStep + 1);
-    };
-    
-    const decrementDreamStep = () => {
-        setDreamStep(prevStep => Math.max(prevStep - 1, 0)); // Ensure it doesn't go below 0
-    };
-
     if (loading) {
         return (
             <div className="main-content text-white flex justify-center items-center h-screen">
@@ -372,9 +359,6 @@ const JournalForm = () => {
                     handleEmotionClick={handleEmotionClick}
                     selectedEmotions={selectedEmotions}
                     dreamStreak={dreamStreak}
-                    dreamStep={dreamStep}
-                    incrementDreamStep={incrementDreamStep}
-                    decrementDreamStep={decrementDreamStep}
                 />
             )}
         </div>
@@ -488,57 +472,22 @@ const JournalDreamView = ({
     emotions,
     handleEmotionClick,
     selectedEmotions,
-    dreamStreak,
-    dreamStep,
-    setDreamStep,
-    incrementDreamStep,
-    decrementDreamStep
+    dreamStreak
 }) => (
     <div>
-        {dreamStep === 0 ? (
-            <>
-                <WelcomeSection 
-                    user={user} 
-                    dreamStreak={dreamStreak} 
-                    setDreamStep={setDreamStep} 
-                    incrementDreamStep={incrementDreamStep} 
-                />
-            </>
-        ) : dreamStep === 1 ? (
-            <>
-                <ShareDreamSection 
-                    error={error} 
-                    setDream={setDream} 
-                    incrementDreamStep={incrementDreamStep}
-                    decrementDreamStep={decrementDreamStep}
-                />
-            </>
-        ) : dreamStep === 2 ? (
-            <>
-                <MoodSection 
-                    emotions={emotions} 
-                    handleEmotionClick={handleEmotionClick} 
-                    selectedEmotions={selectedEmotions} 
-                    incrementDreamStep={incrementDreamStep}
-                    decrementDreamStep={decrementDreamStep}
-                />
-            </>
-        ) : dreamStep === 3 ? (
-            <>
-                <OracleSelectionSection 
-                    user={user} 
-                    scrollLeft={scrollLeft} 
-                    scrollContainerRef={scrollContainerRef} 
-                    oracles={oracles} 
-                    handleSelectionChange={handleSelectionChange} 
-                    scrollRight={scrollRight} 
-                    journalDream={journalDream} 
-                    buttonText={buttonText} 
-                    decrementDreamStep={decrementDreamStep}
-                />
-            </>
-        ) : (<div></div>)}
-        {/* <div className="right-0 flex flex-row justify-center">
+        {user?.name ? (
+            <div>
+                <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
+                {dreamStreak && dreamStreak.streakLength > 0 && (
+                    <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
+                )}
+            </div>
+        ) : (
+            <div>
+                <p className="text-center golden-ratio-3">Welcome to Dream Oracles</p>
+            </div>
+        )}
+        <div className="right-0 flex flex-row justify-center">
             {!user?.name && (
                 <div className="golden-ratio-2 mb-5">
                     <p className="hidden md:flex">
@@ -554,139 +503,23 @@ const JournalDreamView = ({
                     </p>
                 </div>
             )}
-        </div> */}
-
-        {/* <ShareDreamSection error={error} setDream={setDream} />
-        <MoodSection 
-            emotions={emotions} 
-            handleEmotionClick={handleEmotionClick} 
-            selectedEmotions={selectedEmotions} 
-        />
-        <OracleSelectionSection 
-            user={user} 
-            scrollLeft={scrollLeft} 
-            scrollContainerRef={scrollContainerRef} 
-            oracles={oracles} 
-            handleSelectionChange={handleSelectionChange} 
-            scrollRight={scrollRight} 
-            journalDream={journalDream} 
-            buttonText={buttonText} 
-        /> */}
-    </div>
-);
-
-const WelcomeSection = ({ user, dreamStreak, incrementDreamStep }) => {
-    return (
-        <div>
-            {user?.name ? (
-                <div>
-                    <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
-                    {dreamStreak && dreamStreak.streakLength > 0 && (
-                        <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
-                    )}
-                </div>
-            ) : (
-                <WelcomePageSection incrementDreamStep={incrementDreamStep} />
-            )}
         </div>
-    );
-}
-
-const WelcomePageSection = ({ incrementDreamStep }) => {
-    const titleRef = useRef(null);
-    const descriptionRef = useRef(null);
-
-    useEffect(() => {
-        if (titleRef.current && descriptionRef.current) {
-            const titleWidth = titleRef.current.offsetWidth;
-            const adjustedWidth = titleWidth - 40; // Adjust the width to be smaller by 40px
-            descriptionRef.current.style.width = `${adjustedWidth}px`;
-        }
-    }, []);
-
-    return (
-        <div className="pt-5 title-container">
-            <p className="text-center golden-ratio-2">Welcome to</p>
-            <p ref={titleRef} className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
-            <p ref={descriptionRef} className="text-center golden-ratio-1 match-width">
-                Find out what your dreams are trying to tell you with our intelligent dream interpretation AI models. All you have to do is follow the steps below:
-            </p>
-            <div className="image-container">
-                <div className="step-section border-right">
-                    <img src="/DreamOraclesStep1.png" alt="Step 1" className="step-image" />
-                    <p className="golden-ratio-1">Step 1:</p>
-                    <p className="golden-ratio-2">Share your dream</p>
-                    <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
-                </div>
-                <div className="step-section border-right">
-                    <img src="/DreamOraclesStep2.png" alt="Step 2" className="step-image" />
-                    <p className="golden-ratio-1">Step 2:</p>
-                    <p className="golden-ratio-2">Choose an Oracle</p>
-                    <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
-                </div>
-                <div className="step-section">
-                    <img src="/DreamOraclesStep3.png" alt="Step 3" className="step-image" />
-                    <p className="golden-ratio-1">Step 3:</p>
-                    <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
-                    <p className="golden-ratio-1">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
-                </div>
-            </div>
-            <div className="button-container">
-                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Start Now!</button>
-            </div>
-            <div className="image-container text-center mt-4">
-                <img src="/mandela.png" alt="Mandela" className="mandela-image" />
+        <HowItWorksPopup />
+        <div className="flex flex-col items-center">
+            <textarea
+                type="text"
+                rows={5}
+                placeholder='Dream goes here'
+                className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full"
+                onChange={(event) => setDream(event.target.value)}
+            />
+            <div className="flex justify-center mt-2">
+                <PublicDreamSection setDreamPublic={setDreamPublic} />
             </div>
         </div>
-    );
-};
 
-const ShareDreamSection = ({ setDream, error, incrementDreamStep, decrementDreamStep }) => {
-    return (
-        <div className="">
-            <div className="back-button-container">
-                <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
-            </div>
-            <HowItWorksPopup />
-            <div className="flex flex-col items-center">
-                <textarea
-                    type="text"
-                    rows={5}
-                    placeholder='Dream goes here'
-                    className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full"
-                    onChange={(event) => setDream(event.target.value)}
-                />
-            </div>
-            {error && <div className="bg-red-500 w-max p-1 text-black font-bold rounded-xl whitespace-nowrap">{error}</div>}
-            <div className="button-container">
-                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Continue</button>
-            </div>
-        </div>
-    )
-}
-
-const HowItWorksPopup = () => (
-    <div className="justify-center golden-ratio-3 text-center px-1">
-        <div className="flex justify-center items-center golden-ratio-2">
-            <span className="inline-flex items-center">
-                <p className="golden-ratio-3">1. Share Your Dream</p>
-                <InfoPopup 
-                    icon={faQuestionCircle} 
-                    infoTitle="Describe your dream"
-                    infoText="Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream, and instead describe their relationship to you." 
-                />
-            </span>
-        </div>
-        <p className="golden-ratio-2 mb-2">Write down everything that you remember and try to include as many details as possible</p>
-    </div>
-);
-
-const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, decrementDreamStep, incrementDreamStep }) => {
-    return (
+        {error && <div className="bg-red-500 w-max p-1 text-black font-bold rounded-xl whitespace-nowrap">{error}</div>}
         <div id="mood-selection-section">
-            <div className="back-button-container">
-                <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
-            </div>
             <MoodSelectionPopup />
             <div className="flex flex-wrap gap-2 justify-center">
                 {emotions.map(emotion => (
@@ -699,36 +532,19 @@ const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, decrement
                     </button>
                 ))}
             </div>
-            <div className="button-container">
-                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Continue</button>
-            </div>
         </div>
-    )
-}
-
-const MoodSelectionPopup = () => (
-    <div className="justify-center golden-ratio-3 pt-5 leading-none text-center pb-2">
-        <div className="flex justify-center items-center golden-ratio-2">
-            <span className="inline-flex items-center">
-                <p className="golden-ratio-3 m-0">2. Moods and Feelings</p>
-                <InfoPopup 
-                    icon={faQuestionCircle} 
-                    infoTitle="How Did Your Dream Feel?"
-                    infoText="Select any feelings you might have felt during the dream or upon waking from the dream. These can help bring more context into your interpretation, as our emotions play a huge role in understanding our dreams"
-                />
-            </span>
-        </div>
-        <p className="golden-ratio-2 mt-3">How did you feel during and after your dream?</p>
-    </div>
-)
-
-const OracleSelectionSection = ({ user, scrollLeft, scrollContainerRef, oracles, handleSelectionChange, scrollRight, journalDream, buttonText, decrementDreamStep }) => {
-    return (
         <div id="interpretation-section" className="relative">
-            <div className="back-button-container">
-                <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
-            </div>
             <OracleSelectionPopup credits={user?.credits} />
+            {/* <div className="justify-center items-center flex md:flex-row flex-col space-x-6">
+                {oracles.map(oracle => (
+                    <OracleSection
+                        key={oracle._id}
+                        oracle={oracle}
+                        handleSelectionChange={handleSelectionChange}
+                        isDisabled={oracle.oracleID !== 1 && !user?.name}
+                    />
+                ))}
+            </div> */}
             <div className="flex items-center justify-center relative">
                 <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -750,7 +566,7 @@ const OracleSelectionSection = ({ user, scrollLeft, scrollContainerRef, oracles,
             </div>
             <div className="flex flex-col items-center">
                 <button
-                    className="start-button"
+                    className="dream-button golden-ratio-2"
                     onClick={journalDream}
                     disabled={!user?.activated && user?.name}
                 >
@@ -761,8 +577,39 @@ const OracleSelectionSection = ({ user, scrollLeft, scrollContainerRef, oracles,
                 )}
             </div>
         </div>
-    )
-}
+    </div>
+);
+
+const HowItWorksPopup = () => (
+    <div className="justify-center golden-ratio-3 text-center px-1">
+        <div className="flex justify-center items-center golden-ratio-2 mt-5">
+            <span className="inline-flex items-center">
+                <p className="golden-ratio-3 m-0">1. Share Your Dream</p>
+                <InfoPopup 
+                    icon={faQuestionCircle} 
+                    infoTitle="Describe your dream"
+                    infoText="Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream, and instead describe their relationship to you." 
+                />
+            </span>
+        </div>
+    </div>
+);
+
+const MoodSelectionPopup = ({ }) => (
+    <div className="justify-center golden-ratio-3 pt-5 leading-none text-center pb-2">
+        <div className="flex justify-center items-center golden-ratio-2">
+            <span className="inline-flex items-center">
+                <p className="golden-ratio-3 m-0">2. Moods and Feelings</p>
+                <InfoPopup 
+                    icon={faQuestionCircle} 
+                    infoTitle="How Did Your Dream Feel?"
+                    infoText="Select any feelings you might have felt during the dream or upon waking from the dream. These can help bring more context into your interpretation, as our emotions play a huge role in understanding our dreams"
+                />
+            </span>
+        </div>
+        <p className="golden-ratio-2 mt-3">How did you feel during and after your dream?</p>
+    </div>
+)
 
 
 const OracleSelectionPopup = ({ credits }) => (
