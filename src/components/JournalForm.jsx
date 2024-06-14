@@ -494,7 +494,7 @@ const JournalDreamView = ({
     incrementDreamStep,
     decrementDreamStep
 }) => (
-    <div>
+    <div className="flex justify-center items-center min-h-screen relative">
         {dreamStep === 0 ? (
             <>
                 <WelcomeSection 
@@ -505,14 +505,17 @@ const JournalDreamView = ({
                 />
             </>
         ) : dreamStep === 1 ? (
-            <>
+            <div className="">
+                <div className="back-button-container">
+                    <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
+                </div>
                 <ShareDreamSection 
                     error={error} 
                     setDream={setDream} 
                     incrementDreamStep={incrementDreamStep}
                     decrementDreamStep={decrementDreamStep}
                 />
-            </>
+            </div>
         ) : dreamStep === 2 ? (
             <>
                 <MoodSection 
@@ -604,33 +607,58 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
         }
     }, []);
 
+    const isMobile = window.innerWidth < 768;
+
     return (
-        <div className="pt-5 title-container">
+        <div className="title-container">
             <p className="text-center golden-ratio-2">Welcome to</p>
             <p ref={titleRef} className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
             <p ref={descriptionRef} className="text-center golden-ratio-1 match-width">
                 Find out what your dreams are trying to tell you with our intelligent dream interpretation AI models. All you have to do is follow the steps below:
             </p>
-            <div className="image-container">
-                <div className="step-section border-right">
-                    <img src="/DreamOraclesStep1.png" alt="Step 1" className="step-image" />
-                    <p className="golden-ratio-1">Step 1:</p>
-                    <p className="golden-ratio-2">Share your dream</p>
-                    <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
+            {isMobile ? (
+                <div className="image-container flex flex-col">
+                    <div className="step-section-mobile border-bottom mb-4">
+                        <img src="/DreamOraclesStep1.png" alt="Step 1" className="step-image-mobile" />
+                        <p className="golden-ratio-1 center-text">Step 1</p>
+                        <p className="golden-ratio-2 center-text">Share your dream</p>
+                        <p className="golden-ratio-1 center-text">Write down everything that you remember and try to include as many details as possible</p>
+                    </div>
+                    <div className="step-section-mobile border-bottom mb-4">
+                        <img src="/DreamOraclesStep2.png" alt="Step 2" className="step-image-mobile" />
+                        <p className="golden-ratio-1 center-text">Step 2</p>
+                        <p className="golden-ratio-2 center-text">Choose an Oracle</p>
+                        <p className="golden-ratio-1 center-text">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
+                    </div>
+                    <div className="step-section-mobile">
+                        <img src="/DreamOraclesStep3.png" alt="Step 3" className="step-image-mobile" />
+                        <p className="golden-ratio-1 center-text">Step 3</p>
+                        <p className="golden-ratio-2 center-text">Learn about your dream</p>
+                        <p className="golden-ratio-1 center-text">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
+                    </div>
                 </div>
-                <div className="step-section border-right">
-                    <img src="/DreamOraclesStep2.png" alt="Step 2" className="step-image" />
-                    <p className="golden-ratio-1">Step 2:</p>
-                    <p className="golden-ratio-2">Choose an Oracle</p>
-                    <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
+            ) : (
+                <div className="image-container flex flex-row">
+                    <div className="step-section border-right mr-4">
+                        <img src="/DreamOraclesStep1.png" alt="Step 1" className="step-image" />
+                        <p className="golden-ratio-1">Step 1:</p>
+                        <p className="golden-ratio-2">Share your dream</p>
+                        <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
+                    </div>
+                    <div className="step-section border-right mr-4">
+                        <img src="/DreamOraclesStep2.png" alt="Step 2" className="step-image" />
+                        <p className="golden-ratio-1">Step 2:</p>
+                        <p className="golden-ratio-2">Choose an Oracle</p>
+                        <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
+                    </div>
+                    <div className="step-section">
+                        <img src="/DreamOraclesStep3.png" alt="Step 3" className="step-image" />
+                        <p className="golden-ratio-1">Step 3:</p>
+                        <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
+                        <p className="golden-ratio-1">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
+                    </div>
                 </div>
-                <div className="step-section">
-                    <img src="/DreamOraclesStep3.png" alt="Step 3" className="step-image" />
-                    <p className="golden-ratio-1">Step 3:</p>
-                    <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
-                    <p className="golden-ratio-1">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
-                </div>
-            </div>
+            )}
             <div className="button-container">
                 <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Start Now!</button>
             </div>
@@ -641,19 +669,17 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
     );
 };
 
+
 const ShareDreamSection = ({ setDream, error, incrementDreamStep, decrementDreamStep }) => {
     return (
-        <div className="">
-            <div className="back-button-container">
-                <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
-            </div>
+        <div>
             <HowItWorksPopup />
             <div className="flex flex-col items-center">
                 <textarea
                     type="text"
                     rows={5}
                     placeholder='Dream goes here'
-                    className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:w-3/4 md:m-0 m-2 w-full"
+                    className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black  md:m-0 m-2 w-full"
                     onChange={(event) => setDream(event.target.value)}
                 />
             </div>
@@ -667,19 +693,21 @@ const ShareDreamSection = ({ setDream, error, incrementDreamStep, decrementDream
 
 const HowItWorksPopup = () => (
     <div className="justify-center golden-ratio-3 text-center px-1">
-        <div className="flex justify-center items-center golden-ratio-2">
-            <span className="inline-flex items-center">
-                <p className="golden-ratio-3">1. Share Your Dream</p>
-                <InfoPopup 
-                    icon={faQuestionCircle} 
-                    infoTitle="Describe your dream"
-                    infoText="Describe your dream in as much detail as you can remember. Prevent yourself from using names when talking about people in the dream, and instead describe their relationship to you." 
-                />
-            </span>
+        <div className="flex flex-col justify-center items-center golden-ratio-2">
+            <p className="golden-ratio-2">Step 1</p>
+            <p className="golden-ratio-5 gradient-title-text">Share Your Dream</p>
         </div>
-        <p className="golden-ratio-2 mb-2">Write down everything that you remember and try to include as many details as possible</p>
+        <div className="inline-flex items-center">
+            <p className="golden-ratio-2 mb-3">Write down everything that you remember and try to include as many details as possible</p>
+            <InfoPopup 
+                icon={faQuestionCircle} 
+                infoTitle="Describe your dream"
+                infoText="When entering your dream description into our Dream Interpretation application, focus on including as many details as possible. Instead of using people's names, describe their relationship to you (e.g., 'my friend,' 'a family member'). Additionally, mention significant settings and any notable symbols or events to provide a comprehensive and insightful interpretation." 
+            />
+        </div>
     </div>
 );
+
 
 const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, decrementDreamStep, incrementDreamStep }) => {
     return (

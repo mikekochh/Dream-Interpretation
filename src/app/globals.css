@@ -2,25 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-/* body {
-  background-color: #000011;
-  font-family:cursive;
-} */
-
-/* 
-  Dark Blue: #000020
-  Buttons Cyan: #00FFFF
-  Secondary: Ivory (White): #FFFFF0
-  Font Color: Black Ink: #000000
-  Some Fonts: Gold: #FFD700
-*/
-
-.nav-bar-background {
-  background-color: #FFFFF0;
-}
-
 body {
   background-color: #000011;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -306,6 +287,11 @@ nav {
 .border-gold {
   border: 1px solid gold;
   border-width: 5px;
+}
+
+.border-gold-small {
+  border: 1px solid gold;
+  border-width: 2px;
 }
 
 
@@ -975,7 +961,10 @@ h3.golden-ratio-2 {
 }
 
 .back-button-container {
-  position: relative;
+  position: absolute;
+  /* top: 70px; */
+  top: 0px;
+  left: 5px;
 }
 
 .match-width {
@@ -984,10 +973,14 @@ h3.golden-ratio-2 {
   word-break: break-word;
 }
 
+.center-text {
+  text-align: center;
+  width: 100%;
+}
+
 .image-container {
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   width: 100%;
   padding: 10%;
   padding-top: 5%;
@@ -1005,14 +998,37 @@ h3.golden-ratio-2 {
   box-sizing: border-box;
 }
 
+.step-section-mobile {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  padding-bottom: 8%;
+  padding-top: 5%;
+}
+
 .border-right {
-  border-right: 1px solid rgba(255, 255, 255, 0.3); /* Semi-transparent white */
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.border-bottom {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .step-image {
   max-width: 100%;
   height: auto;
   margin-bottom: 8px;
+}
+
+.step-image-mobile {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .step-section p {

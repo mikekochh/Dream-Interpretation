@@ -43,12 +43,11 @@ const NavBar = () => {
         <div className="golden-ratio-2">
             {!noNavBar && (
                 <div>
-                    <nav className="flex justify-between items-center w-full p-4 border-b nav-bar-background">
-                    {/* Section for logo and ability to change based off of screen size */}
+                    <nav className="flex justify-between items-center w-full p-4">
                     <Link href="https://www.dreamoracles.co">
                         <div className="flex flex-row items-center">
-                            <Image src="/dream_icon.jpeg" className="rounded-lg" width={32} height={32} alt="logo" />
-                            <p className="text-black font-semibold ml-1 w-fit">Dream Oracles</p>
+                            <Image src="/dream_icon.jpeg" className="rounded-lg border-gold-small" width={32} height={32} alt="logo" />
+                            <p className="text-white font-semibold ml-2 w-fit">Dream Oracles</p>
                         </div>
                     </Link>
                     {sale && (
@@ -69,7 +68,7 @@ const NavBar = () => {
                     )}
 
                     {/* Section on the right */}
-                    <div className="relative justify-end items-center text-black md:flex hidden">
+                    <div className="relative justify-end items-center text-white md:flex hidden">
                         <ul className="flex">
                             <li className={`cursor-pointer mr-4 ${pathname === '/interpret' ? 'font-bold' : ''}`}>
                                 <Link href="/interpret">Interpret</Link>
@@ -95,16 +94,17 @@ const NavBar = () => {
                         {isOpen ? (
                             <FontAwesomeIcon
                                 icon={faX}
-                                size="2x"
                                 alt="close"
+                                className="text-white"
                                 onClick={() => setIsOpen(false)}
                             />
                             ) : (
                             <FontAwesomeIcon
                                 icon={faListDots}
-                                size="2x"
                                 id="menu"
+                                size="lg"
                                 alt="menu"
+                                className="text-white"
                                 onClick={() => setIsOpen(true)}
                             />
                         )}
