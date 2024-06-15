@@ -201,8 +201,8 @@ const SettingsForm = () => {
                         )}
                     </div>
                 </form>
-                <div className="logout absolute bottom-0 right-0 p-4">
-                    <button onClick={logout} className="back-button">Log Out</button>
+                <div className="">
+                    <button onClick={logout} className="logout-button">Log Out</button>
                     {/* {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>} */}
                 </div>
                 <ContactAndPrivacyButtons />

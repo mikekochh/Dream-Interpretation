@@ -111,7 +111,7 @@ const NavBar = () => {
                     </div>
                 </nav>
                 {isOpen && (
-                    <div className="fixed inset-0 top-65 bg-gray-200 z-20 flex justify-between flex-col items-center">
+                    <div className="mobile-nav-background fixed inset-0 top-65 z-20 flex justify-between flex-col items-center">
                         <div className="flex-1 p-4">
                             <MenuItems setIsOpen={setIsOpen} pathname={pathname} createAccount={session === null}/>
                         </div>
@@ -126,13 +126,7 @@ const NavBar = () => {
 const MenuItems = ({setIsOpen, pathname, createAccount}) => {
 
     return (
-        <div className="h-full golden-ratio-3">
-            {createAccount && (
-                <div className="font-bold text-right underline flex flex-col main-content absolute top-0 right-0 pr-2 h-fit">
-                    <a href="/createAccount">Create an account for full features</a>
-                    <a href="/login">Log In</a>
-                </div>
-            )}
+        <div className="h-full golden-ratio-3 text-white">
             <ul className='list-none flex flex-col h-full text-center inset-0 justify-center mobile-list' style={{ position: 'relative', zIndex: 1000 }}>
                 <li className={`cursor-pointer p-4 ${pathname === '/interpret' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/interpret">Interpret</Link>
@@ -152,6 +146,16 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                 <li className={`cursor-pointer p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/settings">Profile</Link>
                 </li>
+                {createAccount && (
+                    <>
+                        <li className={`cursor-pointer p-4 ${pathname === '/createAccount' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                            <Link href="/createAccount">Create Account</Link>
+                        </li>
+                        <li className={`cursor-pointer p-4 ${pathname === '/login' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                            <Link href="/login">Login</Link>
+                        </li>
+                    </>
+                )}
             </ul>
         </div>
     )
