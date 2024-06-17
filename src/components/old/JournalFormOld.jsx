@@ -182,6 +182,7 @@ export default function JournalForm() {
             else {
                 const resJournal = await axios.post('/api/dream/journal', { dream, userID: null, interpretDream: oracleSelected });
                 const dreamID = resJournal.data._id;
+                localStorage.removeItem('dreamID');
                 localStorage.setItem('dreamID', dreamID);
                 interpretDreams(dreamID);
                 document.cookie = "spentCredits=true; max-age=31536000";

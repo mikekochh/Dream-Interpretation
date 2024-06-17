@@ -991,8 +991,8 @@ h3.golden-ratio-2 {
 
 .back-button-container {
   position: absolute;
-  /* top: 70px; */
-  top: 0px;
+  top: 60px;
+  /* top: 0px; */
   left: 5px;
 }
 

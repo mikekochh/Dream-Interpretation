@@ -73,7 +73,7 @@ export default function RegisterForm() {
     
                 setSentEmailVerification(true);
                 await axios.post('api/sendVerificationEmail', { email: emailLower });
-                await new Promise(resolve => setTimeout(resolve, 5000));
+                await new Promise(resolve => setTimeout(resolve, 4000));
 
                 const resSignIn = await signIn("credentials", {
                     email: emailLower,
@@ -125,16 +125,17 @@ export default function RegisterForm() {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     {/* <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} /> */}
-                    {registeringUser && (
-                        <div className="bg-blue-500 text-white w-fit py-1 px-3 rounded-md mt-2 golden-ratio-1">
+                    {registeringUser ? (
+                        <div className="bg-blue-500 text-white w-fit py-1 px-3 rounded-md mt-2 golden-ratio-1 text-center">
                             Registering user...
                         </div>
+                    ) : (
+                        <div className="flex justify-center">
+                            <button className="start-button golden-ratio-2">
+                                Register
+                            </button>
+                        </div>
                     )}
-                    <div className="flex justify-center">
-                        <button className="dream-button font-bold golden-ratio-2">
-                            Register
-                        </button>
-                    </div>
                     {error && (
                         <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
                             {error}

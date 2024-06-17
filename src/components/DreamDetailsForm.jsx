@@ -479,7 +479,9 @@ export default function DreamsForm() {
                                             ) : (
                                                 <div className="text-center">
                                                     <button className="dream-button" onClick={() => askQuestion(detail._id, detail.oracleID)}>Submit</button>
-                                                    <button className="back-button" onClick={() => setAskQuestionInterpretationID(null)}>Cancel</button>
+                                                    <div className="back-button-container">
+                                                        <button className="back-button" onClick={() => setAskQuestionInterpretationID(null)}>Cancel</button>
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>

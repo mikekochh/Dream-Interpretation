@@ -13,7 +13,7 @@ const InfoPopup = ({ icon, infoText, infoTitle }) => {
 
     return (
         <div className="relative inline-block">
-            <FontAwesomeIcon icon={icon} className="ml-2 cursor-pointer golden-ratio-2 mb-2" onClick={handleToggle} />
+            <FontAwesomeIcon icon={icon} className="ml-2 cursor-pointer golden-ratio-1" onClick={handleToggle} />
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg relative w-3/4 max-w-2xl">

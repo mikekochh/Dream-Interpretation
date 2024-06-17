@@ -11,12 +11,12 @@ const JournalForm = () => {
     const { data: session, status } = useSession();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
-    const [savingDream, setSavingDream] = useState(false);
+    const [savingDream, setSavingDream] = useState(false); //false
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [newDreamID, setNewDreamID] = useState(null);
     const [interpretingDream, setInterpretingDream] = useState(false);
-    const [saveMessage, setSaveMessage] = useState("Your dream has been saved.");
+    const [saveMessage, setSaveMessage] = useState("");
     const [oracleSelected, setOracleSelected] = useState(false);
     const [dream, setDream] = useState("");
     const [justJournal, setJustJournal] = useState(false);
@@ -194,15 +194,14 @@ const JournalForm = () => {
     };
 
     const journalDream = async () => {
-        const dreamText = document.querySelector('.DreamBox').value;
-        if (!dreamText) {
+        if (!dream) {
             setError("Please enter a dream");
             return;
         }
         setSavingDream(true);
         const userID = user?._id;
         try {
-            const resJournal = await axios.post('/api/dream/journal', { userID, dream: dreamText, interpretDream: oracleSelected, emotions: selectedEmotions });
+            const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
             const dreamID = resJournal.data._id;
             setNewDreamID(dreamID);
             if (oracleSelected) {
@@ -242,7 +241,9 @@ const JournalForm = () => {
     }
 
     const interpretDreams = async (dreamID) => {
-        setSaveMessage(dreamID ? "Your dream has been saved and is currently being interpreted." : "Your dream is currently being interpreted.");
+        if (user?.name) {
+            setSaveMessage(dreamID ? "Your dream has been saved and is currently being interpreted." : "Your dream is currently being interpreted.");
+        }
         setInterpretingDream(true);
 
         let userDetails = [];
@@ -337,7 +338,7 @@ const JournalForm = () => {
     }
 
     return (
-        <div className="text-white main-content relative">
+        <div className="text-white relative">
             {savingDream ? (
                 <SavingDreamView
                     saveMessage={saveMessage}
@@ -375,6 +376,7 @@ const JournalForm = () => {
                     dreamStep={dreamStep}
                     incrementDreamStep={incrementDreamStep}
                     decrementDreamStep={decrementDreamStep}
+                    oracleSelected={oracleSelected}
                 />
             )}
         </div>
@@ -394,7 +396,7 @@ const SavingDreamView = ({
     oracleSelected,
     errorWhileJournaling
 }) => (
-    <div className="flex justify-center">
+    <div className="flex justify-center main-content">
         <div className="flex justify-center items-center flex-col">
             <p className="text-center text-2xl">{saveMessage}</p>
             <div className="flex justify-center pb-5">
@@ -428,7 +430,7 @@ const SavingDreamView = ({
             {interpretingDream && !user?.name && (
                 <div className="flex justify-center">
                     <div className="golden-ratio-2 text-center font-bold text-gold md:w-2/3 mx-5">
-                        Create an account below to view your dream interpretation once it&apos;s ready
+                        Create an account below to view your interpretation once it&apos;s ready
                     </div>
                 </div>
             )}
@@ -489,18 +491,19 @@ const JournalDreamView = ({
     dreamStep,
     setDreamStep,
     incrementDreamStep,
-    decrementDreamStep
+    decrementDreamStep,
+    oracleSelected
 }) => (
     <div className="flex justify-center items-center min-h-screen relative">
         {dreamStep === 0 ? (
-            <>
+            <div className="main-content overflow-y-auto h-screen">
                 <WelcomeSection 
                     user={user} 
                     dreamStreak={dreamStreak} 
                     setDreamStep={setDreamStep} 
                     incrementDreamStep={incrementDreamStep} 
                 />
-            </>
+            </div>
         ) : dreamStep === 1 ? (
             <div>
                 <div className="back-button-container">
@@ -542,6 +545,7 @@ const JournalDreamView = ({
                     journalDream={journalDream} 
                     buttonText={buttonText} 
                     decrementDreamStep={decrementDreamStep}
+                    oracleSelected={oracleSelected}
                 />
             </div>
         ) : (<div></div>)}
@@ -657,7 +661,7 @@ const ShareDreamSection = ({ setDream, dream, error, incrementDreamStep }) => {
             <div className="flex flex-col items-center">
                 <textarea
                     type="text"
-                    rows={5}
+                    rows={7}
                     placeholder='Dream goes here'
                     className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black  md:m-0 m-2 w-full"
                     value={dream}
@@ -689,11 +693,11 @@ const HowItWorksPopup = () => {
             </div>
             <div className="inline-flex items-center">
                 <p className="golden-ratio-2 mb-3">Write down everything that you remember and try to include as many details as possible</p>
-                <InfoPopup 
+                {/* <InfoPopup 
                     icon={faQuestionCircle} 
                     infoTitle="Describe your dream"
                     infoText="When entering your dream description into our Dream Interpretation application, focus on including as many details as possible. Instead of using people's names, describe their relationship to you (e.g., 'my friend,' 'a family member'). Additionally, mention significant settings and any notable symbols or events to provide a comprehensive and insightful interpretation." 
-                />
+                /> */}
             </div>
         </div>
     )
@@ -704,12 +708,12 @@ const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, increment
     return (
         <div id="mood-selection-section">
             <MoodSelectionPopup />
-            <div className="flex flex-wrap gap-2 justify-center">
+            <div className="flex flex-wrap gap-2 justify-center md:w-3/4 md:mx-auto">
                 {emotions.map(emotion => (
                     <button 
                         key={emotion.emotionID} 
                         onClick={() => handleEmotionClick(emotion.emotionID)} 
-                        className={`px-4 py-2 rounded-lg transition text-black ${selectedEmotions?.includes(emotion.emotionID) ? 'border-4 border-gold bg-gray-400  hover:bg-gray-200' : 'bg-gray-200 hover:bg-gray-400'}`}
+                        className={`px-4 py-2 rounded-lg transition text-black ${selectedEmotions?.includes(emotion.emotionID) ? 'border-4 border-gold bg-gray-400 hover:bg-gray-200' : 'bg-gray-200 hover:bg-gray-400'}`}
                     >
                         {emotion.emotionName}
                     </button>
@@ -728,22 +732,35 @@ const MoodSelectionPopup = () => {
 
     return (
         <div className="justify-center golden-ratio-3 text-center px-1">
-            <div className="flex flex-col justify-center items-center golden-ratio-2">
+            <div className="flex flex-col justify-center items-center">
                 <p className={`gradient-title-text ${isMobile ? 'golden-ratio-4' : 'golden-ratio-5'}`}>Mood Board</p>
             </div>
             <div className="inline-flex items-center">
-                <p className="golden-ratio-2 mb-3">What emotions did you experience during and after your dream? (optional)</p>
-                <InfoPopup 
+                <p className="golden-ratio-2 mb-7">What emotions did you experience during and after your dream? (optional)</p>
+                {/* <InfoPopup 
                     icon={faQuestionCircle} 
                     infoTitle="How Did Your Dream Feel?"
                     infoText="Select any feelings you might have felt during the dream or upon waking from the dream. These can help bring more context into your interpretation, as our emotions play a huge role in understanding our dreams" 
-                />
+                /> */}
             </div>
         </div>
     )
 }
 
-const OracleSelectionSection = ({ user, scrollLeft, scrollContainerRef, oracles, handleSelectionChange, scrollRight, journalDream, buttonText }) => {
+const OracleSelectionSection = ({ 
+    user, 
+    scrollLeft, 
+    scrollContainerRef, 
+    oracles, 
+    handleSelectionChange, 
+    scrollRight, 
+    journalDream, 
+    buttonText,
+    oracleSelected
+}) => {
+
+    const isButtonDisabled = (!user?.activated && user?.name) || (!oracleSelected && !user?.name);
+
     return (
         <div id="interpretation-section" className="relative">
             <OracleSelectionPopup credits={user?.credits} />
@@ -768,9 +785,9 @@ const OracleSelectionSection = ({ user, scrollLeft, scrollContainerRef, oracles,
             </div>
             <div className="flex flex-col items-center">
                 <button
-                    className="start-button"
+                    className={`start-button ${isButtonDisabled ? 'disabled-button' : ''}`}
                     onClick={journalDream}
-                    disabled={!user?.activated && user?.name}
+                    disabled={isButtonDisabled}
                 >
                     {buttonText}
                 </button>
@@ -793,11 +810,11 @@ const OracleSelectionPopup = ({ credits }) => {
             </div>
             <div className="inline-flex items-center">
                 <p className="golden-ratio-2 mb-3">Select a Dream Oracle, with each oracle being one of our intelligent AI interpretation models</p>
-                <InfoPopup 
+                {/* <InfoPopup 
                     icon={faQuestionCircle} 
                     infoTitle="Choosing a Dream Oracle"
                     infoText="Here, you can select as many oracles as you would like to interpret your dreams. The more Dream Oracles you select, the longer it will take to interpret your dream. Click on the info icon next to each oracle to learn about their interpretation style." 
-                />
+                /> */}
             </div>
         </div>
     )
