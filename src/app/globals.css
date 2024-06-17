@@ -982,6 +982,25 @@ h3.golden-ratio-2 {
   text-align: center;
 }
 
+.title-container-alt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.title-container-alt p {
+  text-align: center;
+}
+
+.content-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .button-container {
   display: flex;
   justify-content: center;
@@ -1068,7 +1087,3 @@ h3.golden-ratio-2 {
 .reduce-line-spacing {
   line-height: 1.2; /* Adjust this value as needed */
 }
-
-
-
-

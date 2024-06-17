@@ -115,7 +115,6 @@ export default function LoginForm() {
                     <form className="flex flex-col gap-3" onSubmit={login}>
                         <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
                         {/* <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} /> */}
-                        <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center" onClick={login}>Login</button>
                         <div className="flex">
                             { error && (
                                 <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 mr-1">
@@ -129,10 +128,12 @@ export default function LoginForm() {
                                     </button>
                                 </div>
                             )}
-                            { logginIn && (
+                            { logginIn ? (
                                 <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
                                     Loggin in...
                                 </div>
+                            ) : (
+                                <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full" onClick={login}>Login</button>
                             )}
                             { forgotPassword && (
                                 <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 ml-1">
@@ -142,7 +143,7 @@ export default function LoginForm() {
                                 </div>
                             )}
                         </div>
-                        <Link href={'/createAccount'} className="text-sm mt-3 text-right">
+                        <Link href={'/register'} className="text-sm mt-3 text-right">
                             Don&apos;t have an account? <span className="underline">Register</span>
                         </Link>
                     </form>

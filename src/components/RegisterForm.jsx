@@ -131,7 +131,7 @@ export default function RegisterForm() {
                         </div>
                     ) : (
                         <div className="flex justify-center">
-                            <button className="start-button golden-ratio-2">
+                            <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full">
                                 Register
                             </button>
                         </div>

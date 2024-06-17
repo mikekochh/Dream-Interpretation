@@ -566,17 +566,23 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep }) => {
 
 const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user }) => {
     return (
-        <div>
-            <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
-            {dreamStreak && dreamStreak.streakLength > 0 && (
-                <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
-            )}
-            <div className="button-container">
-                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>New Dream</button>
+        <div className="title-container-alt">
+            <div className="content-wrapper">
+                <p className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
+                <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
+                {dreamStreak && dreamStreak.streakLength > 0 && (
+                    <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
+                )}
+                <div className="button-container">
+                    <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>New Dream</button>
+                </div>
+            </div>
+            <div className="image-container text-center">
+                <img src="/mandela.png" alt="Mandela" className="mandela-image" />
             </div>
         </div>
-    )
-}
+    );
+};
 
 const WelcomePageSection = ({ incrementDreamStep }) => {
     const titleRef = useRef(null);
@@ -602,19 +608,19 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
             {isMobile ? (
                 <div className="image-container flex flex-col">
                     <div className="step-section-mobile border-bottom mb-4">
-                        <img src="/DreamOraclesStep1.png" alt="Step 1" className="step-image-mobile" />
+                        <img src="/ShareDreamStep.svg" alt="Step 1" className="step-image-mobile" />
                         <p className="golden-ratio-1 center-text">Step 1</p>
                         <p className="golden-ratio-2 center-text">Share your dream</p>
                         <p className="golden-ratio-1 center-text">Write down everything that you remember and try to include as many details as possible</p>
                     </div>
                     <div className="step-section-mobile border-bottom mb-4">
-                        <img src="/DreamOraclesStep2.png" alt="Step 2" className="step-image-mobile" />
+                        <img src="/OracleStep.svg" alt="Step 2" className="step-image-mobile" />
                         <p className="golden-ratio-1 center-text">Step 2</p>
                         <p className="golden-ratio-2 center-text">Choose an Oracle</p>
                         <p className="golden-ratio-1 center-text">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
                     </div>
                     <div className="step-section-mobile">
-                        <img src="/DreamOraclesStep3.png" alt="Step 3" className="step-image-mobile" />
+                        <img src="/LearnStep.svg" alt="Step 3" className="step-image-mobile" />
                         <p className="golden-ratio-1 center-text">Step 3</p>
                         <p className="golden-ratio-2 center-text">Learn about your dream</p>
                         <p className="golden-ratio-1 center-text">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
@@ -623,19 +629,19 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
             ) : (
                 <div className="image-container flex flex-row">
                     <div className="step-section border-right mr-4">
-                        <img src="/DreamOraclesStep1.png" alt="Step 1" className="step-image" />
+                        <img src="/ShareDreamStep.svg" alt="Step 1" className="step-image" />
                         <p className="golden-ratio-1">Step 1:</p>
                         <p className="golden-ratio-2">Share your dream</p>
                         <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
                     </div>
                     <div className="step-section border-right mr-4">
-                        <img src="/DreamOraclesStep2.png" alt="Step 2" className="step-image" />
+                        <img src="/OracleStep.svg" alt="Step 2" className="step-image" />
                         <p className="golden-ratio-1">Step 2:</p>
                         <p className="golden-ratio-2">Choose an Oracle</p>
                         <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
                     </div>
                     <div className="step-section">
-                        <img src="/DreamOraclesStep3.png" alt="Step 3" className="step-image" />
+                        <img src="/LearnStep.svg" alt="Step 3" className="step-image" />
                         <p className="golden-ratio-1">Step 3:</p>
                         <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
                         <p className="golden-ratio-1">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
