@@ -40,14 +40,14 @@ const NavBar = () => {
 
 
     return (
-        <div className="golden-ratio-2">
+        <div className="golden-ratio-1">
             {!noNavBar && (
                 <div>
                     <nav className="flex justify-between items-center w-full p-4">
                     <Link href="https://www.dreamoracles.co">
                         <div className="flex flex-row items-center">
                             <Image src="/dream_icon.jpeg" className="rounded-lg border-gold-small" width={32} height={32} alt="logo" />
-                            <p className="text-white font-semibold ml-2 w-fit">Dream Oracles</p>
+                            <p className="text-white font-semibold ml-2 w-fit golden-ratio-2">Dream Oracles</p>
                         </div>
                     </Link>
                     {sale && (
@@ -76,10 +76,10 @@ const NavBar = () => {
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`}>
                                 <Link href="/dreams">Journal</Link>
                             </li>
-                            {/* <li className={`cursor-pointer mr-4 ${pathname.startsWith('/blog') ? 'font-bold' : ''}`}>
+                            <li className={`cursor-pointer mr-4 ${pathname.startsWith('/blog') ? 'font-bold' : ''}`}>
                                 <Link href="/blog">Blog</Link>
                             </li>
-                            <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
+                            {/* <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
                                 <Link href="/pricing">Shop</Link>
                             </li> */}
                             {/* <li className={`cursor-pointer mr-4 ${pathname === '/dreamStream' ? 'font-bold' : ''}`}>
@@ -134,10 +134,10 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                 <li className={`cursor-pointer p-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/dreams">Journal</Link>
                 </li>
-                {/* <li className={`cursor-pointer p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <li className={`cursor-pointer p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/blog">Blog</Link>
                 </li>
-                <li className={`cursor-pointer p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                {/* <li className={`cursor-pointer p-4 ${pathname === '/pricing' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/pricing">Shop</Link>
                 </li> */}
                 {/* <li className={`cursor-pointer p-4 ${pathname === '/blog' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
