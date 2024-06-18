@@ -421,8 +421,8 @@ const SavingDreamView = ({
                             </div>
                         ) : (
                             <div>
-                                <button className="dream-button" onClick={resetPage}>Journal New Dream</button>
-                                {!justJournal && !errorWhileJournaling && <button className="dream-button" onClick={goToDreamDetails}>Go To Dream Details</button>}
+                                <button className="start-button" onClick={resetPage}>Journal New Dream</button>
+                                {!justJournal && !errorWhileJournaling && <button className="start-button" onClick={goToDreamDetails}>Go To Dream Details</button>}
                             </div>
                         )}
                     </div>
