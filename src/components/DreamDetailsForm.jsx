@@ -391,6 +391,9 @@ export default function DreamsForm() {
 
     return (
         <div className="flex flex-col main-content h-screen text-white">
+            <div className="ml-1">
+                <button className="start-button golden-ratio-1" onClick={backToDreams}>Back To Journal</button>
+            </div>
             <div className="flex justify-center border rounded-xl m-2 border-gold-small">
                 <div className='p-2 mb-2 w-11/12'>
                     <h1 className="text-center golden-ratio-3 text-gold">The Dream</h1>
@@ -581,13 +584,12 @@ export default function DreamsForm() {
                         />
                     </div>
                     <div className="flex justify-end items-end md:relative">
-                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2 back-button" onClick={backToDreams}>Back</button>
                         {saving ? (
                             <div className="flex right-0 absolute m-2 top-0">
                                 <div className="loader"></div>
                             </div>
                         ) : (
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded right-0 justify-end m-2 bottom-0 dream-button" onClick={saveNotes}>Save</button>
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded right-0 justify-end m-2 bottom-0 start-button" onClick={saveNotes}>Save Notes</button>
                         )}
                     </div>
                 </div>

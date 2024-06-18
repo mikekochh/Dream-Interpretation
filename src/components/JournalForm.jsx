@@ -204,6 +204,7 @@ const JournalForm = () => {
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
             const dreamID = resJournal.data._id;
             setNewDreamID(dreamID);
+            localStorage.setItem("dreamID", dreamID);
             if (oracleSelected) {
                 interpretDreams(dreamID);
             } else {
@@ -574,8 +575,23 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user }) => {
                     <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
                 )}
                 <div className="button-container">
-                    <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>New Dream</button>
+                    <button 
+                        className={`start-button golden-ratio-1 ${!user?.activated ? 'disabled-button' : ''}`} 
+                        onClick={user?.activated ? incrementDreamStep : null} 
+                        disabled={!user?.activated}
+                    >
+                        New Dream
+                    </button>
                 </div>
+                {!user?.activated && (
+                    <div className="text-center text-gold golden-ratio-1 mt-5">
+                        <p className="font-bold">
+                            Please activate your account to continue. Check your email for the activation link.
+                        </p>
+                        <a href={`/emailVerification?email=${user?.email}`} className="underline">Didn't receive the verification email?</a>
+                    </div>
+
+                    )}
             </div>
             <div className="image-container text-center">
                 <img src="/mandela.png" alt="Mandela" className="mandela-image" />
