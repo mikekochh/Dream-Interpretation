@@ -588,7 +588,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user }) => {
                         <p className="font-bold">
                             Please activate your account to continue. Check your email for the activation link.
                         </p>
-                        <a href={`/emailVerification?email=${user?.email}`} className="underline">Didn't receive the verification email?</a>
+                        <a href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</a>
                     </div>
 
                     )}
