@@ -1,17 +1,16 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-import RegisterForm from './RegisterForm';
-import InfoPopup from './InfoPopup'; // Import the new InfoPopup component
-import OracleSection from './OracleSection';
+import Image from 'next/image';
+const RegisterForm = lazy(() => import('./RegisterForm'));
+const OracleSection = lazy(() => import('./OracleSection'));
 
 const JournalForm = () => {
     const { data: session, status } = useSession();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false);
-    const [savingDream, setSavingDream] = useState(false); //false
+    const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [newDreamID, setNewDreamID] = useState(null);
@@ -38,7 +37,6 @@ const JournalForm = () => {
     const [dreamStreak, setDreamStreak] = useState();
 
     const [dreamStep, setDreamStep] = useState(0);
-    
 
     const localCreditsGiven = useRef(false);
     const scrollContainerRef = useRef(null);
@@ -61,26 +59,6 @@ const JournalForm = () => {
             return () => clearInterval(interval);
         }
     }, [interpretingDream, interpretationProgressIndex]);
-
-    useEffect(() => {
-        const loadGTag = () => {
-            const script = document.createElement('script');
-            script.src = "https://www.googletagmanager.com/gtag/js?id=G-1TF2VESNGX";
-            script.async = true;
-            document.head.appendChild(script);
-
-            script.onload = () => {
-                window.dataLayer = window.dataLayer || [];
-                function gtag() { dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-1TF2VESNGX');
-            };
-        };
-
-        if (!window.gtag) {
-            loadGTag();
-        }
-    }, []);
 
     useEffect(() => {
         const setUserData = async () => {
@@ -152,10 +130,10 @@ const JournalForm = () => {
     }, []);
 
     useEffect(() => {
-        if (!loadingUser && 
-            !loadingOracles && 
-            !loadingEmotions && 
-            !loadingSession && 
+        if (!loadingUser &&
+            !loadingOracles &&
+            !loadingEmotions &&
+            !loadingSession &&
             !loadingDreamStreak
         ) {
             setLoading(false);
@@ -216,7 +194,6 @@ const JournalForm = () => {
             setErrorWhileJournaling(true);
         }
     };
-
 
     const handleEmotionClick = (emotionId) => {
         setSelectedEmotions(prevSelectedEmotions => {
@@ -318,7 +295,7 @@ const JournalForm = () => {
     const incrementDreamStep = () => {
         setDreamStep(prevStep => prevStep + 1);
     };
-    
+
     const decrementDreamStep = () => {
         setDreamStep(prevStep => Math.max(prevStep - 1, 0)); // Ensure it doesn't go below 0
     };
@@ -378,6 +355,7 @@ const JournalForm = () => {
                     incrementDreamStep={incrementDreamStep}
                     decrementDreamStep={decrementDreamStep}
                     oracleSelected={oracleSelected}
+                    setDreamStep={setDreamStep}
                 />
             )}
         </div>
@@ -385,14 +363,14 @@ const JournalForm = () => {
 };
 
 const SavingDreamView = ({
-    saveMessage, 
-    interpretingDream, 
-    user, 
-    resetPage, 
-    justJournal, 
-    goToDreamDetails, 
-    oracles, 
-    interpretationProgressArray, 
+    saveMessage,
+    interpretingDream,
+    user,
+    resetPage,
+    justJournal,
+    goToDreamDetails,
+    oracles,
+    interpretationProgressArray,
     progressBarClass,
     oracleSelected,
     errorWhileJournaling
@@ -437,7 +415,9 @@ const SavingDreamView = ({
             )}
             {!user && (
                 <div className="text-center flex justify-center">
-                    <RegisterForm />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <RegisterForm />
+                    </Suspense>
                 </div>
             )}
         </div>
@@ -455,33 +435,33 @@ const InterpretingDreamView = ({ oracles, interpretationProgressArray, progressB
             </div>
         </div>
         <div className="flex flex-col items-center w-full">
-        {oracles.map((oracle, index) => (
-            oracle.selected && (
-                <div key={oracle._id} className="flex flex-col items-center max-w-lg w-full">
-                    <div className="w-full md:text-left text-center">{oracle.oracleName}</div>
-                    <div className="progress-bar-container w-full flex justify-center">
-                        <div className={`progress-bar ${progressBarClass}`}>
-                            <div className="progress-bar-inside" style={{ width: `${interpretationProgressArray[index]}%` }}>
-                                Interpreting...
+            {oracles.map((oracle, index) => (
+                oracle.selected && (
+                    <div key={oracle._id} className="flex flex-col items-center max-w-lg w-full">
+                        <div className="w-full md:text-left text-center">{oracle.oracleName}</div>
+                        <div className="progress-bar-container w-full flex justify-center">
+                            <div className={`progress-bar ${progressBarClass}`}>
+                                <div className="progress-bar-inside" style={{ width: `${interpretationProgressArray[index]}%` }}>
+                                    Interpreting...
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )
-        ))}
+                )
+            ))}
         </div>
     </div>
 );
 
 const JournalDreamView = ({
-    user, 
-    error, 
-    dream, 
-    setDream, 
-    handleSelectionChange, 
-    oracles, 
-    journalDream, 
-    buttonText, 
+    user,
+    error,
+    dream,
+    setDream,
+    handleSelectionChange,
+    oracles,
+    journalDream,
+    buttonText,
     scrollLeft,
     scrollRight,
     scrollContainerRef,
@@ -498,11 +478,11 @@ const JournalDreamView = ({
     <div className="flex justify-center items-center min-h-screen relative">
         {dreamStep === 0 ? (
             <div className="main-content overflow-y-auto h-screen">
-                <WelcomeSection 
-                    user={user} 
-                    dreamStreak={dreamStreak} 
-                    setDreamStep={setDreamStep} 
-                    incrementDreamStep={incrementDreamStep} 
+                <WelcomeSection
+                    user={user}
+                    dreamStreak={dreamStreak}
+                    setDreamStep={setDreamStep}
+                    incrementDreamStep={incrementDreamStep}
                 />
             </div>
         ) : dreamStep === 1 ? (
@@ -510,10 +490,10 @@ const JournalDreamView = ({
                 <div className="back-button-container">
                     <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
                 </div>
-                <ShareDreamSection 
-                    error={error} 
+                <ShareDreamSection
+                    error={error}
                     dream={dream}
-                    setDream={setDream} 
+                    setDream={setDream}
                     incrementDreamStep={incrementDreamStep}
                     decrementDreamStep={decrementDreamStep}
                 />
@@ -523,10 +503,10 @@ const JournalDreamView = ({
                 <div className="back-button-container">
                     <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
                 </div>
-                <MoodSection 
-                    emotions={emotions} 
-                    handleEmotionClick={handleEmotionClick} 
-                    selectedEmotions={selectedEmotions} 
+                <MoodSection
+                    emotions={emotions}
+                    handleEmotionClick={handleEmotionClick}
+                    selectedEmotions={selectedEmotions}
                     incrementDreamStep={incrementDreamStep}
                     decrementDreamStep={decrementDreamStep}
                 />
@@ -536,15 +516,15 @@ const JournalDreamView = ({
                 <div className="back-button-container">
                     <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
                 </div>
-                <OracleSelectionSection 
-                    user={user} 
-                    scrollLeft={scrollLeft} 
-                    scrollContainerRef={scrollContainerRef} 
-                    oracles={oracles} 
-                    handleSelectionChange={handleSelectionChange} 
-                    scrollRight={scrollRight} 
-                    journalDream={journalDream} 
-                    buttonText={buttonText} 
+                <OracleSelectionSection
+                    user={user}
+                    scrollLeft={scrollLeft}
+                    scrollContainerRef={scrollContainerRef}
+                    oracles={oracles}
+                    handleSelectionChange={handleSelectionChange}
+                    scrollRight={scrollRight}
+                    journalDream={journalDream}
+                    buttonText={buttonText}
                     decrementDreamStep={decrementDreamStep}
                     oracleSelected={oracleSelected}
                 />
@@ -575,9 +555,9 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user }) => {
                     <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
                 )}
                 <div className="button-container">
-                    <button 
-                        className={`start-button golden-ratio-1 ${!user?.activated ? 'disabled-button' : ''}`} 
-                        onClick={user?.activated ? incrementDreamStep : null} 
+                    <button
+                        className={`start-button golden-ratio-1 ${!user?.activated ? 'disabled-button' : ''}`}
+                        onClick={user?.activated ? incrementDreamStep : null}
                         disabled={!user?.activated}
                     >
                         New Dream
@@ -591,10 +571,10 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user }) => {
                         <a href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</a>
                     </div>
 
-                    )}
+                )}
             </div>
             <div className="image-container text-center">
-                <img src="/mandela.png" alt="Mandela" className="mandela-image" />
+                <Image src="/mandela.png" alt="Mandela" width={200} height={200} className="mandela-image" />
             </div>
         </div>
     );
@@ -624,19 +604,19 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
             {isMobile ? (
                 <div className="image-container flex flex-col">
                     <div className="step-section-mobile border-bottom mb-4">
-                        <img src="/ShareDreamStep.svg" alt="Step 1" className="step-image-mobile" />
+                        <Image src="/ShareDreamStep.svg" alt="Step 1" width={100} height={100} className="step-image-mobile" />
                         <p className="golden-ratio-1 center-text">Step 1</p>
                         <p className="golden-ratio-2 center-text">Share your dream</p>
                         <p className="golden-ratio-1 center-text">Write down everything that you remember and try to include as many details as possible</p>
                     </div>
                     <div className="step-section-mobile border-bottom mb-4">
-                        <img src="/OracleStep.svg" alt="Step 2" className="step-image-mobile" />
+                        <Image src="/OracleStep.svg" alt="Step 2" width={100} height={100} className="step-image-mobile" />
                         <p className="golden-ratio-1 center-text">Step 2</p>
                         <p className="golden-ratio-2 center-text">Choose an Oracle</p>
                         <p className="golden-ratio-1 center-text">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
                     </div>
                     <div className="step-section-mobile">
-                        <img src="/LearnStep.svg" alt="Step 3" className="step-image-mobile" />
+                        <Image src="/LearnStep.svg" alt="Step 3" width={100} height={100} className="step-image-mobile" />
                         <p className="golden-ratio-1 center-text">Step 3</p>
                         <p className="golden-ratio-2 center-text">Learn about your dream</p>
                         <p className="golden-ratio-1 center-text">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
@@ -645,19 +625,19 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
             ) : (
                 <div className="image-container flex flex-row">
                     <div className="step-section border-right mr-4">
-                        <img src="/ShareDreamStep.svg" alt="Step 1" className="step-image" />
+                        <Image src="/ShareDreamStep.svg" alt="Step 1" width={50} height={50} className="step-image" />
                         <p className="golden-ratio-1">Step 1:</p>
                         <p className="golden-ratio-2">Share your dream</p>
                         <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
                     </div>
                     <div className="step-section border-right mr-4">
-                        <img src="/OracleStep.svg" alt="Step 2" className="step-image" />
+                        <Image src="/OracleStep.svg" alt="Step 2" width={50} height={50} className="step-image" />
                         <p className="golden-ratio-1">Step 2:</p>
                         <p className="golden-ratio-2">Choose an Oracle</p>
                         <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
                     </div>
                     <div className="step-section">
-                        <img src="/LearnStep.svg" alt="Step 3" className="step-image" />
+                        <Image src="/LearnStep.svg" alt="Step 3" width={50} height={50} className="step-image" />
                         <p className="golden-ratio-1">Step 3:</p>
                         <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
                         <p className="golden-ratio-1">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
@@ -669,7 +649,7 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
             </div>
             <a href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</a>
             <div className="image-container text-center mt-4">
-                <img src="/mandela.png" alt="Mandela" className="mandela-image" />
+                <Image src="/mandela.png" alt="Mandela" width={500} height={500} className="mandela-image" />
             </div>
         </div>
     );
@@ -715,11 +695,6 @@ const HowItWorksPopup = () => {
             </div>
             <div className="inline-flex items-center">
                 <p className="golden-ratio-2 mb-3">Write down everything that you remember and try to include as many details as possible</p>
-                {/* <InfoPopup 
-                    icon={faQuestionCircle} 
-                    infoTitle="Describe your dream"
-                    infoText="When entering your dream description into our Dream Interpretation application, focus on including as many details as possible. Instead of using people's names, describe their relationship to you (e.g., 'my friend,' 'a family member'). Additionally, mention significant settings and any notable symbols or events to provide a comprehensive and insightful interpretation." 
-                /> */}
             </div>
         </div>
     )
@@ -732,9 +707,9 @@ const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, increment
             <MoodSelectionPopup />
             <div className="flex flex-wrap gap-2 justify-center md:w-3/4 md:mx-auto">
                 {emotions.map(emotion => (
-                    <button 
-                        key={emotion.emotionID} 
-                        onClick={() => handleEmotionClick(emotion.emotionID)} 
+                    <button
+                        key={emotion.emotionID}
+                        onClick={() => handleEmotionClick(emotion.emotionID)}
                         className={`px-4 py-2 rounded-lg transition text-black ${selectedEmotions?.includes(emotion.emotionID) ? 'border-4 border-gold bg-gray-400 hover:bg-gray-200' : 'bg-gray-200 hover:bg-gray-400'}`}
                     >
                         {emotion.emotionName}
@@ -759,24 +734,19 @@ const MoodSelectionPopup = () => {
             </div>
             <div className="inline-flex items-center">
                 <p className="golden-ratio-2 mb-7">What emotions did you experience during and after your dream? (optional)</p>
-                {/* <InfoPopup 
-                    icon={faQuestionCircle} 
-                    infoTitle="How Did Your Dream Feel?"
-                    infoText="Select any feelings you might have felt during the dream or upon waking from the dream. These can help bring more context into your interpretation, as our emotions play a huge role in understanding our dreams" 
-                /> */}
             </div>
         </div>
     )
 }
 
-const OracleSelectionSection = ({ 
-    user, 
-    scrollLeft, 
-    scrollContainerRef, 
-    oracles, 
-    handleSelectionChange, 
-    scrollRight, 
-    journalDream, 
+const OracleSelectionSection = ({
+    user,
+    scrollLeft,
+    scrollContainerRef,
+    oracles,
+    handleSelectionChange,
+    scrollRight,
+    journalDream,
     buttonText,
     oracleSelected
 }) => {
@@ -795,7 +765,9 @@ const OracleSelectionSection = ({
                 <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
                     {oracles.filter(oracle => oracle.active).map((oracle) => (
                         <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
-                            <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
+                            </Suspense>
                         </div>
                     ))}
                 </div>
@@ -832,11 +804,6 @@ const OracleSelectionPopup = ({ credits }) => {
             </div>
             <div className="inline-flex items-center">
                 <p className="golden-ratio-2 mb-3">Select a Dream Oracle, with each oracle being one of our intelligent AI interpretation models</p>
-                {/* <InfoPopup 
-                    icon={faQuestionCircle} 
-                    infoTitle="Choosing a Dream Oracle"
-                    infoText="Here, you can select as many oracles as you would like to interpret your dreams. The more Dream Oracles you select, the longer it will take to interpret your dream. Click on the info icon next to each oracle to learn about their interpretation style." 
-                /> */}
             </div>
         </div>
     )
