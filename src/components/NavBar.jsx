@@ -46,7 +46,7 @@ const NavBar = () => {
                     <nav className="flex justify-between items-center w-full p-4">
                     <Link href="https://www.dreamoracles.co">
                         <div className="flex flex-row items-center">
-                            <Image src="/dream_icon.jpeg" className="rounded-lg border-gold-small" width={32} height={32} alt="logo" />
+                            <Image src="/dream_icon.webp" className="rounded-lg border-gold-small" width={32} height={32} alt="logo" />
                             <p className="text-white font-semibold ml-2 w-fit">Dream Oracles</p>
                         </div>
                     </Link>

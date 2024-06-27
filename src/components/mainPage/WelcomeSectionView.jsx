@@ -43,7 +43,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user }) => {
                 )}
             </div>
             <div className="image-container text-center">
-                <Image src="/mandela.png" alt="Mandela" width={200} height={200} className="mandela-image" />
+                <Image src="/mandela.webp" alt="Mandela" width={200} height={200} className="mandela-image" />
             </div>
         </div>
     );
@@ -118,7 +118,7 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
             </div>
             <a href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</a>
             <div className="image-container text-center mt-4">
-                <Image src="/mandela.png" alt="Mandela" width={500} height={500} className="mandela-image" />
+                <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
             </div>
         </div>
     );
