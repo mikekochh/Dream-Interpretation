@@ -48,9 +48,9 @@ export default function HomePageForm() {
     return (
         <div className="home-page">
             <div className="video-container">
-                <video autoPlay loop muted playsInline preload='auto' className="cosmic-video">
+                {/* <video autoPlay loop muted playsInline preload='auto' className="cosmic-video">
                     <source src="/cosmic_background.mp4" type="video/mp4" />
-                </video>
+                </video> */}
                 <div className="place-items-center hidden register-form md:block">
                     <RegisterForm />
                 </div>

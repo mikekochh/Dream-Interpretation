@@ -146,7 +146,7 @@ export default function DreamsForm() {
     }
 
     const createAccount = () => {
-        window.location.href = '/createAccount';
+        window.location.href = '/register';
     }
 
     if (loading) {

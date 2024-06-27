@@ -75,7 +75,7 @@ const SettingsForm = () => {
     }
 
     const createAccount = () => {
-        router.push("/createAccount");
+        router.push("/register");
     }
 
     const handleSubmit = async (e) => {

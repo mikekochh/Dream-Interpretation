@@ -18,7 +18,7 @@ const NavBar = () => {
     const [sale, setSale] = useState(null);
 
     useEffect(() => {
-        if (pathname === '/register' || pathname === '/login' || pathname === '/createAccount') {
+        if (pathname === '/register' || pathname === '/login' || pathname === '/register') {
             setNoNavBar(true);
             return;
         }
@@ -148,8 +148,8 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                 </li>
                 {createAccount && (
                     <>
-                        <li className={`cursor-pointer p-4 ${pathname === '/createAccount' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                            <Link href="/createAccount">Create Account</Link>
+                        <li className={`cursor-pointer p-4 ${pathname === '/register' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                            <Link href="/register">Create Account</Link>
                         </li>
                         <li className={`cursor-pointer p-4 ${pathname === '/login' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                             <Link href="/login">Login</Link>

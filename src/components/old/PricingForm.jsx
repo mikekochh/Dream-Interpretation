@@ -102,7 +102,7 @@ export default function PricingForm() {
     }
 
     const createAccount = () => {
-        window.location.href = '/createAccount';
+        window.location.href = '/register';
     }
 
     return (
