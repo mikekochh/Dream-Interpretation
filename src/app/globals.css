@@ -204,8 +204,15 @@ nav {
 }
 
 .main-content {
-  padding-top: 70px; /* Add a top padding to avoid content overlay */
+  padding-top: 70px;
   overflow-y: auto;
+  max-height: 100%; 
+  min-height: 80%;
+}
+
+.main-content-home {
+  padding-top: 70px;
+  overflow-y: hidden;
   max-height: 100%; 
   min-height: 80%;
 }
@@ -988,6 +995,7 @@ h3.golden-ratio-2 {
   align-items: center;
   min-height: 100vh;
   overflow-y: hidden;
+  overflow: hidden;
 }
 
 .title-container-alt p {
