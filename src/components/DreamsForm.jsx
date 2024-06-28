@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import 'reactjs-popup/dist/index.css';
@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { faTrash, faStar, faStarHalfStroke, faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+const LoadingComponent = lazy(() => import('./LoadingComponent'));
+
 
 export default function DreamsForm() {
     const { data: session, status } = useSession();
@@ -151,16 +153,7 @@ export default function DreamsForm() {
 
     if (loading) {
         return (
-            <div className="main-content text-white flex justify-center items-center h-screen">
-                <div className='loadingContainer'>
-                    <p className='loadingText'>Preparing Your Dream Journal</p>
-                    <div className='dotsContainer'>
-                        <div className='dot delay200'></div>
-                        <div className='dot delay400'></div>
-                        <div className='dot'></div>
-                    </div>
-                </div>
-            </div>
+            <LoadingComponent loadingText={'Preparing Your Dream Journal'} />
         );
     }
 

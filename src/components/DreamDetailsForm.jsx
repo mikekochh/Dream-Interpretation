@@ -1,11 +1,12 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OracleSection from './OracleSection';
+const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 export default function DreamsForm() {
     const searchParams = useSearchParams();
@@ -376,16 +377,7 @@ export default function DreamsForm() {
 
     if (loading) {
         return (
-            <div className="main-content text-white flex justify-center items-center h-screen">
-                <div className='loadingContainer'>
-                    <p className='loadingText'>Collecting Dream Details</p>
-                    <div className='dotsContainer'>
-                        <div className='dot delay200'></div>
-                        <div className='dot delay400'></div>
-                        <div className='dot'></div>
-                    </div>
-                </div>
-            </div>
+            <LoadingComponent loadingText={'Collecting Dream Details'} />
         );
     }
 

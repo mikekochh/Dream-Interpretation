@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useEffect, useRef, lazy } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
-const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'))
-const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'))
+const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
+const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
+const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 const JournalForm = () => {
     const { data: session, status } = useSession();
@@ -301,63 +302,56 @@ const JournalForm = () => {
 
     if (loading) {
         return (
-            <div className="main-content text-white flex justify-center items-center h-screen">
-                <div className='loadingContainer'>
-                    <p className='loadingText'>Assembling the Dream Oracles</p>
-                    <div className='dotsContainer'>
-                        <div className='dot delay200'></div>
-                        <div className='dot delay400'></div>
-                        <div className='dot'></div>
-                    </div>
-                </div>
-            </div>
+            <LoadingComponent loadingText={'Assembling the Dream Oracles'} />
         );
     }
 
     return (
-        <div className="text-white relative">
-            {savingDream ? (
-                <SavingDreamView
-                    saveMessage={saveMessage}
-                    interpretingDream={interpretingDream}
-                    user={user}
-                    resetPage={resetPage}
-                    justJournal={justJournal}
-                    goToDreamDetails={goToDreamDetails}
-                    oracles={oracles}
-                    interpretationProgressArray={interpretationProgressArray}
-                    progressBarClass={progressBarClass}
-                    oracleSelected={oracleSelected}
-                    errorWhileJournaling={errorWhileJournaling}
-                />
-            ) : (
-                <JournalDreamView
-                    user={user}
-                    error={error}
-                    setError={setError}
-                    dream={dream}
-                    setDream={setDream}
-                    handleSelectionChange={handleSelectionChange}
-                    oracles={oracles}
-                    journalDream={journalDream}
-                    buttonText={buttonText}
-                    setDreamPublic={setDreamPublic}
-                    dreamPublic={dreamPublic}
-                    scrollLeft={scrollLeft}
-                    scrollRight={scrollRight}
-                    scrollContainerRef={scrollContainerRef}
-                    emotions={emotions}
-                    handleEmotionClick={handleEmotionClick}
-                    selectedEmotions={selectedEmotions}
-                    dreamStreak={dreamStreak}
-                    dreamStep={dreamStep}
-                    incrementDreamStep={incrementDreamStep}
-                    decrementDreamStep={decrementDreamStep}
-                    oracleSelected={oracleSelected}
-                    setDreamStep={setDreamStep}
-                />
-            )}
-        </div>
+        <Suspense fallback={<LoadingComponent loadingText={'Assembling the Dream Oracles'} /> }>
+            <div className="text-white relative">
+                {savingDream ? (
+                    <SavingDreamView
+                        saveMessage={saveMessage}
+                        interpretingDream={interpretingDream}
+                        user={user}
+                        resetPage={resetPage}
+                        justJournal={justJournal}
+                        goToDreamDetails={goToDreamDetails}
+                        oracles={oracles}
+                        interpretationProgressArray={interpretationProgressArray}
+                        progressBarClass={progressBarClass}
+                        oracleSelected={oracleSelected}
+                        errorWhileJournaling={errorWhileJournaling}
+                    />
+                ) : (
+                    <JournalDreamView
+                        user={user}
+                        error={error}
+                        setError={setError}
+                        dream={dream}
+                        setDream={setDream}
+                        handleSelectionChange={handleSelectionChange}
+                        oracles={oracles}
+                        journalDream={journalDream}
+                        buttonText={buttonText}
+                        setDreamPublic={setDreamPublic}
+                        dreamPublic={dreamPublic}
+                        scrollLeft={scrollLeft}
+                        scrollRight={scrollRight}
+                        scrollContainerRef={scrollContainerRef}
+                        emotions={emotions}
+                        handleEmotionClick={handleEmotionClick}
+                        selectedEmotions={selectedEmotions}
+                        dreamStreak={dreamStreak}
+                        dreamStep={dreamStep}
+                        incrementDreamStep={incrementDreamStep}
+                        decrementDreamStep={decrementDreamStep}
+                        oracleSelected={oracleSelected}
+                        setDreamStep={setDreamStep}
+                    />
+                )}
+            </div>
+        </Suspense>
     );
 };
 

@@ -970,12 +970,12 @@ h3.golden-ratio-2 {
   cursor: not-allowed; /* Shows a 'not allowed' cursor when hovered */
 }
 
-/* .gradient-title-text {
+.gradient-title-text {
   background: linear-gradient(180deg, #ffffff, #8585A3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: 'Gill Sans', sans-serif;
-} */
+}
 
 .title-container {
   display: flex;

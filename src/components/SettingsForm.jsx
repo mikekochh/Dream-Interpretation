@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import { useSession } from 'next-auth/react';
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ContactAndPrivacyButtons from './ContactAndPrivacyButtons';
 import axios from 'axios';
+const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 const SettingsForm = () => {
     const router = useRouter();
@@ -105,16 +106,7 @@ const SettingsForm = () => {
 
     if (loading) {
         return (
-            <div className="main-content text-white flex justify-center items-center h-screen">
-                <div className='loadingContainer'>
-                    <p className='loadingText'>Transporting to Dream Profile</p>
-                    <div className='dotsContainer'>
-                        <div className='dot delay200'></div>
-                        <div className='dot delay400'></div>
-                        <div className='dot'></div>
-                    </div>
-                </div>
-            </div>
+            <LoadingComponent loadingText={'Transporting to Dream Profile'} />
         );
     }
 
