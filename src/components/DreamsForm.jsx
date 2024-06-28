@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { faTrash, faStar, faStarHalfStroke, faArrowRight, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
+import InfoPopup from './InfoPopup';
 
 
 export default function DreamsForm() {
@@ -166,7 +167,9 @@ export default function DreamsForm() {
                 </div>
             )}
             <div className={`${!session && "blur-effect"}`}>
-                <InfoTag name={session?.user.name} />
+                <div className="golden-ratio-3 leading-none pb-2 text-center">
+                    <p className="text-center flex items-center justify-center font-bold">{session?.user.name}&apos;s Dream Journal</p>
+                </div>
                 <div className="flex justify-between">
                     <div className="ml-3 items-center flex dropdown cursor-pointer border border-white p-2 rounded-lg select-none mb-1" onClick={dropdown}>
                         Sort by: <span className="font-bold ml-1">{selectedSort}</span>
@@ -251,26 +254,6 @@ const DreamCard = ({ dream, deleteDream, starDream, formatDreamDate }) => {
                     onClick={() => starDream(dream._id, dream.starred)}
                 />
             )}
-        </div>
-    )
-}
-
-const InfoTag = ({ name }) => {
-
-    const [open, setOpen] = useState(false);
-
-    return (
-        <div className="golden-ratio-3 leading-none pb-2 text-center">
-            <p className="text-center flex items-center justify-center font-bold">{name}&apos;s Dream Journal <FontAwesomeIcon icon={faQuestionCircle} className="cursor-pointer ml-2 golden-ratio-2" onClick={() => setOpen(o => !o)}/></p>
-            <div className="dropdown w-full md:w-3/4 flex flex-col md:flex-row">
-                <div className={`${open ? 'popup-menu-active' : 'popup-menu'}`}>
-                    <p className="text-xl select-none golden-ratio-2">
-                        <b>Dream Journal</b><br/>
-                        Each of your dreams are stored here. You can see the beginning of each dream, the date it was recorded, and whether or not it has been interpreted.<br/><br/>
-                        You can filter dreams by week, starred, or all dreams. You can star dreams by clicking on the half star icon. You can delete dreams by clicking on the trash icon.
-                    </p>
-                </div>
-            </div>
         </div>
     )
 }
