@@ -18,7 +18,7 @@ export default function HomePageForm() {
         if (session) {
             router.push('/interpret');
         }
-    }, [session]);
+    }, [session, router]);
 
     useEffect(() => {
         const topPosition = document.querySelector('.scrollable-div').getBoundingClientRect().top;
