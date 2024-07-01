@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Link from 'next/link';
 
 
 const StarBackground = ({ children }) => {
@@ -27,14 +28,15 @@ const StarBackground = ({ children }) => {
         return () => clearInterval(interval);
     }, []);
 
-    const feedback = function() {
-        window.location.href = "/feedback";
-    }
-
     return (
         <div className="star-background relative">
             {children}
-            <button className="absolute left-0 bottom-0 dream-button golden-ratio-1" onClick={feedback}>Give us Feedback</button>
+            <Link
+                className="absolute left-0 bottom-0 dream-button golden-ratio-1"
+                href={'/feedback'}
+            >
+                Give us Feedback
+            </Link>
         </div>
     );
 }
