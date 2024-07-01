@@ -286,10 +286,23 @@ nav {
   background-color: #00FFFF;
 }
 
+.start-button-mobile {
+  color: black;
+  border-radius: 7px; /* Increased border-radius for more rounded corners */
+  margin: 5px;
+  padding: 4px 12px; /* Adjusted padding for smaller buttons */
+  background-color: #00FFFF;
+}
+
 .start-button.disabled-button {
   background-color: #b3ffff; /* Greyed out version of #00FFFF */
   cursor: not-allowed;
   opacity: 0.6; /* Optional: to make it look more disabled */
+}
+
+.start-button:hover {
+  --tw-bg-opacity: 1;
+  background-color:  #00BBBB;
 }
 
 .dream-button:hover {
@@ -773,6 +786,16 @@ h3.golden-ratio-2 {
   padding-top: 5%;
   padding-bottom: 0%;
 }
+
+.image-container-mandela {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
+}
+
 
 .step-section {
   flex: 1;

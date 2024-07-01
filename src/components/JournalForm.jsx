@@ -300,6 +300,10 @@ const JournalForm = () => {
         setDreamStep(prevStep => Math.max(prevStep - 1, 0)); // Ensure it doesn't go below 0
     };
 
+    const skipToDreamStep = (newDreamStep) => {
+        setDreamStep(newDreamStep);
+    };
+
     if (loading) {
         return (
             <LoadingComponent loadingText={'Assembling the Dream Oracles'} />
@@ -348,6 +352,7 @@ const JournalForm = () => {
                         decrementDreamStep={decrementDreamStep}
                         oracleSelected={oracleSelected}
                         setDreamStep={setDreamStep}
+                        skipToDreamStep={skipToDreamStep}
                     />
                 )}
             </div>

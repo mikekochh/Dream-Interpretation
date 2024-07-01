@@ -1,22 +1,58 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import axios from 'axios';
+import Link from 'next/link';
 
-const WelcomeSection = ({ user, dreamStreak, incrementDreamStep }) => {
+const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream }) => {
+
+    const isMobile = window.innerWidth < 768;
+
     return (
         <div>
             {user?.name ? (
-                <WelcomeBackPageSection user={user} dreamStreak={dreamStreak} incrementDreamStep={incrementDreamStep} />
+                <WelcomeBackPageSection 
+                    user={user} 
+                    dreamStreak={dreamStreak} 
+                    incrementDreamStep={incrementDreamStep} 
+                    skipToDreamStep={skipToDreamStep} 
+                    setDream={setDream}
+                    isMobile={isMobile}
+                />
             ) : (
-                <WelcomePageSection incrementDreamStep={incrementDreamStep} />
+                <WelcomePageSection incrementDreamStep={incrementDreamStep} isMobile={isMobile} />
             )}
         </div>
     );
 }
 
-const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user }) => {
+const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile }) => {
+
+    const [mostRecentDream, setMostRecentDream] = useState({});
+
+    useEffect(() => {
+        const getMostRecentDream = async () => {
+            try {
+                const mostRecentDream = await axios.get("/api/dream/mostRecent/" + user._id);
+                setMostRecentDream(mostRecentDream.data.dream);
+            }
+            catch (error) {
+                console.log("No most recent dream found: ", error);
+            }
+        }
+
+        if (user._id) {
+            getMostRecentDream();
+        }
+    }, [user])
+
+    const interpretRecentDream = () => {
+        setDream(mostRecentDream.dream);
+        skipToDreamStep(3);
+    }
+
     return (
-        <div className="title-container-alt">
+        <div className="title-container">
             <div className="content-wrapper">
                 <p className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
                 <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
@@ -29,27 +65,49 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user }) => {
                         onClick={user?.activated ? incrementDreamStep : null}
                         disabled={!user?.activated}
                     >
-                        New Dream
+                        Journal New Dream
                     </button>
+                </div>
+                <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter">
+                    <p className='golden-ratio-2'>Your Most Recent Dream Entry</p>
+                    <p className='golden-ratio-1'>{mostRecentDream.dream}</p>
+                    <div className="flex justify-center">
+                        <Link 
+                            className={`mx-2 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                            href={`/dreamDetails?dreamID=${mostRecentDream._id}`}
+                            style={{ whiteSpace: 'nowrap' }}
+                        >
+                            View Dream Board
+                        </Link>
+                        {!mostRecentDream.interpretation && (
+                            <button 
+                                className={`mx-2 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                                onClick={interpretRecentDream}
+                                style={{ whiteSpace: 'nowrap' }}
+                            >
+                                Interpret Dream
+                            </button>
+                        )}
+                    </div>
                 </div>
                 {!user?.activated && (
                     <div className="text-center text-gold golden-ratio-1 mt-5">
                         <p className="font-bold">
                             Please activate your account to continue. Check your email for the activation link.
                         </p>
-                        <a href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</a>
+                        <Link href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</Link>
                     </div>
 
                 )}
             </div>
-            <div className="image-container text-center">
-                <Image src="/mandela.webp" alt="Mandela" width={200} height={200} className="mandela-image" />
+            <div className="image-container-mandela text-center">
+                <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
             </div>
         </div>
     );
 };
 
-const WelcomePageSection = ({ incrementDreamStep }) => {
+const WelcomePageSection = ({ incrementDreamStep, isMobile }) => {
     const titleRef = useRef(null);
     const descriptionRef = useRef(null);
 
@@ -60,8 +118,6 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
             descriptionRef.current.style.width = `${adjustedWidth}px`;
         }
     }, []);
-
-    const isMobile = window.innerWidth < 768;
 
     return (
         <div className="title-container">
@@ -116,7 +172,7 @@ const WelcomePageSection = ({ incrementDreamStep }) => {
             <div className="button-container">
                 <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Start Now!</button>
             </div>
-            <a href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</a>
+            <Link href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</Link>
             <div className="image-container text-center mt-4">
                 <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
             </div>

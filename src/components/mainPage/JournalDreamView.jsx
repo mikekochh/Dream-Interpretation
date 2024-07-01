@@ -26,17 +26,20 @@ export default function JournalDreamView({
     setDreamStep,
     incrementDreamStep,
     decrementDreamStep,
-    oracleSelected
+    oracleSelected,
+    skipToDreamStep
 }) {
     return (
         <div className="flex justify-center items-center min-h-screen relative">
             {dreamStep === 0 ? (
-                <div className={`overflow-y-auto h-screen ${user ? 'main-content-home' : 'main-content'}`}>
+                <div className={`overflow-y-auto h-screen ${user ? 'main-content' : 'main-content'}`}>
                     <WelcomeSection
                         user={user}
                         dreamStreak={dreamStreak}
                         setDreamStep={setDreamStep}
                         incrementDreamStep={incrementDreamStep}
+                        skipToDreamStep={skipToDreamStep}
+                        setDream={setDream}
                     />
                 </div>
             ) : dreamStep === 1 ? (
