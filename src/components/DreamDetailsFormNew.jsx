@@ -3,9 +3,10 @@ import React, { useState, useEffect, useRef, lazy } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { faPencil, faPlusCircle, faCirclePlus, faSave, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPencil, faEye, faCirclePlus, faSave, faEyeOpen, faEyeSlash, faSearch, faMagnifyingGlass, faMagnifyingGlassPlus, faMagnifyingGlassMinus, faFileAlt, faFolderOpen, faEyeDropper, faBookOpen, faWindowClose, faTimes, faTimesCircle, faXmark, faXmarkCircle, faXmarkSquare, faBan, faMinus, faMinusCircle, faMinusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OracleSection from './OracleSection';
+import { isMobilePhone } from 'validator';
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 export default function DreamsForm() {
@@ -15,10 +16,11 @@ export default function DreamsForm() {
 
     const [dreamDetails, setDreamDetails] = useState([]);
     const [user, setUser] = useState(null);
-    const [oracles, setOracles] = useState([]);
+    
     const [saving, setSaving] = useState(false);
     const [updatingDream, setUpdatingDream] = useState(false);
     const [loadingInterpretations, setLoadingInterpretations] = useState(true); // Start as true
+    const [interpretingDream, setInterpretingDream] = useState(false);
     const [loadingNotes, setLoadingNotes] = useState(true); // Start as true
     const [loadingUser, setLoadingUser] = useState(true); // New loading state for user data
     const [loading, setLoading] = useState(true); // New loading state
@@ -27,8 +29,6 @@ export default function DreamsForm() {
     const [askingQuestion, setAskingQuestion] = useState(false);
     const [answer, setAnswer] = useState(null);
     const [edittingDream, setEdittingDream] = useState(false);
-    const [interpretingDream, setInterpretingDream] = useState(false);
-    const [interpretButtonActive, setInterpretButtonActive] = useState(false);
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
@@ -40,9 +40,9 @@ export default function DreamsForm() {
     const [toggleInterpretations, setToggleInterpretations] = useState(false);
     const [toggleNotes, setToggleNotes] = useState(false);
 
-    const [showFullInterpretation, setShowFullInterpretation] = useState({}); // New state
+    const [showFullInterpretation, setShowFullInterpretation] = useState({});
 
-    const scrollContainerRef = useRef(null);
+    const isMobile = window.innerWidth < 768;
 
     useEffect(() => {
         const checkPage = () => {
@@ -110,10 +110,10 @@ export default function DreamsForm() {
         }
     }, [dreamID]);
 
-    useEffect(() => {
-        const isAnyOracleSelected = oracles.some(oracle => oracle.selected);
-        setInterpretButtonActive(isAnyOracleSelected);
-    }, [oracles]);
+    // useEffect(() => {
+    //     const isAnyOracleSelected = oracles.some(oracle => oracle.selected);
+    //     setInterpretButtonActive(isAnyOracleSelected);
+    // }, [oracles]);
 
     useEffect(() => {
         const getDreamDetails = async () => {
@@ -213,18 +213,6 @@ export default function DreamsForm() {
         }));
     };
 
-    const scrollLeft = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
-        }
-    };
-
-    const scrollRight = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
-        }
-    };
-
     const saveNotes = async () => {
         try {
             setSaving(true);
@@ -239,6 +227,342 @@ export default function DreamsForm() {
     const handleNotesChange = (event) => {
         setNotes(event.target.value);
     };
+
+    const backToDreams = () => {
+        router.push('/dreams');
+    }
+
+    const endDreamUpdate = async () => {
+        try {
+            setEdittingDream(false);
+            await axios.post('api/dream/update', {
+                newDream: dream,
+                dreamID
+            });
+        } catch (err) {
+            console.log("There was an error updating the dream: ", err);
+        }
+    }
+
+    const askQuestion = async (interpretationID, oracleID) => {
+        setAskingQuestion(true);
+        const question = document.querySelector('.question-box').value;
+        const dreamDetailElements = document.querySelectorAll('.detail-box');
+        let interpretationText = '';
+
+        dreamDetailElements.forEach((element) => {
+            if (element.getAttribute('data-id') === interpretationID) {
+                const interpretationP = element.querySelector('.interpretation-box');
+                if (interpretationP) {
+                    interpretationText = interpretationP.textContent;
+                }
+            }
+        });
+
+        const res = await axios.post('/api/dream/question/', {
+            question,
+            interpretation: interpretationText,
+            dream,
+            oracleID
+        });
+
+        if (res.status === 200) {
+            setAskingQuestion(false);
+            setAnswer(res.data.answerText);
+        }
+    }
+
+    const editDream = () => {
+        setEdittingDream(true);
+    }
+
+    const getEmotionName = (emotionID) => {
+        const emotion = emotions.find(e => e.emotionID === emotionID);
+        return emotion ? emotion.emotionName : 'Unknown Emotion';
+    };
+
+    if (loading) {
+        return (
+            <LoadingComponent loadingText={'Collecting Dream Details'} />
+        );
+    }
+
+    return (
+        <div className="flex flex-col main-content h-screen text-white">
+            <div className="ml-1">
+                <button className="start-button golden-ratio-1" onClick={backToDreams}>Back To Journal</button>
+            </div>
+            <div className="flex justify-center border rounded-xl m-2 border-gold-small">
+                <div className='p-2 mb-2 w-11/12'>
+                    <h1 className="text-center golden-ratio-3 text-gold">The Dream</h1>
+                    <div>
+                        <div 
+                            contentEditable={edittingDream} 
+                            suppressContentEditableWarning={true}
+                            className={`cursor-pointer golden-ratio-2 text-gold ${edittingDream ? 'border-2 border-black rounded-lg p-2' : ''}`}
+                            onClick={!edittingDream ? editDream : undefined}
+                            onBlur={edittingDream ? (e) => setDream(e.target.innerText) : undefined}
+                        >
+                            {dream}
+                        </div>
+
+                        <div className={`flex flex-wrap gap-2 justify-center p-4 ${edittingDream ? 'pointer-events-none' : ''}`}>
+                            {dreamEmotions.map((emotion) => (
+                                <div 
+                                    key={emotion._id} 
+                                    className="px-4 py-2 bg-gray-200 rounded-lg text-black"
+                                >
+                                    {getEmotionName(emotion.emotionID)}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="flex justify-end items-center">
+                            {edittingDream ? (
+                                <>
+                                    {updatingDream ? (
+                                        <LoadingComponent />
+                                    ) : (
+                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2 dream-button" onClick={endDreamUpdate}>Done</button>
+                                    )}
+                                </>
+                            ) : (
+                                <p className="golden-ratio-2 text-right cursor-pointer" onClick={editDream}>
+                                    Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2" />
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="flex md:flex-row flex-col relative pb-12">
+                <div className="md:w-2/3 text-white">
+                    <ViewInterpretationSection 
+                        toggleInterpretations={toggleInterpretations}
+                        setToggleInterpretations={setToggleInterpretations}
+                        dreamDetails={dreamDetails}
+                        getOracleName={getOracleName}
+                        showFullInterpretation={showFullInterpretation}
+                        formatInterpretationDate={formatInterpretationDate}
+                        insertLineBreaks={insertLineBreaks}
+                        toggleFullInterpretation={toggleFullInterpretation}
+                        askQuestionInterpretationID={askQuestionInterpretationID}
+                        askingQuestion={askingQuestion}
+                        answer={answer}
+                        askQuestion={askQuestion}
+                        setAskQuestionInterpretationID={setAskQuestionInterpretationID}
+                        user={user}
+                        isMobile={isMobile}
+                    />
+                    <AddInterpretationSection 
+                        toggleInterpretations={toggleInterpretations} 
+                        setToggleInterpretations={setToggleInterpretations} 
+                        user={user}
+                        isMobile={isMobile}
+                    />
+                    {/* {dreamDetails.length > 0 && oracles ? (
+                        dreamDetails.map((detail) => (
+                            <div
+                                key={detail._id}
+                                data-id={detail._id}
+                                className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl pr-2 detail-box"
+                            >
+                                <div className="pl-2">
+                                    <p className="golden-ratio-2 text-center font-bold">Interpretation by {getOracleName(detail.oracleID)} on {formatInterpretationDate(detail.interpretationDate)}</p>
+                                    <p className="interpretation-box">
+                                        {!showFullInterpretation[detail._id] && (
+                                            <div>
+                                                <span className="font-bold golden-ratio-2">Summary</span><br/>
+                                            </div>
+                                        )}
+                                        
+                                        {showFullInterpretation[detail._id] ? insertLineBreaks(detail.interpretation) : detail.interpretation.split('\n\n').pop()}
+                                    </p>
+                                    <button onClick={() => toggleFullInterpretation(detail._id)} className="font-bold">
+                                        {showFullInterpretation[detail._id] ? "Show Less" : "Read More"}
+                                    </button>
+                                </div>
+                                {askQuestionInterpretationID === detail._id ? (
+                                    <div className="w-full">
+                                        <div className="flex flex-col w-full p-4">
+                                            <textarea
+                                                className="DreamBox border-2 border-black rounded-lg text-black w-full p-2 question-box"
+                                                placeholder="Type your question here"
+                                            />
+                                            {askingQuestion && !answer ? (
+                                                <div className="flex text-center justify-center items-center pb-5">
+                                                    <p className="text-center text-3xl pr-3">Asking Question</p>
+                                                    <LoadingComponent />
+                                                </div>
+                                            ) : (
+                                                <div className="text-center">
+                                                    <button className="dream-button" onClick={() => askQuestion(detail._id, detail.oracleID)}>Submit</button>
+                                                    <div className="back-button-container">
+                                                        <button className="back-button" onClick={() => setAskQuestionInterpretationID(null)}>Cancel</button>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {answer && (
+                                            <div className="flex flex-col w-full p-4">
+                                                <p className="font-bold text-center">Answer</p>
+                                                <p className="text-center DreamBox rounded-xl p-2">{insertLineBreaks(answer)}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <button className="dream-button hidden" onClick={() => setAskQuestionInterpretationID(detail._id)}>Ask Question</button>
+                                )}
+                            </div>
+                        ))
+                    ) : !interpretingDream ? (
+                        <div className="h-full relative">
+                            {/* <p className="golden-ratio-2 text-center font-bold">Add interpretations</p>
+                            <div className="flex items-center justify-center relative">
+                                <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </button>
+                                <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
+                                    {oracles.filter(oracle => oracle.active).map((oracle) => (
+                                        <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
+                                            <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
+                                        </div>
+                                    ))}
+                                </div>
+                                <button onClick={scrollRight} className="absolute right-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div className="flex flex-col items-center text-center">
+                                <button
+                                    className={`bg-blue-500 text-white font-bold py-2 px-4 rounded justify-center m-2 bottom-0 dream-button items-center ${
+                                        interpretButtonActive && user?.activated ? 'hover:bg-blue-700' : 'opacity-50 cursor-not-allowed'
+                                    }`}
+                                    onClick={interpretDream}
+                                    disabled={!interpretButtonActive || !user?.activated}
+                                >
+                                    Interpret
+                                </button>
+                                {!user?.activated && (
+                                    <a className="text-gold golden-ratio-1 underline cursor-pointer" href={`/emailVerification?email=${user?.email}`}>Finish registering your account to continue</a>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <div>
+                            <div className='loadingContainer mb-5'>
+                                <p className="text-center golden-ratio-2">Interpreting Your Dream</p>
+                                <p className='loadingText'>Please wait while we interpret your dream</p>
+                                <div className='dotsContainer'>
+                                    <div className='dot delay200'></div>
+                                    <div className='dot delay400'></div>
+                                    <div className='dot'></div>
+                                </div>
+                            </div>
+                            <div>
+                                {oracles.map((oracle, index) => {
+                                    if (oracle.selected) {
+                                        return (
+                                            <div key={oracle._id}>
+                                                <div className="text-center">{oracle.oracleName}</div>
+                                                <div className="flex justify-center">
+                                                    <div data-label="Interpreting..." className="progress-bar w-2/3">
+                                                        <div className="progress-bar-inside" style={{ width: `${interpretationProgressArray[index]}%` }}>Interpreting...</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    }
+                                })}
+                            </div>
+                        </div>
+                    )} */}
+                </div>
+                <div className="md:w-1/3">
+                    <div className="p-2 text-white">
+                        {loadingNotes && (
+                            <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
+                                <p className="text-center text-3xl pr-3">Loading Notes</p>
+                                <LoadingComponent />
+                            </div>
+                        )}
+                        {toggleNotes && !loadingNotes && (
+                            <div>
+                                {saving ? (
+                                    <LoadingComponent loadingText={"Saving Notes"} altScreen={true} />
+                                ) : (
+                                    <textarea
+                                        type="text"
+                                        rows={10}
+                                        className="DreamBox NoteBox border-2 border-black rounded-lg text-black w-full h-full p-2"
+                                        style={{ minHeight: '100px' }}
+                                        placeholder='Notes on dream or interpretations go here'
+                                        value={notes}
+                                        onChange={handleNotesChange}
+                                    />
+                                )}
+                                <div className="">
+                                    {!saving && (
+                                        <div className="cursor-pointer">
+                                            <button 
+                                                className="dream-details-button w-full border border-white rounded-xl text-center golden-ratio-2"
+                                                onClick={saveNotes}
+                                            >
+                                                Save Notes <FontAwesomeIcon icon={faSave} className="pl-1"/>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                        {!toggleNotes && !loadingNotes && (
+                            <div className="cursor-pointer mt-2">
+                                <button 
+                                    className="dream-details-button w-full border border-white rounded-xl text-center golden-ratio-2"
+                                    onClick={() => setToggleNotes(true)}
+                                >
+                                    {notes ? 'Edit Notes' : 'Add Notes'}
+                                    <FontAwesomeIcon 
+                                        icon={notes ? faPencil : faCirclePlus} className="pl-2"
+                                    />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+const AddInterpretationSection = ({
+    toggleInterpretations, 
+    setToggleInterpretations,
+    user,
+    isMobile
+}) => {
+
+    const scrollContainerRef = useRef(null);
+    const [oracles, setOracles] = useState([]);
+    const [interpretButtonActive, setInterpretButtonActive] = useState(false);
+    const [interpretingDream, setInterpretingDream] = useState(false);
+
+    useEffect(() => {
+        const getOracles = async () => {
+            try {
+                const oraclesRes = axios.get('/api/allOracles')
+                setOracles(oraclesRes.data);
+            } catch (error) {
+                console.error("Error fetching oracles:", error);
+            }
+        };
+
+        getOracles();
+    }, []);
 
     async function getGenderName(genderID) {
         try {
@@ -321,54 +645,6 @@ export default function DreamsForm() {
         }
     }
 
-    const backToDreams = () => {
-        router.push('/dreams');
-    }
-
-    const endDreamUpdate = async () => {
-        try {
-            setEdittingDream(false);
-            await axios.post('api/dream/update', {
-                newDream: dream,
-                dreamID
-            });
-        } catch (err) {
-            console.log("There was an error updating the dream: ", err);
-        }
-    }
-
-    const askQuestion = async (interpretationID, oracleID) => {
-        setAskingQuestion(true);
-        const question = document.querySelector('.question-box').value;
-        const dreamDetailElements = document.querySelectorAll('.detail-box');
-        let interpretationText = '';
-
-        dreamDetailElements.forEach((element) => {
-            if (element.getAttribute('data-id') === interpretationID) {
-                const interpretationP = element.querySelector('.interpretation-box');
-                if (interpretationP) {
-                    interpretationText = interpretationP.textContent;
-                }
-            }
-        });
-
-        const res = await axios.post('/api/dream/question/', {
-            question,
-            interpretation: interpretationText,
-            dream,
-            oracleID
-        });
-
-        if (res.status === 200) {
-            setAskingQuestion(false);
-            setAnswer(res.data.answerText);
-        }
-    }
-
-    const editDream = () => {
-        setEdittingDream(true);
-    }
-
     function handleSelectionChange(selected, oracleID) {
         setOracles(prev => {
             const updatedOracles = [...prev];
@@ -378,249 +654,199 @@ export default function DreamsForm() {
         });
     }
 
-    const getEmotionName = (emotionID) => {
-        const emotion = emotions.find(e => e.emotionID === emotionID);
-        return emotion ? emotion.emotionName : 'Unknown Emotion';
+    const scrollLeft = () => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+        }
     };
 
-    if (loading) {
-        return (
-            <LoadingComponent loadingText={'Collecting Dream Details'} />
-        );
-    }
+    const scrollRight = () => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+        }
+    };
+
+
 
     return (
-        <div className="flex flex-col main-content h-screen text-white">
-            <div className="ml-1">
-                <button className="start-button golden-ratio-1" onClick={backToDreams}>Back To Journal</button>
-            </div>
-            <div className="flex justify-center border rounded-xl m-2 border-gold-small">
-                <div className='p-2 mb-2 w-11/12'>
-                    <h1 className="text-center golden-ratio-3 text-gold">The Dream</h1>
-                    <div>
-                        <div 
-                            contentEditable={edittingDream} 
-                            suppressContentEditableWarning={true}
-                            className={`cursor-pointer golden-ratio-2 text-gold ${edittingDream ? 'border-2 border-black rounded-lg p-2' : ''}`}
-                            onClick={!edittingDream ? editDream : undefined}
-                            onBlur={edittingDream ? (e) => setDream(e.target.innerText) : undefined}
-                        >
-                            {dream}
-                        </div>
-
-                        <div className={`flex flex-wrap gap-2 justify-center p-4 ${edittingDream ? 'pointer-events-none' : ''}`}>
-                            {dreamEmotions.map((emotion) => (
-                                <div 
-                                    key={emotion._id} 
-                                    className="px-4 py-2 bg-gray-200 rounded-lg text-black"
-                                >
-                                    {getEmotionName(emotion.emotionID)}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="flex justify-end items-center">
-                            {edittingDream ? (
-                                <>
-                                    {updatingDream ? (
-                                        <LoadingComponent />
-                                    ) : (
-                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2 dream-button" onClick={endDreamUpdate}>Done</button>
-                                    )}
-                                </>
-                            ) : (
-                                <p className="golden-ratio-2 text-right cursor-pointer" onClick={editDream}>
-                                    Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2" />
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="flex md:flex-row flex-col relative pb-12">
-                <div className="md:w-2/3 text-white">
-                    {loadingInterpretations && (
-                        <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
-                            <p className="text-center text-3xl pr-3">Loading Interpretations</p>
-                            <LoadingComponent />
-                        </div>
-                    )}
-                    {dreamDetails.length > 0 && oracles ? (
-                        dreamDetails.map((detail) => (
-                            <div
-                                key={detail._id}
-                                data-id={detail._id}
-                                className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl pr-2 detail-box"
-                            >
-                                <div className="pl-2">
-                                    <p className="golden-ratio-2 text-center font-bold">Interpretation by {getOracleName(detail.oracleID)} on {formatInterpretationDate(detail.interpretationDate)}</p>
-                                    <p className="interpretation-box">
-                                        {!showFullInterpretation[detail._id] && (
-                                            <div>
-                                                <span className="font-bold golden-ratio-2">Summary</span><br/>
-                                            </div>
-                                        )}
-                                        
-                                        {showFullInterpretation[detail._id] ? insertLineBreaks(detail.interpretation) : detail.interpretation.split('\n\n').pop()}
-                                    </p>
-                                    <button onClick={() => toggleFullInterpretation(detail._id)} className="font-bold">
-                                        {showFullInterpretation[detail._id] ? "Show Less" : "Read More"}
-                                    </button>
-                                </div>
-                                {askQuestionInterpretationID === detail._id ? (
-                                    <div className="w-full">
-                                        <div className="flex flex-col w-full p-4">
-                                            <textarea
-                                                className="DreamBox border-2 border-black rounded-lg text-black w-full p-2 question-box"
-                                                placeholder="Type your question here"
-                                            />
-                                            {askingQuestion && !answer ? (
-                                                <div className="flex text-center justify-center items-center pb-5">
-                                                    <p className="text-center text-3xl pr-3">Asking Question</p>
-                                                    <LoadingComponent />
-                                                </div>
-                                            ) : (
-                                                <div className="text-center">
-                                                    <button className="dream-button" onClick={() => askQuestion(detail._id, detail.oracleID)}>Submit</button>
-                                                    <div className="back-button-container">
-                                                        <button className="back-button" onClick={() => setAskQuestionInterpretationID(null)}>Cancel</button>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                        {answer && (
-                                            <div className="flex flex-col w-full p-4">
-                                                <p className="font-bold text-center">Answer</p>
-                                                <p className="text-center DreamBox rounded-xl p-2">{insertLineBreaks(answer)}</p>
-                                            </div>
-                                        )}
+        <div>
+            {toggleInterpretations ? (
+                <div>
+                    <div className="h-full relative">
+                    <p className={`gradient-title-text text-center ${isMobile ? 'golden-ratio-3' : 'golden-ratio-4'}`}>Choose an Oracle</p>
+                        <div className="flex items-center justify-center relative">
+                            <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
+                                {oracles.filter(oracle => oracle.active).map((oracle) => (
+                                    <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
+                                        <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                     </div>
-                                ) : (
-                                    <button className="dream-button hidden" onClick={() => setAskQuestionInterpretationID(detail._id)}>Ask Question</button>
-                                )}
+                                ))}
                             </div>
-                        ))
-                    ) : !interpretingDream ? (
-                        <div className="h-full relative">
-                            {}
-                            <p className="golden-ratio-2 text-center font-bold">Add interpretations</p>
-                            <div className="flex items-center justify-center relative">
-                                <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-                                    </svg>
-                                </button>
-                                <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
-                                    {oracles.filter(oracle => oracle.active).map((oracle) => (
-                                        <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
-                                            <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
-                                        </div>
-                                    ))}
-                                </div>
-                                <button onClick={scrollRight} className="absolute right-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div className="flex flex-col items-center text-center">
+                            <button onClick={scrollRight} className="absolute right-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="flex flex-col items-center text-center">
+                            <div className="flex items-center mt-2">
                                 <button
-                                    className={`bg-blue-500 text-white font-bold py-2 px-4 rounded justify-center m-2 bottom-0 dream-button items-center ${
-                                        interpretButtonActive && user?.activated ? 'hover:bg-blue-700' : 'opacity-50 cursor-not-allowed'
-                                    }`}
+                                className={`py-2 px-4 rounded justify-center m-2 start-button items-center ${
+                                    interpretButtonActive && user?.activated ? '' : 'opacity-50 cursor-not-allowed'
+                                }`}
                                     onClick={interpretDream}
                                     disabled={!interpretButtonActive || !user?.activated}
                                 >
                                     Interpret
                                 </button>
-                                {!user?.activated && (
-                                    <a className="text-gold golden-ratio-1 underline cursor-pointer" href={`/emailVerification?email=${user?.email}`}>Finish registering your account to continue</a>
-                                )}
+                                <button 
+                                    className="py-2 px-4 rounded m-2 start-button items-center"
+                                    onClick={() => setToggleInterpretations(false)}
+                                >
+                                    Cancel
+                                </button>
                             </div>
+                            {!user?.activated && (
+                                <a className="text-gold golden-ratio-1 underline cursor-pointer mt-2" href={`/emailVerification?email=${user?.email}`}>
+                                Finish registering your account to continue
+                                </a>
+                            )}
                         </div>
-                    ) : (
-                        <div>
-                            <div className='loadingContainer mb-5'>
-                                <p className="text-center golden-ratio-2">Interpreting Your Dream</p>
-                                <p className='loadingText'>Please wait while we interpret your dream</p>
-                                <div className='dotsContainer'>
-                                    <div className='dot delay200'></div>
-                                    <div className='dot delay400'></div>
-                                    <div className='dot'></div>
-                                </div>
-                            </div>
-                            <div>
-                                {oracles.map((oracle, index) => {
-                                    if (oracle.selected) {
-                                        return (
-                                            <div key={oracle._id}>
-                                                <div className="text-center">{oracle.oracleName}</div>
-                                                <div className="flex justify-center">
-                                                    <div data-label="Interpreting..." className="progress-bar w-2/3"> {/* Adjust the width class as needed */}
-                                                        <div className="progress-bar-inside" style={{ width: `${interpretationProgressArray[index]}%` }}>Interpreting...</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                    }
-                                })}
-                            </div>
-                        </div>
-                    )}
+                    </div>
                 </div>
-                <div className="md:w-1/3">
-                    <div className="p-2 text-white">
-                        {loadingNotes && (
-                            <div className="flex text-center justify-center inset-0 items-center pt-20 pb-5">
-                                <p className="text-center text-3xl pr-3">Loading Notes</p>
-                                <LoadingComponent />
-                            </div>
-                        )}
-                        {toggleNotes && !loadingNotes && (
-                            <div>
-                                {saving ? (
-                                    <LoadingComponent loadingText={"Saving Notes"} altScreen={true} />
-                                ) : (
-                                    <textarea
-                                        type="text"
-                                        rows={10}
-                                        className="DreamBox NoteBox border-2 border-black rounded-lg text-black w-full h-full p-2"
-                                        style={{ minHeight: '100px' }}
-                                        placeholder='Notes on dream or interpretations go here'
-                                        value={notes}
-                                        onChange={handleNotesChange}
-                                    />
+            ) : (
+                <div>
+                    <div className="cursor-pointer mt-4">
+                        <button 
+                            className="dream-details-button w-full border border-white rounded-xl text-center golden-ratio-2"
+                            onClick={() => setToggleInterpretations(true)}
+                        >
+                            Add Interpretations 
+                            <FontAwesomeIcon 
+                                icon={faCirclePlus} className="pl-2"
+                            />
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    )
+}
+
+const ViewInterpretationSection = ({
+    toggleInterpretations,
+    setToggleInterpretations,
+    dreamDetails,
+    getOracleName,
+    showFullInterpretation,
+    formatInterpretationDate,
+    insertLineBreaks,
+    toggleFullInterpretation,
+    askQuestionInterpretationID,
+    askingQuestion,
+    answer,
+    askQuestion,
+    setAskQuestionInterpretationID,
+    user,
+    isMobile
+}) => {
+    return (
+        <div>
+            {toggleInterpretations ? (
+                <div>
+                <div className="cursor-pointer mx-2">
+                    <button 
+                        className="dream-details-button w-full border border-white rounded-xl text-center golden-ratio-2"
+                        onClick={() => toggleInterpretations(false)}
+                    >
+                        Close Interpretations <FontAwesomeIcon icon={faWindowClose} className="pl-1"/>
+                    </button>
+                </div>
+                {dreamDetails.map((detail) => (
+                    <div
+                        key={detail._id}
+                        data-id={detail._id}
+                        className="flex flex-col items-center justify-center text-white border-white border m-2 rounded-xl pr-2 detail-box"
+                    >
+                        <div className="pl-2">
+                            <p className="golden-ratio-2 text-center font-bold">Interpretation by {getOracleName(detail.oracleID)} on {formatInterpretationDate(detail.interpretationDate)}</p>
+                            <p className="interpretation-box">
+                                {!showFullInterpretation[detail._id] && (
+                                    <div>
+                                        <span className="font-bold golden-ratio-2">Summary</span><br/>
+                                    </div>
                                 )}
-                                <div className="">
-                                    {!saving && (
-                                        <div className="cursor-pointer">
-                                            <button 
-                                                className="dream-details-button w-full border border-white rounded-xl text-center golden-ratio-2"
-                                                onClick={saveNotes}
-                                            >
-                                                Save Notes <FontAwesomeIcon icon={faSave} className="pl-1"/>
-                                            </button>
+                                
+                                {showFullInterpretation[detail._id] ? insertLineBreaks(detail.interpretation) : detail.interpretation.split('\n\n').pop()}
+                            </p>
+                            <button onClick={() => toggleFullInterpretation(detail._id)} className="font-bold">
+                                {showFullInterpretation[detail._id] ? "Show Less" : "Read More"}
+                            </button>
+                        </div>
+                        {askQuestionInterpretationID === detail._id ? (
+                            <div className="w-full">
+                                <div className="flex flex-col w-full p-4">
+                                    <textarea
+                                        className="DreamBox border-2 border-black rounded-lg text-black w-full p-2 question-box"
+                                        placeholder="Type your question here"
+                                    />
+                                    {askingQuestion && !answer ? (
+                                        <div className="flex text-center justify-center items-center pb-5">
+                                            <p className="text-center text-3xl pr-3">Asking Question</p>
+                                            <LoadingComponent />
+                                        </div>
+                                    ) : (
+                                        <div className="text-center">
+                                            <button className="dream-button" onClick={() => askQuestion(detail._id, detail.oracleID)}>Submit</button>
+                                            <div className="back-button-container">
+                                                <button className="back-button" onClick={() => setAskQuestionInterpretationID(null)}>Cancel</button>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
+                                {answer && (
+                                    <div className="flex flex-col w-full p-4">
+                                        <p className="font-bold text-center">Answer</p>
+                                        <p className="text-center DreamBox rounded-xl p-2">{insertLineBreaks(answer)}</p>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                        {!toggleNotes && !loadingNotes && (
-                            <div className="cursor-pointer mt-2">
-                                <button 
-                                    className="dream-details-button w-full border border-white rounded-xl text-center golden-ratio-2"
-                                    onClick={() => setToggleNotes(true)}
-                                >
-                                    {notes ? 'Edit Notes' : 'Add Notes'}
-                                    <FontAwesomeIcon 
-                                        icon={notes ? faPencil : faCirclePlus} className="pl-2"
-                                    />
-                                </button>
-                            </div>
+                        ) : (
+                            <button className="dream-button hidden" onClick={() => setAskQuestionInterpretationID(detail._id)}>Ask Question</button>
                         )}
                     </div>
+                ))}
+                    <div>
+                        <AddInterpretationSection 
+                            toggleInterpretations={toggleInterpretations}
+                            setToggleInterpretations={setToggleInterpretations}
+                            user={user}
+                            isMobile={isMobile}
+                        />
+                    </div>
                 </div>
-            </div>
+
+            ) : (
+                <div>
+                    <div className="cursor-pointer mt-4">
+                        <button 
+                            className="dream-details-button w-full border border-white rounded-xl text-center golden-ratio-2"
+                            onClick={() => setToggleInterpretations(true)}
+                        >
+                            View Interpretations 
+                            <FontAwesomeIcon 
+                                icon={faEye} className="pl-2"
+                            />
+                            {/* faSearch, faFolderOpen, faBookOpen, , , , , , ,  */}
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
-    );
+    )
 }

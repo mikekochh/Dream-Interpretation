@@ -1,9 +1,9 @@
 "use client";
 import React from 'react';
 
-const LoadingComponent = ({ loadingText }) => {
+const LoadingComponent = ({ loadingText, altScreen }) => {
     return (
-        <div className="main-content text-white flex justify-center items-center h-screen">
+        <div className={`main-content text-white ${altScreen ? '' : 'flex justify-center items-center h-screen'}`}>
             <div className='loadingContainer'>
                 <p className='loadingText'>{loadingText}</p>
                 <div className='dotsContainer'>
