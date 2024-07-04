@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../../lib/mongodb';
-import User from '../../../../../../models/user';
-import Dream from '../../../../../../models/dream';
 import Interpretation from '../../../../../../models/interpretation';
 
 export async function GET(request) {

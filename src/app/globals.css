@@ -794,6 +794,7 @@ h3.golden-ratio-2 {
   display: flex;
   justify-content: center;
   box-sizing: border-box; /* Ensure padding is included in width calculation */
+  z-index: 1;
 }
 
 

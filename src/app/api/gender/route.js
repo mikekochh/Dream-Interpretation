@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../lib/mongodb';
 import Gender from '../../../../models/genders';
+import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 
 export async function GET(req) {
     try {
@@ -8,12 +10,14 @@ export async function GET(req) {
         
         const url = new URL(req.url);
         const genderID = url.searchParams.get('genderID');
+
+        console.log("genderID: ", genderID);
         
         if (!genderID) {
             return NextResponse.json({ error: 'genderID is required' }, { status: 400 });
         }
-        
-        const gender = await Gender.findById(genderID);
+
+        const gender = await Gender.findOne({genderID})
         
         if (!gender) {
             return NextResponse.json({ error: 'Gender not found' }, { status: 404 });

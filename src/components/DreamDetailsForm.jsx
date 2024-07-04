@@ -226,6 +226,7 @@ export default function DreamsForm() {
     };
 
     const saveNotes = async () => {
+        console.log("no way this is running right");
         try {
             setSaving(true);
             await axios.post('api/dream/note/' + dreamID, { note: notes });

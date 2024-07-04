@@ -6,9 +6,12 @@ export async function GET(request) {
     try {
         const pathname = request.nextUrl.pathname;
         const dreamID = pathname.split('/').pop();
+        // console.log("the dreamID: ", dreamID);
         await connectMongoDB();
 
         const dreamNotes = await Note.find({ dreamID: dreamID });
+
+        // console.log("dreamNotes: ", dreamNotes);
 
         return NextResponse.json({dreamNotes});
     }
@@ -37,7 +40,6 @@ export async function POST(request) {
         }
         else {
             const newNote = await Note.create({ dreamID: dreamID, note: note, lastUpdated: new Date() });
-
         }
 
         return NextResponse.json({message: "Note added successfully!"}, { status: 200 });

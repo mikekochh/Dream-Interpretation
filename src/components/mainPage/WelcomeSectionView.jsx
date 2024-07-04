@@ -73,7 +73,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                     <p className='golden-ratio-1'>{mostRecentDream.dream}</p>
                     <div className="flex justify-center">
                         <Link 
-                            className={`mx-2 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                            className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
                             href={`/dreamDetails?dreamID=${mostRecentDream._id}`}
                             style={{ whiteSpace: 'nowrap' }}
                         >
@@ -81,7 +81,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                         </Link>
                         {!mostRecentDream.interpretation && (
                             <button 
-                                className={`mx-2 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                                className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
                                 onClick={interpretRecentDream}
                                 style={{ whiteSpace: 'nowrap' }}
                             >

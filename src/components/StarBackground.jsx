@@ -2,9 +2,10 @@
 import React from "react";
 import { useEffect } from "react";
 import Link from 'next/link';
-
+import { usePathname } from 'next/navigation';
 
 const StarBackground = ({ children }) => {
+    const pathname = usePathname();
 
     useEffect(() => {
 
@@ -31,12 +32,21 @@ const StarBackground = ({ children }) => {
     return (
         <div className="star-background relative">
             {children}
-            <Link
-                className="absolute left-0 bottom-0 dream-button golden-ratio-1"
-                href={'/feedback'}
-            >
-                Give us Feedback
-            </Link>
+            {pathname !== '/feedback' ? (
+                <Link
+                    className="absolute left-0 bottom-0 dream-button golden-ratio-1 z-10"
+                    href={'/feedback'}
+                >
+                    Give us Feedback
+                </Link>
+            ) : (
+                <Link
+                    className="absolute left-0 bottom-0 dream-button golden-ratio-1 z-10"
+                    href={'/interpret'}
+                >
+                    Back Home
+                </Link>
+            )}
         </div>
     );
 }

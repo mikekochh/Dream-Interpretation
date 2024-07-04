@@ -4,12 +4,9 @@ import Dream from '../../../../../../models/dream';
 
 export async function GET(request) {
     try {
-        console.log("is this even running?");
         const pathname = request.nextUrl.pathname;
         const userID = pathname.split('/').pop();
         await connectMongoDB();
-
-        console.log("userID: ", userID);
 
         // Find the most recent dream for the given user ID
         const dream = await Dream.findOne({ userID }).sort({ dreamDate: -1 });
