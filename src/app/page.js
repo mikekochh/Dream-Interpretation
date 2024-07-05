@@ -1,9 +1,20 @@
-import HomePage from './createAccount/page'
+"use client"
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <main>
-      <HomePage />
-    </main>
-  )
+
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/interpret');
+  }, [router])
+
+  return null;
+
+  // return (
+  //   <main>
+  //     <HomePage />
+  //   </main>
+  // )
 }
