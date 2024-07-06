@@ -5,32 +5,44 @@ import Image from 'next/image';
 import InfoPopup from './InfoPopup';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
-const OracleSection = ({ oracle, handleSelectionChange }) => {
-    
+const OracleSection = ({ oracle, handleSelectionChange, user }) => {
+    // Determine the additional Tailwind CSS classes based on conditions for the image
+    const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''} ${!user?.subscribed && oracle.oracleID !== 1 ? 'filter grayscale blur-sm' : ''}`;
+
+    // Determine the additional Tailwind CSS classes based on conditions for the parent div
+    const parentClasses = `relative max-w-sm ${!user?.subscribed && oracle.oracleID !== 1 ? 'cursor-not-allowed' : ''} hidden md:block`;
+
+    // Conditionally handle the click event
+    const handleClick = () => {
+        if (user?.subscribed || oracle.oracleID === 1) {
+            handleSelectionChange(oracle.selected, oracle.oracleID);
+        }
+    };
+
     return (
         <div className="text-center relative golden-ratio-1">
-            <div className="relative max-w-sm hidden md:block">
+            <div className={parentClasses}>
                 <Image 
                     layout="responsive"
                     width={50}
                     height={50}
                     src={oracle.oraclePicture} 
                     alt={oracle.oracleName} 
-                    className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
-                    onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
+                    className={imageClasses}
+                    onClick={handleClick} 
                     htmlFor={oracle.oracleID}
                     draggable={false}
                 />
             </div>
-            <div className="w-full relative max-w-sm md:hidden oracle-image-mobile">
+            <div className={`w-full relative max-w-sm md:hidden oracle-image-mobile ${!user?.subscribed && oracle.oracleID !== 1 ? 'cursor-not-allowed' : ''}`}>
                 <Image 
                     layout="responsive"
                     width={50}
                     height={50}
                     src={oracle.oraclePicture} 
                     alt={oracle.oracleName} 
-                    className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-4 border-gold' : ''}`}
-                    onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
+                    className={imageClasses}
+                    onClick={handleClick} 
                     htmlFor={oracle.oracleID}
                 />
             </div>
@@ -45,7 +57,7 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
                 />
             </div>
         </div>
-    )
+    );
 }
 
 export default OracleSection;

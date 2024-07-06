@@ -29,7 +29,7 @@ const OracleSelectionSection = ({
                     {oracles.filter(oracle => oracle.active).map((oracle) => (
                         <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
                             <Suspense fallback={<div>Loading...</div>}>
-                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
+                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} user={user} />
                             </Suspense>
                         </div>
                     ))}
