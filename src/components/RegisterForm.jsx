@@ -71,8 +71,18 @@ export default function RegisterForm() {
             if (resNewUser.ok) {
                 gtagCreateAccount();
     
+                // create a whole new api endpoint, and this one gets used if the user has a dreamID
+
+                if (dreamID) {
+                    console.log("We have gotten here!");
+                    await axios.post('api/sendFirstInterpretationEmail', { email: emailLower, dreamID })
+                }
+                else {
+                    await axios.post('api/sendVerificationEmail', { email: emailLower });
+                }
+
+                
                 setSentEmailVerification(true);
-                await axios.post('api/sendVerificationEmail', { email: emailLower });
                 await new Promise(resolve => setTimeout(resolve, 4000));
 
                 const resSignIn = await signIn("credentials", {

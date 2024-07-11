@@ -6,15 +6,18 @@ import InfoPopup from './InfoPopup';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 const OracleSection = ({ oracle, handleSelectionChange, user }) => {
+    // Helper function to determine if the user has access
+    const hasAccess = () => user?.subscribed || oracle.oracleID === 1;
+
     // Determine the additional Tailwind CSS classes based on conditions for the image
-    const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''} ${!user?.subscribed && oracle.oracleID !== 1 ? 'filter grayscale blur-sm' : ''}`;
+    const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''} ${!hasAccess() ? 'filter grayscale blur-sm' : ''}`;
 
     // Determine the additional Tailwind CSS classes based on conditions for the parent div
-    const parentClasses = `relative max-w-sm ${!user?.subscribed && oracle.oracleID !== 1 ? 'cursor-not-allowed' : ''} hidden md:block`;
+    const parentClasses = `relative max-w-sm ${!hasAccess() ? 'cursor-not-allowed' : ''} hidden md:block`;
 
     // Conditionally handle the click event
     const handleClick = () => {
-        if (user?.subscribed || oracle.oracleID === 1) {
+        if (hasAccess()) {
             handleSelectionChange(oracle.selected, oracle.oracleID);
         }
     };
@@ -34,7 +37,7 @@ const OracleSection = ({ oracle, handleSelectionChange, user }) => {
                     draggable={false}
                 />
             </div>
-            <div className={`w-full relative max-w-sm md:hidden oracle-image-mobile ${!user?.subscribed && oracle.oracleID !== 1 ? 'cursor-not-allowed' : ''}`}>
+            <div className={`w-full relative max-w-sm md:hidden oracle-image-mobile ${!hasAccess() ? 'cursor-not-allowed' : ''}`}>
                 <Image 
                     layout="responsive"
                     width={50}
@@ -54,6 +57,7 @@ const OracleSection = ({ oracle, handleSelectionChange, user }) => {
                     icon={faQuestionCircle} 
                     infoText={oracle.oracleDescriptionShort}
                     infoTitle={`${oracle.oracleName}<br/>${oracle.oracleSpecialty}`}
+                    hasAccess={hasAccess()}
                 />
             </div>
         </div>
