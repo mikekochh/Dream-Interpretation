@@ -33,6 +33,10 @@ export async function POST(req) {
             return NextResponse.json({message: "User not found!"}, { status: 404 })
         }
 
+
+        // send the email once the interpretation is complete. Then, the email will say, your interpretation is complete
+        // please verify your email address using the link below to see your interpretation
+
         // at this point, we want to get their dreamID, and wait for the interpretation to be ready.
         // once the interpretation is ready, we will then send the email out
         const dream = await Dream.findById({ _id: dreamID });
@@ -45,25 +49,23 @@ export async function POST(req) {
 
         try {
             const interpretation = await checkForInterpretation(dreamID, timeoutDuration);
-            console.log("the interpretation: ", interpretation);
+            // console.log("the interpretation: ", interpretation);
 
             // send email
             const fromAddress = process.env.EMAIL_FROM_ADDRESS;
             const domain = process.env.DOMAIN;
-            const interpretationText = interpretation.interpretation;
+            // const interpretationText = interpretation.interpretation;
             const verificationLink = `${domain}/activate?verificationTokenID=${verificationTokenID}`;
             const mailOptions = { 
                 from: `Dream Oracles <${fromAddress}>`,
                 to: email,
-                subject: "Your First Interpretation!",
+                subject: "Your Interpretation is Ready!",
                 html: `
                     <h1>Hi ${data.name}!</h1>
-                    <p>First of all, welcome to Dream Oracles! We are very happy to have you hear and are excited for you to read your interpretation.</p>
-                    <p>Below is your interpretation. To continue using our application you must verify your email address by clicking the link at the bottom of this page.</p>
-                    <p>If you did not request this email, you can safely ignore it.</p>
-                    <p>Here is your dream interpretation: </p>
-                    <p>${interpretationText}</p>
+                    <p>First of all, thank you for using Dream Oracles! To view your dream interpretation, please verify your email address by clicking the link below:</p>
                     <p><a href="${verificationLink}">${verificationLink}</a></p>
+                    <p>Once verified, you will be redirected to your dream interpretation.</p>
+                    <p>If you did not request this email, you can safely ignore it.</p>
                     <p>Thank you,<br/>
                     The Dream Oracles Team</p>
                 `

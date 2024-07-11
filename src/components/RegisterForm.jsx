@@ -83,19 +83,20 @@ export default function RegisterForm() {
 
                 
                 setSentEmailVerification(true);
-                await new Promise(resolve => setTimeout(resolve, 4000));
+                // await new Promise(resolve => setTimeout(resolve, 4000));
 
-                const resSignIn = await signIn("credentials", {
-                    email: emailLower,
-                    password,
-                    redirect: false
-                });
-    
                 if (!dreamID) {
-                    router.push('/interpret');
-                } else {
-                    router.push(`dreamDetails?dreamID=${dreamID}`);
+                    const resSignIn = await signIn("credentials", {
+                        email: emailLower,
+                        password,
+                        redirect: false
+                    });
                 }
+                // if (!dreamID) {
+                //     router.push('/interpret');
+                // } else {
+                //     router.push(`dreamDetails?dreamID=${dreamID}`);
+                // }
             }
         } catch (error) {
             setError("User registration failed!");
@@ -158,7 +159,7 @@ export default function RegisterForm() {
             </div>
             {sentEmailVerification && (
                 <PopUpMessage
-                    message="We have sent you a verification email. You will need to verify your email to continue using our website. Redirecting you to your interpretation now..."
+                    message="A verification email has been sent to you. Please verify your email address to view your dream interpretation. Thank you!"
                 />
             )}
         </div>
@@ -167,8 +168,8 @@ export default function RegisterForm() {
 
 const PopUpMessage = ({ message }) => {
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 text-white text-center p-4">
-            <div className="bg-gray-800 p-6 rounded-lg golden-ratio-2">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 text-white text-center p-4 backdrop-blur z-50">
+            <div className="bg-gray-800 p-6 rounded-lg">
                 <p>{message}</p>
             </div>
         </div>

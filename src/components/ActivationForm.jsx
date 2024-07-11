@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import { signIn } from "next-auth/react";
 
 export default function ActivationForm() { 
 
@@ -20,9 +21,19 @@ export default function ActivationForm() {
             const res = await axios.post('api/activate', { verificationTokenID });
 
             setUserName(res.data.activatedUser.name);
-            setUserEmail(res.data.activatedUser.email)
-
-            router.push('/settings');
+            setUserEmail(res.data.activatedUser.email);
+            const dreamID = localStorage.getItem('dreamID');
+            if (dreamID) {
+                router.push('/dreamDetails?dreamID=' + dreamID);
+                const resSignIn = await signIn("credentials", {
+                    email: res.data.activatedUser.email,
+                    password: 'password',
+                    redirect: false
+                });
+            }
+            else {
+                router.push('/settings');
+            }
         } catch (error) {
             setStatus("Error Activating User");
             setError(true);
