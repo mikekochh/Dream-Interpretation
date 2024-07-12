@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import Link from 'next/link';
+import PurchaseButton from '../PurchaseButton';
 
 const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream }) => {
 
@@ -59,15 +60,38 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                 {dreamStreak && dreamStreak.streakLength > 0 && (
                     <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
                 )}
-                <div className="button-container">
-                    <button
-                        className={`start-button golden-ratio-1 ${!user?.activated ? 'disabled-button' : ''}`}
-                        onClick={user?.activated ? incrementDreamStep : null}
-                        disabled={!user?.activated}
-                    >
-                        Journal New Dream
-                    </button>
-                </div>
+                {user?.activated ? (
+                    <div>
+                        {user?.subscribed ? (
+                            <div className="button-container">
+                                <button className='start-button golden-ratio-1' onClick={incrementDreamStep}>
+                                    Journal New Dream
+                                </button>
+                            </div>
+                        ) : (
+                            <div>
+                                <div className="flex justify-center mt-4">
+                                    <PurchaseButton buttonText={"Start Now"} user={user} />
+                                </div>
+                                <p className="golden-ratio-2 mt-4">Start your subscription to continue using Dream Oracles and unlock all the features we offer.</p>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div>
+                        <div className="button-container">
+                            <button className='start-button golden-ratio-1 disabled-button' onClick={null} disabled={true}>
+                                Journal New Dream
+                            </button>
+                        </div>
+                        <div className="text-center text-gold golden-ratio-1 mt-5">
+                            <p className="font-bold">
+                                Please activate your account to continue. Check your email for the activation link.
+                            </p>
+                            <Link href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</Link>
+                        </div>
+                    </div>
+                )}
                 <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter">
                     <p className='golden-ratio-2'>Your Most Recent Dream Entry</p>
                     <p className='golden-ratio-1'>{mostRecentDream.dream}</p>
@@ -90,15 +114,6 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                         )}
                     </div>
                 </div>
-                {!user?.activated && (
-                    <div className="text-center text-gold golden-ratio-1 mt-5">
-                        <p className="font-bold">
-                            Please activate your account to continue. Check your email for the activation link.
-                        </p>
-                        <Link href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</Link>
-                    </div>
-
-                )}
             </div>
             <div className="image-container-mandela text-center">
                 <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
