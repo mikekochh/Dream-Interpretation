@@ -57,8 +57,10 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
             <div className="content-wrapper">
                 <p className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
                 <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
-                {dreamStreak && dreamStreak.streakLength > 0 && (
+                {dreamStreak && dreamStreak.streakLength > 0 ? (
                     <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
+                ) : (
+                    <p className='text-center golden-ratio-1'>Journal a Dream to Start your Dream Streak</p>
                 )}
                 {user?.activated ? (
                     <div>
