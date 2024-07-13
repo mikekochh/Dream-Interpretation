@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import validator from 'validator';
 import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
 import axios from "axios";
+import Image from "next/image";
 
 export default function RegisterForm() {
 
@@ -14,8 +15,6 @@ export default function RegisterForm() {
     const [error, setError] = useState("");
     const [registeringUser, setRegisteringUser] = useState(false);
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
-
-    const router = useRouter();
 
     const register = async (e) => {
         e.preventDefault();
@@ -71,8 +70,6 @@ export default function RegisterForm() {
             if (resNewUser.ok) {
                 gtagCreateAccount();
     
-                // create a whole new api endpoint, and this one gets used if the user has a dreamID
-
                 if (dreamID) {
                     console.log("We have gotten here!");
                     await axios.post('api/sendFirstInterpretationEmail', { email: emailLower, dreamID })
@@ -80,10 +77,8 @@ export default function RegisterForm() {
                 else {
                     await axios.post('api/sendVerificationEmail', { email: emailLower });
                 }
-
                 
                 setSentEmailVerification(true);
-                // await new Promise(resolve => setTimeout(resolve, 4000));
 
                 if (!dreamID) {
                     const resSignIn = await signIn("credentials", {
@@ -92,11 +87,6 @@ export default function RegisterForm() {
                         redirect: false
                     });
                 }
-                // if (!dreamID) {
-                //     router.push('/interpret');
-                // } else {
-                //     router.push(`dreamDetails?dreamID=${dreamID}`);
-                // }
             }
         } catch (error) {
             setError("User registration failed!");
@@ -135,7 +125,6 @@ export default function RegisterForm() {
                         className="LoginInput golden-ratio-1 rounded-lg text-black"
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    {/* <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} /> */}
                     {registeringUser ? (
                         <div className="bg-blue-500 text-white w-fit py-1 px-3 rounded-md mt-2 golden-ratio-1 text-center">
                             Registering user...
@@ -152,6 +141,17 @@ export default function RegisterForm() {
                             {error}
                         </div>
                     )}
+                    <div className="flex justify-center">
+                        <button
+                            onClick={() => signIn('google')}
+                            className="flex items-center bg-white rounded-lg py-1 text-black font-bold text-center w-full"
+                        >
+                            <div className="flex items-center justify-center w-full">
+                                <Image src="/GoogleLogo.webp" className="rounded-lg mr-2" width={32} height={32} alt="logo" />
+                                Sign up with Google
+                            </div>
+                        </button>
+                    </div>
                     <Link href={'/login'} className="mt-3 text-right golden-ratio-1">
                         Already have an account? <span className="underline">Log In</span>
                     </Link>
