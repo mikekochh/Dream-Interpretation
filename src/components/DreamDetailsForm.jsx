@@ -215,18 +215,18 @@ export default function DreamsForm() {
 
                 setDreamDetails(dreamDetailsRes.data.dreamDetails);
                 setOracles(oraclesRes.data);
-                setLoadingInterpretations(false); // Set to false after interpretations are fetched
+                setLoadingInterpretations(false);
 
                 if (!notesRes.data.dreamNotes.length) {
-                    setLoadingNotes(false); // Set to false if no notes to load
+                    setLoadingNotes(false);
                 } else {
                     setNotes(notesRes.data.dreamNotes[0].note);
-                    setLoadingNotes(false); // Set to false after notes are fetched
+                    setLoadingNotes(false);
                 }
                 setDream(dreamRes.data);
             } catch (error) {
                 console.error("Error fetching dream details:", error);
-                setLoadingInterpretations(false); // Ensure to set these to false in case of error
+                setLoadingInterpretations(false);
                 setLoadingNotes(false);
             }
         };
