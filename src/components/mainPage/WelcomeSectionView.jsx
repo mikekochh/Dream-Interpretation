@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import axios from 'axios';
 import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
 
-const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream }) => {
+const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream, mostRecentDream }) => {
 
     const isMobile = window.innerWidth < 768;
 
@@ -19,6 +18,7 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep
                     skipToDreamStep={skipToDreamStep} 
                     setDream={setDream}
                     isMobile={isMobile}
+                    mostRecentDream={mostRecentDream}
                 />
             ) : (
                 <WelcomePageSection incrementDreamStep={incrementDreamStep} isMobile={isMobile} />
@@ -27,25 +27,7 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep
     );
 }
 
-const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile }) => {
-
-    const [mostRecentDream, setMostRecentDream] = useState({});
-
-    useEffect(() => {
-        const getMostRecentDream = async () => {
-            try {
-                const mostRecentDream = await axios.get("/api/dream/mostRecent/" + user._id);
-                setMostRecentDream(mostRecentDream.data.dream);
-            }
-            catch (error) {
-                console.log("No most recent dream found: ", error);
-            }
-        }
-
-        if (user._id) {
-            getMostRecentDream();
-        }
-    }, [user])
+const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile, mostRecentDream }) => {
 
     const interpretRecentDream = () => {
         setDream(mostRecentDream.dream);
@@ -72,10 +54,10 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                             </div>
                         ) : (
                             <div>
+                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer.</p>
                                 <div className="flex justify-center mt-4">
                                     <PurchaseButton buttonText={"Start Now"} user={user} />
                                 </div>
-                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer.</p>
                             </div>
                         )}
                     </div>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
+import LoadingComponent from './LoadingComponent';
 
 export default function SuccessSubscriptionForm() { 
 
@@ -22,7 +23,7 @@ export default function SuccessSubscriptionForm() {
                     setIsVerified(true);
                     if (res.status === 200) {
                         setTimeout(() => {
-                            window.location.href = "/interpret";
+                            window.location.href = "/settings";
                         }, 1500);
                     }
                 } catch (error) {
@@ -53,15 +54,19 @@ export default function SuccessSubscriptionForm() {
     
 
     return (
-        <div className="main-content text-white text-center text-3xl pb-1">
+        <div className="main-content text-white text-center golden-ratio-3 pb-1">
             {error ? (
                 <div>
                     <p className="text-red-500 pt-10">Error: {error}</p>
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-10" onClick={() => window.location.href = "/interpret"}>Return Home</button>
                 </div>
-                
             ) : (
-                <p>Congratulations! You are now subscribed to Dream Oracles services! Redirecting to home screen...</p>
+                <div className="space-y-3 w-3/4 mx-auto">
+                    <p>Congratulations! You are now subscribed to Dream Oracles!</p>
+                    <p className="golden-ratio-2">Redirecting you to profile page to update profile details</p>
+                    <LoadingComponent loadingText={"Redirecting"} altScreen={true} />
+                </div>
+                
             )}
         </div>
     )

@@ -15,13 +15,10 @@ const OracleSection = ({ oracle, handleSelectionChange, selectOracle, user }) =>
     
     const hasAccess = () => user?.subscribed || oracle.oracleID === 1;
 
-    
     const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''} ${!hasAccess() ? 'filter grayscale blur-sm' : ''}`;
 
-    
     const parentClasses = `relative max-w-sm ${!hasAccess() ? 'cursor-not-allowed' : ''} hidden md:block`;
 
-    
     const handleClick = () => {
         if (hasAccess()) {
             handleSelectionChange(oracle.selected, oracle.oracleID);

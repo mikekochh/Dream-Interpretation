@@ -65,6 +65,8 @@ export default function RegisterForm() {
             if (dreamID) {
                 await axios.post('api/dream/newUser', { userID, dreamID });
             }
+
+            await axios.post('/api/dream/streak/newStreak', { userID });
     
             if (resNewUser.ok) {
                 gtagCreateAccount();
@@ -115,7 +117,7 @@ export default function RegisterForm() {
         <div className='text-white'>
             <div className="p-5 rounded-lg border-t-4 border-white-400 border">
                 <h1 className="golden-ratio-2 font-bold my-4">Create Account</h1>
-                <form className="flex flex-col gap-3" onSubmit={(e) => {e.preventDefault(); register();}}>
+                <form className="flex flex-col gap-3" onSubmit={(e) => {register(e)}}>
                     <input
                         type="text"
                         placeholder="Name"

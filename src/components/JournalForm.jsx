@@ -19,8 +19,9 @@ const JournalForm = () => {
     const [oracleSelected, setOracleSelected] = useState(false);
     const [dream, setDream] = useState("");
     const [justJournal, setJustJournal] = useState(false);
-    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0]);
+    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
+    const [mostRecentDream, setMostRecentDream] = useState({});
 
     const [loading, setLoading] = useState(true);
     const [loadingSession, setLoadingSession] = useState(true);
@@ -28,6 +29,7 @@ const JournalForm = () => {
     const [loadingEmotions, setLoadingEmotions] = useState(true);
     const [loadingDreamStreak, setLoadingDreamStreak] = useState(true);
     const [loadingUser, setLoadingUser] = useState(true);
+    const [loadingMostRecentDream, setLoadingMostRecentDream] = useState(true);
 
     const [progressBarClass, setProgressBarClass] = useState('progress-bar-width-mobile');
     const [dreamPublic, setDreamPublic] = useState(false);
@@ -41,26 +43,26 @@ const JournalForm = () => {
     const localCreditsGiven = useRef(false);
     const scrollContainerRef = useRef(null);
 
+    // if google sign up is true, send users to a new page
+
     useEffect(() => {
-        const handleGoogleSignUp = async () => {
-            const dreamID = localStorage.getItem('dreamID');
-            let googleSignUp = localStorage.getItem('googleSignUp');
-            googleSignUp = (googleSignUp === 'true');
-            if (dreamID && googleSignUp) {
-                localStorage.setItem('googleSignUp', false);
-                const userID = user._id;
-                await axios.post('/api/user/sendWelcomeEmail', {
-                    email: user?.email,
-                    name: user?.name
-                })
-                await axios.post('api/dream/newUser', { userID, dreamID, googleSignUp: true });
-                await axios.post('/api/dream/streak/newStreak', { userID });
-                window.location.href = '/dreamDetails?dreamID=' + dreamID;
+        const getMostRecentDream = async () => {
+            try {
+                const mostRecentDream = await axios.get("/api/dream/mostRecent/" + user?._id);
+                setMostRecentDream(mostRecentDream.data.dream);
+                setLoadingMostRecentDream(false);
+            }
+            catch (error) {
+                console.log("No most recent dream found: ", error);
+                setLoadingMostRecentDream(false);
             }
         }
 
         if (user?._id) {
-            handleGoogleSignUp();
+            getMostRecentDream();
+        }
+        else {
+            setLoadingMostRecentDream(false);
         }
     }, [user])
 
@@ -94,17 +96,17 @@ const JournalForm = () => {
                 } catch (err) {
                     console.log('err:', err);
                 } finally {
-                    setLoadingUser(false); // Set to false after user data is fetched
+                    setLoadingUser(false);
                 }
             } else {
-                setLoadingUser(false); // Set to false if no session is available
+                setLoadingUser(false);
             }
         };
 
         if (session) {
             setUserData();
         } else {
-            setLoadingUser(false); // Set to false if no session is available
+            setLoadingUser(false);
         }
     }, [session]);
 
@@ -115,6 +117,16 @@ const JournalForm = () => {
     }, [oracles]);
 
     useEffect(() => {
+
+        const checkGoogleSignUp = () => {
+            const dreamID = localStorage.getItem('dreamID');
+            let googleSignUp = localStorage.getItem('googleSignUp');
+            googleSignUp = (googleSignUp === 'true');
+            if (dreamID && googleSignUp) {
+                window.location.href = '/dreamDetails?dreamID=' + dreamID;
+            }
+        }
+
         const getEmotions = async () => {
             try {
                 const res = await axios.get('api/emotions/getEmotions');
@@ -137,6 +149,7 @@ const JournalForm = () => {
             }
         };
 
+        checkGoogleSignUp();
         getOracles();
         getEmotions();
     }, [])
@@ -153,22 +166,23 @@ const JournalForm = () => {
     }, []);
 
     useEffect(() => {
+
         if (!loadingUser &&
             !loadingOracles &&
             !loadingEmotions &&
             !loadingSession &&
-            !loadingDreamStreak
+            !loadingDreamStreak &&
+            !loadingMostRecentDream
         ) {
             setLoading(false);
         }
-    }, [loadingUser, loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak]);
+    }, [loadingUser, loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak, loadingMostRecentDream]);
 
     useEffect(() => {
         const getUserDreamStreak = async () => {
             setLoadingDreamStreak(true);
             try {
                 const res = await axios.get(`/api/dream/streak`, { params: { userID: user._id } });
-                console.log("res dream streak: ", res);
                 setDreamStreak(res.data.dreamStreak[0]);
             } catch (error) {
                 console.log("Error fetching user dream streak: ", error);
@@ -283,9 +297,7 @@ const JournalForm = () => {
             if (oracles[i].selected) {
                 try {
                     const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dream}`;
-                    const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt } });
-                    // const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt, dreamID, oracleID: oracles[i].oracleID } });
-                    const resUpdateDatabase = await axios.post('/api/dream/interpret', { dreamID, interpretation: resInterpret.data[0].message.content, oracleID: oracles[i].oracleID, user });
+                    await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt, dreamID, oracleID: oracles[i].oracleID } });
                     setInterpretationProgressArray(prevArray => {
                         const updatedArray = [...prevArray];
                         updatedArray[i] = 100;
@@ -387,6 +399,7 @@ const JournalForm = () => {
                         oracleSelected={oracleSelected}
                         setDreamStep={setDreamStep}
                         skipToDreamStep={skipToDreamStep}
+                        mostRecentDream={mostRecentDream}
                     />
                 )}
             </div>
