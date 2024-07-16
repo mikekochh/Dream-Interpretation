@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import validator from 'validator';
-import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import Image from "next/image";
@@ -71,7 +70,6 @@ export default function RegisterForm() {
                 gtagCreateAccount();
     
                 if (dreamID) {
-                    console.log("We have gotten here!");
                     await axios.post('api/sendFirstInterpretationEmail', { email: emailLower, dreamID })
                 }
                 else {
@@ -108,11 +106,16 @@ export default function RegisterForm() {
         }
     }
 
+    const signUpWithGoogle = () => {
+        localStorage.setItem("googleSignUp", true);
+        signIn('google');
+    }
+
     return (
         <div className='text-white'>
             <div className="p-5 rounded-lg border-t-4 border-white-400 border">
                 <h1 className="golden-ratio-2 font-bold my-4">Create Account</h1>
-                <form className="flex flex-col gap-3" onSubmit={register}>
+                <form className="flex flex-col gap-3" onSubmit={(e) => {e.preventDefault(); register();}}>
                     <input
                         type="text"
                         placeholder="Name"
@@ -131,7 +134,7 @@ export default function RegisterForm() {
                         </div>
                     ) : (
                         <div className="flex justify-center">
-                            <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full">
+                            <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full" type="submit">
                                 Register
                             </button>
                         </div>
@@ -141,9 +144,13 @@ export default function RegisterForm() {
                             {error}
                         </div>
                     )}
+                    <div className="flex justify-center my-2">
+                        <span className="text-white">Or</span>
+                    </div>
                     <div className="flex justify-center">
                         <button
-                            onClick={() => signIn('google')}
+                            type="button"
+                            onClick={() => signUpWithGoogle()}
                             className="flex items-center bg-white rounded-lg py-1 text-black font-bold text-center w-full"
                         >
                             <div className="flex items-center justify-center w-full">
@@ -164,6 +171,7 @@ export default function RegisterForm() {
             )}
         </div>
     );
+    
 }
 
 const PopUpMessage = ({ message }) => {

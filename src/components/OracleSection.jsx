@@ -1,21 +1,27 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'reactjs-popup/dist/index.css';
 import Image from 'next/image';
 import InfoPopup from './InfoPopup';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
-const OracleSection = ({ oracle, handleSelectionChange, user }) => {
-    // Helper function to determine if the user has access
+const OracleSection = ({ oracle, handleSelectionChange, selectOracle, user }) => {
+
+    useEffect(() => {
+        if (oracle.oracleID === 1 && !user?.subscribed) {
+            selectOracle(oracle.oracleID)
+        }
+    }, [])
+    
     const hasAccess = () => user?.subscribed || oracle.oracleID === 1;
 
-    // Determine the additional Tailwind CSS classes based on conditions for the image
+    
     const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''} ${!hasAccess() ? 'filter grayscale blur-sm' : ''}`;
 
-    // Determine the additional Tailwind CSS classes based on conditions for the parent div
+    
     const parentClasses = `relative max-w-sm ${!hasAccess() ? 'cursor-not-allowed' : ''} hidden md:block`;
 
-    // Conditionally handle the click event
+    
     const handleClick = () => {
         if (hasAccess()) {
             handleSelectionChange(oracle.selected, oracle.oracleID);

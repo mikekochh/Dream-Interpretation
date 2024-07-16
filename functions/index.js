@@ -18,12 +18,41 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
     cors(req, res, async () => {
-        const { dreamPrompt } = req.query;
+        const { dreamPrompt, dreamID, oracleID } = req.query;
 
         try {
+            await client.connect()
+            const db = client.db('dreamsite');
+            const interpretations = db.collection('interpretations');
+            const interpretationCounter = db.collection('interpretationcounters');
             logger.info('dreamPrompt: ', dreamPrompt);
             const dreamData = await interpretDream(dreamPrompt);
             logger.info('dreamData: ', dreamData);
+            logger.info("the interpretation: ", dreamData.data[0].message.content);
+
+            const newInterpretation = await interpretations.insertOne({
+                dreamID,
+                oracleID,
+                interpretation: dreamData.data[0].message.content,
+                interpretationDate: new Date()
+            })
+
+            logger.info("the new interpretation: ", newInterpretation);
+
+            if (!newInterpretation) {
+                throw new Error('Interpretation creation failed!');
+            }
+
+            await interpretationCounter.findOneAndUpdate({
+                _id: "65a58ab10d04881df7e5a2a7",
+            }, {
+                $inc: { counter: 1 }
+            })
+
+            if (!interpretationCounter) {
+                console.log('Interpretation counter update failed!');
+            }
+
             res.status(200).json(dreamData);
         } catch (error) {
             logger.error('Error: ', error);

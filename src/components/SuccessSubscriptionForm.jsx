@@ -61,7 +61,7 @@ export default function SuccessSubscriptionForm() {
                 </div>
                 
             ) : (
-                <p>Success! You are now subscribed to Dream Oracles services! Redirecting to home screen...</p>
+                <p>Congratulations! You are now subscribed to Dream Oracles services! Redirecting to home screen...</p>
             )}
         </div>
     )

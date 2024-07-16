@@ -75,7 +75,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                                 <div className="flex justify-center mt-4">
                                     <PurchaseButton buttonText={"Start Now"} user={user} />
                                 </div>
-                                <p className="golden-ratio-2 mt-4">Start your subscription to continue using Dream Oracles and unlock all the features we offer.</p>
+                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer.</p>
                             </div>
                         )}
                     </div>
@@ -111,7 +111,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                                 onClick={interpretRecentDream}
                                 style={{ whiteSpace: 'nowrap' }}
                             >
-                                Interpret Dream
+                                Interpret This Dream
                             </button>
                         )}
                     </div>
@@ -140,9 +140,16 @@ const WelcomePageSection = ({ incrementDreamStep, isMobile }) => {
         <div className="title-container">
             <p className="text-center golden-ratio-2">Welcome to</p>
             <p ref={titleRef} className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
-            <p ref={descriptionRef} className="text-center golden-ratio-1 match-width">
-                Find out what your dreams are trying to tell you with our intelligent dream interpretation AI models. All you have to do is follow the steps below:
+            <p ref={descriptionRef} className="text-center golden-ratio-2 match-width">
+                Interpret your dreams using our intelligent dream interpretation AI models
             </p>
+            <div className="button-container">
+                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Interpret Your Dream</button>
+            </div>
+            <Link href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</Link>
+            <div>
+                <h1 className='golden-ratio-3 mt-10'>How Does It Work?</h1>
+            </div>
             {isMobile ? (
                 <div className="image-container flex flex-col">
                     <div className="step-section-mobile border-bottom mb-4">
@@ -187,7 +194,7 @@ const WelcomePageSection = ({ incrementDreamStep, isMobile }) => {
                 </div>
             )}
             <div className="button-container">
-                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Start Now!</button>
+                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Interpret Your Dream</button>
             </div>
             <Link href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</Link>
             <div className="image-container text-center mt-4">

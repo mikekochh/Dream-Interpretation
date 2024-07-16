@@ -30,7 +30,7 @@ const MoodSelectionPopup = () => {
     return (
         <div className="justify-center golden-ratio-3 text-center px-1">
             <div className="flex flex-col justify-center items-center">
-                <p className={`gradient-title-text ${isMobile ? 'golden-ratio-4' : 'golden-ratio-5'}`}>Mood Board</p>
+                <p className={`gradient-title-text ${isMobile ? 'golden-ratio-3' : 'golden-ratio-4'}`}>Mood Board</p>
             </div>
             <div className="inline-flex items-center">
                 <p className="golden-ratio-2 mb-7">What emotions did you experience during and after your dream? (optional)</p>

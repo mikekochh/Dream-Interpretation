@@ -6,7 +6,7 @@ import User from '../../../../../models/user';
 export async function POST(req) {
     try {
         // create user
-        const { userID, dreamID } = await req.json();
+        const { userID, dreamID, googleSignUp } = await req.json();
 
         await connectMongoDB();
 
@@ -16,9 +16,14 @@ export async function POST(req) {
             throw new Error("Dream not found!");
         }
 
+        const userUpdateData = { $inc: { dreamCount: 1 } };
+        if (googleSignUp) {
+            userUpdateData.$set = { activated: true };
+        }
+        
         const updatedUser = await User.findOneAndUpdate(
             { _id: userID },
-            { $inc: { dreamCount: 1 } },
+            userUpdateData,
             { new: true }
         );
         

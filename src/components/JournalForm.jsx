@@ -42,6 +42,29 @@ const JournalForm = () => {
     const scrollContainerRef = useRef(null);
 
     useEffect(() => {
+        const handleGoogleSignUp = async () => {
+            const dreamID = localStorage.getItem('dreamID');
+            let googleSignUp = localStorage.getItem('googleSignUp');
+            googleSignUp = (googleSignUp === 'true');
+            if (dreamID && googleSignUp) {
+                localStorage.setItem('googleSignUp', false);
+                const userID = user._id;
+                await axios.post('/api/user/sendWelcomeEmail', {
+                    email: user?.email,
+                    name: user?.name
+                })
+                await axios.post('api/dream/newUser', { userID, dreamID, googleSignUp: true });
+                await axios.post('/api/dream/streak/newStreak', { userID });
+                window.location.href = '/dreamDetails?dreamID=' + dreamID;
+            }
+        }
+
+        if (user?._id) {
+            handleGoogleSignUp();
+        }
+    }, [user])
+
+    useEffect(() => {
         setLoadingSession(status === 'loading');
     }, [status]);
 
@@ -171,6 +194,15 @@ const JournalForm = () => {
         });
     };
 
+    const selectOracle = (oracleID) => {
+        setOracles(prev => {
+            const updatedOracles = [...prev];
+            const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
+            updatedOracles[oracleIndex].selected = true;
+            return updatedOracles;
+        });
+    }
+
     const journalDream = async () => {
         if (!dream) {
             setError("Please enter a dream");
@@ -252,6 +284,7 @@ const JournalForm = () => {
                 try {
                     const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dream}`;
                     const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt } });
+                    // const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt, dreamID, oracleID: oracles[i].oracleID } });
                     const resUpdateDatabase = await axios.post('/api/dream/interpret', { dreamID, interpretation: resInterpret.data[0].message.content, oracleID: oracles[i].oracleID, user });
                     setInterpretationProgressArray(prevArray => {
                         const updatedArray = [...prevArray];
@@ -335,6 +368,7 @@ const JournalForm = () => {
                         dream={dream}
                         setDream={setDream}
                         handleSelectionChange={handleSelectionChange}
+                        selectOracle={selectOracle}
                         oracles={oracles}
                         journalDream={journalDream}
                         buttonText={buttonText}

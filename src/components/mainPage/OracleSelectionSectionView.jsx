@@ -8,6 +8,7 @@ const OracleSelectionSection = ({
     scrollContainerRef,
     oracles,
     handleSelectionChange,
+    selectOracle,
     scrollRight,
     journalDream,
     buttonText,
@@ -18,7 +19,7 @@ const OracleSelectionSection = ({
 
     return (
         <div id="interpretation-section" className="relative">
-            <OracleSelectionPopup credits={user?.credits} />
+            <OracleSelectionPopup user={user} />
             <div className="flex items-center justify-center relative">
                 <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +30,7 @@ const OracleSelectionSection = ({
                     {oracles.filter(oracle => oracle.active).map((oracle) => (
                         <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
                             <Suspense fallback={<div>Loading...</div>}>
-                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} user={user} />
+                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} selectOracle={selectOracle} user={user} />
                             </Suspense>
                         </div>
                     ))}
@@ -56,17 +57,20 @@ const OracleSelectionSection = ({
     )
 }
 
-const OracleSelectionPopup = ({ credits }) => {
+const OracleSelectionPopup = ({ user }) => {
 
     const isMobile = window.innerWidth < 768;
 
     return (
         <div className="justify-center golden-ratio-3 text-center px-1">
             <div className="flex flex-col justify-center items-center golden-ratio-2">
-                <p className={`gradient-title-text ${isMobile ? 'golden-ratio-4' : 'golden-ratio-5'}`}>Choose an Oracle</p>
+                <p className={`gradient-title-text ${isMobile ? 'golden-ratio-3' : 'golden-ratio-4'}`}>Choose an Oracle</p>
             </div>
-            <div className="inline-flex items-center">
-                <p className="golden-ratio-2 mb-3">Select a Dream Oracle, with each oracle being one of our intelligent AI interpretation models</p>
+            <div className="inline-flex items-center flex-col mb-3">
+                <p className="golden-ratio-2">Select a Dream Oracle, with each oracle being one of our intelligent AI interpretation models</p>
+                {!user && (
+                    <p className="golden-ratio-1 text-gold mt-1">Complete your first interpretation to unlock all oracles</p>
+                )}
             </div>
         </div>
     )

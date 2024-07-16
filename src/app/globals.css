@@ -783,7 +783,7 @@ h3.golden-ratio-2 {
   justify-content: center;
   width: 100%;
   padding: 10%;
-  padding-top: 5%;
+  padding-top: 2%;
   padding-bottom: 0%;
 }
 
@@ -867,6 +867,13 @@ h3.golden-ratio-2 {
 .backdrop-blur {
   backdrop-filter: blur(5px);
 }
+
+.overflow-container {
+  overflow-y: auto;
+  max-height: 100vh;
+  padding-top: 70px;
+}
+
 
 
 

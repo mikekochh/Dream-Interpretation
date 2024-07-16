@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import Interpretation from "../../../../../models/interpretation";
 import InterpretationCounter from '../../../../../models/interpretationCounter';
-import User from "../../../../../models/user";
 import Dream from '../../../../../models/dream';
 
 const isLocal = process.env.NODE_ENV === 'development';
@@ -11,7 +10,7 @@ export async function POST(req) {
     try {
         await connectMongoDB();
         // create user
-        const { dreamID, interpretation , oracleID, user } = await req.json();
+        const { dreamID, interpretation , oracleID } = await req.json();
 
         const interpretationDate = new Date();
 
@@ -25,10 +24,6 @@ export async function POST(req) {
             if (!updateDream) {
                 return NextResponse.json({message: "Dream update failed!"}, { status: 500 })
             }
-
-            // if (!user.subscribed) {
-            //     const dreamCreditsData = await reduceDreamCredits(user._id);
-            // }
 
             const newInterpretation = await Interpretation.create({
                 dreamID,
@@ -58,10 +53,4 @@ export async function POST(req) {
         console.log('error: ', error);
         return NextResponse.json({message: "User activation failed!"}, { status: 500 })
     }
-}
-
-async function reduceDreamCredits(_id) {
-    await connectMongoDB();
-    const newCredits = await User.updateOne({ _id }, { $inc: { credits: -1 } });
-    return newCredits;
 }

@@ -15,27 +15,31 @@ export async function POST(req) {
         // send email
         const fromAddress = process.env.EMAIL_FROM_ADDRESS;
         const domain = process.env.DOMAIN;
+        const subscriptionLink = "/purchaseSubscription";
         const mailOptions = { 
             from: `Dream Oracles <${fromAddress}>`,
             to: email,
             subject: "Welcome to Dream Oracles!",
             html: `
-            <h1>Hello ${name}!</h1>
-            <p>Welcome to Dream Oracles!! 😁</p>
-            <p>We are very happy that you are here and are excited to help you on your journey of understanding your dreams.</p>
-            <p>At Dream Oracles, we believe that dreams are a sacred and special phenomena within humans, and it is important to have tools and a community that is ready to explore your dreams with you.</p>
-            <p>Here's what you should expect from creating an account with Dream Oracles:</p>
-            <ol>
-                <li>Journaling technology to keep track of all of your dreams in an organized manner</li>
-                <li>Personalized dream interpretations using cutting-edge AI technology</li>
-                <li>An ever-growing community of fellow dreamers ready to help you on your journey of exploring the unconscious mind</li>
-            </ol>
-            <p>If you haven't already, make sure to pop on over to the <a href="${domain}/settings">profile page</a>, where you can add more details about yourself. These details are optional, but they can be helpful in making your interpretations more personalized and help us understand who you are better.</p>
-            <p>Either way, we want to thank you again for choosing Dream Oracles. Let's uncover the mystery of your dreams!</p>
-            <p>Thank you,<br/>
-            The Dream Oracles Team</p>
+                <h1>Hello ${name}!</h1>
+                <p>Welcome to Dream Oracles!! 😁</p>
+                <p>We are very happy that you are here and are excited to help you on your journey of understanding your dreams.</p>
+                <p>At Dream Oracles, we believe that dreams are a sacred and special phenomenon within humans, and it is important to have tools to properly explore your dreams.</p>
+                <p>To make the most of your experience, we invite you to <a href="${domain}${subscriptionLink}">start a subscription</a> and unlock all of the powerful features Dream Oracles has to offer:</p>
+                <ul>
+                    <li><strong>Unlimited Interpretations:</strong> Gain unlimited access to all of our dream interpretation AI models.</li>
+                    <li><strong>Intelligent Dream Oracles:</strong> Select from our ever-growing list of 5+ Dream Oracles, each offering a unique perspective on your dreams.</li>
+                    <li><strong>Intuitive Dream Journal:</strong> All of your dreams, interpretations, and notes securely stored in your personal dream journal.</li>
+                    <li><strong>Mood Recording:</strong> Capture the emotions you experienced during your dreams and incorporate them into the interpretation for deeper insights.</li>
+                    <li><strong>Incorporate Personality Details:</strong> Update your profile to include age, gender, cultural background, and spiritual views for more personalized interpretations.</li>
+                </ul>
+                <p><a href="${domain}${subscriptionLink}">Start your subscription today</a> to take full advantage of these features and truly explore the depths of your dreams with Dream Oracles!</p>
+                <p>Thank you,<br/>
+                The Dream Oracles Team</p>
             `
         };
+
+        // we hope you enjoyed your first interpretation
 
         const emailResult = await sgMail.send(mailOptions);
 

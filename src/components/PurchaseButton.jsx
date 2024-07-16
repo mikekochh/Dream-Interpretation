@@ -9,7 +9,7 @@ const PurchaseButton = ({ buttonText, user }) => {
         console.log("user: ", user);
         const res = await axios.post("/api/user/purchase", {
             userID: user._id,
-            paymentTypeID: 2,
+            paymentTypeID: 5,
             quantity: 1
         });
         if (res.status === 200) {

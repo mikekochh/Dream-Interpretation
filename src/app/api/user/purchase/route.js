@@ -114,7 +114,7 @@ export async function POST(req) {
                     success_url: process.env.DOMAIN + '/success/credits?session_id={CHECKOUT_SESSION_ID}',
                 });
             }
-            else if (paymentType.paymentTypeID === 2) {
+            else if (paymentType.paymentTypeID === 2 || paymentType.paymentTypeID === 5) {
                 session = await stripe.checkout.sessions.create({
                     payment_method_types: ['card'],
                     mode: paymentType.paymentTypeName,

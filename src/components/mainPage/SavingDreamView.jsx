@@ -18,9 +18,9 @@ export default function SavingDreamView({
     errorWhileJournaling
 }) {
     return (
-        <div className="flex justify-center main-content">
+        <div className="overflow-container">
             <div className="flex justify-center items-center flex-col">
-                <p className="text-center text-2xl">{saveMessage}</p>
+                <p className="text-center text-2xl golden-ratio-3">{saveMessage}</p>
                 <div className="flex justify-center pb-5">
                     {interpretingDream ? (
                         <InterpretingDreamView
@@ -33,11 +33,7 @@ export default function SavingDreamView({
                             {!user ? (
                                 <div>
                                     <div className="golden-ratio-2 text-center font-bold text-gold">
-                                        {oracleSelected ? (
-                                            <p>Create an account below to view your dream interpretation</p>
-                                        ) : (
-                                            <p>Create an account below to start a dream journal</p>
-                                        )}
+                                        <p>Create an account below to view your dream interpretation</p>
                                     </div>
                                 </div>
                             ) : (
