@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 import axios from "axios";
+import Image from "next/image";
 
 export default function LoginForm() {
 
@@ -112,38 +113,51 @@ export default function LoginForm() {
             <div className='text-white grid place-items-center h-screen z-0'>
                 <div className="p-5 rounded-lg border-t-4 border-white-400 border">
                     <h1 className="text-xl font-bold my-4">Enter Login Details</h1>
-                    <form className="flex flex-col gap-3" onSubmit={login}>
+                    <form className="flex flex-col gap-3" onSubmit={(e) => {e.preventDefault(); login();}}>
                         <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
-                        {/* <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} /> */}
-                        <div className="flex">
-                            { error && (
-                                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 mr-1">
-                                    {error}
+                        <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full" type="submit">Login</button>
+                        { error && (
+                            <div className="bg-red-500 text-white w-full text-sm py-1 px-3 rounded-md text-center">
+                                {error}
+                            </div>
+                        )}
+                        <div className="flex justify-center my-2">
+                            <span className="text-white">Or</span>
+                        </div>
+                        <div className="flex justify-center">
+                            <button
+                                type="button"
+                                onClick={() => signIn('google')}
+                                className="flex items-center bg-white rounded-lg py-1 text-black font-bold text-center w-full"
+                            >
+                                <div className="flex items-center justify-center w-full">
+                                    <Image src="/GoogleLogo.webp" className="rounded-lg mr-2" width={32} height={32} alt="logo" />
+                                    Sign in with Google
                                 </div>
-                            )}
+                            </button>
+                        </div>
+                        <div className="flex justify-between">
                             { sendVerifyEmail && (
-                                <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 ml-1">
+                                <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md">
                                     <button onClick={sendVerficationEmail} className="underline">
                                         Send Again?
                                     </button>
                                 </div>
                             )}
-                            { logginIn ? (
-                                <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                            { logginIn && (
+                                <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md">
                                     Loggin in...
                                 </div>
-                            ) : (
-                                <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full" onClick={login}>Login</button>
                             )}
                             { forgotPassword && (
-                                <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2 ml-1">
+                                <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md">
                                     <button onClick={sendForgotPassword} className="underline">
                                         Forgot Password?
                                     </button>
                                 </div>
                             )}
                         </div>
-                        <Link href={'/register'} className="text-sm mt-3 text-right">
+                        <Link href={'/register'} className="text-sm text-right">
                             Don&apos;t have an account? <span className="underline">Register</span>
                         </Link>
                     </form>
@@ -151,5 +165,5 @@ export default function LoginForm() {
                 <ContactAndPrivacyButtons />
             </div>
         </div>
-    )
+    )    
 }

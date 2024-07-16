@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-const InfoPopup = ({ icon, infoText, infoTitle }) => {
+const InfoPopup = ({ icon, infoText, infoTitle, hasAccess }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleToggle = () => setIsOpen(!isOpen);
@@ -28,6 +28,11 @@ const InfoPopup = ({ icon, infoText, infoTitle }) => {
                             dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(infoTitle) }}
                         ></div>
                         <div className="text-black">{infoText}</div>
+                        {!hasAccess && (
+                            <div className="text-black font-bold mt-4">
+                                Create an account to gain access to all Dream Oracles
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

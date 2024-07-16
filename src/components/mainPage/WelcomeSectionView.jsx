@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import axios from 'axios';
 import Link from 'next/link';
+import PurchaseButton from '../PurchaseButton';
 
-const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream }) => {
+const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream, mostRecentDream }) => {
 
     const isMobile = window.innerWidth < 768;
 
@@ -18,6 +18,7 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep
                     skipToDreamStep={skipToDreamStep} 
                     setDream={setDream}
                     isMobile={isMobile}
+                    mostRecentDream={mostRecentDream}
                 />
             ) : (
                 <WelcomePageSection incrementDreamStep={incrementDreamStep} isMobile={isMobile} />
@@ -26,25 +27,7 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep
     );
 }
 
-const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile }) => {
-
-    const [mostRecentDream, setMostRecentDream] = useState({});
-
-    useEffect(() => {
-        const getMostRecentDream = async () => {
-            try {
-                const mostRecentDream = await axios.get("/api/dream/mostRecent/" + user._id);
-                setMostRecentDream(mostRecentDream.data.dream);
-            }
-            catch (error) {
-                console.log("No most recent dream found: ", error);
-            }
-        }
-
-        if (user._id) {
-            getMostRecentDream();
-        }
-    }, [user])
+const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile, mostRecentDream }) => {
 
     const interpretRecentDream = () => {
         setDream(mostRecentDream.dream);
@@ -56,18 +39,43 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
             <div className="content-wrapper">
                 <p className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
                 <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
-                {dreamStreak && dreamStreak.streakLength > 0 && (
+                {dreamStreak && dreamStreak.streakLength > 0 ? (
                     <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
+                ) : (
+                    <p className='text-center golden-ratio-1'>Journal a Dream to Start your Dream Streak</p>
                 )}
-                <div className="button-container">
-                    <button
-                        className={`start-button golden-ratio-1 ${!user?.activated ? 'disabled-button' : ''}`}
-                        onClick={user?.activated ? incrementDreamStep : null}
-                        disabled={!user?.activated}
-                    >
-                        Journal New Dream
-                    </button>
-                </div>
+                {user?.activated ? (
+                    <div>
+                        {user?.subscribed ? (
+                            <div className="button-container">
+                                <button className='start-button golden-ratio-1' onClick={incrementDreamStep}>
+                                    Journal New Dream
+                                </button>
+                            </div>
+                        ) : (
+                            <div>
+                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer.</p>
+                                <div className="flex justify-center mt-4">
+                                    <PurchaseButton buttonText={"Start Now"} user={user} />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div>
+                        <div className="button-container">
+                            <button className='start-button golden-ratio-1 disabled-button' onClick={null} disabled={true}>
+                                Journal New Dream
+                            </button>
+                        </div>
+                        <div className="text-center text-gold golden-ratio-1 mt-5">
+                            <p className="font-bold">
+                                Please activate your account to continue. Check your email for the activation link.
+                            </p>
+                            <Link href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</Link>
+                        </div>
+                    </div>
+                )}
                 <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter">
                     <p className='golden-ratio-2'>Your Most Recent Dream Entry</p>
                     <p className='golden-ratio-1'>{mostRecentDream.dream}</p>
@@ -85,20 +93,11 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                                 onClick={interpretRecentDream}
                                 style={{ whiteSpace: 'nowrap' }}
                             >
-                                Interpret Dream
+                                Interpret This Dream
                             </button>
                         )}
                     </div>
                 </div>
-                {!user?.activated && (
-                    <div className="text-center text-gold golden-ratio-1 mt-5">
-                        <p className="font-bold">
-                            Please activate your account to continue. Check your email for the activation link.
-                        </p>
-                        <Link href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</Link>
-                    </div>
-
-                )}
             </div>
             <div className="image-container-mandela text-center">
                 <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
@@ -123,9 +122,16 @@ const WelcomePageSection = ({ incrementDreamStep, isMobile }) => {
         <div className="title-container">
             <p className="text-center golden-ratio-2">Welcome to</p>
             <p ref={titleRef} className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
-            <p ref={descriptionRef} className="text-center golden-ratio-1 match-width">
-                Find out what your dreams are trying to tell you with our intelligent dream interpretation AI models. All you have to do is follow the steps below:
+            <p ref={descriptionRef} className="text-center golden-ratio-2 match-width">
+                Interpret your dreams using our intelligent dream interpretation AI models
             </p>
+            <div className="button-container">
+                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Interpret Your Dream</button>
+            </div>
+            <Link href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</Link>
+            <div>
+                <h1 className='golden-ratio-3 mt-10'>How Does It Work?</h1>
+            </div>
             {isMobile ? (
                 <div className="image-container flex flex-col">
                     <div className="step-section-mobile border-bottom mb-4">
@@ -170,7 +176,7 @@ const WelcomePageSection = ({ incrementDreamStep, isMobile }) => {
                 </div>
             )}
             <div className="button-container">
-                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Start Now!</button>
+                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Interpret Your Dream</button>
             </div>
             <Link href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</Link>
             <div className="image-container text-center mt-4">

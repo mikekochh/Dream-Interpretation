@@ -12,7 +12,7 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: [true, "Please enter your password!"]
+        required: [false, "Please enter your password!"]
     },
     credits: {
         type: Number,

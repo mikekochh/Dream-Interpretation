@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import validator from 'validator';
-import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
 import axios from "axios";
+import Image from "next/image";
 
 export default function RegisterForm() {
 
@@ -14,8 +14,6 @@ export default function RegisterForm() {
     const [error, setError] = useState("");
     const [registeringUser, setRegisteringUser] = useState(false);
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
-
-    const router = useRouter();
 
     const register = async (e) => {
         e.preventDefault();
@@ -67,24 +65,27 @@ export default function RegisterForm() {
             if (dreamID) {
                 await axios.post('api/dream/newUser', { userID, dreamID });
             }
+
+            await axios.post('/api/dream/streak/newStreak', { userID });
     
             if (resNewUser.ok) {
                 gtagCreateAccount();
     
+                if (dreamID) {
+                    await axios.post('api/sendFirstInterpretationEmail', { email: emailLower, dreamID })
+                }
+                else {
+                    await axios.post('api/sendVerificationEmail', { email: emailLower });
+                }
+                
                 setSentEmailVerification(true);
-                await axios.post('api/sendVerificationEmail', { email: emailLower });
-                await new Promise(resolve => setTimeout(resolve, 4000));
 
-                const resSignIn = await signIn("credentials", {
-                    email: emailLower,
-                    password,
-                    redirect: false
-                });
-    
                 if (!dreamID) {
-                    router.push('/interpret');
-                } else {
-                    router.push(`dreamDetails?dreamID=${dreamID}`);
+                    const resSignIn = await signIn("credentials", {
+                        email: emailLower,
+                        password,
+                        redirect: false
+                    });
                 }
             }
         } catch (error) {
@@ -107,11 +108,16 @@ export default function RegisterForm() {
         }
     }
 
+    const signUpWithGoogle = () => {
+        localStorage.setItem("googleSignUp", true);
+        signIn('google');
+    }
+
     return (
         <div className='text-white'>
             <div className="p-5 rounded-lg border-t-4 border-white-400 border">
                 <h1 className="golden-ratio-2 font-bold my-4">Create Account</h1>
-                <form className="flex flex-col gap-3" onSubmit={register}>
+                <form className="flex flex-col gap-3" onSubmit={(e) => {register(e)}}>
                     <input
                         type="text"
                         placeholder="Name"
@@ -124,14 +130,13 @@ export default function RegisterForm() {
                         className="LoginInput golden-ratio-1 rounded-lg text-black"
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    {/* <input type="password" placeholder="Password" className="LoginInput rounded-lg text-black" onChange={(e) => setPassword(e.target.value)} /> */}
                     {registeringUser ? (
                         <div className="bg-blue-500 text-white w-fit py-1 px-3 rounded-md mt-2 golden-ratio-1 text-center">
                             Registering user...
                         </div>
                     ) : (
                         <div className="flex justify-center">
-                            <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full">
+                            <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full" type="submit">
                                 Register
                             </button>
                         </div>
@@ -141,6 +146,21 @@ export default function RegisterForm() {
                             {error}
                         </div>
                     )}
+                    <div className="flex justify-center my-2">
+                        <span className="text-white">Or</span>
+                    </div>
+                    <div className="flex justify-center">
+                        <button
+                            type="button"
+                            onClick={() => signUpWithGoogle()}
+                            className="flex items-center bg-white rounded-lg py-1 text-black font-bold text-center w-full"
+                        >
+                            <div className="flex items-center justify-center w-full">
+                                <Image src="/GoogleLogo.webp" className="rounded-lg mr-2" width={32} height={32} alt="logo" />
+                                Sign up with Google
+                            </div>
+                        </button>
+                    </div>
                     <Link href={'/login'} className="mt-3 text-right golden-ratio-1">
                         Already have an account? <span className="underline">Log In</span>
                     </Link>
@@ -148,17 +168,18 @@ export default function RegisterForm() {
             </div>
             {sentEmailVerification && (
                 <PopUpMessage
-                    message="We have sent you a verification email. You will need to verify your email to continue using our website. Redirecting you to your interpretation now..."
+                    message="A verification email has been sent to you. Please verify your email address to view your dream interpretation. Thank you!"
                 />
             )}
         </div>
     );
+    
 }
 
 const PopUpMessage = ({ message }) => {
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 text-white text-center p-4">
-            <div className="bg-gray-800 p-6 rounded-lg golden-ratio-2">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 text-white text-center p-4 backdrop-blur z-50">
+            <div className="bg-gray-800 p-6 rounded-lg">
                 <p>{message}</p>
             </div>
         </div>

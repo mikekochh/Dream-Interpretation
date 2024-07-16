@@ -1,36 +1,54 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'reactjs-popup/dist/index.css';
 import Image from 'next/image';
 import InfoPopup from './InfoPopup';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
-const OracleSection = ({ oracle, handleSelectionChange }) => {
+const OracleSection = ({ oracle, handleSelectionChange, selectOracle, user }) => {
+
+    useEffect(() => {
+        if (oracle.oracleID === 1 && !user?.subscribed) {
+            selectOracle(oracle.oracleID)
+        }
+    }, [])
     
+    const hasAccess = () => user?.subscribed || oracle.oracleID === 1;
+
+    const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''} ${!hasAccess() ? 'filter grayscale blur-sm' : ''}`;
+
+    const parentClasses = `relative max-w-sm ${!hasAccess() ? 'cursor-not-allowed' : ''} hidden md:block`;
+
+    const handleClick = () => {
+        if (hasAccess()) {
+            handleSelectionChange(oracle.selected, oracle.oracleID);
+        }
+    };
+
     return (
         <div className="text-center relative golden-ratio-1">
-            <div className="relative max-w-sm hidden md:block">
+            <div className={parentClasses}>
                 <Image 
                     layout="responsive"
                     width={50}
                     height={50}
                     src={oracle.oraclePicture} 
                     alt={oracle.oracleName} 
-                    className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-8 border-gold' : ''}`}
-                    onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
+                    className={imageClasses}
+                    onClick={handleClick} 
                     htmlFor={oracle.oracleID}
                     draggable={false}
                 />
             </div>
-            <div className="w-full relative max-w-sm md:hidden oracle-image-mobile">
+            <div className={`w-full relative max-w-sm md:hidden oracle-image-mobile ${!hasAccess() ? 'cursor-not-allowed' : ''}`}>
                 <Image 
                     layout="responsive"
                     width={50}
                     height={50}
                     src={oracle.oraclePicture} 
                     alt={oracle.oracleName} 
-                    className={`rounded-xl text-center cursor-pointer ${oracle.selected ? 'border-4 border-gold' : ''}`}
-                    onClick={() => handleSelectionChange(oracle.selected, oracle.oracleID)} 
+                    className={imageClasses}
+                    onClick={handleClick} 
                     htmlFor={oracle.oracleID}
                 />
             </div>
@@ -42,10 +60,11 @@ const OracleSection = ({ oracle, handleSelectionChange }) => {
                     icon={faQuestionCircle} 
                     infoText={oracle.oracleDescriptionShort}
                     infoTitle={`${oracle.oracleName}<br/>${oracle.oracleSpecialty}`}
+                    hasAccess={hasAccess()}
                 />
             </div>
         </div>
-    )
+    );
 }
 
 export default OracleSection;

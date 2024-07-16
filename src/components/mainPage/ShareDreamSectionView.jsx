@@ -3,7 +3,7 @@ import React from 'react';
 
 const ShareDreamSection = ({ setDream, dream, error, incrementDreamStep }) => {
     return (
-        <div>
+        <div className="main-content">
             <HowItWorksPopup />
             <div className="flex flex-col items-center">
                 <textarea
@@ -36,7 +36,7 @@ const HowItWorksPopup = () => {
     return (
         <div className="justify-center golden-ratio-3 text-center px-1">
             <div className="flex flex-col justify-center items-center golden-ratio-2">
-                <p className={`gradient-title-text ${isMobile ? 'golden-ratio-4' : 'golden-ratio-5'}`}>Share Your Dream</p>
+                <p className={`gradient-title-text ${isMobile ? 'golden-ratio-3' : 'golden-ratio-4'}`}>Share Your Dream</p>
             </div>
             <div className="inline-flex items-center">
                 <p className="golden-ratio-2 mb-3">Write down everything that you remember and try to include as many details as possible</p>
