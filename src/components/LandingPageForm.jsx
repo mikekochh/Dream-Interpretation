@@ -84,7 +84,7 @@ const LandingPageForm = ({ }) => {
                         <p className="text-gold golden-ratio-1">Please finish creating an account to start a membership</p>
                         {user?.email ? (
                             <div>
-                                <Link className="text-gold golden-ratio-1 underline" href="/sendEmailVerification">Didn't Receive Verification Email?</Link>
+                                <Link className="text-gold golden-ratio-1 underline" href="/sendEmailVerification">Didn`&apos;t Receive Verification Email?</Link>
                             </div>
                         ) : (
                             <div>
