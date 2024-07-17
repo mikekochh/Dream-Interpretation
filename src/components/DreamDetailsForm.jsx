@@ -76,7 +76,6 @@ export default function DreamsForm() {
 
     useEffect(() => {
         const handleGoogleSignUp = async () => {
-            console.log("handleGoogleSignUp is running...");
             const dreamID = localStorage.getItem('dreamID');
             let googleSignUp = localStorage.getItem('googleSignUp');
             googleSignUp = (googleSignUp === 'true');
