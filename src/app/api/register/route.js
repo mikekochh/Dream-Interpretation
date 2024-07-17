@@ -3,6 +3,8 @@ import { connectMongoDB } from '../../../../lib/mongodb';
 import User from '../../../../models/user';
 import bcrypt from 'bcryptjs';
 
+export const maxDuration = 30;
+
 export async function POST(req) {
 
     await connectMongoDB();
