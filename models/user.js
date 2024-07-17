@@ -53,6 +53,9 @@ const userSchema = new Schema({
     },
     age: {
         type: Number,
+    },
+    birthdate: {
+        type: Date
     }
 }, {timestamps: true});
 
