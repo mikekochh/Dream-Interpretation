@@ -692,7 +692,7 @@ const AddInterpretationSection = ({
                                 <div className="flex flex-col items-center text-center">
                                     <div className="flex items-center mt-2">
                                         <button
-                                        className={`py-2 px-4 rounded justify-center m-2 start-button items-center ${
+                                            className={`py-2 px-4 rounded justify-center m-2 start-button items-center ${
                                             interpretButtonActive && user?.activated ? '' : 'opacity-50 cursor-not-allowed'
                                         }`}
                                             onClick={interpretDream}
