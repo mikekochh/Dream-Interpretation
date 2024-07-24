@@ -918,5 +918,10 @@ h3.golden-ratio-2 {
   color: red;
 }
 
+.text-center .reduce-space {
+  margin-bottom: 0; /* Adjust the bottom margin */
+}
 
-
+.text-center .reduce-space + .reduce-space {
+  margin-top: 0; /* Adjust the top margin of the next element */
+}

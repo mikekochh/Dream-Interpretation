@@ -8,10 +8,12 @@ import axios from 'axios';
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { faT, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import OracleSection from './OracleSection';
+import InfoPopup from './InfoPopup';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 const EditProfileModal = ({ 
     isOpen, 
@@ -200,6 +202,7 @@ const SettingsForm = () => {
                         
                         return updatedOracles;
                     });
+                    setLoading(false);
                 })
                 .catch((err) => {
                     console.log('err: ', err);
@@ -390,8 +393,19 @@ const SettingsForm = () => {
                 <div>
                     <div className="golden-ratio-3 font-bold pl-4 pt-8 pb-4">Member Preferences</div>
                     <div className="md:w-11/12 md:mx-auto">
-                        <div className="text-center">Select Meta-Analysis Oracle</div>
-                        <div className="flex items-center justify-center relative">
+                        <div className="text-center">
+                            <p>Select Meta-Analysis Dream Oracle
+                                <span className="golden-ratio-1">
+                                    <InfoPopup 
+                                        icon={faQuestionCircle} 
+                                        infoText={"Unlock deeper insights into your subconscious with our Weekly Dream Meta-Analysis. This feature compiles and analyzes all the dreams you've journaled throughout the week, offering a comprehensive overivew of recurring themes, symbols, and emotions. Simply select your preferred Dream Oracle to conduct the meta-analysis, and receive a detailed interpretation that reveals patterns and hidden meanings in your dreamscapes."}
+                                        infoTitle={'Weekly Dream Meta-Analysis'}
+                                        hasAccess={true}
+                                    />
+                                </span>
+                            </p>
+                        </div>
+                        <div className="flex items-center justify-center relative pt-2">
                             <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
