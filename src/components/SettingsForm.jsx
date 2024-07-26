@@ -213,10 +213,10 @@ const SettingsForm = () => {
         }
     }, [session]);
 
-    useEffect(() => {
-        console.log("oracles: ", oracles);
-        console.log("metaAnalysisOracleID: ", metaAnalysisOracleID);
-    }, [oracles]);
+    // useEffect(() => {
+    //     console.log("oracles: ", oracles);
+    //     console.log("metaAnalysisOracleID: ", metaAnalysisOracleID);
+    // }, [oracles]);
 
     useEffect(() => {
         async function fetchGenders() {

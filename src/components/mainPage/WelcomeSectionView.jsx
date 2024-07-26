@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
+import axios from 'axios';
 
 const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream, mostRecentDream }) => {
 
@@ -32,6 +33,12 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
     const interpretRecentDream = () => {
         setDream(mostRecentDream.dream);
         skipToDreamStep(3);
+    }
+
+    const runMetaAnalysis = async () => {
+        console.log("running meta-analysis...");
+        const res = await axios.post('api/dream/metaAnalysis');
+        console.log("res: ", res);
     }
 
     return (
@@ -97,6 +104,9 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                             </button>
                         )}
                     </div>
+                </div>
+                <div className="z-10">
+                    <button onClick={runMetaAnalysis} className="start-button z-10">Meta-Analysis</button>
                 </div>
             </div>
             <div className="image-container-mandela text-center">
