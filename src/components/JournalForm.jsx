@@ -22,6 +22,7 @@ const JournalForm = () => {
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [mostRecentDream, setMostRecentDream] = useState({});
+    const [mostRecentDreamMetaAnalysis, setMostRecentDreamMetaAnalysis] = useState({});
 
     const [loading, setLoading] = useState(true);
     const [loadingSession, setLoadingSession] = useState(true);
@@ -55,6 +56,14 @@ const JournalForm = () => {
             catch (error) {
                 console.log("No most recent dream found: ", error);
                 setLoadingMostRecentDream(false);
+            }
+        }
+
+        const getMostRecentDreamMetaAnalysis = async () => {
+            try {
+                const mostRecentDreamMetaAnalysis = await axios.get("/api/dream/mostRecentMetaAnalysis/" + user?.id);
+                setMostRecentDreamMetaAnalysis(mostRecentDreamMetaAnalysis.data.dream);
+                
             }
         }
 

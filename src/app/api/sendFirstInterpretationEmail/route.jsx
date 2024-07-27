@@ -61,13 +61,41 @@ export async function POST(req) {
                 to: email,
                 subject: "Your Interpretation is Ready!",
                 html: `
-                    <h1>Hi ${data.name}!</h1>
-                    <p>First of all, thank you for using Dream Oracles! To view your dream interpretation, please verify your email address by clicking the link below:</p>
-                    <p><a href="${verificationLink}">${verificationLink}</a></p>
-                    <p>Once verified, you will be redirected to your dream interpretation.</p>
-                    <p>If you did not request this email, you can safely ignore it.</p>
-                    <p>Thank you,<br/>
-                    The Dream Oracles Team</p>
+                <html>
+                    <body>
+                        <div style="width: 100%; display: flex; justify-content: center; background-color: #f0f0f0; padding: 20px; box-sizing: border-box;">
+                            <table style="width: 100%; max-width: 500px; text-align: center; margin: auto; background-color: #ffffff; border-radius: 10px; color: #000000; box-sizing: border-box;">
+                                <tr>
+                                    <td style="background-color: #003366; padding: 0; color: #ffffff; font-size: 24px; max-height: 500px; position: relative;">
+                                        <a href="https://www.dreamoracles.co" style="display: block; text-decoration: none;">
+                                            <div style="position: absolute; top: 20px; left: 20px;">
+                                                <div style="display: flex; align-items: center;">
+                                                    <img src="https://www.dreamoracles.co/dream_icon.webp" alt="Dream Oracles Logo" style="max-width: 40px; height: 40px; border-radius: 25%; margin-right: 10px; margin-left: 10px; margin-top: 10px;">
+                                                    <span style="font-size: 18px; color: #ffffff !important; line-height: 55px;">Dream Oracles</span>
+                                                </div>
+                                            </div>
+                                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 40px; font-weight: bold; text-align: center; color: #ffffff;">
+                                                Verify Email
+                                            </div>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" style="text-align: center; color: #000000; padding: 20px;">
+                                        <h1 style="color: #000000;">Hi ${data.name}!</h1>
+                                        <p style="color: #000000;">First of all, thank you for using Dream Oracles! To view your dream interpretation, please verify your email address by clicking the link below:</p>
+                                        <p><a href="${verificationLink}" style="color: #0000FF;">${verificationLink}</a></p>
+                                        <p style="color: #000000;">Once verified, you will be redirected to your dream interpretation.</p>
+                                        <p style="color: #000000;">If you did not request this email, you can safely ignore it.</p>
+                                        <p style="color: #000000;">Thank you,<br/>
+                                        The Dream Oracles Team</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </body>
+                </html>
+
                 `
             };
 

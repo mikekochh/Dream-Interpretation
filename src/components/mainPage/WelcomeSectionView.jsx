@@ -41,6 +41,12 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
         console.log("res: ", res);
     }
 
+    const runVerificationEmail = async () => {
+        console.log("running verification email...");
+        const res = await axios.post('api/sendFirstInterpretationEmail');
+        console.log("res: ", res);
+    }
+
     return (
         <div className="title-container">
             <div className="content-wrapper">
@@ -83,30 +89,45 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                         </div>
                     </div>
                 )}
-                <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter">
-                    <p className='golden-ratio-2'>Your Most Recent Dream Entry</p>
-                    <p className='golden-ratio-1'>{mostRecentDream.dream}</p>
-                    <div className="flex justify-center">
-                        <Link 
-                            className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
-                            href={`/dreamDetails?dreamID=${mostRecentDream._id}`}
-                            style={{ whiteSpace: 'nowrap' }}
-                        >
-                            View Dream Board
-                        </Link>
-                        {!mostRecentDream.interpretation && (
-                            <button 
+                <div className="flex flex-col md:flex-row justify-center items-center w-full">
+                    <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter mx-2">
+                        <p className='golden-ratio-2'>Your Most Recent Dream Entry</p>
+                        <p className='golden-ratio-1'>{mostRecentDream.dream}</p>
+                        <div className="flex justify-center">
+                            <Link 
                                 className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
-                                onClick={interpretRecentDream}
+                                href={`/dreamDetails?dreamID=${mostRecentDream._id}`}
                                 style={{ whiteSpace: 'nowrap' }}
                             >
-                                Interpret This Dream
+                                View Dream Board
+                            </Link>
+                            {!mostRecentDream.interpretation && (
+                                <button 
+                                    className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                                    onClick={interpretRecentDream}
+                                    style={{ whiteSpace: 'nowrap' }}
+                                >
+                                    Interpret This Dream
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter mx-2">
+                        <p className='golden-ratio-2'>Your Most Recent Meta Analysis</p>
+                        <p className='golden-ratio-1'>This is some filler text for your most recent meta analysis. More details will be provided here.</p>
+                        <div className="flex justify-center">
+                            <button 
+                                className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                                style={{ whiteSpace: 'nowrap' }}
+                            >
+                                View Meta Analysis
                             </button>
-                        )}
+                        </div>
                     </div>
                 </div>
                 <div className="z-10">
                     <button onClick={runMetaAnalysis} className="start-button z-10">Meta-Analysis</button>
+                    <button onClick={runVerificationEmail} className="start-button z-10">Verification Email</button>
                 </div>
             </div>
             <div className="image-container-mandela text-center">
