@@ -5,7 +5,7 @@ import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
 import axios from 'axios';
 
-const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream, mostRecentDream }) => {
+const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream, mostRecentDream, mostRecentDreamMetaAnalysis }) => {
 
     const isMobile = window.innerWidth < 768;
 
@@ -20,6 +20,7 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep
                     setDream={setDream}
                     isMobile={isMobile}
                     mostRecentDream={mostRecentDream}
+                    mostRecentDreamMetaAnalysis={mostRecentDreamMetaAnalysis}
                 />
             ) : (
                 <WelcomePageSection incrementDreamStep={incrementDreamStep} isMobile={isMobile} />
@@ -28,7 +29,7 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep
     );
 }
 
-const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile, mostRecentDream }) => {
+const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile, mostRecentDream, mostRecentDreamMetaAnalysis }) => {
 
     const interpretRecentDream = () => {
         setDream(mostRecentDream.dream);
@@ -112,18 +113,20 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                             )}
                         </div>
                     </div>
-                    <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter mx-2">
-                        <p className='golden-ratio-2'>Your Most Recent Meta Analysis</p>
-                        <p className='golden-ratio-1'>This is some filler text for your most recent meta analysis. More details will be provided here.</p>
-                        <div className="flex justify-center">
-                            <button 
-                                className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
-                                style={{ whiteSpace: 'nowrap' }}
-                            >
-                                View Meta Analysis
-                            </button>
+                    {mostRecentDreamMetaAnalysis?.metaAnalysis && (
+                        <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter mx-2">
+                            <p className='golden-ratio-2'>Your Most Recent Meta Analysis</p>
+                            <p className='golden-ratio-1'>{mostRecentDreamMetaAnalysis.metaAnalysis}</p>
+                            <div className="flex justify-center">
+                                <button 
+                                    className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                                    style={{ whiteSpace: 'nowrap' }}
+                                >
+                                    View Meta Analysis
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 <div className="z-10">
                     <button onClick={runMetaAnalysis} className="start-button z-10">Meta-Analysis</button>

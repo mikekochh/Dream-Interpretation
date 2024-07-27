@@ -29,7 +29,8 @@ export default function JournalDreamView({
     decrementDreamStep,
     oracleSelected,
     skipToDreamStep,
-    mostRecentDream
+    mostRecentDream,
+    mostRecentDreamMetaAnalysis
 }) {
     return (
         <div className="flex justify-center items-center min-h-screen relative">
@@ -43,6 +44,7 @@ export default function JournalDreamView({
                         skipToDreamStep={skipToDreamStep}
                         setDream={setDream}
                         mostRecentDream={mostRecentDream}
+                        mostRecentDreamMetaAnalysis={mostRecentDreamMetaAnalysis}
                     />
                 </div>
             ) : dreamStep === 1 ? (
