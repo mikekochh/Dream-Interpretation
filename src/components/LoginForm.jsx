@@ -113,7 +113,7 @@ export default function LoginForm() {
             <div className='text-white grid place-items-center h-screen z-0'>
                 <div className="p-5 rounded-lg border-t-4 border-white-400 border">
                     <h1 className="text-xl font-bold my-4">Enter Login Details</h1>
-                    <form className="flex flex-col gap-3" onSubmit={(e) => {e.preventDefault(); login();}}>
+                    <form className="flex flex-col gap-3" onSubmit={(e) => {e.preventDefault(); login(e);}}>
                         <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />
                         <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full" type="submit">Login</button>
                         { error && (
