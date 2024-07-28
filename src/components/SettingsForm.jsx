@@ -119,7 +119,7 @@ const EditProfileModal = ({
 
 const SettingsForm = () => {
     const router = useRouter();
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
 
@@ -171,6 +171,10 @@ const SettingsForm = () => {
                 },
             });
             return res.json();
+        }
+
+        if (status === 'loading') {
+            return;
         }
 
         if (session) {
