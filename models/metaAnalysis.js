@@ -16,6 +16,10 @@ const metaAnalysisSchema = new Schema({
     metaAnalysisDate: {
         type: Date,
         required: [true, "Please enter a meta analysis date!"]
+    },
+    metaAnalysisSummary: {
+        type: String,
+        required: [true, "Please enter a meta analysis summary!"]
     }
 });
 

@@ -11,16 +11,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export async function POST(req) {
     try {
-
-        // first, we will get all of the emails who are subscribed
-        // then we will go through each email, find the oracle associated with that user
-        // take the oracles meta-analysis prompt and send all of the users dreams from the past week to chatGPT
-        // chatGPT will respond, we will save the meta-analysis in the database for them to view on home page
-        // and then we will send an email to the email address provided where they can view their weekly meta analysis
-
         const users = await User.find({ subscribed: true });
-
-        console.log("We have started the meta analysis");
 
         for (let i = 0; i < users.length; i++) {
             // if they have an email, and their is an oracle selected
@@ -48,9 +39,6 @@ export async function POST(req) {
                     "Do not introduce yourself, just get straight into the meta-analysis. At the end of the meta analysis, write a summary and overarching theme section, which is one section. Begin each paragraph with a title, and each title, and only the titles, should be listed like this:" + "\n" +
                     "**The Title**" + "\n" + "Do not bold anything else but the titles. Here are the dreams:" + "\n\n" + dreamsOfTheWeek.join("\n\n");
 
-
-                console.log("fullMetaAnalysisPrompt: ", fullMetaAnalysisPrompt);
-
                 const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
                 {
                     params: {
@@ -60,11 +48,7 @@ export async function POST(req) {
 
                 const metaAnalysis = resInterpret.data[0].message.content;
 
-                console.log("the metaAnalysis: ", metaAnalysis);
-
                 const formattedMetaAnalysisText = formatMetaAnalysisText(metaAnalysis);
-
-                // const formattedMetaAnalysisText = "testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing ";
 
                 const fromAddress = process.env.EMAIL_FROM_ADDRESS;
                 const domain = process.env.DOMAIN;
@@ -112,12 +96,15 @@ export async function POST(req) {
         
                 const emailResult = await sgMail.send(mailOptions);
 
+                const metaAnalysisSummary = metaAnalysis.trim().split('\n').pop();
+
                 const metaAnalysisEntry = await MetaAnalysis.create({
                     userID: user._id,
                     oracleID: oracle.oracleID,
-                    metaAnalysis: formattedMetaAnalysisText,
-                    metaAnalysisDate: new Date()
-                });
+                    metaAnalysis: metaAnalysis,
+                    metaAnalysisDate: new Date(),
+                    metaAnalysisSummary: metaAnalysisSummary
+                });                
 
                 if (!metaAnalysisEntry) {
                     throw new Error("Failed to save meta analysis to database");
