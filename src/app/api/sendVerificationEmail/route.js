@@ -29,6 +29,8 @@ export async function POST(req) {
             return NextResponse.json({message: "User not found!"}, { status: 404 })
         }
 
+        console.log("Adding this for stuff...");
+
         // send email
         const fromAddress = process.env.EMAIL_FROM_ADDRESS;
         const domain = process.env.DOMAIN;
