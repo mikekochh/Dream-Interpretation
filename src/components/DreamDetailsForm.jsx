@@ -49,6 +49,9 @@ export default function DreamsForm() {
 
     const [showFullInterpretation, setShowFullInterpretation] = useState({});
 
+    const scrollContainerRef = useRef(null);
+    const dreamRef = useRef(null);
+
     useEffect(() => {
         const setUserData = async () => {
             const email = session?.user?.email;
@@ -109,8 +112,6 @@ export default function DreamsForm() {
         getOracles();
         setIsMobile(window.innerWidth < 768);
     }, []);
-
-    const scrollContainerRef = useRef(null);
 
     useEffect(() => {
         const isAnyOracleSelected = oracles?.some(oracle => oracle.selected);
@@ -409,16 +410,20 @@ export default function DreamsForm() {
     }
 
     const endDreamUpdate = async () => {
-        try {
+        if (dreamRef.current) {
+            const newDream = dreamRef.current.innerText;
+            setDream(newDream);
             setEdittingDream(false);
-            await axios.post('api/dream/update', {
-                newDream: dream,
-                dreamID
-            });
-        } catch (err) {
-            console.log("There was an error updating the dream: ", err);
+            try {
+                await axios.post('api/dream/update', {
+                    newDream: newDream,
+                    dreamID
+                });
+            } catch (err) {
+                console.log("There was an error updating the dream: ", err);
+            }
         }
-    }
+    };
 
     const askQuestion = async (interpretationID, oracleID) => {
         setAskingQuestion(true);
@@ -481,16 +486,15 @@ export default function DreamsForm() {
                 <div className='p-2 mb-2 w-11/12'>
                     <h1 className="text-center golden-ratio-3 text-gold">The Dream</h1>
                     <div>
-                        <div 
-                            contentEditable={edittingDream} 
+                        <div
+                            ref={dreamRef}
+                            contentEditable={edittingDream}
                             suppressContentEditableWarning={true}
                             className={`cursor-pointer golden-ratio-2 text-gold ${edittingDream ? 'border-2 border-black rounded-lg p-2' : ''}`}
                             onClick={!edittingDream ? editDream : undefined}
-                            // onBlur={edittingDream ? (e) => setDreamTesting(e.target.innerText) : undefined}
                         >
                             {dream}
                         </div>
-
                         <div className={`flex flex-wrap gap-2 justify-center p-4 ${edittingDream ? 'pointer-events-none' : ''}`}>
                             {dreamEmotions.map((emotion) => (
                                 <div 
