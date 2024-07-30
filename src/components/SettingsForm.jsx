@@ -39,6 +39,10 @@ const EditProfileModal = ({
         setBirthdate(date);
     };
 
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date);
+    };
+
     return (
         <div className="modal-overlay">
             <div className="modal-content relative">
@@ -92,7 +96,7 @@ const EditProfileModal = ({
                     <div>
                         <label>Birthdate: </label>
                         <DatePicker
-                            selected={birthdate}
+                            selected={isValidDate(new Date(birthdate)) ? new Date(birthdate) : null}
                             onChange={handleDateChange}
                             dateFormat="MM/dd/yyyy"
                             placeholderText='MM/DD/YYYY'
@@ -141,7 +145,6 @@ const SettingsForm = () => {
     const [culturalBackground, setCulturalBackground] = useState('');
     const [spiritualPractices, setSpiritualPractices] = useState('');
     const [birthdate, setBirthdate] = useState(new Date());
-    const [metaAnalysisOracleID, setMetaAnalysisOracleID] = useState(0);
 
     const scrollContainerRef = useRef(null);
 
@@ -186,7 +189,6 @@ const SettingsForm = () => {
                     setDisplayCulturalBackground(userData.culturalBackground || '');
                     setDisplaySpiritualPractices(userData.spiritualPractices || '');
                     setDisplayBirthdate(new Date(userData.birthdate).toLocaleDateString() || '');
-                    setMetaAnalysisOracleID(userData.metaAnalysisOracleID || 0);
                     setSelectedOracleID(userData.metaAnalysisOracleID || 0);
 
                     setOracles(prevOracles => {
@@ -216,11 +218,6 @@ const SettingsForm = () => {
             setLoading(false);
         }
     }, [session]);
-
-    // useEffect(() => {
-    //     console.log("oracles: ", oracles);
-    //     console.log("metaAnalysisOracleID: ", metaAnalysisOracleID);
-    // }, [oracles]);
 
     useEffect(() => {
         async function fetchGenders() {
@@ -321,7 +318,6 @@ const SettingsForm = () => {
 
 
     const selectOracle = () => {
-        console.log("Hey");
     }
 
     const scrollLeft = () => {
@@ -336,6 +332,20 @@ const SettingsForm = () => {
         }
     };
 
+    const turnOffMetaAnalysis = async () => {
+        console.log("running turnOffMetaAnalysis...");
+        try {
+            const userID = user._id;
+            await axios.post('/api/user/updateMetaAnalysisOracleID', {
+                userID,
+                oracleID: 0
+            })
+            window.location.reload();
+        } catch (error) {
+            console.log("There was an error turning off meta-analysis: ", error);
+        }
+    }
+
     const updateMetaAnalysisOracle = async () => {
         try {
             const userID = user._id;
@@ -347,6 +357,10 @@ const SettingsForm = () => {
         } catch (error) {
             console.log("There was an error updating meta-analysis oracle: ", error);
         }
+    }
+
+    const onClose = () => {
+        setIsModalOpen(false)
     }
 
     if (loading) {
@@ -380,25 +394,55 @@ const SettingsForm = () => {
                     )}
                 </div>
                 <form className="pl-4 pt-8">
-                    <div className="golden-ratio-3 font-bold">Personal Details</div>
+                    <div className="golden-ratio-3 font-bold">
+                        Personal Details
+                    </div>
+                    {(!displayGender || !displayBirthdate || !displayCulturalBackground || !displaySpiritualPractices) && (
+                        <button
+                            className="golden-ratio-2"
+                            style={{
+                                color: 'red',
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                textDecoration: 'underline'
+                            }}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                openModal();
+                            }}
+                        >
+                            Missing Information
+                        </button>
+                    )}
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <p style={{ marginRight: '10px' }}>{displayGender}</p>
+                        {displayGender && (
+                            <p style={{ marginRight: '10px' }}>{displayGender}</p>
+                        )}
                     </div>
                     <div>
-                        <p style={{ marginRight: '10px' }}>Born on {displayBirthdate}</p>
+                        {displayBirthdate && !isNaN(new Date(displayBirthdate)) && (
+                            <p style={{ marginRight: '10px' }}>Born on {displayBirthdate}</p>
+                        )}
                     </div>
                     <div>
-                        <p>{displayCulturalBackground} Cultural Background</p>
+                        {displayCulturalBackground && (
+                            <p>{displayCulturalBackground} Cultural Background</p>
+                        )}
                     </div>
                     <div>
-                        <p>Religious/Spiritual Practices: {displaySpiritualPractices}</p>
+                        {displaySpiritualPractices && (
+                            <p>Religious/Spiritual Practices: {displaySpiritualPractices}</p>
+                        )}
                     </div>
                 </form>
                 <div>
-                    <div className="golden-ratio-3 font-bold pl-4 pt-8 pb-4">Member Preferences</div>
+                    <div className="pl-4 pb-4 pt-8">
+                        <div className="golden-ratio-3 font-bold">Member Preferences</div>
+                    </div>
                     <div className="md:w-11/12 md:mx-auto">
                         <div className="text-center">
-                            <p>Select Meta-Analysis Dream Oracle
+                            <div>Select Meta-Analysis Dream Oracle
                                 <span className="golden-ratio-1">
                                     <InfoPopup 
                                         icon={faQuestionCircle} 
@@ -407,7 +451,15 @@ const SettingsForm = () => {
                                         hasAccess={true}
                                     />
                                 </span>
-                            </p>
+                            </div>
+                            {selectedOracleID === 0 && (
+                            <div 
+                                className="golden-ratio-2 underline"
+                                style={{color: 'red'}}
+                            >
+                                Please Select Below
+                            </div>
+                            )}
                         </div>
                         <div className="flex items-center justify-center relative pt-2">
                             <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
@@ -436,6 +488,15 @@ const SettingsForm = () => {
                             >
                                 Update Meta-Analysis
                             </button>
+                            {selectedOracleID !== 0 && (
+                                <button
+                                    className='start-button-small golden-ratio-1'
+                                    onClick={turnOffMetaAnalysis}
+                                >
+                                    Turn Off Meta-Analysis
+                                </button>
+                            )}
+                            
                         </div>
                     </div>
                 </div>
@@ -451,7 +512,7 @@ const SettingsForm = () => {
 
             <EditProfileModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={onClose}
                 onSave={handleSubmit}
                 genders={genders}
                 selectedGenderID={selectedGenderID}

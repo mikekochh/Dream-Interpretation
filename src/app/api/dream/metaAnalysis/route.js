@@ -15,7 +15,9 @@ export async function POST(req) {
 
         for (let i = 0; i < users.length; i++) {
             // if they have an email, and their is an oracle selected
-            if (users[i].email && users[i].metaAnalysisOracleID) {
+            console.log("email: ", users[i].email);
+            console.log("meta analysis oracle: ", users[i].metaAnalysisOracleID);
+            if (users[i].email && users[i].metaAnalysisOracleID && users[i].metaAnalysisOracleID !== 0) {
                 const user = users[i];
                 const oracle = await Oracle.findOne({ oracleID: user.metaAnalysisOracleID });
 
