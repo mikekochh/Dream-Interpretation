@@ -73,17 +73,13 @@ export async function POST(req) {
                     </div>
                 </body>
             </html>
-
-
-                <p style="color: black;">Happy exploring!<br/>
-                The Dream Oracles Team</p>
             `
         };
         
 
-        const emailResult = await sgMail.send(mailOptions);
+        await sgMail.send(mailOptions);
 
-        const updatedUser = await User.findOneAndUpdate({ email }, { communityAccess: true }, { new: true });
+        await User.findOneAndUpdate({ email }, { communityAccess: true }, { new: true });
 
         return NextResponse.json({message: "Telegram email sent!"}, { status: 200 })
     } catch (error) {
