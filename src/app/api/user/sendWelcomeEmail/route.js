@@ -51,10 +51,10 @@ export async function POST(req) {
                                     <ul style="color: black; padding-left: 20px;">
                                         <li style="color: black; padding: 5px 0;"><strong>Unlimited Interpretations:</strong> Gain unlimited access to all of our dream interpretation AI models.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Intelligent Dream Oracles:</strong> Select from our ever-growing list of 5+ Dream Oracles, each offering a unique perspective on your dreams.</li>
+                                        <li style="color: black; padding: 5px 0;"><strong>Weekly Meta Analysis:</strong> Discover recurring themes and patterns in your dreams and decipher them with our advanced dream meta-analysis feature.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Intuitive Dream Journal:</strong> All of your dreams, interpretations, and notes securely stored in your personal dream journal.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Mood Recording:</strong> Capture the emotions you experienced during your dreams and incorporate them into the interpretation for deeper insights.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Incorporate Personality Details:</strong> Update your profile to include age, gender, cultural background, and spiritual views for more personalized interpretations.</li>
-                                        <li style="color: black; padding: 5px 0;"><strong>Meta Analysis:</strong> Discover recurring themes and patterns in your dreams with our advanced meta analysis feature.</li>
                                     </ul>
                                     <p style="color: black;"><a href="${domain}${subscriptionLink}" style="color: blue; text-decoration: underline;">Start your subscription today</a> to take full advantage of these features and truly explore the depths of your dreams with Dream Oracles!</p>
                                     <h1 style="color: #000000;">Thank you for choosing Dream Oracles!</h1>

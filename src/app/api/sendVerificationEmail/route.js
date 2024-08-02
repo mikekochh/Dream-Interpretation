@@ -60,7 +60,7 @@ export async function POST(req) {
                                 </td>
                             </tr>
                             <tr>
-                                <td valign="top" style="text-align: center; color: #000000; padding: 20px; overflow: auto;">
+                                <td valign="top" style="text-align: center; color: #000000; padding: 5%; overflow: auto;">
                                     <h1 style="color: #000000;">Hi ${data.name}!</h1>
                                     <h3 style="color: #000000; padding: 20px;">Please verify your email address ${email} using the link below. If you did not request this link, you can safely ignore this email.</h3>
                                     <h3 style="color: #000000;"><a href="${verificationLink}">Verify Email Here!</a></h3>

@@ -501,13 +501,15 @@ const SettingsForm = () => {
                     </div>
                 </div>
                 <div>
-                    <button onClick={logout} className="logout-button">Log Out</button>
-                    {/* {subscribed && <button onClick={subscription} className="dream-button">Cancel Subscription</button>} */}
+                    <div className="pl-4 pb-4 pt-8">
+                        <div className="golden-ratio-3 font-bold">Support & Policies</div>
+                        <ContactAndPrivacyButtons />
+                        <button className='golden-ratio-2 underline pl-1' onClick={logout}>Logout</button>
+                    </div>
                 </div>
                 <div className="image-container text-center">
                     <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
                 </div>
-                <ContactAndPrivacyButtons />
             </div>
 
             <EditProfileModal

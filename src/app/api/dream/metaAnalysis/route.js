@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { connectMongoDB } from '../../../../../lib/mongodb';
 import User from '../../../../../models/user';
 import Dream from '../../../../../models/dream';
 import Oracle from '../../../../../models/oracles';
@@ -15,8 +14,6 @@ export async function POST(req) {
 
         for (let i = 0; i < users.length; i++) {
             // if they have an email, and their is an oracle selected
-            console.log("email: ", users[i].email);
-            console.log("meta analysis oracle: ", users[i].metaAnalysisOracleID);
             if (users[i].email && users[i].metaAnalysisOracleID && users[i].metaAnalysisOracleID !== 0) {
                 const user = users[i];
                 const oracle = await Oracle.findOne({ oracleID: user.metaAnalysisOracleID });
@@ -79,7 +76,7 @@ export async function POST(req) {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td valign="top" style="text-align: center; color: #000000; padding: 20px;">
+                                        <td valign="top" style="text-align: left; color: #000000; padding: 5%;">
                                             <h1 style="color: #000000;">Good morning ${user.name},</h1>
                                             <h3 style="color: #000000;">Happy Sunday! Below is your weekly dream meta analysis from ${oracle.oracleName} on your dreams from the previous week. If you would like to update your dream meta analysis oracle, please visit your <a href="${domain}/settings" style="color: #0000FF;">profile</a>.</h3>
                                             <h3 style="color: #000000;">Otherwise, we hope you enjoy your meta analysis from ${oracle.oracleName} and hope you have a great week :)</h3>
@@ -96,7 +93,7 @@ export async function POST(req) {
                     `
                 };
         
-                const emailResult = await sgMail.send(mailOptions);
+                await sgMail.send(mailOptions);
 
                 const metaAnalysisSummary = metaAnalysis.trim().split('\n').pop();
 

@@ -64,9 +64,9 @@ export async function POST(req) {
                 <html>
                     <body>
                         <div style="width: 100%; display: flex; justify-content: center; background-color: #f0f0f0; padding: 20px; box-sizing: border-box;">
-                            <table style="width: 100%; max-width: 500px; text-align: center; margin: auto; background-color: #ffffff; border-radius: 10px; color: #000000; box-sizing: border-box;">
+                            <table style="width: 100%; text-align: center; margin: auto; background-color: #ffffff; border-radius: 10px; color: #000000; box-sizing: border-box; overflow: hidden;">
                                 <tr>
-                                    <td style="background-color: #003366; padding: 0; color: #ffffff; font-size: 24px; max-height: 500px; position: relative;">
+                                    <td style="background-color: #003366; padding: 0; color: #ffffff; font-size: 24px; max-height: 500px; position: relative; overflow: hidden;">
                                         <a href="https://www.dreamoracles.co" style="display: block; text-decoration: none;">
                                             <div style="position: absolute; top: 20px; left: 20px;">
                                                 <div style="display: flex; align-items: center;">
@@ -75,31 +75,29 @@ export async function POST(req) {
                                                 </div>
                                             </div>
                                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 40px; font-weight: bold; text-align: center; color: #ffffff;">
-                                                Verify Email
+                                                See Interpretation Below
                                             </div>
                                         </a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td valign="top" style="text-align: center; color: #000000; padding: 20px;">
+                                    <td valign="top" style="text-align: center; color: #000000; padding: 5%; overflow: auto;">
                                         <h1 style="color: #000000;">Hi ${data.name}!</h1>
-                                        <p style="color: #000000;">First of all, thank you for using Dream Oracles! To view your dream interpretation, please verify your email address by clicking the link below:</p>
-                                        <p><a href="${verificationLink}" style="color: #0000FF;">${verificationLink}</a></p>
-                                        <p style="color: #000000;">Once verified, you will be redirected to your dream interpretation.</p>
-                                        <p style="color: #000000;">If you did not request this email, you can safely ignore it.</p>
-                                        <p style="color: #000000;">Thank you,<br/>
-                                        The Dream Oracles Team</p>
+                                        <h3 style="color: #000000;">First of all, thank you for using Dream Oracles! To view your dream interpretation, please click the link below:</h3>
+                                        <h3><a href="${verificationLink}" style="color: #0000FF;">View Interpretation Here</a></h3>
+                                        <h3 style="color: #000000;">Once verified, you will be redirected to your dream interpretation.</h3>
+                                        <h3 style="color: #000000;">If you did not request this email, you can safely ignore it.</h3>
+                                        <h1 style="color: #000000;">Thank you for choosing Dream Oracles!</h1>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                     </body>
                 </html>
-
                 `
             };
 
-            const emailResult = await sgMail.send(mailOptions);
+            await sgMail.send(mailOptions);
 
             return NextResponse.json({message: "Verification Email Sent!"}, { status: 200 })
         } catch (error) {

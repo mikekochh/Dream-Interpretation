@@ -37,15 +37,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
     }
 
     const runMetaAnalysis = async () => {
-        console.log("running meta-analysis...");
         const res = await axios.post('api/dream/metaAnalysis');
-        console.log("res: ", res);
-    }
-
-    const runVerificationEmail = async () => {
-        console.log("running verification email...");
-        const res = await axios.post('api/sendFirstInterpretationEmail');
-        console.log("res: ", res);
     }
 
     function truncateText(text, maxLength = 300) {
@@ -75,7 +67,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                             </div>
                         ) : (
                             <div>
-                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer.</p>
+                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer</p>
                                 <div className="flex justify-center mt-4">
                                     <PurchaseButton buttonText={"Start Now"} user={user} />
                                 </div>
@@ -137,7 +129,6 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                 </div>
                 <div className="z-10">
                     <button onClick={runMetaAnalysis} className="start-button z-10">Meta-Analysis</button>
-                    <button onClick={runVerificationEmail} className="start-button z-10">Verification Email</button>
                 </div>
             </div>
             <div className="image-container-mandela text-center">
