@@ -3,8 +3,9 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
+import axios from 'axios';
 
-const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream, mostRecentDream }) => {
+const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream, mostRecentDream, mostRecentDreamMetaAnalysis }) => {
 
     const isMobile = window.innerWidth < 768;
 
@@ -19,6 +20,7 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep
                     setDream={setDream}
                     isMobile={isMobile}
                     mostRecentDream={mostRecentDream}
+                    mostRecentDreamMetaAnalysis={mostRecentDreamMetaAnalysis}
                 />
             ) : (
                 <WelcomePageSection incrementDreamStep={incrementDreamStep} isMobile={isMobile} />
@@ -27,12 +29,23 @@ const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep
     );
 }
 
-const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile, mostRecentDream }) => {
+const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile, mostRecentDream, mostRecentDreamMetaAnalysis }) => {
 
     const interpretRecentDream = () => {
         setDream(mostRecentDream.dream);
         skipToDreamStep(3);
     }
+
+    const runMetaAnalysis = async () => {
+        const res = await axios.post('api/dream/metaAnalysis');
+    }
+
+    function truncateText(text, maxLength = 300) {
+        if (text?.length > maxLength) {
+          return text.substring(0, maxLength) + '...';
+        }
+        return text;
+      }
 
     return (
         <div className="title-container">
@@ -54,7 +67,7 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                             </div>
                         ) : (
                             <div>
-                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer.</p>
+                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer</p>
                                 <div className="flex justify-center mt-4">
                                     <PurchaseButton buttonText={"Start Now"} user={user} />
                                 </div>
@@ -76,27 +89,46 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                         </div>
                     </div>
                 )}
-                <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter">
-                    <p className='golden-ratio-2'>Your Most Recent Dream Entry</p>
-                    <p className='golden-ratio-1'>{mostRecentDream.dream}</p>
-                    <div className="flex justify-center">
-                        <Link 
-                            className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
-                            href={`/dreamDetails?dreamID=${mostRecentDream._id}`}
-                            style={{ whiteSpace: 'nowrap' }}
-                        >
-                            View Dream Board
-                        </Link>
-                        {!mostRecentDream.interpretation && (
-                            <button 
+                <div className="flex flex-col md:flex-row justify-center items-center w-full">
+                    <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter mx-2">
+                        <p className='golden-ratio-2'>Your Most Recent Dream Entry</p>
+                        <p className='golden-ratio-1'>{truncateText(mostRecentDream.dream)}</p>
+                        <div className="flex justify-center">
+                            <Link 
                                 className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
-                                onClick={interpretRecentDream}
+                                href={`/dreamDetails?dreamID=${mostRecentDream._id}`}
                                 style={{ whiteSpace: 'nowrap' }}
                             >
-                                Interpret This Dream
-                            </button>
-                        )}
+                                View Dream Board
+                            </Link>
+                            {!mostRecentDream.interpretation && (
+                                <button 
+                                    className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                                    onClick={interpretRecentDream}
+                                    style={{ whiteSpace: 'nowrap' }}
+                                >
+                                    Interpret This Dream
+                                </button>
+                            )}
+                        </div>
                     </div>
+                    {mostRecentDreamMetaAnalysis?.metaAnalysis && (
+                        <div className="md:mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter mx-2">
+                            <p className='golden-ratio-2'>Your Most Recent Meta Analysis</p>
+                            <p className='golden-ratio-1'>{truncateText(mostRecentDreamMetaAnalysis.metaAnalysisSummary)}</p>
+                            <div className="flex justify-center">
+                                <button 
+                                    className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
+                                    style={{ whiteSpace: 'nowrap' }}
+                                >
+                                    View Meta Analysis
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className="z-10">
+                    <button onClick={runMetaAnalysis} className="start-button z-10">Meta-Analysis</button>
                 </div>
             </div>
             <div className="image-container-mandela text-center">

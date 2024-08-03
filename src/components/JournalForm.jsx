@@ -22,6 +22,7 @@ const JournalForm = () => {
     const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
     const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
     const [mostRecentDream, setMostRecentDream] = useState({});
+    const [mostRecentDreamMetaAnalysis, setMostRecentDreamMetaAnalysis] = useState({});
 
     const [loading, setLoading] = useState(true);
     const [loadingSession, setLoadingSession] = useState(true);
@@ -30,6 +31,7 @@ const JournalForm = () => {
     const [loadingDreamStreak, setLoadingDreamStreak] = useState(true);
     const [loadingUser, setLoadingUser] = useState(true);
     const [loadingMostRecentDream, setLoadingMostRecentDream] = useState(true);
+    const [loadingMostRecentDreamMetaAnalysis, setLoadingMostRecentDreamMetaAnalysis] = useState(true);
 
     const [progressBarClass, setProgressBarClass] = useState('progress-bar-width-mobile');
     const [dreamPublic, setDreamPublic] = useState(false);
@@ -58,11 +60,25 @@ const JournalForm = () => {
             }
         }
 
+        const getMostRecentDreamMetaAnalysis = async () => {
+            try {
+                const mostRecentDreamMetaAnalysis = await axios.get("/api/dream/mostRecentMetaAnalysis/" + user?._id);
+                setMostRecentDreamMetaAnalysis(mostRecentDreamMetaAnalysis.data.metaAnalysis);
+                setLoadingMostRecentDreamMetaAnalysis(false);
+            }
+            catch (error) {
+                console.log("No recent meta analysis found: ", error);
+                setLoadingMostRecentDreamMetaAnalysis(false);
+            }
+        }
+
         if (user?._id) {
             getMostRecentDream();
+            getMostRecentDreamMetaAnalysis();
         }
         else {
             setLoadingMostRecentDream(false);
+            setLoadingMostRecentDreamMetaAnalysis(false);
         }
     }, [user])
 
@@ -172,11 +188,12 @@ const JournalForm = () => {
             !loadingEmotions &&
             !loadingSession &&
             !loadingDreamStreak &&
-            !loadingMostRecentDream
+            !loadingMostRecentDream &&
+            !loadingMostRecentDreamMetaAnalysis
         ) {
             setLoading(false);
         }
-    }, [loadingUser, loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak, loadingMostRecentDream]);
+    }, [loadingUser, loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak, loadingMostRecentDream, loadingMostRecentDreamMetaAnalysis]);
 
     useEffect(() => {
         const getUserDreamStreak = async () => {
@@ -400,6 +417,7 @@ const JournalForm = () => {
                         setDreamStep={setDreamStep}
                         skipToDreamStep={skipToDreamStep}
                         mostRecentDream={mostRecentDream}
+                        mostRecentDreamMetaAnalysis={mostRecentDreamMetaAnalysis}
                     />
                 )}
             </div>

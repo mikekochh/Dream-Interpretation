@@ -5,7 +5,7 @@ import User from '../../../../../models/user';
 export async function POST(req) {
     try {
         // create user
-        const { genderID, culturalBackground, spiritualPractices, userID, age } = await req.json();
+        const { genderID, culturalBackground, spiritualPractices, userID, birthdate, name } = await req.json();
 
         await connectMongoDB();
 
@@ -13,7 +13,8 @@ export async function POST(req) {
         if (genderID) updateFields.genderID = genderID;
         if (culturalBackground) updateFields.culturalBackground = culturalBackground;
         if (spiritualPractices) updateFields.spiritualPractices = spiritualPractices;
-        if (age) updateFields.age = age;
+        if (birthdate) updateFields.birthdate = birthdate;
+        if (name) updateFields.name = name;
 
         const updatedUser = await User.findOneAndUpdate(
             { _id: userID },

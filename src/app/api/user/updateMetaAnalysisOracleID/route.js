@@ -7,6 +7,9 @@ export async function POST(req) {
         // create user
         const { oracleID, userID } = await req.json();
 
+        console.log("oracleID: ", oracleID);
+        console.log("userID: ", userID);
+
         await connectMongoDB();
 
         const newUser = await User.findOneAndUpdate({ _id: userID }, { $set: { metaAnalysisOracleID: oracleID } }, { new: true });

@@ -43,7 +43,7 @@ export default function DreamsForm() {
     const [interpretButtonActive, setInterpretButtonActive] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
-    const [toggleViewInterpretations, setToggleViewInterpretations] = useState(false);
+    const [toggleViewInterpretations, setToggleViewInterpretations] = useState(true);
     const [toggleAddInterpretations, setToggleAddInterpretations] = useState(false);
     const [toggleNotes, setToggleNotes] = useState(false);
 

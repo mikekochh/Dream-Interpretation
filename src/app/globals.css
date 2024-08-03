@@ -273,9 +273,22 @@ nav {
   background-color: #00FFFF;
 }
 
+.start-button-small {
+  color: black;
+  border-radius: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 5px;
+  --tw-bg-opacity: 1;
+  padding: 4px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #00FFFF;
+}
+
 .start-button {
   color: black;
-  border-radius: 7px; /* Increased border-radius for more rounded corners */
+  border-radius: 7px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 5px;
@@ -298,6 +311,11 @@ nav {
   background-color: #b3ffff; /* Greyed out version of #00FFFF */
   cursor: not-allowed;
   opacity: 0.6; /* Optional: to make it look more disabled */
+}
+
+.start-button-small:hover {
+  --tw-bg-opacity: 1;
+  background-color:  #00BBBB;
 }
 
 .start-button:hover {
@@ -874,6 +892,36 @@ h3.golden-ratio-2 {
   padding-top: 70px;
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
 
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  z-index: 1001;
+}
 
+.error-message {
+  color: red;
+}
 
+.text-center .reduce-space {
+  margin-bottom: 0; /* Adjust the bottom margin */
+}
+
+.text-center .reduce-space + .reduce-space {
+  margin-top: 0; /* Adjust the top margin of the next element */
+}

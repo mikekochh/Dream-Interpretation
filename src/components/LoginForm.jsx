@@ -4,7 +4,6 @@ import { useState } from "react";
 import validator from 'validator';
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import ContactAndPrivacyButtons from "./ContactAndPrivacyButtons";
 import axios from "axios";
 import Image from "next/image";
 
@@ -162,7 +161,6 @@ export default function LoginForm() {
                         </Link>
                     </form>
                 </div>
-                <ContactAndPrivacyButtons />
             </div>
         </div>
     )    
