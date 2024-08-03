@@ -111,7 +111,6 @@ exports.scheduledFunction = functions.pubsub.schedule('every day 00:00').onRun(a
 // New Scheduled function to run every Sunday at midnight
 exports.weeklyDreamMetaAnalysis = functions.pubsub.schedule('every sunday 00:00').onRun(async (context) => {
     logger.info('Weekly Dream Meta Analysis Function running');
-
     try {
         await client.connect();
         const db = client.db('dreamsite');
@@ -135,7 +134,16 @@ exports.weeklyDreamMetaAnalysis = functions.pubsub.schedule('every sunday 00:00'
                 const endOfWeek = new Date(startOfWeek);
                 endOfWeek.setDate(startOfWeek.getDate() + 7);
 
-                const userWeeklyDreams = await dreamsCollection.find({ userID: user._id, dreamDate: { $gte: startOfWeek, $lt: endOfWeek } }).toArray();
+                logger.info("Start Date Created: ", startOfWeek);
+                logger.info("End Date Created: ", endOfWeek);
+
+                const userWeeklyDreams = await dreamsCollection.find({ userID: user._id.toString(), dreamDate: { $gte: startOfWeek, $lt: endOfWeek } }).toArray();
+                
+                if (!userWeeklyDreams) {
+                    logger.error(`Failed to fetch dreams for user: ${user._id}`);
+                } else {
+                    logger.info(`Retrieved ${userWeeklyDreams.length} dreams for user: ${user._id}`);
+                }
 
                 let dreamsOfTheWeek = [];
 
@@ -146,6 +154,9 @@ exports.weeklyDreamMetaAnalysis = functions.pubsub.schedule('every sunday 00:00'
                 let fullMetaAnalysisPrompt = oracle.oracleMetaAnalysisPrompt + "\n" +
                     "Do not introduce yourself, just get straight into the meta-analysis. At the end of the meta analysis, write a summary and overarching theme section, which is one section. Begin each paragraph with a title, and each title, and only the titles, should be listed like this:" + "\n" +
                     "**The Title**" + "\n" + "Do not bold anything else but the titles. Here are the dreams:" + "\n\n" + dreamsOfTheWeek.join("\n\n");
+                
+
+                logger.info('This is the full meta analysis prompt being used: ', fullMetaAnalysisPrompt);
 
                 const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
                 {

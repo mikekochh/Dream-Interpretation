@@ -127,14 +127,23 @@ const checkForInterpretation = async (dreamID, timeoutDuration) => {
     );
 
     const check = async () => {
+        const timeout = 3 * 60 * 1000; // 3 minutes in milliseconds
+        const startTime = Date.now();
+    
         while (true) {
             const interpretation = await Interpretation.findOne({ dreamID });
-
+    
             if (interpretation) {
                 console.log('Interpretation found:', interpretation);
                 return interpretation;
             }
-
+    
+            // Check if the timeout period has been exceeded
+            if (Date.now() - startTime > timeout) {
+                console.log('Timeout: No interpretation found within 3 minutes.');
+                return null; // or handle the timeout case as needed
+            }
+    
             console.log('No interpretation found yet, checking again in 5 seconds...');
             await new Promise(resolve => setTimeout(resolve, 5000));
         }
