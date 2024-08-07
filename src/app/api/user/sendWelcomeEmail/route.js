@@ -47,6 +47,8 @@ export async function POST(req) {
                                     <p style="color: black;">Welcome to Dream Oracles!! 😁</p>
                                     <p style="color: black;">We are very happy that you are here and are excited to help you on your journey of understanding your dreams.</p>
                                     <p style="color: black;">At Dream Oracles, we believe that dreams are a sacred and special phenomenon within humans, and it is important to have tools to properly explore your dreams.</p>
+                                    <p style="color: black;">Join our vibrant Dream Oracles Discord community, where you can share your dreams, connect with fellow dream enthusiasts, and explore the fascinating world of dream interpretation together!</p>
+                                    <h3 style="color: black; text-align: center;"><a href="https://discord.gg/7QZYAJnE">Join Discord Community Here!</a></h3>
                                     <p style="color: black;">To make the most of your experience, we invite you to <a href="${domain}${subscriptionLink}" style="color: blue; text-decoration: underline;">start a subscription</a> and unlock all of the powerful features Dream Oracles has to offer:</p>
                                     <ul style="color: black; padding-left: 20px;">
                                         <li style="color: black; padding: 5px 0;"><strong>Unlimited Interpretations:</strong> Gain unlimited access to all of our dream interpretation AI models.</li>

@@ -128,16 +128,20 @@ exports.weeklyDreamMetaAnalysis = functions.pubsub.schedule('every sunday 00:00'
 
                 const today = new Date();
                 const dayOfWeek = today.getDay(); // Sunday - 0, Monday - 1, etc.
-                const startOfWeek = new Date(today);
-                startOfWeek.setDate(today.getDate() - dayOfWeek);
-                startOfWeek.setHours(0, 0, 0, 0);
-                const endOfWeek = new Date(startOfWeek);
-                endOfWeek.setDate(startOfWeek.getDate() + 7);
+                
+                // Calculate start of the previous week
+                const startOfPreviousWeek = new Date(today);
+                startOfPreviousWeek.setDate(today.getDate() - dayOfWeek - 7);
+                startOfPreviousWeek.setHours(0, 0, 0, 0);
+                
+                // Calculate end of the previous week
+                const endOfPreviousWeek = new Date(startOfPreviousWeek);
+                endOfPreviousWeek.setDate(startOfPreviousWeek.getDate() + 7);
 
-                logger.info("Start Date Created: ", startOfWeek);
-                logger.info("End Date Created: ", endOfWeek);
+                logger.info("Start Date Created: ", startOfPreviousWeek);
+                logger.info("End Date Created: ", endOfPreviousWeek);
 
-                const userWeeklyDreams = await dreamsCollection.find({ userID: user._id.toString(), dreamDate: { $gte: startOfWeek, $lt: endOfWeek } }).toArray();
+                const userWeeklyDreams = await dreamsCollection.find({ userID: user._id.toString(), dreamDate: { $gte: startOfPreviousWeek, $lt: endOfPreviousWeek } }).toArray();
                 
                 if (!userWeeklyDreams) {
                     logger.error(`Failed to fetch dreams for user: ${user._id}`);

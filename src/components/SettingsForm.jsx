@@ -14,6 +14,7 @@ import Image from 'next/image';
 import OracleSection from './OracleSection';
 import InfoPopup from './InfoPopup';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import PurchaseButton from './PurchaseButton';
 
 const EditProfileModal = ({ 
     isOpen, 
@@ -393,113 +394,122 @@ const SettingsForm = () => {
                         <p>0 Dream&apos;s Journaled</p>
                     )}
                 </div>
-                <form className="pl-4 pt-8">
-                    <div className="golden-ratio-3 font-bold">
-                        Personal Details
-                    </div>
-                    {(!displayGender || !displayBirthdate || !displayCulturalBackground || !displaySpiritualPractices) && (
-                        <button
-                            className="golden-ratio-2"
-                            style={{
-                                color: 'red',
-                                background: 'none',
-                                border: 'none',
-                                cursor: 'pointer',
-                                textDecoration: 'underline'
-                            }}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                openModal();
-                            }}
-                        >
-                            Missing Information
-                        </button>
-                    )}
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {displayGender && (
-                            <p style={{ marginRight: '10px' }}>{displayGender}</p>
-                        )}
-                    </div>
-                    <div>
-                        {displayBirthdate && !isNaN(new Date(displayBirthdate)) && (
-                            <p style={{ marginRight: '10px' }}>Born on {displayBirthdate}</p>
-                        )}
-                    </div>
-                    <div>
-                        {displayCulturalBackground && (
-                            <p>{displayCulturalBackground} Cultural Background</p>
-                        )}
-                    </div>
-                    <div>
-                        {displaySpiritualPractices && (
-                            <p>Religious/Spiritual Practices: {displaySpiritualPractices}</p>
-                        )}
-                    </div>
-                </form>
-                <div>
-                    <div className="pl-4 pb-4 pt-8">
-                        <div className="golden-ratio-3 font-bold">Member Preferences</div>
-                    </div>
-                    <div className="md:w-11/12 md:mx-auto">
-                        <div className="text-center">
-                            <div>Select Meta-Analysis Dream Oracle
-                                <span className="golden-ratio-1">
-                                    <InfoPopup 
-                                        icon={faQuestionCircle} 
-                                        infoText={"Unlock deeper insights into your subconscious with our Weekly Dream Meta-Analysis. This feature compiles and analyzes all the dreams you've journaled throughout the week, offering a comprehensive overivew of recurring themes, symbols, and emotions. Simply select your preferred Dream Oracle to conduct the meta-analysis, and receive a detailed interpretation that reveals patterns and hidden meanings in your dreamscapes."}
-                                        infoTitle={'Weekly Dream Meta-Analysis'}
-                                        hasAccess={true}
-                                    />
-                                </span>
+                {user.subscribed ? (
+                    <>
+                        <form className="pl-4 pt-8">
+                            <div className="golden-ratio-3 font-bold">
+                                Personal Details
                             </div>
-                            {selectedOracleID === 0 && (
-                            <div 
-                                className="golden-ratio-2 underline"
-                                style={{color: 'red'}}
-                            >
-                                Please Select Below
-                            </div>
-                            )}
-                        </div>
-                        <div className="flex items-center justify-center relative pt-2">
-                            <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </button>
-                            <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
-                                {oracles.filter(oracle => oracle.active).map((oracle) => (
-                                    <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
-                                        <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} selectOracle={selectOracle} user={user} />
-                                    </div>
-                                ))}
-                            </div>
-                            <button onClick={scrollRight} className="absolute right-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div className="text-center">
-                            <button 
-                                className={`start-button-small golden-ratio-1 ${selectedOracleID === user?.metaAnalysisOracleID ? 'opacity-50 cursor-not-allowed' : ''}`} 
-                                onClick={updateMetaAnalysisOracle}
-                                disabled={selectedOracleID === user?.metaAnalysisOracleID}
-                            >
-                                Update Meta-Analysis
-                            </button>
-                            {selectedOracleID !== 0 && (
+                            {(!displayGender || !displayBirthdate || !displayCulturalBackground || !displaySpiritualPractices) && (
                                 <button
-                                    className='start-button-small golden-ratio-1'
-                                    onClick={turnOffMetaAnalysis}
+                                    className="golden-ratio-2"
+                                    style={{
+                                        color: 'red',
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        textDecoration: 'underline'
+                                    }}
+                                    onClick={(event) => {
+                                        event.preventDefault();
+                                        openModal();
+                                    }}
                                 >
-                                    Turn Off Meta-Analysis
+                                    Missing Information
                                 </button>
                             )}
-                            
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                {displayGender && (
+                                    <p style={{ marginRight: '10px' }}>{displayGender}</p>
+                                )}
+                            </div>
+                            <div>
+                                {displayBirthdate && !isNaN(new Date(displayBirthdate)) && (
+                                    <p style={{ marginRight: '10px' }}>Born on {displayBirthdate}</p>
+                                )}
+                            </div>
+                            <div>
+                                {displayCulturalBackground && (
+                                    <p>{displayCulturalBackground} Cultural Background</p>
+                                )}
+                            </div>
+                            <div>
+                                {displaySpiritualPractices && (
+                                    <p>Religious/Spiritual Practices: {displaySpiritualPractices}</p>
+                                )}
+                            </div>
+                        </form>
+                        <div>
+                            <div className="pl-4 pb-4 pt-8">
+                                <div className="golden-ratio-3 font-bold">Member Preferences</div>
+                            </div>
+                            <div className="md:w-11/12 md:mx-auto">
+                                <div className="text-center">
+                                    <div>Select Meta-Analysis Dream Oracle
+                                        <span className="golden-ratio-1">
+                                            <InfoPopup 
+                                                icon={faQuestionCircle} 
+                                                infoText={"Unlock deeper insights into your subconscious with our Weekly Dream Meta-Analysis. This feature compiles and analyzes all the dreams you've journaled throughout the week, offering a comprehensive overview of recurring themes, symbols, and emotions. Simply select your preferred Dream Oracle to conduct the meta-analysis, and receive a detailed interpretation that reveals patterns and hidden meanings in your dreamscapes."}
+                                                infoTitle={'Weekly Dream Meta-Analysis'}
+                                                hasAccess={true}
+                                            />
+                                        </span>
+                                    </div>
+                                    {selectedOracleID === 0 && (
+                                    <div 
+                                        className="golden-ratio-2 underline"
+                                        style={{color: 'red'}}
+                                    >
+                                        Please Select Below
+                                    </div>
+                                    )}
+                                </div>
+                                <div className="flex items-center justify-center relative pt-2">
+                                    <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
+                                        {oracles.filter(oracle => oracle.active).map((oracle) => (
+                                            <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
+                                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} selectOracle={selectOracle} user={user} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button onClick={scrollRight} className="absolute right-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div className="text-center">
+                                    <button 
+                                        className={`start-button-small golden-ratio-1 ${selectedOracleID === user?.metaAnalysisOracleID ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                                        onClick={updateMetaAnalysisOracle}
+                                        disabled={selectedOracleID === user?.metaAnalysisOracleID}
+                                    >
+                                        Update Meta-Analysis
+                                    </button>
+                                    {selectedOracleID !== 0 && (
+                                        <button
+                                            className='start-button-small golden-ratio-1'
+                                            onClick={turnOffMetaAnalysis}
+                                        >
+                                            Turn Off Meta-Analysis
+                                        </button>
+                                    )}
+                                    
+                                </div>
+                            </div>
                         </div>
+                    </>
+                ) : (
+                    <div className="text-center golden-ratio-1 mt-8">
+                        <p className="golden-ratio-3 font-bold mb-3">Subscribe to enjoy all member features.</p>
+                        <PurchaseButton buttonText={"Start Now"} user={user}></PurchaseButton>
                     </div>
-                </div>
+                )}
                 <div>
                     <div className="pl-4 pb-4 pt-8">
                         <div className="golden-ratio-3 font-bold">Support & Policies</div>
