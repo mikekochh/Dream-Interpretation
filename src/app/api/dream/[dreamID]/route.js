@@ -9,10 +9,11 @@ export async function GET(req) {
         const dreamID = pathname.split('/').pop();
         await connectMongoDB();
         const dream = await Dream.findById(dreamID);
+        console.log("dream: ", dream);
         if (!dream) {
             return NextResponse.error(new Error('Dream not found!'));
         }
-        return NextResponse.json(dream.dream);
+        return NextResponse.json(dream);
     } catch (error) {
         console.log('error: ', error);
         return NextResponse.error(error);
