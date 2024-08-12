@@ -223,7 +223,6 @@ export default function DreamsForm() {
                     setNotes(notesRes.data.dreamNotes[0].note);
                     setLoadingNotes(false);
                 }
-                console.log("dreamRes: ", dreamRes);
                 setDream(dreamRes.data.dream);
             } catch (error) {
                 console.error("Error fetching dream details:", error);
