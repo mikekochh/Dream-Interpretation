@@ -53,6 +53,9 @@ const oracleSchema = new Schema({
         type: String,
         required: [true, "Please enter oracle question prompt!"]
     },
+    appActive: {
+        type: Boolean,
+    }
 });
 
 const Oracle = models.Oracle || mongoose.model("Oracle", oracleSchema);
