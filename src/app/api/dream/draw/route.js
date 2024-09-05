@@ -33,8 +33,6 @@ export async function POST(req) {
             }
         );
 
-        console.log("imageResponse: ", imageResponse);
-
         // Check if image generation was successful
         if (imageResponse.data && imageResponse.data.data && imageResponse.data.data.length > 0) {
             const imageURL = imageResponse.data.data[0].url;

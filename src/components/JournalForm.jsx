@@ -247,14 +247,30 @@ const JournalForm = () => {
             setNewDreamID(dreamID);
             localStorage.setItem("dreamID", dreamID);
             console.log("Drawing dream!");
-            const resDrawDream = await axios.post('/api/dream/draw', { dreamID: dreamID, dream: dream });
+            const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
+                { 
+                    dreamID: dreamID, 
+                    dream: dream 
+                }
+            );
             console.log('resDrawDream: ', resDrawDream);
+            const resDreamSymbols = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSymbols', 
+                { 
+                    params: { 
+                        dreamText: dream, 
+                        dreamID: dreamID, 
+                        userID: userID 
+                    } 
+                }
+            );
+            console.log('resDreamSymbols: ', resDreamSymbols);
             if (oracleSelected) {
                 interpretDreams(dreamID);
             } else {
                 setJustJournal(true);
             }
         } catch (error) {
+            console.log("the error: ", error);
             setError("Error Journaling Dream");
             setSaveMessage("Error Journaling Dream. Please Try Again Later");
             setErrorWhileJournaling(true);

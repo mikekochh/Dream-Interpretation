@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import EditDreamModal from './EditDreamModal';
 import OracleInterpretations from './OracleInterpretations';
 import AddNewInterpretationModal from './AddNewInterpretationModal';
+import SymbolCard from './SymbolCard';
 
 const LoadingComponent = lazy(() => import('../LoadingComponent'));
 
@@ -33,6 +34,8 @@ export default function DreamsForm() {
     const [dream, setDream] = useState(null);
     const [interpretations, setInterpretations] = useState(null);
     const [oracles, setOracles] = useState(null);
+    const [dreamSymbols, setDreamSymbols] = useState([]);
+    const [userDreamSymbols, setUserDreamSymbols] = useState([]);
 
     const [isDreamExpanded, setIsDreamExpanded] = useState(false);
 
@@ -145,8 +148,19 @@ export default function DreamsForm() {
             }
         };
 
+        const fetchUserDreamSymbols = async () => {
+            try {
+                const res = await axios.get(`/api/dream/userDreamSymbols?dreamID=${dreamID}`);
+                console.log("user dream symbols: ", res);
+                setUserDreamSymbols(res.data);
+            } catch (error) {
+                console.log("There was an error fetching the user dream symbols: ", error);
+            }
+        }
+
         if (dreamID) {
             fetchDreamEmotions();
+            fetchUserDreamSymbols();
         }
     }, [dreamID]);
 
@@ -219,7 +233,7 @@ export default function DreamsForm() {
 
     return (
         <div className="main-content">
-            <div className="flex flex-col mb-10 text-white md:w-4/12 mx-auto p-2">
+            <div className="flex flex-col mb-10 text-white md:w-6/12 mx-auto p-2">
                 <p className='golden-ratio-1 mb-0 text-gold'>Interpretations</p>
                 <div className="flex flex-row">
                     {interpretations.map((interpretation) => {
@@ -240,21 +254,37 @@ export default function DreamsForm() {
                         <p className="mt-2 text-sm text-gold">Add New</p>
                     </div>
                 </div>
-                <div className="relative">
-                    {dream.imageURL ? (
-                        <Image 
-                            src={dream.imageURL} 
-                            alt="the dream image" 
-                            className="w-full h-full rounded-lg"
-                            width={100}
-                            height={100}
-                            unoptimized={true}
-                        />
-                    ) : (
-                        <div className="w-full h-48 flex items-center justify-center border-2 border-dashed rounded-lg">
-                            <span className="text-gray-500">+ Add Picture</span>
+                <div className="relative flex flex-col md:flex-row">
+                    <div className="w-full md:w-2/3 h-full md:h-auto">
+                        {dream.imageURL ? (
+                            <Image 
+                                src={dream.imageURL} 
+                                alt="the dream image" 
+                                className="w-full h-full rounded-lg"
+                                width={500} // Adjust to your preferred fixed width
+                                height={500} // Adjust to your preferred fixed height
+                                unoptimized={true}
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center border-2 border-dashed rounded-lg">
+                                <span className="text-gray-500">+ Add Picture</span>
+                            </div>
+                        )}
+                    </div>
+                    <div className="w-full md:w-1/3 md:pl-4 mt-4 md:mt-0 mb-4">
+                        <h3 className="text-xl font-bold text-white">Dream Themes</h3>
+                        <div className="flex flex-wrap gap-4 mt-4">
+                            {userDreamSymbols && userDreamSymbols.length > 0 ? (
+                                userDreamSymbols.map((symbol, index) => (
+                                    <SymbolCard key={index} symbol={symbol} />
+                                ))
+                            ) : (
+                                <div className="p-4 bg-gradient-to-r from-gray-700 to-gray-900 rounded-lg shadow-lg text-white text-center">
+                                    No symbols found
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
                 <div>
                     <p className='golden-ratio-2 px-1'>{isDreamExpanded ? dream.dream : sliceDream(dream.dream)}</p>
