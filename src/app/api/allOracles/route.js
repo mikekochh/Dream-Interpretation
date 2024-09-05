@@ -5,7 +5,10 @@ import Oracle from '../../../../models/oracles';
 export async function GET(req) {
     try {
         await connectMongoDB();
-        const oracles = await Oracle.find();
+        
+        // Find oracles where the "active" field is true
+        const oracles = await Oracle.find({ active: true });
+        
         return NextResponse.json(oracles);
     } catch (error) {
         console.log('error: ', error);

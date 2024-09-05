@@ -12,7 +12,7 @@ const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, increment
                         onClick={() => handleEmotionClick(emotion.emotionID)}
                         className={`px-4 py-2 rounded-lg transition text-black ${selectedEmotions?.includes(emotion.emotionID) ? 'border-4 border-gold bg-gray-400 hover:bg-gray-200' : 'bg-gray-200 hover:bg-gray-400'}`}
                     >
-                        {emotion.emotionName}
+                        {emotion.emotionName} {emotion.emotionEmoji}
                     </button>
                 ))}
             </div>

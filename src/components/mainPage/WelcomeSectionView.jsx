@@ -127,9 +127,6 @@ const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToD
                         </div>
                     )}
                 </div>
-                <div className="z-10">
-                    <button onClick={runMetaAnalysis} className="start-button z-10">Meta-Analysis</button>
-                </div>
             </div>
             <div className="image-container-mandela text-center">
                 <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />

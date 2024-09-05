@@ -30,6 +30,9 @@ const dreamSchema = new Schema({
         type: Boolean,
         default: false,
         required: [true, "Is dream publicly available?"]
+    },
+    imageURL: {
+        type: String
     }
 });
 

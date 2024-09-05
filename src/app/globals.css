@@ -925,3 +925,12 @@ h3.golden-ratio-2 {
 .text-center .reduce-space + .reduce-space {
   margin-top: 0; /* Adjust the top margin of the next element */
 }
+
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}

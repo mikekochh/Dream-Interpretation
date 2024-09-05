@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectMongoDB } from "../../../../../lib/mongodb";
 import Dream from "../../../../../models/dream";
-
+import Interpretation from "../../../../../models/interpretation";
 
 export async function GET(req) {
     try {
@@ -9,11 +9,12 @@ export async function GET(req) {
         const dreamID = pathname.split('/').pop();
         await connectMongoDB();
         const dream = await Dream.findById(dreamID);
-        console.log("dream: ", dream);
         if (!dream) {
             return NextResponse.error(new Error('Dream not found!'));
         }
-        return NextResponse.json(dream);
+
+        const interpretations = await Interpretation.find({ dreamID });
+        return NextResponse.json({ dream, interpretations });
     } catch (error) {
         console.log('error: ', error);
         return NextResponse.error(error);

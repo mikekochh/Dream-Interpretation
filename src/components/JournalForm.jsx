@@ -246,6 +246,9 @@ const JournalForm = () => {
             const dreamID = resJournal.data._id;
             setNewDreamID(dreamID);
             localStorage.setItem("dreamID", dreamID);
+            console.log("Drawing dream!");
+            const resDrawDream = await axios.post('/api/dream/draw', { dreamID: dreamID, dream: dream });
+            console.log('resDrawDream: ', resDrawDream);
             if (oracleSelected) {
                 interpretDreams(dreamID);
             } else {
