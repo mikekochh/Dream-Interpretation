@@ -203,10 +203,6 @@ export default function DreamsForm() {
         );
     };
 
-    const openAddNewInterpretationModal = () => {
-        console.log("opening add new interpretation modal")
-    }
-
     const handleSaveDream = (updatedDreamText) => {
         setDream((prev) => ({...prev, dream: updatedDreamText}));
     }
@@ -245,7 +241,7 @@ export default function DreamsForm() {
                     </div>
                 </div>
                 <div className="relative">
-                    {false ? (
+                    {dream.imageURL ? (
                         <Image 
                             src={dream.imageURL} 
                             alt="the dream image" 

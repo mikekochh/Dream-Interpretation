@@ -3,6 +3,28 @@ import Image from 'next/image';
 const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose }) => {
   if (!isOpen) return null; // Don't render the modal if it's not open
 
+  console.log("the interpretation: ", interpretation);
+
+  function cleanHTML(interpretation) {
+    // Remove everything before the first '<' and after the last '>'
+    const start = interpretation.indexOf('<');
+    const end = interpretation.lastIndexOf('>') + 1; // Include the '>'
+
+    if (start !== -1 && end !== -1) {
+        let cleanedHtml = interpretation.substring(start, end);
+
+        // Modify <h2> tags to include the desired styles
+        cleanedHtml = cleanedHtml.replace(/<h2>/g, '<h2 style="font-size: 1.5em; font-weight: 600;">');
+
+        return cleanedHtml;
+    }
+
+    return interpretation; // In case there is no valid HTML, return as is
+}
+
+  // Clean the interpretation HTML content
+  const cleanInterpretation = cleanHTML(interpretation.interpretation);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-15 text-white">
       <div className="rounded-lg w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto bg-black hide-scrollbar">
@@ -33,7 +55,8 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose }) => {
 
         {/* Interpretation Text */}
         <div className="text-gray-200 text-center">
-          <p>{interpretation.interpretation}</p>
+          {/* Use dangerouslySetInnerHTML to render the cleaned HTML */}
+          <div dangerouslySetInnerHTML={{ __html: cleanInterpretation }} />
         </div>
 
         {/* Modal Footer */}
