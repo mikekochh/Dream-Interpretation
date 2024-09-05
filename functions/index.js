@@ -18,7 +18,7 @@ const openai = new OpenAI({
 });
 
 const uri = functions.config().mongodb.uri;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri);
 
 exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
     cors(req, res, async () => {
@@ -37,10 +37,34 @@ exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 
             logger.info("the interpretation: ", dreamData[0].message.content);
 
             if (dreamID && oracleID) {
+                const organizeInterpretationPrompt = `Take the following dream interpretation and organize it into a JSON object. The structure should be an array where each element is an object representing a section. Each section should have a 'title' field for the section heading and a 'content' field for the section details. The final section of the array should be a summary of the interpretation.
+
+                Dream interpretation: ${dreamData[0].message.content}
+                
+                Output format:
+                [
+                  {
+                    "title": "Section 1 Title",
+                    "content": "Details for section 1."
+                  },
+                  {
+                    "title": "Section 2 Title",
+                    "content": "Details for section 2."
+                  },
+                  {
+                    "title": "Summary",
+                    "content": "Summary of the interpretation."
+                  }
+                ]`;
+
+                const organizedInterpretationData = await interpretDream(organizeInterpretationPrompt);
+                logger.info("organized dream interpretation: ", organizedInterpretationData);
+                
+
                 const newInterpretation = await interpretations.insertOne({
                     dreamID,
                     oracleID,
-                    interpretation: dreamData[0].message.content,
+                    interpretation: organizedInterpretationData[0].message.content,
                     interpretationDate: new Date()
                 });
 

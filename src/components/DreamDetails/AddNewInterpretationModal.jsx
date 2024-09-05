@@ -1,13 +1,19 @@
 import { useState } from 'react';
+import Image from 'next/image';
 
 const AddNewInterpretationModal = ({ oracles, isOpen, onClose, onInterpret }) => {
   const [selectedOracle, setSelectedOracle] = useState('');
 
   if (!isOpen) return null; // Don't render the modal if it's not open
 
-  const handleSelectChange = (e) => {
-    setSelectedOracle(e.target.value);
+  const handleCardClick = (oracleID) => {
+    setSelectedOracle(oracleID);
   };
+
+  const handleClose = () => {
+    setSelectedOracle(null);
+    onClose();
+  }
 
   const handleInterpret = () => {
     if (selectedOracle) {
@@ -20,11 +26,11 @@ const AddNewInterpretationModal = ({ oracles, isOpen, onClose, onInterpret }) =>
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-15 text-white">
-      <div className="rounded-lg w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto bg-black hide-scrollbar">
+      <div className="rounded-lg w-full max-w-lg lg:max-w-4xl p-6 relative max-h-[90vh] overflow-y-auto bg-black hide-scrollbar">
         {/* Close button */}
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-3xl"
-          onClick={onClose}
+          onClick={handleClose}
         >
           &times;
         </button>
@@ -34,24 +40,27 @@ const AddNewInterpretationModal = ({ oracles, isOpen, onClose, onInterpret }) =>
           Select an Oracle to Interpret Your Dream
         </h2>
 
-        {/* Oracle Selection Dropdown */}
-        <div className="mb-4">
-          <label htmlFor="oracleSelect" className="block text-lg font-semibold mb-2">
-            Choose Oracle
-          </label>
-          <select
-            id="oracleSelect"
-            className="w-full p-2 border rounded-lg text-black"
-            value={selectedOracle}
-            onChange={handleSelectChange}
-          >
-            <option value="" disabled>Select an Oracle</option>
-            {oracles.map((oracle) => (
-              <option key={oracle.oracleID} value={oracle.oracleID}>
-                {oracle.oracleName} - {oracle.speciality}
-              </option>
-            ))}
-          </select>
+        {/* Oracle Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {oracles.map((oracle) => (
+            <div
+              key={oracle.oracleID}
+              className={`border p-4 rounded-lg cursor-pointer transform transition-all duration-300 
+                ${selectedOracle === oracle.oracleID ? 'border-blue-500 scale-105 background-darkblue' : 'border-gray-500 background-darkerblue'}`}
+              onClick={() => handleCardClick(oracle.oracleID)}
+            >
+              <Image
+                src={oracle.oraclePicture}
+                alt={oracle.oracleName}
+                className="w-full h-40 object-cover rounded-md mb-4"
+                width={100}
+                height={100}
+                unoptimized={true}
+              />
+              <h3 className="text-lg font-semibold mb-2 text-center">{oracle.oracleName}</h3>
+              <p className="text-sm text-center">{oracle.oracleDescriptionShort}</p>
+            </div>
+          ))}
         </div>
 
         {/* Modal Footer */}

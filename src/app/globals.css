@@ -934,3 +934,11 @@ h3.golden-ratio-2 {
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, and Opera */
 }
+
+.background-darkblue {
+  background-color: #0A1172;
+}
+
+.background-darkerblue {
+  background-color: #050A30;
+}

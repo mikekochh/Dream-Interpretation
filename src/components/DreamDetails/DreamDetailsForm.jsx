@@ -38,7 +38,7 @@ export default function DreamsForm() {
 
     // modals
     const [showAddNewInterpretationModal, setShowAddNewInterpretationModal] = useState(false);
-    const [showEditDreamModal, setShowEditDreamModal] = useState(true);
+    const [showEditDreamModal, setShowEditDreamModal] = useState(false);
 
     const handleToggleDreamExpanded = () => {
         setIsDreamExpanded(!isDreamExpanded);
@@ -245,14 +245,20 @@ export default function DreamsForm() {
                     </div>
                 </div>
                 <div className="relative">
-                    <Image 
-                        src={dream.imageURL} 
-                        alt="the dream image" 
-                        className="w-full h-full rounded-lg"
-                        width={100}
-                        height={100}
-                        unoptimized={true}
-                    />
+                    {false ? (
+                        <Image 
+                            src={dream.imageURL} 
+                            alt="the dream image" 
+                            className="w-full h-full rounded-lg"
+                            width={100}
+                            height={100}
+                            unoptimized={true}
+                        />
+                    ) : (
+                        <div className="w-full h-48 flex items-center justify-center border-2 border-dashed rounded-lg">
+                            <span className="text-gray-500">+ Add Picture</span>
+                        </div>
+                    )}
                 </div>
                 <div>
                     <p className='golden-ratio-2 px-1'>{isDreamExpanded ? dream.dream : sliceDream(dream.dream)}</p>
