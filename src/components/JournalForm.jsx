@@ -246,11 +246,22 @@ const JournalForm = () => {
             const dreamID = resJournal.data._id;
             setNewDreamID(dreamID);
             localStorage.setItem("dreamID", dreamID);
+            console.log("Summarizing dream!");
+            const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
+                {
+                    params: {
+                        dream: dream
+                    }
+                }
+            )
+            console.log("resSummarizeDream: ", resSummarizeDream);
+            const dreamSummary = resSummarizeDream.data[0].message.content;
+            console.log("The dream summary: ", dreamSummary);
             console.log("Drawing dream!");
             const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
                 { 
                     dreamID: dreamID, 
-                    dream: dream 
+                    dream: dreamSummary 
                 }
             );
             console.log('resDrawDream: ', resDrawDream);
