@@ -271,12 +271,12 @@ export default function DreamsForm() {
                             </div>
                         )}
                     </div>
-                    <div className="w-full md:w-1/3 md:pl-4 mt-4 md:mt-0 mb-4">
-                        <h3 className="text-xl font-bold text-white">Dream Themes</h3>
-                        <div className="flex flex-wrap gap-4 mt-4">
+                    <div className="w-full md:w-1/3 md:pl-4 md:mt-0">
+                        <h3 className="text-xl font-bold text-white">Dream Symbols Found</h3>
+                        <div className="flex gap-4 mb-2 overflow-x-auto whitespace-nowrap py-1">
                             {userDreamSymbols && userDreamSymbols.length > 0 ? (
                                 userDreamSymbols.map((symbol, index) => (
-                                    <SymbolCard key={index} symbol={symbol} />
+                                    <SymbolCard key={index} symbol={symbol} className="inline-block" />
                                 ))
                             ) : (
                                 <div className="p-4 bg-gradient-to-r from-gray-700 to-gray-900 rounded-lg shadow-lg text-white text-center">

@@ -27,7 +27,7 @@ const OracleInterpretations = ({ interpretation, oracle }) => {
           />
         </div>
       )}
-      <p className="mt-2 text-sm text-gold">{oracle ? oracle.oracleName : 'Unknown Oracle'}</p>
+      <p className="mt-2 text-sm text-gold text-center">{oracle ? oracle.oracleShortName : 'Unknown Oracle'}</p>
 
       {/* Modal for viewing interpretation */}
       <ViewInterpretation

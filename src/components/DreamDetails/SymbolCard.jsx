@@ -26,20 +26,23 @@ const SymbolCard = ({ symbol }) => {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75">
-          <div className="relative w-11/12 md:w-1/3 bg-white p-6 rounded-lg shadow-lg text-black">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75 backdrop-blur-sm">
+          <div className="relative w-11/12 md:w-1/3 bg-gray-900 bg-opacity-90 p-6 rounded-lg shadow-2xl text-white">
             {/* Close Button */}
             <button
               onClick={toggleModal}
-              className="absolute top-2 right-2 text-gray-500 hover:text-black"
+              className="absolute top-2 right-2 text-gray-400 hover:text-white"
             >
               X
             </button>
 
             {/* Modal Content */}
-            <div className="text-center">
+            <div className="text-center text-white">
               <h2 className="text-2xl font-bold mb-4">{symbol.symbolID.symbol}</h2>
-              <p className="text-lg">{symbol.symbolID.meaning}</p>
+              {/* Ensure text wraps and doesn't overflow */}
+              <p className="text-lg break-words break-normal whitespace-normal">
+                {symbol.symbolID.meaning}
+              </p>
             </div>
 
             {/* Close Button */}
@@ -54,6 +57,9 @@ const SymbolCard = ({ symbol }) => {
           </div>
         </div>
       )}
+
+
+
     </div>
   );
 };

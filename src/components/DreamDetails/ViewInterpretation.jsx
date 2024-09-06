@@ -3,50 +3,47 @@ import Image from 'next/image';
 const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose }) => {
   if (!isOpen) return null; // Don't render the modal if it's not open
 
-  console.log("the interpretation: ", interpretation);
-
   function cleanHTML(interpretation) {
-    // Remove everything before the first '<' and after the last '>'
     const start = interpretation.indexOf('<');
     const end = interpretation.lastIndexOf('>') + 1; // Include the '>'
 
     if (start !== -1 && end !== -1) {
-        let cleanedHtml = interpretation.substring(start, end);
+      let cleanedHtml = interpretation.substring(start, end);
 
-        // Modify <h2> tags to include the desired styles
-        cleanedHtml = cleanedHtml.replace(/<h2>/g, '<h2 style="font-size: 1.5em; font-weight: 600;">');
+      // Modify <h2> tags to include the desired styles
+      cleanedHtml = cleanedHtml.replace(/<h2>/g, '<h2 style="font-size: 1.5em; font-weight: 600;">');
 
-        return cleanedHtml;
+      return cleanedHtml;
     }
 
     return interpretation; // In case there is no valid HTML, return as is
-}
+  }
 
   // Clean the interpretation HTML content
   const cleanInterpretation = cleanHTML(interpretation.interpretation);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-15 text-white">
-      <div className="rounded-lg w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto bg-black hide-scrollbar">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
+      <div className="rounded-lg w-full max-w-lg p-4 relative max-h-[80vh] h-auto overflow-y-auto bg-gray-900 bg-opacity-90 shadow-2xl text-white hide-scrollbar">
         {/* Close button */}
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-3xl"
+          className="absolute top-2 right-2 text-gray-400 hover:text-white text-3xl"
           onClick={onClose}
         >
           &times;
         </button>
 
         {/* Modal Title */}
-        <h2 className="text-xl font-semibold mb-4 text-center">
+        <h2 className="text-xl font-semibold mb-2 px-4 text-center">
           Dream Interpretation by {oracle.oracleName}
         </h2>
 
         {/* Oracle Image */}
-        <div className="text-center justify-center flex mb-4">
+        <div className="text-center justify-center flex mb-2">
           <Image
             src={oracle.oraclePicture}
             alt={oracle.oracleName}
-            className="w-48 h-48 rounded-full border-gold-small"
+            className="w-32 h-32 rounded-full border-gold-small"
             width={100}
             height={100}
             unoptimized={true}
@@ -55,7 +52,6 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose }) => {
 
         {/* Interpretation Text */}
         <div className="text-gray-200 text-center">
-          {/* Use dangerouslySetInnerHTML to render the cleaned HTML */}
           <div dangerouslySetInnerHTML={{ __html: cleanInterpretation }} />
         </div>
 
