@@ -4,6 +4,7 @@ import { AuthProvider } from './Providers'
 import NavBar from '../components/NavBar'
 import Head from 'next/head';
 import Script from 'next/script';
+import { UserProvider } from '@/context/UserContext';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -24,10 +25,12 @@ export default function RootLayout({ children }) {
       </Head>
       <body>
         <AuthProvider>
+          <UserProvider>
             <NavBar />
             <div className="main-content">
               {children}
             </div>
+          </UserProvider>
         </AuthProvider>
       </body>
       <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-1TF2VESNGX"/>

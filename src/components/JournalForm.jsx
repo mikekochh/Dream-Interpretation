@@ -1,14 +1,16 @@
 "use client";
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense, useContext } from 'react';
 import axios from 'axios';
-import { useSession } from 'next-auth/react';
+import { UserContext } from "@/context/UserContext";
+
+
 const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 const JournalForm = () => {
-    const { data: session, status } = useSession();
-    const [user, setUser] = useState(null);
+    const { user } = useContext(UserContext)
+
     const [error, setError] = useState(false);
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
@@ -29,7 +31,6 @@ const JournalForm = () => {
     const [loadingOracles, setLoadingOracles] = useState(true);
     const [loadingEmotions, setLoadingEmotions] = useState(true);
     const [loadingDreamStreak, setLoadingDreamStreak] = useState(true);
-    const [loadingUser, setLoadingUser] = useState(true);
     const [loadingMostRecentDream, setLoadingMostRecentDream] = useState(true);
     const [loadingMostRecentDreamMetaAnalysis, setLoadingMostRecentDreamMetaAnalysis] = useState(true);
 
@@ -102,31 +103,6 @@ const JournalForm = () => {
     }, [interpretingDream, interpretationProgressIndex]);
 
     useEffect(() => {
-        const setUserData = async () => {
-            const email = session?.user?.email;
-            if (email) {
-                try {
-                    const res = await fetch(`api/user/${email}`, { method: "GET", headers: { "Content-Type": "application/json" } });
-                    const userData = await res.json();
-                    setUser(userData);
-                } catch (err) {
-                    console.log('err:', err);
-                } finally {
-                    setLoadingUser(false);
-                }
-            } else {
-                setLoadingUser(false);
-            }
-        };
-
-        if (session) {
-            setUserData();
-        } else {
-            setLoadingUser(false);
-        }
-    }, [session]);
-
-    useEffect(() => {
         const selectedOracle = oracles.some(oracle => oracle.selected);
         setOracleSelected(selectedOracle);
         setButtonText(selectedOracle ? "Interpret Dream" : "Journal Dream");
@@ -182,9 +158,7 @@ const JournalForm = () => {
     }, []);
 
     useEffect(() => {
-
-        if (!loadingUser &&
-            !loadingOracles &&
+        if (!loadingOracles &&
             !loadingEmotions &&
             !loadingSession &&
             !loadingDreamStreak &&
@@ -193,7 +167,7 @@ const JournalForm = () => {
         ) {
             setLoading(false);
         }
-    }, [loadingUser, loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak, loadingMostRecentDream, loadingMostRecentDreamMetaAnalysis]);
+    }, [loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak, loadingMostRecentDream, loadingMostRecentDreamMetaAnalysis]);
 
     useEffect(() => {
         const getUserDreamStreak = async () => {

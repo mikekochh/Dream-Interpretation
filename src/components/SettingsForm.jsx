@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, lazy, useRef } from 'react';
+import React, { useState, useEffect, lazy, useRef, useContext } from 'react';
 import { useSession } from 'next-auth/react';
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,8 @@ import OracleSection from './OracleSection';
 import InfoPopup from './InfoPopup';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import PurchaseButton from './PurchaseButton';
+
+import { UserContext } from '@/context/UserContext';
 
 const EditProfileModal = ({ 
     isOpen, 
@@ -125,8 +127,10 @@ const EditProfileModal = ({
 const SettingsForm = () => {
     const router = useRouter();
     const { data: session, status } = useSession();
-    const [user, setUser] = useState({});
-    const [loading, setLoading] = useState(true);
+
+    const { user } = useContext(UserContext);
+
+    const [loading, setLoading] = useState(false);
 
     const [genders, setGenders] = useState([]);
     const [error, setError] = useState('');
@@ -166,59 +170,33 @@ const SettingsForm = () => {
     }, []);
 
     useEffect(() => {
-        async function setUserData() {
-            const email = session?.user?.email;
-            const res = await fetch(`api/user/${email}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+        if (user) {
+            setDisplayGender(getGenderName(user.genderID) || '');
+            setDisplayName(user.name || '');
+            setDisplayCulturalBackground(user.culturalBackground || '');
+            setDisplaySpiritualPractices(user.spiritualPractices || '');
+            setDisplayBirthdate(new Date(user.birthdate).toLocaleDateString() || '');
+            setSelectedOracleID(user.metaAnalysisOracleID || 0);
+    
+            setOracles(prevOracles => {
+                const updatedOracles = prevOracles.map(oracle => ({
+                    ...oracle,
+                    selected: oracle.oracleID === user.metaAnalysisOracleID
+                }));
+                
+                // Move the selected oracle to the front
+                if (user.metaAnalysisOracleID) {
+                    const selectedOracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === user.metaAnalysisOracleID);
+                    if (selectedOracleIndex !== -1) {
+                        const [selectedOracle] = updatedOracles.splice(selectedOracleIndex, 1);
+                        updatedOracles.unshift(selectedOracle);
+                    }
+                }
+                
+                return updatedOracles;
             });
-            return res.json();
         }
-
-        if (status === 'loading') {
-            return;
-        }
-
-        if (session) {
-            setUserData()
-                .then((userData) => {
-                    setUser(userData);
-                    setDisplayGender(getGenderName(userData.genderID) || '');
-                    setDisplayName(userData.name || '');
-                    setDisplayCulturalBackground(userData.culturalBackground || '');
-                    setDisplaySpiritualPractices(userData.spiritualPractices || '');
-                    setDisplayBirthdate(new Date(userData.birthdate).toLocaleDateString() || '');
-                    setSelectedOracleID(userData.metaAnalysisOracleID || 0);
-
-                    setOracles(prevOracles => {
-                        const updatedOracles = prevOracles.map(oracle => ({
-                            ...oracle,
-                            selected: oracle.oracleID === userData.metaAnalysisOracleID
-                        }));
-                        
-                        // Move the selected oracle to the front
-                        if (userData.metaAnalysisOracleID) {
-                            const selectedOracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === userData.metaAnalysisOracleID);
-                            if (selectedOracleIndex !== -1) {
-                                const [selectedOracle] = updatedOracles.splice(selectedOracleIndex, 1);
-                                updatedOracles.unshift(selectedOracle);
-                            }
-                        }
-                        
-                        return updatedOracles;
-                    });
-                    setLoading(false);
-                })
-                .catch((err) => {
-                    console.log('err: ', err);
-                    setLoading(false);
-                });
-        } else {
-            setLoading(false);
-        }
-    }, [session]);
+    }, [user])
 
     useEffect(() => {
         async function fetchGenders() {
@@ -364,7 +342,7 @@ const SettingsForm = () => {
         setIsModalOpen(false)
     }
 
-    if (loading) {
+    if (!user) {
         return (
             <LoadingComponent loadingText={'Transporting to Dream Profile'} />
         );

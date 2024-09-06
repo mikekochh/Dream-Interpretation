@@ -1,9 +1,11 @@
 "use client";
-import React, { useState, useEffect, useRef, lazy } from 'react';
+import React, { useState, useEffect, useRef, lazy, useContext } from 'react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+
+import { UserContext } from '@/context/UserContext';
 
 import axios from 'axios';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
@@ -17,14 +19,11 @@ import SymbolCard from './SymbolCard';
 const LoadingComponent = lazy(() => import('../LoadingComponent'));
 
 export default function DreamsForm() {
-
-    const { data: session } = useSession();
-
     const searchParams = useSearchParams();
     const dreamID = searchParams.get('dreamID');
     const router = useRouter();
 
-    const [user, setUser] = useState(null);
+    const { user } = useContext(UserContext);
     
     const [loadingUser, setLoadingUser] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -50,31 +49,6 @@ export default function DreamsForm() {
     const handleToggleDreamExpanded = () => {
         setIsDreamExpanded(!isDreamExpanded);
     }
-
-    useEffect(() => {
-        const setUserData = async () => {
-            const email = session?.user?.email;
-            if (email) {
-                try {
-                    const res = await fetch(`api/user/${email}`, { method: "GET", headers: { "Content-Type": "application/json" } });
-                    const userData = await res.json();
-                    setUser(userData);
-                } catch (err) {
-                    console.log('err:', err);
-                } finally {
-                    setLoadingUser(false);
-                }
-            } else {
-                setLoadingUser(false);
-            }
-        };
-
-        if (session) {
-            setUserData();
-        } else {
-            setLoadingUser(false);
-        }
-    }, [session]);
 
     useEffect(() => {
         const handleGoogleSignUp = async () => {
@@ -105,16 +79,16 @@ export default function DreamsForm() {
             }
         }
 
-        const getUser = async () => {
-            try {
-                const userDetails = await axios.get("/api/dream/getUser/" + dreamID);
-                setUser(userDetails.data.user);
-            } catch (error) {
-                console.error("Error fetching user details:", error);
-            } finally {
-                setLoadingUser(false); // Set to false after user data is fetched
-            }
-        }
+        // const getUser = async () => {
+        //     try {
+        //         const userDetails = await axios.get("/api/dream/getUser/" + dreamID);
+        //         setUser(userDetails.data.user);
+        //     } catch (error) {
+        //         console.error("Error fetching user details:", error);
+        //     } finally {
+        //         setLoadingUser(false); // Set to false after user data is fetched
+        //     }
+        // }
 
         const getEmotions = async () => {
             try {
@@ -137,7 +111,7 @@ export default function DreamsForm() {
         }
 
         checkPage();
-        getUser();
+        // getUser();
         getEmotions();
         getOracles();
     }, [])
