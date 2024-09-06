@@ -14,28 +14,33 @@ const OracleInterpretations = ({ interpretation, oracle }) => {
   };
 
   return (
-    <div className="flex flex-col cursor-pointer p-2">
-      {oracle && (
-        <div className="w-14 h-14 rounded-full border-gold-small flex items-center justify-center bg-black bg-opacity-50">
-          <Image
-            src={oracle.oraclePicture}
-            alt={`Oracle ${oracle.oracleName}`}
-            className="w-full h-full rounded-full object-cover"
-            width={100}
-            height={100}
-            onClick={openInterpretationModal}
-          />
+    <div>
+      <div 
+          className="flex flex-col md:flex-row md:items-center md:bg-gray-700 md:bg-opacity-50 md:rounded-lg cursor-pointer p-2"
+          onClick={openInterpretationModal}
+      >
+        {oracle && (
+          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center bg-opacity-50 md:mr-4">
+            <Image
+              src={oracle.oraclePicture}
+              alt={`Oracle ${oracle.oracleName}`}
+              className="rounded-full object-cover border-gold-small"
+              width={100}
+              height={100}
+            />
+          </div>
+        )}
+        <div className="text-center md:text-left">
+          <p className="text-sm hidden md:flex text-gold">{oracle ? oracle.oracleName : 'Unknown Oracle'}</p>
+          <p className="text-sm md:hidden text-gold mt-1">{oracle ? oracle.oracleShortName : 'Unknown Oracle'}</p>
         </div>
-      )}
-      <p className="mt-2 text-sm text-gold text-center">{oracle ? oracle.oracleShortName : 'Unknown Oracle'}</p>
-
-      {/* Modal for viewing interpretation */}
+      </div>
       <ViewInterpretation
-        interpretation={interpretation}
-        oracle={oracle}
-        isOpen={showInterpretationModal}
-        onClose={closeInterpretationModal}
-      />
+          interpretation={interpretation}
+          oracle={oracle}
+          isOpen={showInterpretationModal}
+          onClose={closeInterpretationModal}
+        />
     </div>
   );
 };

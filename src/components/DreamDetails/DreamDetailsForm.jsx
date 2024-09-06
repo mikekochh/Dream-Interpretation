@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, lazy } from 'react';
+import React, { useState, useEffect, useRef, lazy } from 'react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
@@ -34,7 +34,6 @@ export default function DreamsForm() {
     const [dream, setDream] = useState(null);
     const [interpretations, setInterpretations] = useState(null);
     const [oracles, setOracles] = useState(null);
-    const [dreamSymbols, setDreamSymbols] = useState([]);
     const [userDreamSymbols, setUserDreamSymbols] = useState([]);
 
     const [isDreamExpanded, setIsDreamExpanded] = useState(false);
@@ -42,6 +41,11 @@ export default function DreamsForm() {
     // modals
     const [showAddNewInterpretationModal, setShowAddNewInterpretationModal] = useState(false);
     const [showEditDreamModal, setShowEditDreamModal] = useState(false);
+
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const containerRef = useRef(null);
 
     const handleToggleDreamExpanded = () => {
         setIsDreamExpanded(!isDreamExpanded);
@@ -225,6 +229,26 @@ export default function DreamsForm() {
         console.log("interpreting the dream...");
     }
 
+    const handleMouseDown = (e) => {
+        if (containerRef.current) {
+            setIsDragging(true);
+            setStartX(e.pageX - containerRef.current.offsetLeft);
+            setScrollLeft(containerRef.current.scrollLeft);
+        }
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging || !containerRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - containerRef.current.offsetLeft;
+        const walk = (x - startX) * 2; // Speed of scrolling
+        containerRef.current.scrollLeft = scrollLeft - walk;
+    };
+
+    const handleMouseUpOrLeave = () => {
+        setIsDragging(false);
+    };
+
     if (loading || !dream) {
         return (
             <LoadingComponent loadingText={'Collecting Dream Details'} />
@@ -234,56 +258,69 @@ export default function DreamsForm() {
     return (
         <div className="main-content">
             <div className="flex flex-col mb-10 text-white md:w-6/12 mx-auto p-2">
-                <p className='golden-ratio-1 mb-0 text-gold'>Interpretations</p>
-                <div className="flex flex-row">
-                    {interpretations.map((interpretation) => {
-                        const oracle = oracles.find((oracle) => oracle.oracleID === interpretation.oracleID);
+                <div className="md:flex md:flex-row">
+                    <div className="interpretations-section md:w-1/3">
+                        <p className="golden-ratio-1 md:text-xl mb-1 text-gold">Interpretations</p>
+                        <div className="flex md:flex-col flex-row md:space-y-2">
+                            {interpretations.map((interpretation) => {
+                                const oracle = oracles.find((oracle) => oracle.oracleID === interpretation.oracleID);
 
-                        return (
-                            <OracleInterpretations
-                                key={interpretation.oracleID}
-                                interpretation={interpretation}
-                                oracle={oracle}
-                            />
-                        );
-                    })}
-                    <div className="flex flex-col cursor-pointer p-2" onClick={() => setShowAddNewInterpretationModal(true)}>
-                        <div className="w-14 h-14 rounded-full border-gold-small flex items-center justify-center bg-black bg-opacity-50">
-                        <span className="text-xl font-bold text-gold">+</span>
-                        </div>
-                        <p className="mt-2 text-sm text-gold">Add New</p>
-                    </div>
-                </div>
-                <div className="relative flex flex-col md:flex-row">
-                    <div className="w-full md:w-2/3 h-full md:h-auto">
-                        {dream.imageURL ? (
-                            <Image 
-                                src={dream.imageURL} 
-                                alt="the dream image" 
-                                className="w-full h-full rounded-lg"
-                                width={500} // Adjust to your preferred fixed width
-                                height={500} // Adjust to your preferred fixed height
-                                unoptimized={true}
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center border-2 border-dashed rounded-lg">
-                                <span className="text-gray-500">+ Add Picture</span>
+                                return (
+                                    <OracleInterpretations
+                                        key={interpretation.oracleID}
+                                        interpretation={interpretation}
+                                        oracle={oracle}
+                                    />
+                                );
+                            })}
+                            <div className="flex flex-col cursor-pointer p-2" onClick={() => setShowAddNewInterpretationModal(true)}>
+                                <div className="w-14 h-14 rounded-full border-gold-small flex items-center justify-center bg-black bg-opacity-50">
+                                    <span className="text-xl font-bold text-gold">+</span>
+                                </div>
+                                <p className="mt-1 text-sm text-gold">Add New</p>
                             </div>
-                        )}
+                        </div>
                     </div>
-                    <div className="w-full md:w-1/3 md:pl-4 md:mt-0">
-                        <h3 className="text-xl font-bold text-white">Dream Symbols Found</h3>
-                        <div className="flex gap-4 mb-2 overflow-x-auto whitespace-nowrap py-1">
-                            {userDreamSymbols && userDreamSymbols.length > 0 ? (
-                                userDreamSymbols.map((symbol, index) => (
-                                    <SymbolCard key={index} symbol={symbol} className="inline-block" />
-                                ))
+
+                    <div className="image-section md:w-2/3 md:ml-4">
+                        <div className="w-full md:w-full h-full md:h-auto">
+                            {dream.imageURL ? (
+                                <Image
+                                    src={dream.imageURL}
+                                    alt="the dream image"
+                                    className="w-full h-full rounded-lg"
+                                    width={500} // Adjust to your preferred fixed width
+                                    height={500} // Adjust to your preferred fixed height
+                                    unoptimized={true}
+                                />
                             ) : (
-                                <div className="p-4 bg-gradient-to-r from-gray-700 to-gray-900 rounded-lg shadow-lg text-white text-center">
-                                    No symbols found
+                                <div className="w-full h-full flex items-center justify-center border-2 border-dashed rounded-lg">
+                                    <span className="text-gray-500">+ Add Picture</span>
                                 </div>
                             )}
                         </div>
+                    </div>
+                </div>
+                <div className="w-full mt-2">
+                    <h3 className="text-xl font-bold text-white">Dream Symbols Found</h3>
+                    <div
+                        className="flex gap-4 mb-2 py-1 px-1 overflow-x-auto whitespace-nowrap hide-scrollbar cursor-grab"
+                        ref={containerRef}
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUpOrLeave}
+                        onMouseLeave={handleMouseUpOrLeave}
+                        style={{ userSelect: "none" }}
+                    >
+                        {userDreamSymbols && userDreamSymbols.length > 0 ? (
+                            userDreamSymbols.map((symbol, index) => (
+                                <SymbolCard key={index} symbol={symbol} className="inline-block" />
+                            ))
+                        ) : (
+                            <div className="p-4 bg-gradient-to-r from-gray-700 to-gray-900 rounded-lg shadow-lg text-white text-center">
+                                No symbols found
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div>
