@@ -299,12 +299,17 @@ nav {
   background-color: #00FFFF;
 }
 
-.start-button-mobile {
-  color: black;
-  border-radius: 7px; /* Increased border-radius for more rounded corners */
+.start-button-hollow {
+  color: white;
+  border-radius: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
   margin: 5px;
-  padding: 4px 12px; /* Adjusted padding for smaller buttons */
-  background-color: #00FFFF;
+  padding: 6px;
+  padding-left: 40px;
+  padding-right: 40px;
+  background-color: transparent;
+  border: 2px solid #00FFFF;
 }
 
 .start-button.disabled-button {
@@ -679,7 +684,7 @@ h3.golden-ratio-2 {
 }
 
 .loadingText {
-  font-size: 1.5rem;
+  font-size: 2rem;
   padding: 1rem;
 }
 
@@ -885,12 +890,6 @@ h3.golden-ratio-2 {
 
 .backdrop-blur {
   backdrop-filter: blur(5px);
-}
-
-.overflow-container {
-  overflow-y: auto;
-  max-height: 100vh;
-  padding-top: 70px;
 }
 
 .modal-overlay {

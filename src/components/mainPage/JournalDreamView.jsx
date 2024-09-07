@@ -2,13 +2,11 @@
 import React, { lazy } from 'react';
 
 const WelcomeSection = lazy(() => import('./WelcomeSectionView'));
-const ShareDreamSection = lazy(() => import('./ShareDreamSectionView'));
 const MoodSection = lazy(() => import('./MoodSectionView'));
 const OracleSelectionSection = lazy(() => import('./OracleSelectionSectionView'));
 
 export default function JournalDreamView({
     user,
-    error,
     dream,
     setDream,
     handleSelectionChange,
@@ -24,13 +22,9 @@ export default function JournalDreamView({
     selectedEmotions,
     dreamStreak,
     dreamStep,
-    setDreamStep,
     incrementDreamStep,
     decrementDreamStep,
     oracleSelected,
-    skipToDreamStep,
-    mostRecentDream,
-    mostRecentDreamMetaAnalysis
 }) {
     return (
         <div className="flex justify-center items-center min-h-screen relative">
@@ -39,29 +33,12 @@ export default function JournalDreamView({
                     <WelcomeSection
                         user={user}
                         dreamStreak={dreamStreak}
-                        setDreamStep={setDreamStep}
                         incrementDreamStep={incrementDreamStep}
-                        skipToDreamStep={skipToDreamStep}
                         setDream={setDream}
-                        mostRecentDream={mostRecentDream}
-                        mostRecentDreamMetaAnalysis={mostRecentDreamMetaAnalysis}
                         dream={dream}
                     />
                 </div>
             ) : dreamStep === 1 ? (
-                <div>
-                    <div className="back-button-container">
-                        <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
-                    </div>
-                    <ShareDreamSection
-                        error={error}
-                        dream={dream}
-                        setDream={setDream}
-                        incrementDreamStep={incrementDreamStep}
-                        decrementDreamStep={decrementDreamStep}
-                    />
-                </div>
-            ) : dreamStep === 2 ? (
                 <div>
                     <div className="back-button-container">
                         <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
@@ -71,10 +48,9 @@ export default function JournalDreamView({
                         handleEmotionClick={handleEmotionClick}
                         selectedEmotions={selectedEmotions}
                         incrementDreamStep={incrementDreamStep}
-                        decrementDreamStep={decrementDreamStep}
                     />
                 </div>
-            ) : dreamStep === 3 ? (
+            ) : dreamStep === 2 ? (
                 <div>
                     <div className="back-button-container">
                         <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
@@ -89,7 +65,6 @@ export default function JournalDreamView({
                         scrollRight={scrollRight}
                         journalDream={journalDream}
                         buttonText={buttonText}
-                        decrementDreamStep={decrementDreamStep}
                         oracleSelected={oracleSelected}
                     />
                 </div>

@@ -37,7 +37,7 @@ export default function FeedbackForm() {
             <div>
                 <p className="p-2 golden-ratio-3">If you have an idea for a new feature for the site or some constructive feedback, we would love to hear it!</p>
                 <textarea className="DreamBox w-full rounded-xl p-2" rows={10} placeholder="Feedback"></textarea>
-                <button className="dream-button" onClick={submitFeedback}>Submit</button>
+                <button className="start-button-small" onClick={submitFeedback}>Submit</button>
             </div>
         ) : (
             <div className="flex flex-col middle-content">

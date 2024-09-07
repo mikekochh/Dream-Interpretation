@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, lazy, Suspense, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from "@/context/UserContext";
-
+import { useRouter } from 'next/navigation';
 
 const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
@@ -11,96 +11,33 @@ const LoadingComponent = lazy(() => import('./LoadingComponent'));
 const JournalForm = () => {
     const { user } = useContext(UserContext)
 
-    const [error, setError] = useState(false);
+    const router = useRouter();
+
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
     const [buttonText, setButtonText] = useState("Journal Dream");
-    const [newDreamID, setNewDreamID] = useState(null);
-    const [interpretingDream, setInterpretingDream] = useState(false);
     const [saveMessage, setSaveMessage] = useState("");
     const [oracleSelected, setOracleSelected] = useState(false);
     const [dream, setDream] = useState("");
-    const [justJournal, setJustJournal] = useState(false);
-    const [interpretationProgressArray, setInterpretationProgressArray] = useState([0, 0, 0, 0, 0]);
-    const [interpretationProgressIndex, setInterpretationProgressIndex] = useState(0);
-    const [mostRecentDream, setMostRecentDream] = useState({});
-    const [mostRecentDreamMetaAnalysis, setMostRecentDreamMetaAnalysis] = useState({});
 
     const [loading, setLoading] = useState(true);
     const [loadingSession, setLoadingSession] = useState(true);
     const [loadingOracles, setLoadingOracles] = useState(true);
     const [loadingEmotions, setLoadingEmotions] = useState(true);
     const [loadingDreamStreak, setLoadingDreamStreak] = useState(true);
-    const [loadingMostRecentDream, setLoadingMostRecentDream] = useState(true);
-    const [loadingMostRecentDreamMetaAnalysis, setLoadingMostRecentDreamMetaAnalysis] = useState(true);
 
-    const [progressBarClass, setProgressBarClass] = useState('progress-bar-width-mobile');
     const [dreamPublic, setDreamPublic] = useState(false);
     const [emotions, setEmotions] = useState([]);
     const [selectedEmotions, setSelectedEmotions] = useState([]);
-    const [errorWhileJournaling, setErrorWhileJournaling] = useState(false);
     const [dreamStreak, setDreamStreak] = useState();
 
     const [dreamStep, setDreamStep] = useState(0);
 
-    const localCreditsGiven = useRef(false);
     const scrollContainerRef = useRef(null);
-
-    // if google sign up is true, send users to a new page
-
-    useEffect(() => {
-        const getMostRecentDream = async () => {
-            try {
-                const mostRecentDream = await axios.get("/api/dream/mostRecent/" + user?._id);
-                setMostRecentDream(mostRecentDream.data.dream);
-                setLoadingMostRecentDream(false);
-            }
-            catch (error) {
-                console.log("No most recent dream found: ", error);
-                setLoadingMostRecentDream(false);
-            }
-        }
-
-        const getMostRecentDreamMetaAnalysis = async () => {
-            try {
-                const mostRecentDreamMetaAnalysis = await axios.get("/api/dream/mostRecentMetaAnalysis/" + user?._id);
-                setMostRecentDreamMetaAnalysis(mostRecentDreamMetaAnalysis.data.metaAnalysis);
-                setLoadingMostRecentDreamMetaAnalysis(false);
-            }
-            catch (error) {
-                console.log("No recent meta analysis found: ", error);
-                setLoadingMostRecentDreamMetaAnalysis(false);
-            }
-        }
-
-        if (user?._id) {
-            getMostRecentDream();
-            getMostRecentDreamMetaAnalysis();
-        }
-        else {
-            setLoadingMostRecentDream(false);
-            setLoadingMostRecentDreamMetaAnalysis(false);
-        }
-    }, [user])
 
     useEffect(() => {
         setLoadingSession(status === 'loading');
     }, [status]);
-
-    useEffect(() => {
-        if (interpretingDream) {
-            const interval = setInterval(() => {
-                setInterpretationProgressArray(prevArray => {
-                    const updatedArray = [...prevArray];
-                    if (updatedArray[interpretationProgressIndex] <= 99) {
-                        updatedArray[interpretationProgressIndex] += 0.10;
-                    }
-                    return updatedArray;
-                });
-            }, 25);
-            return () => clearInterval(interval);
-        }
-    }, [interpretingDream, interpretationProgressIndex]);
 
     useEffect(() => {
         const selectedOracle = oracles.some(oracle => oracle.selected);
@@ -108,14 +45,14 @@ const JournalForm = () => {
         setButtonText(selectedOracle ? "Interpret Dream" : "Journal Dream");
     }, [oracles]);
 
+    // if google sign up is true, send users to a new page
     useEffect(() => {
-
         const checkGoogleSignUp = () => {
             const dreamID = localStorage.getItem('dreamID');
             let googleSignUp = localStorage.getItem('googleSignUp');
             googleSignUp = (googleSignUp === 'true');
             if (dreamID && googleSignUp) {
-                window.location.href = '/dreamDetails?dreamID=' + dreamID;
+                router.push('/dreamDetails?dreamID=' + dreamID);
             }
         }
 
@@ -147,27 +84,14 @@ const JournalForm = () => {
     }, [])
 
     useEffect(() => {
-        const handleResize = () => {
-            setProgressBarClass(window.innerWidth > 768 ? 'progress-bar-width-desktop' : 'progress-bar-width-mobile');
-        };
-
-        window.addEventListener('resize', handleResize);
-        handleResize();
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    useEffect(() => {
         if (!loadingOracles &&
             !loadingEmotions &&
             !loadingSession &&
-            !loadingDreamStreak &&
-            !loadingMostRecentDream &&
-            !loadingMostRecentDreamMetaAnalysis
+            !loadingDreamStreak
         ) {
             setLoading(false);
         }
-    }, [loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak, loadingMostRecentDream, loadingMostRecentDreamMetaAnalysis]);
+    }, [loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak]);
 
     useEffect(() => {
         const getUserDreamStreak = async () => {
@@ -209,18 +133,13 @@ const JournalForm = () => {
     }
 
     const journalDream = async () => {
-        if (!dream) {
-            setError("Please enter a dream");
-            return;
-        }
         setSavingDream(true);
         const userID = user?._id;
         try {
+            setSaveMessage("Journaling Dream");
             const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
             const dreamID = resJournal.data._id;
-            setNewDreamID(dreamID);
             localStorage.setItem("dreamID", dreamID);
-            console.log("Summarizing dream!");
             const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
                 {
                     params: {
@@ -228,17 +147,15 @@ const JournalForm = () => {
                     }
                 }
             )
-            console.log("resSummarizeDream: ", resSummarizeDream);
+            setSaveMessage("Generating Dream Image");
             const dreamSummary = resSummarizeDream.data[0].message.content;
-            console.log("The dream summary: ", dreamSummary);
-            console.log("Drawing dream!");
             const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
                 { 
                     dreamID: dreamID, 
                     dream: dreamSummary 
                 }
             );
-            console.log('resDrawDream: ', resDrawDream);
+            setSaveMessage("Uncovering Dream Symbols");
             const resDreamSymbols = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSymbols', 
                 { 
                     params: { 
@@ -248,17 +165,16 @@ const JournalForm = () => {
                     } 
                 }
             );
-            console.log('resDreamSymbols: ', resDreamSymbols);
             if (oracleSelected) {
-                interpretDreams(dreamID);
-            } else {
-                setJustJournal(true);
+                await interpretDreams(dreamID);
             }
+            setSaveMessage("Dream Interpretation Complete! Taking you to your personalized Dream Page");
+            setTimeout(() => {
+                router.push('/dreamDetails?dreamID=' + dreamID);
+            }, 3000);
         } catch (error) {
             console.log("the error: ", error);
-            setError("Error Journaling Dream");
             setSaveMessage("Error Journaling Dream. Please Try Again Later");
-            setErrorWhileJournaling(true);
         }
     };
 
@@ -286,64 +202,44 @@ const JournalForm = () => {
     }
 
     const interpretDreams = async (dreamID) => {
-        if (user?.name) {
-            setSaveMessage(dreamID ? "Your dream has been saved and is currently being interpreted." : "Your dream is currently being interpreted.");
-        }
-        setInterpretingDream(true);
-
         let userDetails = [];
-
-        if (user?.genderID) {
-            const genderName = await getGenderName(user.genderID);
-            if (genderName) {
-                userDetails.push(`Gender: ${genderName}`);
-            }
-        }
-        if (user?.age) {
-            userDetails.push(`Age: ${user.age}`);
-        }
-        if (user?.culturalBackground) {
-            userDetails.push(`Cultural Background: ${user.culturalBackground}`);
-        }
-        if (user?.spiritualPractices) {
-            userDetails.push(`Spiritual Practices: ${user.spiritualPractices}`);
-        }
-
         let additionalContext = '';
-        if (userDetails.length > 0) {
-            additionalContext = `\nIf provided, consider the following details about the dreamer to add context to the interpretation, but only if they are relevant to the dream: ${userDetails.join(', ')}. If these details do not seem relevant, feel free to disregard them.\n`;
+
+        if (user) {
+            if (user?.genderID) {
+                const genderName = await getGenderName(user.genderID);
+                if (genderName) {
+                    userDetails.push(`Gender: ${genderName}`);
+                }
+            }
+            if (user?.age) {
+                userDetails.push(`Age: ${user.age}`);
+            }
+            if (user?.culturalBackground) {
+                userDetails.push(`Cultural Background: ${user.culturalBackground}`);
+            }
+            if (user?.spiritualPractices) {
+                userDetails.push(`Spiritual Practices: ${user.spiritualPractices}`);
+            }
+            if (userDetails.length > 0) {
+                additionalContext = `\nIf provided, consider the following details about the dreamer to add context to the interpretation, but only if they are relevant to the dream: ${userDetails.join(', ')}. If these details do not seem relevant, feel free to disregard them.\n`;
+            }
         }
 
         for (let i = 0; i < oracles.length; i++) {
             if (oracles[i].selected) {
                 try {
                     const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dream}`;
+                    setSaveMessage(oracles[i].oracleName + " is now interpreting your dream");
                     await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt, dreamID, oracleID: oracles[i].oracleID } });
-                    setInterpretationProgressArray(prevArray => {
-                        const updatedArray = [...prevArray];
-                        updatedArray[i] = 100;
-                        return updatedArray;
-                    });
                 } catch (error) {
-                    setError("Error Interpreting or Saving Interpretation");
                     setSaveMessage("Error Interpreting or Saving Interpretation. Please Try Again Later");
-                    setErrorWhileJournaling(true);
                     console.log("error:", error);
                     return;
                 }
-                setInterpretationProgressIndex(i + 1);
             }
         }
-        setInterpretingDream(false);
         setSaveMessage(user?._id ? "Dream interpretation complete! You can now view your dream interpretation under the dream details page." : "Dream interpretation complete!");
-    };
-
-    const resetPage = () => {
-        window.location.reload();
-    };
-
-    const goToDreamDetails = () => {
-        window.location.href = `/dreamDetails?dreamID=${newDreamID}`;
     };
 
     const scrollLeft = () => {
@@ -366,10 +262,6 @@ const JournalForm = () => {
         setDreamStep(prevStep => Math.max(prevStep - 1, 0)); // Ensure it doesn't go below 0
     };
 
-    const skipToDreamStep = (newDreamStep) => {
-        setDreamStep(newDreamStep);
-    };
-
     if (loading) {
         return (
             <LoadingComponent loadingText={'Assembling the Dream Oracles'} />
@@ -380,24 +272,10 @@ const JournalForm = () => {
         <Suspense fallback={<LoadingComponent loadingText={'Assembling the Dream Oracles'} /> }>
             <div className="text-white relative">
                 {savingDream ? (
-                    <SavingDreamView
-                        saveMessage={saveMessage}
-                        interpretingDream={interpretingDream}
-                        user={user}
-                        resetPage={resetPage}
-                        justJournal={justJournal}
-                        goToDreamDetails={goToDreamDetails}
-                        oracles={oracles}
-                        interpretationProgressArray={interpretationProgressArray}
-                        progressBarClass={progressBarClass}
-                        oracleSelected={oracleSelected}
-                        errorWhileJournaling={errorWhileJournaling}
-                    />
+                    <SavingDreamView saveMessage={saveMessage} user={user} />
                 ) : (
                     <JournalDreamView
                         user={user}
-                        error={error}
-                        setError={setError}
                         dream={dream}
                         setDream={setDream}
                         handleSelectionChange={handleSelectionChange}
@@ -418,10 +296,6 @@ const JournalForm = () => {
                         incrementDreamStep={incrementDreamStep}
                         decrementDreamStep={decrementDreamStep}
                         oracleSelected={oracleSelected}
-                        setDreamStep={setDreamStep}
-                        skipToDreamStep={skipToDreamStep}
-                        mostRecentDream={mostRecentDream}
-                        mostRecentDreamMetaAnalysis={mostRecentDreamMetaAnalysis}
                     />
                 )}
             </div>

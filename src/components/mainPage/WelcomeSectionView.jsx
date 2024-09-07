@@ -30,7 +30,7 @@ const WelcomeSection = ({
                 {!user && (<p className="text-center golden-ratio-2">Welcome to</p>)}
                 <p className="text-center golden-ratio-5 gradient-title-text">Dream Oracles</p>
                 <p className="text-center golden-ratio-2 mb-4">
-                    {user ? 'Welcome back ' + user?.name : 'Interpret your dreams using our intelligent dream interpretation AI models'}
+                    {user ? 'What was your dream ' + user?.name + "?" : 'Interpret your dreams using our intelligent dream interpretation AI models'}
                 </p>
                 <textarea
                     type="text"
@@ -41,7 +41,7 @@ const WelcomeSection = ({
                     onChange={(event) => setDream(event.target.value)}
                 />
                 {!user || (user?.activated && user?.subscribed) ? (
-                    <div>
+                    <div className="text-center">
                         <div className="button-container">
                             <button 
                                 className={`start-button golden-ratio-1 ${dream.length < 20 && 'disabled-button'}`}
