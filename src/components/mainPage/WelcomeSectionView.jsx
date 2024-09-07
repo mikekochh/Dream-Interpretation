@@ -3,139 +3,16 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
-import axios from 'axios';
 
-const WelcomeSection = ({ user, dreamStreak, incrementDreamStep, skipToDreamStep, setDream, mostRecentDream, mostRecentDreamMetaAnalysis }) => {
-
+const WelcomeSection = ({ 
+    user, 
+    dreamStreak, 
+    incrementDreamStep, 
+    setDream, 
+    dream 
+}) => {
     const isMobile = window.innerWidth < 768;
 
-    return (
-        <div>
-            {user?.name ? (
-                <WelcomeBackPageSection 
-                    user={user} 
-                    dreamStreak={dreamStreak} 
-                    incrementDreamStep={incrementDreamStep} 
-                    skipToDreamStep={skipToDreamStep} 
-                    setDream={setDream}
-                    isMobile={isMobile}
-                    mostRecentDream={mostRecentDream}
-                    mostRecentDreamMetaAnalysis={mostRecentDreamMetaAnalysis}
-                />
-            ) : (
-                <WelcomePageSection incrementDreamStep={incrementDreamStep} isMobile={isMobile} />
-            )}
-        </div>
-    );
-}
-
-const WelcomeBackPageSection = ({ incrementDreamStep, dreamStreak, user, skipToDreamStep, setDream, isMobile, mostRecentDream, mostRecentDreamMetaAnalysis }) => {
-
-    const interpretRecentDream = () => {
-        setDream(mostRecentDream.dream);
-        skipToDreamStep(3);
-    }
-
-    const runMetaAnalysis = async () => {
-        const res = await axios.post('api/dream/metaAnalysis');
-    }
-
-    function truncateText(text, maxLength = 300) {
-        if (text?.length > maxLength) {
-          return text.substring(0, maxLength) + '...';
-        }
-        return text;
-      }
-
-    return (
-        <div className="title-container">
-            <div className="content-wrapper">
-                <p className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
-                <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
-                {dreamStreak && dreamStreak.streakLength > 0 ? (
-                    <p className="text-center golden-ratio-2">{dreamStreak.streakLength} Day Dream Streak</p>
-                ) : (
-                    <p className='text-center golden-ratio-1'>Journal a Dream to Start your Dream Streak</p>
-                )}
-                {user?.activated ? (
-                    <div>
-                        {user?.subscribed ? (
-                            <div className="button-container">
-                                <button className='start-button golden-ratio-1' onClick={incrementDreamStep}>
-                                    Journal New Dream
-                                </button>
-                            </div>
-                        ) : (
-                            <div>
-                                <p className="golden-ratio-2 mt-4 mx-2 text-gold">Start your subscription to continue using Dream Oracles and unlock all the features we offer</p>
-                                <div className="flex justify-center mt-4">
-                                    <PurchaseButton buttonText={"Start Now"} user={user} />
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    <div>
-                        <div className="button-container">
-                            <button className='start-button golden-ratio-1 disabled-button' onClick={null} disabled={true}>
-                                Journal New Dream
-                            </button>
-                        </div>
-                        <div className="text-center text-gold golden-ratio-1 mt-5">
-                            <p className="font-bold">
-                                Please activate your account to continue. Check your email for the activation link.
-                            </p>
-                            <Link href={`/emailVerification?email=${user?.email}`} className="underline">Didn&apos;t receive the verification email?</Link>
-                        </div>
-                    </div>
-                )}
-                <div className="flex flex-col md:flex-row justify-center items-center w-full">
-                    <div className="mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter mx-2">
-                        <p className='golden-ratio-2'>Your Most Recent Dream Entry</p>
-                        <p className='golden-ratio-1'>{truncateText(mostRecentDream.dream)}</p>
-                        <div className="flex justify-center">
-                            <Link 
-                                className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
-                                href={`/dreamDetails?dreamID=${mostRecentDream._id}`}
-                                style={{ whiteSpace: 'nowrap' }}
-                            >
-                                View Dream Board
-                            </Link>
-                            {!mostRecentDream.interpretation && (
-                                <button 
-                                    className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
-                                    onClick={interpretRecentDream}
-                                    style={{ whiteSpace: 'nowrap' }}
-                                >
-                                    Interpret This Dream
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                    {mostRecentDreamMetaAnalysis?.metaAnalysis && (
-                        <div className="md:mt-4 mb-10 border border-white rounded-3xl p-4 w-5/6 md:w-2/3 bg-black bg-opacity-40 backdrop-filter mx-2">
-                            <p className='golden-ratio-2'>Your Most Recent Meta Analysis</p>
-                            <p className='golden-ratio-1'>{truncateText(mostRecentDreamMetaAnalysis.metaAnalysisSummary)}</p>
-                            <div className="flex justify-center">
-                                <button 
-                                    className={`mx-2 z-10 ${isMobile ? 'start-button-mobile' : 'start-button'}`}
-                                    style={{ whiteSpace: 'nowrap' }}
-                                >
-                                    View Meta Analysis
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-            <div className="image-container-mandela text-center">
-                <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
-            </div>
-        </div>
-    );
-};
-
-const WelcomePageSection = ({ incrementDreamStep, isMobile }) => {
     const titleRef = useRef(null);
     const descriptionRef = useRef(null);
 
@@ -148,71 +25,79 @@ const WelcomePageSection = ({ incrementDreamStep, isMobile }) => {
     }, []);
 
     return (
-        <div className="title-container">
-            <p className="text-center golden-ratio-2">Welcome to</p>
-            <p ref={titleRef} className="text-center golden-ratio-5 gradient-title-text pb-2">Dream Oracles</p>
-            <p ref={descriptionRef} className="text-center golden-ratio-2 match-width">
-                Interpret your dreams using our intelligent dream interpretation AI models
-            </p>
-            <div className="button-container">
-                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Interpret Your Dream</button>
+        <div>
+            <div className="md:w-2/3 md:px-0 px-2 mx-auto title-container">
+                {!user && (<p className="text-center golden-ratio-2">Welcome to</p>)}
+                <p className="text-center golden-ratio-5 gradient-title-text">Dream Oracles</p>
+                <p className="text-center golden-ratio-2 mb-4">
+                    {user ? 'Welcome back ' + user?.name : 'Interpret your dreams using our intelligent dream interpretation AI models'}
+                </p>
+                <textarea
+                    type="text"
+                    rows={7}
+                    placeholder='Dream goes here'
+                    className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black  md:m-0 m-2 w-full"
+                    value={dream}
+                    onChange={(event) => setDream(event.target.value)}
+                />
+                {!user || (user?.activated && user?.subscribed) ? (
+                    <div>
+                        <div className="button-container">
+                            <button 
+                                className={`start-button golden-ratio-1 ${dream.length < 20 && 'disabled-button'}`}
+                                onClick={incrementDreamStep}
+                                disabled={dream.length < 20}
+                            >
+                                {dream.length === 0 ? 'Enter Dream Above' : dream.length < 20 ? 'Keep Going!' : 'Interpret Your Dream'}
+                            </button>
+                        </div>
+                        {!user && (<Link href="/login" className="text-gold golden-ratio-1 underline text-center">Already Have Account?</Link>)}
+                    </div>
+                ) : (
+                    <div className='text-center'>
+                        <p className="golden-ratio-2 mt-4 mx-2 text-gold">
+                            {!user?.activated ? 'Please activate your account to continue. Check your email for the activation link.' : 'Start your subscription to continue using Dream Oracles and unlock all the features we offer'}
+                        </p>
+                        {!user?.subscribed && (<PurchaseButton buttonText={'Start Now'} user={user} />)}
+                    </div>
+                )}
             </div>
-            <Link href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</Link>
-            <div>
-                <h1 className='golden-ratio-3 mt-10'>How Does It Work?</h1>
-            </div>
-            {isMobile ? (
-                <div className="image-container flex flex-col">
-                    <div className="step-section-mobile border-bottom mb-4">
-                        <Image src="/ShareDreamStep.svg" alt="Step 1" width={100} height={100} className="step-image-mobile" />
-                        <p className="golden-ratio-1 center-text">Step 1</p>
-                        <p className="golden-ratio-2 center-text">Share your dream</p>
-                        <p className="golden-ratio-1 center-text">Write down everything that you remember and try to include as many details as possible</p>
-                    </div>
-                    <div className="step-section-mobile border-bottom mb-4">
-                        <Image src="/OracleStep.svg" alt="Step 2" width={100} height={100} className="step-image-mobile" />
-                        <p className="golden-ratio-1 center-text">Step 2</p>
-                        <p className="golden-ratio-2 center-text">Choose an Oracle</p>
-                        <p className="golden-ratio-1 center-text">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
-                    </div>
-                    <div className="step-section-mobile">
-                        <Image src="/LearnStep.svg" alt="Step 3" width={100} height={100} className="step-image-mobile" />
-                        <p className="golden-ratio-1 center-text">Step 3</p>
-                        <p className="golden-ratio-2 center-text">Learn about your dream</p>
-                        <p className="golden-ratio-1 center-text">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
-                    </div>
-                </div>
-            ) : (
-                <div className="image-container flex flex-row">
-                    <div className="step-section border-right mr-4">
-                        <Image src="/ShareDreamStep.svg" alt="Step 1" width={50} height={50} className="step-image" />
-                        <p className="golden-ratio-1">Step 1:</p>
-                        <p className="golden-ratio-2">Share your dream</p>
-                        <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
-                    </div>
-                    <div className="step-section border-right mr-4">
-                        <Image src="/OracleStep.svg" alt="Step 2" width={50} height={50} className="step-image" />
-                        <p className="golden-ratio-1">Step 2:</p>
-                        <p className="golden-ratio-2">Choose an Oracle</p>
-                        <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
-                    </div>
-                    <div className="step-section">
-                        <Image src="/LearnStep.svg" alt="Step 3" width={50} height={50} className="step-image" />
-                        <p className="golden-ratio-1">Step 3:</p>
-                        <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
-                        <p className="golden-ratio-1">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
-                    </div>
+            {dreamStreak && (
+                <div className="streak-container text-center mt-4">
+                    <h2 className="text-4xl font-bold text-yellow-500">
+                        🔥 {dreamStreak.streakLength}-day Dream Streak! 🔥
+                    </h2>
+                    <p className="text-xl mt-2 text-gray-300">
+                        You're on fire! Keep up the cosmic connection.
+                    </p>
                 </div>
             )}
-            <div className="button-container">
-                <button className="start-button golden-ratio-1" onClick={incrementDreamStep}>Interpret Your Dream</button>
+            <h1 className='golden-ratio-3 mt-10 text-center'>How Does It Work?</h1>
+            <div className="image-container flex flex-col md:flex-row">
+                <div className={`${isMobile ? 'border-bottom step-section-mobile' : 'border-right step-section'}`}>
+                    <Image src="/ShareDreamStep.svg" alt="Step 1" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
+                    <p className="golden-ratio-1">Step 1:</p>
+                    <p className="golden-ratio-2">Share your dream</p>
+                    <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
+                </div>
+                <div className={`${isMobile ? 'border-bottom step-section-mobile' : 'border-right step-section'}`}>
+                    <Image src="/OracleStep.svg" alt="Step 2" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
+                    <p className="golden-ratio-1">Step 2:</p>
+                    <p className="golden-ratio-2">Choose an Oracle</p>
+                    <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
+                </div>
+                <div className={`${isMobile ? 'step-section-mobile' : 'step-section'}`}>
+                    <Image src="/LearnStep.svg" alt="Step 3" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
+                    <p className="golden-ratio-1">Step 3:</p>
+                    <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
+                    <p className="golden-ratio-1">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
+                </div>
             </div>
-            <Link href="/login" className="text-gold golden-ratio-1 underline">Already Have Account?</Link>
             <div className="image-container text-center mt-4">
                 <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
             </div>
         </div>
     );
-};
+}
 
 export default WelcomeSection;

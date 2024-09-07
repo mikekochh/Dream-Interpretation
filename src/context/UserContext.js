@@ -23,7 +23,6 @@ export const UserProvider = ({ children }) => {
                 console.log("There was an error fetching user data: ", error);
             }
         }
-        console.log("The user id for the session: ", userID);
     }
     
     if (session) {
@@ -44,6 +43,7 @@ export const UserProvider = ({ children }) => {
   const logout = async () => {
     try {
       await signOut({ redirect: true, callbackUrl: '/interpret' });
+      setUser({});
     } catch (error) {
       console.error('Error logging out:', error.message);
     }

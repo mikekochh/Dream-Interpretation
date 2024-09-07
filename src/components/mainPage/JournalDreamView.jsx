@@ -45,6 +45,7 @@ export default function JournalDreamView({
                         setDream={setDream}
                         mostRecentDream={mostRecentDream}
                         mostRecentDreamMetaAnalysis={mostRecentDreamMetaAnalysis}
+                        dream={dream}
                     />
                 </div>
             ) : dreamStep === 1 ? (
