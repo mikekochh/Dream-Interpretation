@@ -83,10 +83,9 @@ export async function POST(req) {
                                 <tr>
                                     <td valign="top" style="text-align: center; color: #000000; padding: 5%; overflow: auto;">
                                         <h1 style="color: #000000;">Hi ${data.name}!</h1>
-                                        <h3 style="color: #000000;">First of all, thank you for using Dream Oracles! To view your dream interpretation, please click the link below:</h3>
+                                        <h3 style="color: #000000;">To view your dream interpretation, please click the link below:</h3>
                                         <h3><a href="${verificationLink}" style="color: #0000FF;">View Interpretation Here</a></h3>
-                                        <h3 style="color: #000000;">Once verified, you will be redirected to your dream interpretation.</h3>
-                                        <h3 style="color: #000000;">If you did not request this email, you can safely ignore it.</h3>
+                                        <h3 style="color: #d3d3d3; font-weight: 300;">If you did not request this email, you can safely ignore it.</h3>
                                         <h1 style="color: #000000;">Thank you for choosing Dream Oracles!</h1>
                                     </td>
                                 </tr>

@@ -57,6 +57,8 @@ export async function POST(req) {
                                     <ul style="color: black;">
                                         <li style="color: black;"><strong>Unlimited Interpretations:</strong> Dive deep into your dreams with unlimited access to our advanced dream interpretation AI models.</li>
                                         <li style="color: black;"><strong>Intelligent Dream Oracles:</strong> Choose from our diverse range of Dream Oracles, each offering unique perspectives and insights.</li>
+                                        <li style="color: black;"><strong>Uncover Dream Symbols:</strong> Automatically match symbols from your dreams with our expansive dream dictionary for even stronger interpretations.</li>
+                                        <li style="color: black;"><strong>Dream Image Generation:</strong> Bring your dreams to life with AI-generated visuals crafted from your dream descriptions.</li>
                                         <li style="color: black;"><strong>Weekly Meta Analysis:</strong> Discover recurring themes and patterns in your dreams and decipher them with our advanced dream meta-analysis feature.</li>
                                         <li style="color: black;"><strong>Intuitive Dream Journal:</strong> Securely store all your dreams, interpretations, and notes in your personal dream journal.</li>
                                         <li style="color: black;"><strong>Mood Recording:</strong> Track the emotions you experience during your dreams for deeper, more insightful interpretations.</li>

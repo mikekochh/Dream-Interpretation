@@ -20,7 +20,7 @@ const OracleInterpretations = ({ interpretation, oracle }) => {
           onClick={openInterpretationModal}
       >
         {oracle && (
-          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center bg-opacity-50 md:mr-4">
+          <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center bg-opacity-50 md:mr-4">
             <Image
               src={oracle.oraclePicture}
               alt={`Oracle ${oracle.oracleName}`}
@@ -28,7 +28,9 @@ const OracleInterpretations = ({ interpretation, oracle }) => {
               width={100}
               height={100}
             />
+            <div className="absolute bottom-0 right-0 h-3 w-3 bg-red-400 rounded-full shadow-lg animate-pulse"></div>
           </div>
+
         )}
         <div className="text-center md:text-left">
           <p className="text-sm hidden md:flex text-gold">{oracle ? oracle.oracleName : 'Unknown Oracle'}</p>

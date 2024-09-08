@@ -52,10 +52,12 @@ export default function DreamsForm() {
 
     useEffect(() => {
         const handleGoogleSignUp = async () => {
+            console.log("Are we getting here?");
             const dreamID = localStorage.getItem('dreamID');
             let googleSignUp = localStorage.getItem('googleSignUp');
             googleSignUp = (googleSignUp === 'true');
             if (dreamID && googleSignUp) {
+                console.log("What about here?");
                 localStorage.setItem('googleSignUp', false);
                 const userID = user._id;
                 await axios.post('/api/user/sendWelcomeEmail', {
@@ -79,17 +81,6 @@ export default function DreamsForm() {
             }
         }
 
-        // const getUser = async () => {
-        //     try {
-        //         const userDetails = await axios.get("/api/dream/getUser/" + dreamID);
-        //         setUser(userDetails.data.user);
-        //     } catch (error) {
-        //         console.error("Error fetching user details:", error);
-        //     } finally {
-        //         setLoadingUser(false); // Set to false after user data is fetched
-        //     }
-        // }
-
         const getEmotions = async () => {
             try {
                 const resEmotions = await axios.get("/api/emotions/getEmotions");
@@ -111,7 +102,6 @@ export default function DreamsForm() {
         }
 
         checkPage();
-        // getUser();
         getEmotions();
         getOracles();
     }, [])

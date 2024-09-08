@@ -113,6 +113,32 @@ export default function RegisterForm() {
         signIn('google');
     }
 
+    // const signUpWithGoogle = () => {
+    //     localStorage.setItem("googleSignUp", true);
+    
+    //     const width = 500;
+    //     const height = 600;
+    //     const left = (window.innerWidth - width) / 2;
+    //     const top = (window.innerHeight - height) / 2;
+    
+    //     // Open a popup window for Google sign-in
+    //     const googleAuthWindow = window.open(
+    //         '/api/auth/signin/google', // This assumes you're using NextAuth's default route for Google sign-in
+    //         'Google Sign-In',
+    //         `width=${width},height=${height},top=${top},left=${left}`
+    //     );
+    
+    //     // Check when the popup is closed
+    //     const checkAuth = setInterval(() => {
+    //         if (googleAuthWindow.closed) {
+    //             clearInterval(checkAuth);
+    //             // Handle the result after the popup closes (e.g., reload the page or fetch session)
+    //             console.log('Google sign-in popup closed');
+    //             window.location.reload(); // You can also fetch user session here instead of reloading
+    //         }
+    //     }, 1000);
+    // }
+
     return (
         <div className='text-white'>
             <div className="p-5 rounded-lg border-t-4 border-white-400 border">

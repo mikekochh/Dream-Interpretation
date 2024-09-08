@@ -19,6 +19,7 @@ const JournalForm = () => {
     const [saveMessage, setSaveMessage] = useState("");
     const [oracleSelected, setOracleSelected] = useState(false);
     const [dream, setDream] = useState("");
+    const [interpretationComplete, setInterpretationComplete] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [loadingSession, setLoadingSession] = useState(true);
@@ -168,10 +169,17 @@ const JournalForm = () => {
             if (oracleSelected) {
                 await interpretDreams(dreamID);
             }
-            setSaveMessage("Dream Interpretation Complete! Taking you to your personalized Dream Page");
-            setTimeout(() => {
-                router.push('/dreamDetails?dreamID=' + dreamID);
-            }, 3000);
+            if (user) {
+                setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
+                // if they do not have an account, they need to create one to see their interpretation. do not take them straight to in this case
+                setTimeout(() => {
+                    router.push('/dreamDetails?dreamID=' + dreamID);
+                }, 3000);
+            }
+            else {
+                setSaveMessage("Dream interpretation complete! Please create an account to continue");
+                setInterpretationComplete(true);
+            }
         } catch (error) {
             console.log("the error: ", error);
             setSaveMessage("Error Journaling Dream. Please Try Again Later");
@@ -272,7 +280,7 @@ const JournalForm = () => {
         <Suspense fallback={<LoadingComponent loadingText={'Assembling the Dream Oracles'} /> }>
             <div className="text-white relative">
                 {savingDream ? (
-                    <SavingDreamView saveMessage={saveMessage} user={user} />
+                    <SavingDreamView saveMessage={saveMessage} user={user} interpretationComplete={interpretationComplete} />
                 ) : (
                     <JournalDreamView
                         user={user}
