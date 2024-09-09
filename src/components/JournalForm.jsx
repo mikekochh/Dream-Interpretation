@@ -10,7 +10,6 @@ const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 const JournalForm = () => {
     const { user } = useContext(UserContext)
-    const existingDreamID = localStorage.getItem('dreamID');
 
     const router = useRouter();
 
@@ -98,12 +97,12 @@ const JournalForm = () => {
         }
 
         const checkRegisteredAccount = async () => {
+            const existingDreamID = localStorage.getItem('dreamID');
             if (existingDreamID) {
                 journalDream();
             }
         }
 
-        console.log("the user: ", user);
         if (!loading && user) {
             checkRegisteredAccount();
             checkGoogleSignUp();
@@ -157,15 +156,15 @@ const JournalForm = () => {
     }
 
     const journalDream = async () => {
-        console.log("journalDream running...");
         setSavingDream(true);
-        setSaveMessage("Journaling Dream");
+        setSaveMessage("Journaling Your Dream");
         const userID = user?._id;
         let localOracleSelected = oracleSelected;  // Create a local variable
         let existingDream = dream;
-        
+    
         try {
             let dreamID;
+            const existingDreamID = localStorage.getItem('dreamID');
             if (!existingDreamID) {
                 const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
                 dreamID = resJournal.data._id;
@@ -176,13 +175,12 @@ const JournalForm = () => {
                 localOracleSelected = true;  // Update local variable immediately
                 localStorage.removeItem('dreamID');
                 localStorage.removeItem('googleSignUp');
-                console.log("dreamID: ", dreamID);
                 const resGetDream = await axios.get('/api/dream/' + dreamID);
-                console.log("resGetDream: ", resGetDream);
                 existingDream = resGetDream.data.dream.dream;
-                console.log("existing dream: ", existingDream);
                 setDream(existingDream);
             }
+    
+            // Summarize the dream
             const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
                 {
                     params: {
@@ -190,15 +188,23 @@ const JournalForm = () => {
                     }
                 }
             );
-            setSaveMessage("Generating Dream Image");
             const dreamSummary = resSummarizeDream.data[0].message.content;
             console.log("dreamSummary: ", dreamSummary);
-            const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
-                { 
-                    dreamID: dreamID, 
-                    dream: dreamSummary 
-                }
-            );
+    
+            // Try generating the dream image, but don't break the flow if it fails
+            setSaveMessage("Generating Dream Image");
+            try {
+                const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
+                    { 
+                        dreamID: dreamID, 
+                        dream: dreamSummary 
+                    }
+                );
+            } catch (error) {
+                console.log("Error generating dream image, continuing without image.");
+            }
+    
+            // Uncovering Dream Symbols
             setSaveMessage("Uncovering Dream Symbols");
             const resDreamSymbols = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSymbols', 
                 { 
@@ -209,20 +215,24 @@ const JournalForm = () => {
                     } 
                 }
             );
+    
+            // Handle Oracle interpretation if selected
             if (localOracleSelected) {
-                console.log("Are we getting here? Oracle Selected?");
                 await interpretDreams(dreamID, dream || existingDream);
             }
+    
             setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
-            // if they do not have an account, they need to create one to see their interpretation. do not take them straight to in this case
+            
+            // if they do not have an account, they need to create one to see their interpretation. Do not take them straight in this case
             setTimeout(() => {
                 router.push('/dreamDetails?dreamID=' + dreamID);
             }, 3000);
+    
         } catch (error) {
             console.log("the error: ", error);
             setSaveMessage("Error Journaling Dream. Please Try Again Later");
         }
-    };
+    };    
     
 
     const handleEmotionClick = (emotionId) => {

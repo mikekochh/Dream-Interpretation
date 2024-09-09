@@ -68,7 +68,7 @@ const WelcomeSection = ({
                         🔥 {dreamStreak.streakLength}-day Dream Streak! 🔥
                     </h2>
                     <p className="text-xl mt-2 text-gray-300">
-                        You're on fire! Keep up the cosmic connection.
+                        You&aposre on fire! Keep up the cosmic connection.
                     </p>
                 </div>
             )}
@@ -90,7 +90,7 @@ const WelcomeSection = ({
                     <Image src="/LearnStep.svg" alt="Step 3" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
                     <p className="golden-ratio-1">Step 3:</p>
                     <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
-                    <p className="golden-ratio-1">Read a summary and discover detailed insights on your dream, while saving it all in your dream journal</p>
+                    <p className="golden-ratio-1">Read a summary, generate a dream image, and discover detailed insights on your dream, all while saving it all in your dream journal</p>
                 </div>
             </div>
             <div className="image-container text-center mt-4">

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from "next-auth/react";
+import LoadingComponent from './LoadingComponent';
 
 export default function ActivationForm() { 
 
@@ -63,9 +64,9 @@ export default function ActivationForm() {
     });
 
     return (
-        <div className="text-white text-3xl text-center p-4 main-content">
-            {status}
-            {error && <div className="text-red-500">You might have clicked an old activation email. If you continue to have issues, please contact for support.</div> }
+        <div className="text-white text-3xl text-center p-4">
+            <LoadingComponent loadingText={status} />
+            {error && <div className="text-red-500 w-2/3">You might have clicked an old activation email. If you continue to have issues, please contact for support.</div> }
         </div>
     )
 }

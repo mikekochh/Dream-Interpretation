@@ -10,14 +10,21 @@ export async function POST(req) {
 
         await connectMongoDB();
 
+        console.log("googleSignUp: ", googleSignUp);
+        console.log("dreamID: ", dreamID);
+        console.log("userID: ", userID);
+
         const updateDream = await Dream.findOneAndUpdate({ _id: dreamID }, { $set: { userID: userID }}, { new: true });
         
+        console.log("updateDream: ", updateDream);
+
         if (!updateDream) {
             throw new Error("Dream not found!");
         }
 
         const userUpdateData = { $inc: { dreamCount: 1 } };
         if (googleSignUp) {
+            console.log("Hey");
             userUpdateData.$set = { activated: true };
         }
         
@@ -26,6 +33,8 @@ export async function POST(req) {
             userUpdateData,
             { new: true }
         );
+
+        console.log("updateUser: ", updatedUser);
         
 
         if (!updatedUser) {
