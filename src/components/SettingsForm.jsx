@@ -128,7 +128,7 @@ const SettingsForm = () => {
     const router = useRouter();
     const { data: session, status } = useSession();
 
-    const { user } = useContext(UserContext);
+    const { user, logout } = useContext(UserContext);
 
     const [loading, setLoading] = useState(false);
 
@@ -213,8 +213,8 @@ const SettingsForm = () => {
         fetchGenders();
     }, []);
 
-    const logout = async () => {
-        await signOut({ redirect: false });
+    const handleLogout = async () => {
+        await logout();
         router.push("/interpret");
     };
 
@@ -492,7 +492,7 @@ const SettingsForm = () => {
                     <div className="pl-4 pb-4 pt-8">
                         <div className="golden-ratio-3 font-bold">Support & Policies</div>
                         <ContactAndPrivacyButtons />
-                        <button className='golden-ratio-2 underline pl-1' onClick={logout}>Logout</button>
+                        <button className='golden-ratio-2 underline pl-1' onClick={handleLogout}>Logout</button>
                     </div>
                 </div>
                 <div className="image-container text-center">

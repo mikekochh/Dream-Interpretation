@@ -27,6 +27,7 @@ export const authOptions = {
                         return null;
                     }
 
+                    // Return the MongoDB user, which includes _id
                     return user;
 
                 } catch (error) {
@@ -56,12 +57,16 @@ export const authOptions = {
                     const existingUser = await User.findOne({ email: user.email });
 
                     if (!existingUser) {
+                        // Create a new user in MongoDB for Google SSO users
                         const newUser = new User({
                             name: user.name,
                             email: user.email,
-                            password: "", // No password as the user is using Google SSO
+                            password: "", // No password required for Google users
                         });
                         await newUser.save();
+                        user._id = newUser._id;  // Assign MongoDB _id to the user object
+                    } else {
+                        user._id = existingUser._id; // Assign MongoDB _id from existing user
                     }
                 } catch (error) {
                     console.log("Error in signIn callback: ", error);
@@ -71,12 +76,14 @@ export const authOptions = {
             return true;
         },
         async session({ session, token }) {
-            session.user.id = token.sub;
+            // Attach the MongoDB _id to the session object
+            session.user.id = token._id; // Use _id from MongoDB
             return session;
         },
         async jwt({ token, user }) {
+            // If user is signing in for the first time, assign MongoDB _id to the token
             if (user) {
-                token.sub = user.id;
+                token._id = user._id; // Store the MongoDB _id in the JWT
             }
             return token;
         },

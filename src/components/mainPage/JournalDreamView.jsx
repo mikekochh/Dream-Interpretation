@@ -4,6 +4,7 @@ import React, { lazy } from 'react';
 const WelcomeSection = lazy(() => import('./WelcomeSectionView'));
 const MoodSection = lazy(() => import('./MoodSectionView'));
 const OracleSelectionSection = lazy(() => import('./OracleSelectionSectionView'));
+const RegisterForm = lazy(() => import('../RegisterForm'));
 
 export default function JournalDreamView({
     user,
@@ -25,7 +26,11 @@ export default function JournalDreamView({
     incrementDreamStep,
     decrementDreamStep,
     oracleSelected,
+    createAccountFlow
 }) {
+
+    const isMobile = window.innerWidth < 768;
+
     return (
         <div className="flex justify-center items-center min-h-screen relative">
             {dreamStep === 0 ? (
@@ -66,9 +71,18 @@ export default function JournalDreamView({
                         journalDream={journalDream}
                         buttonText={buttonText}
                         oracleSelected={oracleSelected}
+                        createAccountFlow={createAccountFlow}
                     />
                 </div>
-            ) : (<div></div>)}
+            ) : (
+                <div className="text-center">
+                    <p className={`gradient-title-text ${isMobile ? 'golden-ratio-3' : 'golden-ratio-4'}`}>Create an Account</p>
+                    <p className="golden-ratio-2">Create an account with us to view your dream interpretation</p>
+                    <div className="text-center flex justify-center">
+                        <RegisterForm />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

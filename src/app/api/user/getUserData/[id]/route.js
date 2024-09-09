@@ -6,8 +6,10 @@ export async function GET(req) {
     try {
         const pathname = req.nextUrl.pathname;
         const id = pathname.split('/').pop();
+        console.log("the id: ", id);
         await connectMongoDB();
         const user = await User.findById(id);
+        console.log("the user found: ", user);
         if (!user) {
             return NextResponse.error(new Error('User not found!'));
         }

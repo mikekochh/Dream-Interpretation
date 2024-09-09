@@ -10,6 +10,7 @@ const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 const JournalForm = () => {
     const { user } = useContext(UserContext)
+    const existingDreamID = localStorage.getItem('dreamID');
 
     const router = useRouter();
 
@@ -22,7 +23,6 @@ const JournalForm = () => {
     const [interpretationComplete, setInterpretationComplete] = useState(false);
 
     const [loading, setLoading] = useState(true);
-    const [loadingSession, setLoadingSession] = useState(true);
     const [loadingOracles, setLoadingOracles] = useState(true);
     const [loadingEmotions, setLoadingEmotions] = useState(true);
     const [loadingDreamStreak, setLoadingDreamStreak] = useState(true);
@@ -37,10 +37,6 @@ const JournalForm = () => {
     const scrollContainerRef = useRef(null);
 
     useEffect(() => {
-        setLoadingSession(status === 'loading');
-    }, [status]);
-
-    useEffect(() => {
         const selectedOracle = oracles.some(oracle => oracle.selected);
         setOracleSelected(selectedOracle);
         setButtonText(selectedOracle ? "Interpret Dream" : "Journal Dream");
@@ -48,15 +44,6 @@ const JournalForm = () => {
 
     // if google sign up is true, send users to a new page
     useEffect(() => {
-        const checkGoogleSignUp = () => {
-            const dreamID = localStorage.getItem('dreamID');
-            let googleSignUp = localStorage.getItem('googleSignUp');
-            googleSignUp = (googleSignUp === 'true');
-            if (dreamID && googleSignUp) {
-                router.push('/dreamDetails?dreamID=' + dreamID);
-            }
-        }
-
         const getEmotions = async () => {
             try {
                 const res = await axios.get('api/emotions/getEmotions');
@@ -79,7 +66,6 @@ const JournalForm = () => {
             }
         };
 
-        checkGoogleSignUp();
         getOracles();
         getEmotions();
     }, [])
@@ -87,12 +73,42 @@ const JournalForm = () => {
     useEffect(() => {
         if (!loadingOracles &&
             !loadingEmotions &&
-            !loadingSession &&
             !loadingDreamStreak
         ) {
             setLoading(false);
         }
-    }, [loadingOracles, loadingEmotions, loadingSession, loadingDreamStreak]);
+    }, [loadingOracles, loadingEmotions, loadingDreamStreak]);
+
+    useEffect(() => {
+        const checkGoogleSignUp = async () => {
+            const dreamID = localStorage.getItem('dreamID');
+            let googleSignUp = localStorage.getItem('googleSignUp');
+            googleSignUp = (googleSignUp === 'true');
+            if (dreamID && googleSignUp) {
+                const userID = user?._id;
+                console.log("userID for google flow: ", userID);
+                await axios.post('/api/user/sendWelcomeEmail', {
+                    email: user?.email,
+                    name: user?.name
+                })
+                await axios.post('api/dream/newUser', { userID, dreamID, googleSignUp: true });
+                // await axios.post('/api/dream/streak/newStreak', { userID });
+                journalDream();
+            }
+        }
+
+        const checkRegisteredAccount = async () => {
+            if (existingDreamID) {
+                journalDream();
+            }
+        }
+
+        console.log("the user: ", user);
+        if (!loading && user) {
+            checkRegisteredAccount();
+            checkGoogleSignUp();
+        }
+    }, [loading, user])
 
     useEffect(() => {
         const getUserDreamStreak = async () => {
@@ -133,23 +149,50 @@ const JournalForm = () => {
         });
     }
 
+    const createAccountFlow = async () => {
+        const resJournal = await axios.post('/api/dream/journal', { dream, interpretDream: oracleSelected, emotions: selectedEmotions });
+        const dreamID = resJournal.data._id;
+        localStorage.setItem("dreamID", dreamID);
+        incrementDreamStep();
+    }
+
     const journalDream = async () => {
+        console.log("journalDream running...");
         setSavingDream(true);
+        setSaveMessage("Journaling Dream");
         const userID = user?._id;
+        let localOracleSelected = oracleSelected;  // Create a local variable
+        let existingDream = dream;
+        
         try {
-            setSaveMessage("Journaling Dream");
-            const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
-            const dreamID = resJournal.data._id;
-            localStorage.setItem("dreamID", dreamID);
+            let dreamID;
+            if (!existingDreamID) {
+                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
+                dreamID = resJournal.data._id;
+            } else {
+                dreamID = existingDreamID;
+                selectOracle(1); // this means they do not have an account, so must be jung interpretation
+                setOracleSelected(true);
+                localOracleSelected = true;  // Update local variable immediately
+                localStorage.removeItem('dreamID');
+                localStorage.removeItem('googleSignUp');
+                console.log("dreamID: ", dreamID);
+                const resGetDream = await axios.get('/api/dream/' + dreamID);
+                console.log("resGetDream: ", resGetDream);
+                existingDream = resGetDream.data.dream.dream;
+                console.log("existing dream: ", existingDream);
+                setDream(existingDream);
+            }
             const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
                 {
                     params: {
-                        dream: dream
+                        dream: dream ? dream : existingDream
                     }
                 }
-            )
+            );
             setSaveMessage("Generating Dream Image");
             const dreamSummary = resSummarizeDream.data[0].message.content;
+            console.log("dreamSummary: ", dreamSummary);
             const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
                 { 
                     dreamID: dreamID, 
@@ -160,31 +203,27 @@ const JournalForm = () => {
             const resDreamSymbols = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSymbols', 
                 { 
                     params: { 
-                        dreamText: dream, 
+                        dreamText: dream ? dream : existingDream, 
                         dreamID: dreamID, 
                         userID: userID 
                     } 
                 }
             );
-            if (oracleSelected) {
-                await interpretDreams(dreamID);
+            if (localOracleSelected) {
+                console.log("Are we getting here? Oracle Selected?");
+                await interpretDreams(dreamID, dream || existingDream);
             }
-            if (user) {
-                setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
-                // if they do not have an account, they need to create one to see their interpretation. do not take them straight to in this case
-                setTimeout(() => {
-                    router.push('/dreamDetails?dreamID=' + dreamID);
-                }, 3000);
-            }
-            else {
-                setSaveMessage("Dream interpretation complete! Please create an account to continue");
-                setInterpretationComplete(true);
-            }
+            setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
+            // if they do not have an account, they need to create one to see their interpretation. do not take them straight to in this case
+            setTimeout(() => {
+                router.push('/dreamDetails?dreamID=' + dreamID);
+            }, 3000);
         } catch (error) {
             console.log("the error: ", error);
             setSaveMessage("Error Journaling Dream. Please Try Again Later");
         }
     };
+    
 
     const handleEmotionClick = (emotionId) => {
         setSelectedEmotions(prevSelectedEmotions => {
@@ -209,7 +248,7 @@ const JournalForm = () => {
         }
     }
 
-    const interpretDreams = async (dreamID) => {
+    const interpretDreams = async (dreamID, dreamText) => {
         let userDetails = [];
         let additionalContext = '';
 
@@ -237,7 +276,7 @@ const JournalForm = () => {
         for (let i = 0; i < oracles.length; i++) {
             if (oracles[i].selected) {
                 try {
-                    const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dream}`;
+                    const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dreamText}`;
                     setSaveMessage(oracles[i].oracleName + " is now interpreting your dream");
                     await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt, dreamID, oracleID: oracles[i].oracleID } });
                 } catch (error) {
@@ -272,12 +311,12 @@ const JournalForm = () => {
 
     if (loading) {
         return (
-            <LoadingComponent loadingText={'Assembling the Dream Oracles'} />
+            <LoadingComponent loadingText={'Preparing the Dream Oracles'} />
         );
     }
 
     return (
-        <Suspense fallback={<LoadingComponent loadingText={'Assembling the Dream Oracles'} /> }>
+        <Suspense fallback={<LoadingComponent loadingText={'Preparing the Dream Oracles'} /> }>
             <div className="text-white relative">
                 {savingDream ? (
                     <SavingDreamView saveMessage={saveMessage} user={user} interpretationComplete={interpretationComplete} />
@@ -304,6 +343,7 @@ const JournalForm = () => {
                         incrementDreamStep={incrementDreamStep}
                         decrementDreamStep={decrementDreamStep}
                         oracleSelected={oracleSelected}
+                        createAccountFlow={createAccountFlow}
                     />
                 )}
             </div>

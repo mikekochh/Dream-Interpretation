@@ -108,36 +108,10 @@ export default function RegisterForm() {
         }
     }
 
-    const signUpWithGoogle = () => {
+    const signUpWithGoogle = async () => {
         localStorage.setItem("googleSignUp", true);
-        signIn('google');
-    }
-
-    // const signUpWithGoogle = () => {
-    //     localStorage.setItem("googleSignUp", true);
-    
-    //     const width = 500;
-    //     const height = 600;
-    //     const left = (window.innerWidth - width) / 2;
-    //     const top = (window.innerHeight - height) / 2;
-    
-    //     // Open a popup window for Google sign-in
-    //     const googleAuthWindow = window.open(
-    //         '/api/auth/signin/google', // This assumes you're using NextAuth's default route for Google sign-in
-    //         'Google Sign-In',
-    //         `width=${width},height=${height},top=${top},left=${left}`
-    //     );
-    
-    //     // Check when the popup is closed
-    //     const checkAuth = setInterval(() => {
-    //         if (googleAuthWindow.closed) {
-    //             clearInterval(checkAuth);
-    //             // Handle the result after the popup closes (e.g., reload the page or fetch session)
-    //             console.log('Google sign-in popup closed');
-    //             window.location.reload(); // You can also fetch user session here instead of reloading
-    //         }
-    //     }, 1000);
-    // }
+        await signIn('google');
+    }   
 
     return (
         <div className='text-white'>
@@ -194,7 +168,7 @@ export default function RegisterForm() {
             </div>
             {sentEmailVerification && (
                 <PopUpMessage
-                    message="A verification email has been sent to you. Please verify your email address to view your dream interpretation. Thank you!"
+                    message="A verification email has been sent to you. Please verify your email address to interpret your dream. Thank you!"
                 />
             )}
         </div>

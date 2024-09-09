@@ -25,7 +25,6 @@ export default function DreamsForm() {
 
     const { user } = useContext(UserContext);
     
-    const [loadingUser, setLoadingUser] = useState(true);
     const [loading, setLoading] = useState(true);
 
     const [dreamEmotions, setDreamEmotions] = useState([]);
@@ -149,12 +148,6 @@ export default function DreamsForm() {
         }
     }, [dreamID]);
 
-    useEffect(() => {
-        if (!loadingUser) {
-            setLoading(false); // Set loading to false only after all data is fetched
-        }
-    }, [loadingUser]);
-
     const backToDreams = () => {
         router.push('/dreams');
     }
@@ -213,7 +206,7 @@ export default function DreamsForm() {
         setIsDragging(false);
     };
 
-    if (loading || !dream) {
+    if (loading || !oracles || !emotions || !dream) {
         return (
             <LoadingComponent loadingText={'Collecting Dream Details'} />
         );

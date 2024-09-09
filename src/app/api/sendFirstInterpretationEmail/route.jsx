@@ -48,7 +48,7 @@ export async function POST(req) {
         const timeoutDuration = 60000;
 
         try {
-            const interpretation = await checkForInterpretation(dreamID, timeoutDuration);
+            // const interpretation = await checkForInterpretation(dreamID, timeoutDuration);
             // console.log("the interpretation: ", interpretation);
 
             // send email
@@ -75,7 +75,7 @@ export async function POST(req) {
                                                 </div>
                                             </div>
                                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 40px; font-weight: bold; text-align: center; color: #ffffff;">
-                                                See Interpretation Below
+                                                Interpretation Below
                                             </div>
                                         </a>
                                     </td>
@@ -83,9 +83,9 @@ export async function POST(req) {
                                 <tr>
                                     <td valign="top" style="text-align: center; color: #000000; padding: 5%; overflow: auto;">
                                         <h1 style="color: #000000;">Hi ${data.name}!</h1>
-                                        <h3 style="color: #000000;">To view your dream interpretation, please click the link below:</h3>
+                                        <h3 style="color: #000000;">To get your dream interpretation, please click the link below:</h3>
                                         <h3><a href="${verificationLink}" style="color: #0000FF;">View Interpretation Here</a></h3>
-                                        <h3 style="color: #d3d3d3; font-weight: 300;">If you did not request this email, you can safely ignore it.</h3>
+                                        <h3 style="color: #a9a9a9; font-weight: 300;">If you did not request this email, you can safely ignore it.</h3>
                                         <h1 style="color: #000000;">Thank you for choosing Dream Oracles!</h1>
                                     </td>
                                 </tr>

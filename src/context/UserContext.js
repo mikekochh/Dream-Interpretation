@@ -13,10 +13,13 @@ export const UserProvider = ({ children }) => {
     setLoading(false);
 
     const setUserData = async () => {
+        console.log("session: ", session);
         const userID = session?.user?.id;
+        console.log("setUserData running: ", userID);
         if (userID) {
             try {
                 const res = await fetch(`api/user/getUserData/${userID}`, { method: "GET", headers: { "Content-Type":"application/json" } });
+                console.log("the res: ", res);
                 const userData = await res.json();
                 setUser(userData);
             } catch (error) {

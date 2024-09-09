@@ -24,7 +24,8 @@ export default function ActivationForm() {
             setUserEmail(res.data.activatedUser.email);
             const dreamID = localStorage.getItem('dreamID');
             if (dreamID) {
-                router.push('/dreamDetails?dreamID=' + dreamID);
+                // router.push('/dreamDetails?dreamID=' + dreamID);
+                router.push('/interpret');
                 const resSignIn = await signIn("credentials", {
                     email: res.data.activatedUser.email,
                     password: 'password',

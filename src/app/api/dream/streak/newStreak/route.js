@@ -14,6 +14,7 @@ export async function POST(req) {
         }
 
         let dreamStreak = await DreamStreak.findOne({ userID: new mongoose.Types.ObjectId(userID) });
+        console.log("dreamStreak from newStreak: ", dreamStreak);
             
         if (!dreamStreak) {
             dreamStreak = new DreamStreak({
