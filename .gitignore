@@ -42,4 +42,4 @@ firebase-debug.log
 
 get-pip.py
 
-/components/oldPages/
+src/components/oldPages/
