@@ -68,7 +68,7 @@ const WelcomeSection = ({
                         🔥 {dreamStreak.streakLength}-day Dream Streak! 🔥
                     </h2>
                     <p className="text-xl mt-2 text-gray-300">
-                        You&aposre on fire! Keep up the cosmic connection.
+                        You&apos;re on fire! Keep up the cosmic connection.
                     </p>
                 </div>
             )}
