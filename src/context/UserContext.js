@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 
 export const UserContext = createContext();
@@ -13,13 +13,10 @@ export const UserProvider = ({ children }) => {
     setLoading(false);
 
     const setUserData = async () => {
-        console.log("session: ", session);
         const userID = session?.user?.id;
-        console.log("setUserData running: ", userID);
         if (userID) {
             try {
                 const res = await fetch(`api/user/getUserData/${userID}`, { method: "GET", headers: { "Content-Type":"application/json" } });
-                console.log("the res: ", res);
                 const userData = await res.json();
                 setUser(userData);
             } catch (error) {
@@ -27,8 +24,8 @@ export const UserProvider = ({ children }) => {
             }
         }
     }
-    
-    if (session) {
+
+    if (session && !user) {
         setUserData();
     }
   }, [session]);
@@ -57,7 +54,15 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, getUser, loading }}>
+    <UserContext.Provider value={{ 
+      user,
+      loading,
+      session,
+      status, 
+      login, 
+      logout, 
+      getUser  
+    }}>
       {children}
     </UserContext.Provider>
   );

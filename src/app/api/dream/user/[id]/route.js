@@ -6,13 +6,10 @@ import Dream from '../../../../../../models/dream';
 export async function GET(request) {
     try {
         const pathname = request.nextUrl.pathname;
-        const email = pathname.split('/').pop();
+        const id = pathname.split('/').pop();
         await connectMongoDB();
 
-        const user = await User.findOne({ email: email });
-        const userID = user._id.toString();
-
-        const userDreams = await Dream.find({ userID: userID });
+        const userDreams = await Dream.find({ userID: id });
 
         return NextResponse.json(userDreams);
     }

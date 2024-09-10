@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef, lazy, useContext } from 'react';
-import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -8,10 +7,12 @@ import Image from 'next/image';
 import { UserContext } from '@/context/UserContext';
 
 import axios from 'axios';
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faPencil, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import EditDreamModal from './EditDreamModal';
+import DeleteDreamModal from './DeleteDreamModal';
+import DreamSettingsModal from './DreamSettingsModal';
 import OracleInterpretations from './OracleInterpretations';
 import AddNewInterpretationModal from './AddNewInterpretationModal';
 import SymbolCard from './SymbolCard';
@@ -39,6 +40,8 @@ export default function DreamsForm() {
     // modals
     const [showAddNewInterpretationModal, setShowAddNewInterpretationModal] = useState(false);
     const [showEditDreamModal, setShowEditDreamModal] = useState(false);
+    const [showDreamSettingsModal, setShowDreamSettingsModal] = useState(false);
+    const [showDeleteDreamModal, setShowDeleteDreamModal] = useState(false);
 
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -148,10 +151,6 @@ export default function DreamsForm() {
         }
     }, [dreamID]);
 
-    const backToDreams = () => {
-        router.push('/dreams');
-    }
-
     const getEmotionEmoji = (emotionID) => {
         const emotion = emotions.find(e => e.emotionID === emotionID);
         return emotion ? emotion.emotionEmoji : '';
@@ -205,6 +204,23 @@ export default function DreamsForm() {
     const handleMouseUpOrLeave = () => {
         setIsDragging(false);
     };
+    
+    const handleOpenEditDreamModal = () => {
+        setShowDreamSettingsModal(false);
+        setShowEditDreamModal(true);
+    }
+
+    const handleOpenDeleteDreamModal = () => {
+        setShowDreamSettingsModal(false);
+        setShowDeleteDreamModal(true);
+    }
+
+    const handleDeleteDream = async () => {
+        const res = await axios.post('/api/dream/delete', { dreamID });
+        if (res.status === 200) {
+            router.push('/dreams');
+        }
+    }
 
     if (loading || !oracles || !emotions || !dream) {
         return (
@@ -216,7 +232,15 @@ export default function DreamsForm() {
         <div className="main-content">
             <div className="flex flex-col mb-10 text-white md:w-6/12 mx-auto p-2">
                 <div className="md:flex md:flex-row">
-                    <div className="interpretations-section md:w-1/3">
+                    <div className="interpretations-section md:w-1/3 relative">
+                        {/* Three Dots Button */}
+                        <div className="absolute top-0 right-1 md:hidden">
+                            <button className="text-white focus:outline-none bg-white bg-opacity-20 rounded-full h-10 w-10 flex items-center justify-center border border-white">
+                                <FontAwesomeIcon icon={faEllipsisV} className="w-5 h-5" onClick={() => setShowDreamSettingsModal(true)} />
+                            </button>
+                        </div>
+
+                        {/* Interpretations Section */}
                         <p className="golden-ratio-1 md:text-xl mb-1 text-gold">Interpretations</p>
                         <div className="flex md:flex-col flex-row md:space-y-2">
                             {interpretations.map((interpretation) => {
@@ -238,8 +262,15 @@ export default function DreamsForm() {
                             </div>
                         </div>
                     </div>
+                    <div className="image-section relative md:w-2/3 md:ml-4">
+                        {/* Three Dots Above the Image */}
+                        <div className="w-full justify-end mb-2 hidden md:flex">
+                            <button className="text-white focus:outline-none bg-white bg-opacity-20 rounded-full h-10 w-10 flex items-center justify-center border border-white">
+                                <FontAwesomeIcon icon={faEllipsisV} className="w-5 h-5" onClick={() => setShowDreamSettingsModal(true)} />
+                            </button>
+                        </div>
 
-                    <div className="image-section md:w-2/3 md:ml-4">
+                        {/* Image Section */}
                         <div className="w-full md:w-full h-full md:h-auto">
                             {dream.imageURL ? (
                                 <Image
@@ -297,6 +328,17 @@ export default function DreamsForm() {
                     </p>
                 </div>
             </div>
+            <DeleteDreamModal 
+                isOpen={showDeleteDreamModal}
+                onClose={() => setShowDeleteDreamModal(false)}
+                onDelete={handleDeleteDream}
+            />
+            <DreamSettingsModal 
+                isOpen={showDreamSettingsModal}
+                onClose={() => setShowDreamSettingsModal(false)}
+                onEditDream={handleOpenEditDreamModal}
+                onDeleteDream={handleOpenDeleteDreamModal}
+            />
             <EditDreamModal
                 dream={dream}
                 isOpen={showEditDreamModal}

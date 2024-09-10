@@ -955,3 +955,13 @@ h3.golden-ratio-2 {
 .background-darkerblue {
   background-color: #050A30;
 }
+
+/* Add this CSS to your global styles or in the relevant CSS file */
+.dream-card {
+  background-color: rgba(255, 215, 0, 0.5); /* Gold with 50% opacity */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.dream-card:hover {
+  background-color: rgba(255, 215, 0, 0.7); /* Gold with 70% opacity on hover */
+}
