@@ -11,7 +11,6 @@ import { usePathname } from "next/navigation";
 const NavBar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [noNavBarElements, setNoNavBarElements] = useState(false);
     const { data: session } = useSession();
     const pathname = usePathname();
     const [noNavBar, setNoNavBar] = useState(false);
@@ -76,15 +75,6 @@ const NavBar = () => {
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`}>
                                 <Link href="/dreams">Journal</Link>
                             </li>
-                            {/* <li className={`cursor-pointer mr-4 ${pathname.startsWith('/blog') ? 'font-bold' : ''}`}>
-                                <Link href="/blog">Blog</Link>
-                            </li>
-                            <li className={`cursor-pointer mr-4 ${pathname === '/pricing' ? 'font-bold' : ''}`}>
-                                <Link href="/pricing">Shop</Link>
-                            </li> */}
-                            {/* <li className={`cursor-pointer mr-4 ${pathname === '/dreamStream' ? 'font-bold' : ''}`}>
-                                <Link href="/dreamStream">Stream</Link>
-                            </li> */}
                             <li className={`cursor-pointer ${pathname === '/settings' || pathname === '/cancelSubscription' ? 'font-bold' : ''}`}>
                                 <Link href="/settings">Profile</Link>
                             </li>
