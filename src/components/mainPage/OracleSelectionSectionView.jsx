@@ -1,6 +1,6 @@
 "use client";
-import React, { lazy, Suspense } from 'react';
-const OracleSection = lazy(() => import('../OracleSection'));
+import React, { Suspense } from 'react';
+import OracleSection from '../OracleSection';
 
 const OracleSelectionSection = ({
     user,
@@ -30,7 +30,7 @@ const OracleSelectionSection = ({
                 <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
                     {oracles.filter(oracle => oracle.active).map((oracle) => (
                         <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
-                            <Suspense fallback={<div>Loading...</div>}>
+                            <Suspense fallback={<div/>}>
                                 <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} selectOracle={selectOracle} user={user} />
                             </Suspense>
                         </div>

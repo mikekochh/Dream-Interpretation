@@ -326,7 +326,7 @@ const JournalForm = () => {
     }
 
     return (
-        <Suspense fallback={<LoadingComponent loadingText={'Preparing the Dream Oracles'} /> }>
+        <Suspense fallback={<div /> }>
             <div className="text-white relative">
                 {savingDream ? (
                     <SavingDreamView saveMessage={saveMessage} user={user} interpretationComplete={interpretationComplete} />

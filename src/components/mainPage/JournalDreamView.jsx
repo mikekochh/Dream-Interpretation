@@ -1,10 +1,12 @@
 "use client";
-import React, { lazy } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 
-const WelcomeSection = lazy(() => import('./WelcomeSectionView'));
-const MoodSection = lazy(() => import('./MoodSectionView'));
-const OracleSelectionSection = lazy(() => import('./OracleSelectionSectionView'));
-const RegisterForm = lazy(() => import('../RegisterForm'));
+// Directly import all components without lazy loading
+import WelcomeSection from './WelcomeSectionView';
+import MoodSection from './MoodSectionView';
+import OracleSelectionSection from './OracleSelectionSectionView';
+import RegisterForm from '../RegisterForm';
 
 export default function JournalDreamView({
     user,
@@ -28,13 +30,48 @@ export default function JournalDreamView({
     oracleSelected,
     createAccountFlow
 }) {
-
     const isMobile = window.innerWidth < 768;
+    const containerRef = useRef(null);
+    const [isAnimating, setIsAnimating] = useState(false); // Track if an animation is in progress
+    const [currentStep, setCurrentStep] = useState(dreamStep); // Local state for dreamStep
+
+    useEffect(() => {
+        if (!isAnimating && currentStep !== dreamStep) {
+            setIsAnimating(true);
+
+            // Animate fade-out
+            gsap.to(containerRef.current, {
+                opacity: 0,
+                y: -20,
+                duration: 0.6,
+                ease: 'power2.in',
+                onComplete: () => {
+                    // Once fade-out is complete, update the step
+                    setCurrentStep(dreamStep);
+
+                    // Animate fade-in
+                    gsap.fromTo(
+                        containerRef.current,
+                        { opacity: 0, y: 20 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.6,
+                            ease: 'power2.out',
+                            onComplete: () => {
+                                setIsAnimating(false); // Animation is done, reset the flag
+                            }
+                        }
+                    );
+                }
+            });
+        }
+    }, [dreamStep, currentStep, isAnimating]);
 
     return (
-        <div className="flex justify-center items-center min-h-screen relative">
-            {dreamStep === 0 ? (
-                <div className={`overflow-y-auto h-screen ${user ? 'main-content' : 'main-content'}`}>
+        <div ref={containerRef} className="flex justify-center items-center min-h-screen relative">
+            {currentStep === 0 ? (
+                <div className={`overflow-y-auto hide-scrollbar h-screen ${user ? 'main-content' : 'main-content'}`}>
                     <WelcomeSection
                         user={user}
                         dreamStreak={dreamStreak}
@@ -43,7 +80,7 @@ export default function JournalDreamView({
                         dream={dream}
                     />
                 </div>
-            ) : dreamStep === 1 ? (
+            ) : currentStep === 1 ? (
                 <div>
                     <div className="back-button-container">
                         <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
@@ -55,7 +92,7 @@ export default function JournalDreamView({
                         incrementDreamStep={incrementDreamStep}
                     />
                 </div>
-            ) : dreamStep === 2 ? (
+            ) : currentStep === 2 ? (
                 <div>
                     <div className="back-button-container">
                         <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
