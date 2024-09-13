@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const WelcomeSection = ({ 
     user, 
@@ -12,45 +13,69 @@ const WelcomeSection = ({
     setDream, 
     dream 
 }) => {
-    const isMobile = window.innerWidth < 768;
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        // Set the initial state based on window size
+        handleResize();
+
+        // Listen to window resize
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const titleRef = useRef(null);
     const subtitleRef = useRef(null);
     const descriptionRef = useRef(null);
     const restOfPageRef = useRef(null);
-
-    // Animate on mount using GSAP
+    const streakRef = useRef(null);
+    const howDoesItWorkRef = useRef(null);
+    
+    // Register the ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
+    
     useEffect(() => {
         const timeline = gsap.timeline();
-
-        // 1. Animate the welcome text (if it exists)
+    
+        // Existing animations for the welcome text, title, etc.
         timeline.fromTo(
             titleRef.current, 
             { opacity: 0, y: 50 }, 
             { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
         );
-
-        // 2. Animate "Dream Oracles" text
+    
         timeline.fromTo(
             subtitleRef.current, 
             { opacity: 0, y: 50 }, 
             { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
-            "-=0.5" // Overlap with the previous animation by 0.5 seconds
+            "-=0.5"
         );
-
-        // 3. Animate the mini description below
+    
         timeline.fromTo(
             descriptionRef.current, 
             { opacity: 0, y: 50 }, 
             { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
-            "-=0.5" // Overlap with the previous animation by 0.5 seconds
+            "-=0.5"
         );
-
-        // 4. Animate the rest of the page content (textarea and buttons)
+    
         timeline.fromTo(
             restOfPageRef.current, 
             { opacity: 0, y: 50 }, 
             { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+            "-=0.5"
+        );
+    
+        timeline.fromTo(
+            streakRef.current,
+            { opacity: 0, x: 50 },
+            { opacity: 1, x: 0, duration: 1, ease: "power3.out" },
             "-=0.5"
         );
     }, []);
@@ -70,12 +95,12 @@ const WelcomeSection = ({
                 </p>
 
                 {/* 4. Rest of the page */}
-                <div ref={restOfPageRef} className="">
+                <div ref={restOfPageRef}>
                     <textarea
                         type="text"
                         rows={7}
                         placeholder='Dream goes here'
-                        className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black  md:m-0 m-2 w-full"
+                        className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:m-0 w-full"
                         value={dream}
                         onChange={(event) => setDream(event.target.value)}
                     />
@@ -105,7 +130,7 @@ const WelcomeSection = ({
             
             {/* Dream Streak */}
             {dreamStreak && (
-                <div className="streak-container text-center mt-4">
+                <div ref={streakRef} className="streak-container text-center mt-4">
                     <h2 className="text-4xl font-bold text-yellow-500">
                         🔥 {dreamStreak.streakLength}-day Dream Streak! 🔥
                     </h2>
@@ -116,26 +141,28 @@ const WelcomeSection = ({
             )}
 
             {/* How It Works Section */}
-            <h1 className='golden-ratio-3 mt-10 text-center'>How Does It Work?</h1>
-            <div className="image-container flex flex-col md:flex-row">
-                {/* Steps */}
-                <div className={`${isMobile ? 'border-bottom step-section-mobile' : 'border-right step-section'}`}>
-                    <Image src="/ShareDreamStep.svg" alt="Step 1" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
-                    <p className="golden-ratio-1">Step 1:</p>
-                    <p className="golden-ratio-2">Share your dream</p>
-                    <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
-                </div>
-                <div className={`${isMobile ? 'border-bottom step-section-mobile' : 'border-right step-section'}`}>
-                    <Image src="/OracleStep.svg" alt="Step 2" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
-                    <p className="golden-ratio-1">Step 2:</p>
-                    <p className="golden-ratio-2">Choose an Oracle</p>
-                    <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
-                </div>
-                <div className={`${isMobile ? 'step-section-mobile' : 'step-section'}`}>
-                    <Image src="/LearnStep.svg" alt="Step 3" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
-                    <p className="golden-ratio-1">Step 3:</p>
-                    <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
-                    <p className="golden-ratio-1">Read a summary, generate a dream image, and discover detailed insights on your dream, all while saving it all in your dream journal</p>
+            <div ref={howDoesItWorkRef}>
+                <h1 className='golden-ratio-3 mt-10 text-center'>How Does It Work?</h1>
+                <div className="image-container flex flex-col md:flex-row">
+                    {/* Steps */}
+                    <div className={`${isMobile ? 'border-bottom step-section-mobile' : 'border-right step-section'}`}>
+                        <Image src="/ShareDreamStep.svg" alt="Step 1" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
+                        <p className="golden-ratio-1">Step 1:</p>
+                        <p className="golden-ratio-2">Share your dream</p>
+                        <p className="golden-ratio-1">Write down everything that you remember and try to include as many details as possible</p>
+                    </div>
+                    <div className={`${isMobile ? 'border-bottom step-section-mobile' : 'border-right step-section'}`}>
+                        <Image src="/OracleStep.svg" alt="Step 2" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
+                        <p className="golden-ratio-1">Step 2:</p>
+                        <p className="golden-ratio-2">Choose an Oracle</p>
+                        <p className="golden-ratio-1">Select a dream oracle, with each oracle being one of our intelligent AI interpretation models</p>
+                    </div>
+                    <div className={`${isMobile ? 'step-section-mobile' : 'step-section'}`}>
+                        <Image src="/LearnStep.svg" alt="Step 3" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
+                        <p className="golden-ratio-1">Step 3:</p>
+                        <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
+                        <p className="golden-ratio-1">Read a summary, generate a dream image, and discover detailed insights on your dream, all while saving it all in your dream journal</p>
+                    </div>
                 </div>
             </div>
 
