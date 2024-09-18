@@ -127,6 +127,9 @@ const MenuItems = ({setIsOpen, pathname, createAccount}) => {
                 <li className={`cursor-pointer p-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/dreams">Journal</Link>
                 </li>
+                <li className={`cursor-pointer p-4 ${pathname === '/library' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                    <Link href="/library">Library</Link>
+                </li>
                 <li className={`cursor-pointer p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/settings">Profile</Link>
                 </li>
