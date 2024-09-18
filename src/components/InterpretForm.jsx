@@ -167,6 +167,7 @@ const JournalForm = () => {
             const existingDreamID = localStorage.getItem('dreamID');
             if (!existingDreamID) {
                 const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
+                console.log("resJournal: ", resJournal);
                 dreamID = resJournal.data._id;
             } else {
                 dreamID = existingDreamID;

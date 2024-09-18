@@ -78,6 +78,13 @@ const WelcomeSection = ({
             { opacity: 1, x: 0, duration: 1, ease: "power3.out" },
             "-=0.5"
         );
+
+        timeline.fromTo(
+            howDoesItWorkRef.current,
+            { opacity: 0, x: 50 },
+            { opacity: 1, x: 0, duration: 1, ease: "power3.out" },
+            "-=0.5"
+        )
     }, []);
 
     return (

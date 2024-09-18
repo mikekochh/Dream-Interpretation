@@ -42,7 +42,7 @@ export default function DreamsForm() {
                 setFirstDayOfWeek(startOfWeek);
 
                 const endOfWeek = new Date(startOfWeek);
-                endOfWeek.setDate(startOfWeek.getDate() + 6);
+                endOfWeek.setDate(startOfWeek.getDate() + 7);
                 setLastDayOfWeek(endOfWeek);
 
                 const weekDays = [];
@@ -134,7 +134,7 @@ export default function DreamsForm() {
                 {session && !noDreams && (
                     <div className="grid grid-cols-1 md:grid-cols-7 gap-0 mb-10">
                         {dreams.map((dayGroup, index) => (
-                            <div key={index} className="md:border-l border-white p-2">
+                            <div key={index} className={`md:border-l border-white p-2`}>
                                 <h3 className="font-bold text-center whitespace-pre-line">{formatColumnDate(dayGroup.day)}</h3>
                                 {dayGroup.dreams.length === 0 ? (
                                     <p className="text-center">No dreams</p>

@@ -75,6 +75,9 @@ const NavBar = () => {
                             <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dreamDetails' ? 'font-bold' : ''}`}>
                                 <Link href="/dreams">Journal</Link>
                             </li>
+                            <li className={`cursor-pointer mr-4 ${pathname === '/library' ? 'font-bold' : ''}`}>
+                                <Link href="/library">Library</Link>
+                            </li>
                             <li className={`cursor-pointer ${pathname === '/settings' || pathname === '/cancelSubscription' ? 'font-bold' : ''}`}>
                                 <Link href="/settings">Profile</Link>
                             </li>

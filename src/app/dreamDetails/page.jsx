@@ -1,12 +1,6 @@
 "use client";
-import DreamDetailsForm from "@/components/DreamDetails/DreamDetailsForm"
-import StarBackground from "@/components/StarBackground";
+import DreamDetailsForm from "@/components/DreamDetails/DreamDetailsForm";
 
 export default function DreamDetailsPage() {
-
-    return (
-        <StarBackground>
-            <DreamDetailsForm />
-        </StarBackground>
-    )
+    return (<DreamDetailsForm />)
 }

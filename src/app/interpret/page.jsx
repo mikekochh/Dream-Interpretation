@@ -1,11 +1,6 @@
 "use client";
-import JournalForm from "@/components/JournalForm"
-import StarBackground from "@/components/StarBackground";
+import InterpretForm from "@/components/InterpretForm"
 
-export default function JournalPage() {
-    return (
-        <StarBackground>
-            <JournalForm />
-        </StarBackground>
-    )
+export default function InterpretPage() {
+    return (<InterpretForm />)
 }

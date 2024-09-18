@@ -5,6 +5,7 @@ import NavBar from '../components/NavBar'
 import Head from 'next/head';
 import Script from 'next/script';
 import { UserProvider } from '@/context/UserContext';
+import StarBackground from '@/components/StarBackground';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -28,7 +29,9 @@ export default function RootLayout({ children }) {
           <UserProvider>
             <NavBar />
             <div className="main-content">
-              {children}
+              <StarBackground>
+                {children}
+              </StarBackground>
             </div>
           </UserProvider>
         </AuthProvider>

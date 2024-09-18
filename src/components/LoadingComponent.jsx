@@ -1,28 +1,42 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 const LoadingComponent = ({ loadingText, altScreen }) => {
     const [displayedText, setDisplayedText] = useState(loadingText);
-    const [fadeState, setFadeState] = useState("fade-in");
+    const textRef = useRef(null);
 
     useEffect(() => {
-        // Trigger fade-out when the loadingText changes
-        setFadeState("fade-out");
+        if (textRef.current) {
+            // Create a GSAP timeline for a smooth animation sequence
+            const tl = gsap.timeline();
 
-        const timeout = setTimeout(() => {
-            // After fade-out, update the text and fade-in
-            setDisplayedText(loadingText);
-            setFadeState("fade-in");
-        }, 300); // Duration should match the CSS transition time
+            // Animate the text out
+            tl.to(textRef.current, {
+                duration: 0.3,
+                y: -20,
+                opacity: 0,
+                ease: "power1.out",
+                onComplete: () => {
+                    // Update the text after the animation
+                    setDisplayedText(loadingText);
+                },
+            });
 
-        // Clean up the timeout to prevent memory leaks
-        return () => clearTimeout(timeout);
+            // Animate the text in
+            tl.fromTo(
+                textRef.current,
+                { y: 20, opacity: 0 },
+                { duration: 0.3, y: 0, opacity: 1, ease: "power1.in" }
+            );
+        }
     }, [loadingText]);
 
     return (
         <div className={`main-content text-white ${altScreen ? '' : 'flex justify-center items-center h-screen'}`}>
             <div className='loadingContainer'>
-                <p className={`loadingText ${fadeState}`}>{displayedText}</p>
+                {/* Attach the ref to the <p> tag */}
+                <p ref={textRef} className='loadingText'>{displayedText}</p>
                 <div className='dotsContainer'>
                     <div className='dot delay200'></div>
                     <div className='dot delay400'></div>
