@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import DreamGallery from '../DreamGallery';
 
 const WelcomeSection = ({ 
     user, 
@@ -137,7 +138,7 @@ const WelcomeSection = ({
             
             {/* Dream Streak */}
             {dreamStreak && (
-                <div ref={streakRef} className="streak-container text-center mt-4">
+                <div ref={streakRef} className="streak-container text-center mt-4 mb-10">
                     <h2 className="text-4xl font-bold text-yellow-500">
                         🔥 {dreamStreak.streakLength}-day Dream Streak! 🔥
                     </h2>
@@ -146,6 +147,8 @@ const WelcomeSection = ({
                     </p>
                 </div>
             )}
+
+            <DreamGallery />
 
             {/* How It Works Section */}
             <div ref={howDoesItWorkRef}>
