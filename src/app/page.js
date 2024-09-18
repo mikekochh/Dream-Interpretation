@@ -11,10 +11,4 @@ export default function Home() {
   }, [router])
 
   return null;
-
-  // return (
-  //   <main>
-  //     <HomePage />
-  //   </main>
-  // )
 }

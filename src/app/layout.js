@@ -11,9 +11,9 @@ import StarBackground from '@/components/StarBackground';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Dream Oracles | Free Dream Interpretation AI',
-  description: 'Find out what your dreams mean using cutting-edge AI technology. Explore our Jung, Freud, and Islamic AI models for dream interpretations.',
-  url: 'https://dreamoracles.com',
+  title: 'Dream Oracles',
+  description: 'Find out what your dreams mean using cutting-edge AI technology.',
+  url: 'https://dreamoracles.co',
   robots: 'index, follow',
 }
 
