@@ -8,7 +8,7 @@ const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
-const JournalForm = () => {
+const InterpretForm = () => {
     const { user } = useContext(UserContext)
 
     const router = useRouter();
@@ -19,7 +19,7 @@ const JournalForm = () => {
     const [saveMessage, setSaveMessage] = useState("");
     const [oracleSelected, setOracleSelected] = useState(false);
     const [dream, setDream] = useState("");
-    const [interpretationComplete, setInterpretationComplete] = useState(false);
+    const [isPublic, setIsPublic] = useState(true);
 
     const [loading, setLoading] = useState(true);
     const [loadingOracles, setLoadingOracles] = useState(true);
@@ -166,7 +166,7 @@ const JournalForm = () => {
             let dreamID;
             const existingDreamID = localStorage.getItem('dreamID');
             if (!existingDreamID) {
-                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
+                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions, isPublic });
                 console.log("resJournal: ", resJournal);
                 dreamID = resJournal.data._id;
             } else {
@@ -329,8 +329,8 @@ const JournalForm = () => {
     return (
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
-                {savingDream ? (
-                    <SavingDreamView saveMessage={saveMessage} user={user} interpretationComplete={interpretationComplete} />
+                {true ? (
+                    <SavingDreamView saveMessage={saveMessage} user={user} />
                 ) : (
                     <JournalDreamView
                         user={user}
@@ -355,6 +355,8 @@ const JournalForm = () => {
                         decrementDreamStep={decrementDreamStep}
                         oracleSelected={oracleSelected}
                         createAccountFlow={createAccountFlow}
+                        isPublic={isPublic}
+                        setIsPublic={setIsPublic}
                     />
                 )}
             </div>
@@ -362,4 +364,4 @@ const JournalForm = () => {
     );
 };
 
-export default JournalForm;
+export default InterpretForm;
