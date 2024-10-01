@@ -329,7 +329,7 @@ const InterpretForm = () => {
     return (
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
-                {true ? (
+                {savingDream ? (
                     <SavingDreamView saveMessage={saveMessage} user={user} />
                 ) : (
                     <JournalDreamView
