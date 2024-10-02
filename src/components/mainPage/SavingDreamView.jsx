@@ -6,11 +6,11 @@ import PublicDreamView from './PublicDreamView';
 
 export default function SavingDreamView({
     saveMessage,
-    user
+    dreamID
 }) {    
     return (
         <div className="flex justify-center items-center flex-col h-screen">
-            <PublicDreamView />
+            <PublicDreamView dreamID={dreamID} />
             <LoadingComponent loadingText={saveMessage} altScreen={true} />
         </div>
     );   

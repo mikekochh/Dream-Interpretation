@@ -5,7 +5,7 @@ import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import DreamGallery from '../DreamGallery';
+import DreamStream from '../DreamStream';
 
 const WelcomeSection = ({ 
     user, 
@@ -148,7 +148,7 @@ const WelcomeSection = ({
                 </div>
             )}
 
-            <DreamGallery />
+            <DreamStream />
 
             {/* How It Works Section */}
             <div ref={howDoesItWorkRef}>

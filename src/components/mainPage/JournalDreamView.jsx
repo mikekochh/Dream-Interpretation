@@ -7,7 +7,6 @@ import WelcomeSection from './WelcomeSectionView';
 import MoodSection from './MoodSectionView';
 import OracleSelectionSection from './OracleSelectionSectionView';
 import RegisterForm from '../RegisterForm';
-import PublicDreamView from './PublicDreamView';
 
 export default function JournalDreamView({
     user,
@@ -29,9 +28,7 @@ export default function JournalDreamView({
     incrementDreamStep,
     decrementDreamStep,
     oracleSelected,
-    createAccountFlow,
-    isPublic,
-    setIsPublic
+    createAccountFlow
 }) {
     const isMobile = window.innerWidth < 768;
     const containerRef = useRef(null);
@@ -113,13 +110,6 @@ export default function JournalDreamView({
                         oracleSelected={oracleSelected}
                         createAccountFlow={createAccountFlow}
                     />
-                </div>
-            ) : currentStep === 3 ? (
-                <div>
-                    <div className="back-button-container">
-                        <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
-                    </div>
-                    <PublicDreamView incrementDreamStep={incrementDreamStep} isPublic={isPublic} setIsPublic={setIsPublic} />
                 </div>
             ) : (
                 <div className="text-center">

@@ -41,7 +41,7 @@ export async function GET(req) {
             // Sort by count in descending order
             { $sort: { count: -1 } },
             // Limit to top 5 symbols
-            { $limit: 12 },
+            { $limit: 4 },
             // Lookup corresponding dream symbol data
             {
                 $lookup: {

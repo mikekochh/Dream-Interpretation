@@ -48,6 +48,8 @@ export default function DreamsForm() {
     const [scrollLeft, setScrollLeft] = useState(0);
     const containerRef = useRef(null);
 
+    const [isUsersOwnDream, setIsUsersOwnDream] = useState(false);
+
     const handleToggleDreamExpanded = () => {
         setIsDreamExpanded(!isDreamExpanded);
     }
@@ -140,6 +142,7 @@ export default function DreamsForm() {
                 const dreamRes = await axios.get('/api/dream/' + dreamID);
                 setDream(dreamRes.data.dream);
                 setInterpretations(dreamRes.data.interpretations);
+                console.log("dreamRes: ", dreamRes);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching dream details:", error);
@@ -150,6 +153,17 @@ export default function DreamsForm() {
             getDreamDetails();
         }
     }, [dreamID]);
+
+    useEffect(() => {
+        console.log("user: ", user);
+        console.log("dream: ", dream);
+        if (!user || user?._id !== dream?.userID) {
+            setIsUsersOwnDream(false);
+        }
+        else {
+            setIsUsersOwnDream(true);
+        }
+    }, [user, dream]);
 
     const getEmotionEmoji = (emotionID) => {
         const emotion = emotions.find(e => e.emotionID === emotionID);
@@ -234,12 +248,13 @@ export default function DreamsForm() {
                 <div className="md:flex md:flex-row">
                     <div className="interpretations-section md:w-1/3 relative">
                         {/* Three Dots Button */}
+                        {isUsersOwnDream && (
                         <div className="absolute top-0 right-1 md:hidden">
                             <button className="text-white focus:outline-none bg-white bg-opacity-20 rounded-full h-10 w-10 flex items-center justify-center border border-white">
                                 <FontAwesomeIcon icon={faEllipsisV} className="w-5 h-5" onClick={() => setShowDreamSettingsModal(true)} />
                             </button>
                         </div>
-
+                        )}
                         {/* Interpretations Section */}
                         <p className="golden-ratio-1 md:text-xl mb-1 text-gold">Interpretations</p>
                         <div className="flex md:flex-col flex-row md:space-y-2">
@@ -254,22 +269,25 @@ export default function DreamsForm() {
                                     />
                                 );
                             })}
+                            {isUsersOwnDream && (
                             <div className="flex flex-col cursor-pointer p-2" onClick={() => setShowAddNewInterpretationModal(true)}>
                                 <div className="w-14 h-14 rounded-full border-gold-small flex items-center justify-center bg-black bg-opacity-50">
                                     <span className="text-xl font-bold text-gold">+</span>
                                 </div>
                                 <p className="mt-1 text-sm text-gold">Add New</p>
                             </div>
+                            )}
                         </div>
                     </div>
                     <div className="image-section relative md:w-2/3 md:ml-4">
                         {/* Three Dots Above the Image */}
-                        <div className="w-full justify-end mb-2 hidden md:flex">
-                            <button className="text-white focus:outline-none bg-white bg-opacity-20 rounded-full h-10 w-10 flex items-center justify-center border border-white">
-                                <FontAwesomeIcon icon={faEllipsisV} className="w-5 h-5" onClick={() => setShowDreamSettingsModal(true)} />
-                            </button>
-                        </div>
-
+                        {isUsersOwnDream && (
+                            <div className="w-full justify-end mb-2 hidden md:flex">
+                                <button className="text-white focus:outline-none bg-white bg-opacity-20 rounded-full h-10 w-10 flex items-center justify-center border border-white">
+                                    <FontAwesomeIcon icon={faEllipsisV} className="w-5 h-5" onClick={() => setShowDreamSettingsModal(true)} />
+                                </button>
+                            </div>
+                        )}
                         {/* Image Section */}
                         <div className="w-full md:w-full h-full md:h-auto">
                             {dream.imageURL ? (
@@ -323,9 +341,11 @@ export default function DreamsForm() {
                             </div>
                         ))}
                     </div>
+                    {isUsersOwnDream && (
                     <p className="golden-ratio-2 text-right cursor-pointer" onClick={() => setShowEditDreamModal(true)}>
                         Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2" />
                     </p>
+                    )}
                 </div>
             </div>
             <DeleteDreamModal 

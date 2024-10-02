@@ -19,7 +19,7 @@ const InterpretForm = () => {
     const [saveMessage, setSaveMessage] = useState("");
     const [oracleSelected, setOracleSelected] = useState(false);
     const [dream, setDream] = useState("");
-    const [isPublic, setIsPublic] = useState(true);
+    const [dreamID, setDreamID] = useState();
 
     const [loading, setLoading] = useState(true);
     const [loadingOracles, setLoadingOracles] = useState(true);
@@ -163,14 +163,14 @@ const InterpretForm = () => {
         let existingDream = dream;
     
         try {
-            let dreamID;
+            let localDreamID;
             const existingDreamID = localStorage.getItem('dreamID');
             if (!existingDreamID) {
-                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions, isPublic });
+                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
                 console.log("resJournal: ", resJournal);
-                dreamID = resJournal.data._id;
+                localDreamID = resJournal.data._id;
             } else {
-                dreamID = existingDreamID;
+                localDreamID = existingDreamID;
                 selectOracle(1); // this means they do not have an account, so must be jung interpretation
                 setOracleSelected(true);
                 localOracleSelected = true;  // Update local variable immediately
@@ -180,6 +180,8 @@ const InterpretForm = () => {
                 existingDream = resGetDream.data.dream.dream;
                 setDream(existingDream);
             }
+
+            setDreamID(localDreamID);
     
             // Summarize the dream
             const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
@@ -197,7 +199,7 @@ const InterpretForm = () => {
             try {
                 const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
                     { 
-                        dreamID: dreamID, 
+                        dreamID: localDreamID, 
                         dream: dreamSummary 
                     }
                 );
@@ -211,7 +213,7 @@ const InterpretForm = () => {
                 { 
                     params: { 
                         dreamText: dream ? dream : existingDream, 
-                        dreamID: dreamID, 
+                        dreamID: localDreamID, 
                         userID: userID 
                     } 
                 }
@@ -219,14 +221,14 @@ const InterpretForm = () => {
     
             // Handle Oracle interpretation if selected
             if (localOracleSelected) {
-                await interpretDreams(dreamID, dream || existingDream);
+                await interpretDreams(localDreamID, dream || existingDream);
             }
     
             setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
             
             // if they do not have an account, they need to create one to see their interpretation. Do not take them straight in this case
             setTimeout(() => {
-                router.push('/dreamDetails?dreamID=' + dreamID);
+                router.push('/dreamDetails?dreamID=' + localDreamID);
             }, 3000);
     
         } catch (error) {
@@ -330,7 +332,7 @@ const InterpretForm = () => {
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
                 {savingDream ? (
-                    <SavingDreamView saveMessage={saveMessage} user={user} />
+                    <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} />
                 ) : (
                     <JournalDreamView
                         user={user}
@@ -341,8 +343,6 @@ const InterpretForm = () => {
                         oracles={oracles}
                         journalDream={journalDream}
                         buttonText={buttonText}
-                        setDreamPublic={setDreamPublic}
-                        dreamPublic={dreamPublic}
                         scrollLeft={scrollLeft}
                         scrollRight={scrollRight}
                         scrollContainerRef={scrollContainerRef}
@@ -355,8 +355,6 @@ const InterpretForm = () => {
                         decrementDreamStep={decrementDreamStep}
                         oracleSelected={oracleSelected}
                         createAccountFlow={createAccountFlow}
-                        isPublic={isPublic}
-                        setIsPublic={setIsPublic}
                     />
                 )}
             </div>

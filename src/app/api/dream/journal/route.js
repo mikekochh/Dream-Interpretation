@@ -7,7 +7,7 @@ import DreamStreak from '../../../../../models/dreamStreaks';
 
 export async function POST(req) {
     try {
-        const { dream, userID, interpretDream, emotions, isPublic } = await req.json();
+        const { dream, userID, interpretDream, emotions } = await req.json();
         const dreamDate = new Date();
 
         await connectMongoDB();
@@ -21,7 +21,7 @@ export async function POST(req) {
                 interpretationID: 0,
                 dreamDate,
                 interpretation: interpretDream,
-                isPublic
+                isPublic: true
             });
 
             if (!newDream) {
@@ -56,7 +56,7 @@ export async function POST(req) {
                 interpretationID: 0,
                 dreamDate,
                 interpretation: interpretDream,
-                isPublic
+                isPublic: true
             });
 
             if (!newDream) {

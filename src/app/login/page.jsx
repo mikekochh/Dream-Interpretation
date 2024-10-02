@@ -1,13 +1,14 @@
+"use client";
 import LoginForm from "@/components/LoginForm"
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { useContext } from "react";
+import { UserContext } from "@/context/UserContext";
 
-export default async function LoginPage() {
+export default function LoginPage() {
 
-    const session = await getServerSession(authOptions);
+    const { user } = useContext(UserContext);
 
-    if (session) {
+    if (user) {
         redirect("/interpret");
     }
 

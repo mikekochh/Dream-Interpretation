@@ -6,6 +6,9 @@ const cors = require('cors')({ origin: true });
 const { MongoClient } = require('mongodb');
 const sgMail = require('@sendgrid/mail');
 const axios = require('axios');
+const { ObjectId } = require('mongodb'); 
+const path = require('path');
+const { Storage } = require('@google-cloud/storage');
 
 // Set SendGrid API key
 sgMail.setApiKey(functions.config().sendgrid.api_key);
@@ -18,7 +21,13 @@ const openai = new OpenAI({
 });
 
 const uri = functions.config().mongodb.uri;
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// OpenAI API setup using the existing configuration
+const OPENAI_API_KEY = functions.config().openai.api_key;
+const OPENAI_API_URL = 'https://api.openai.com/v1/images/generations'; // Use this constant for the API URL
+
+const storage = new Storage();
 
 exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
     cors(req, res, async () => {
@@ -32,32 +41,26 @@ exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 
             logger.info('dreamPrompt: ', dreamPrompt);
             logger.info('dreamID: ', dreamID);
             logger.info("oracleID: ", oracleID);
-            const dreamData = await interpretDream(dreamPrompt);
+            const dreamData = await interactWithChatGPT(dreamPrompt);
             logger.info('dreamData: ', dreamData);
             logger.info("the interpretation: ", dreamData[0].message.content);
 
             if (dreamID && oracleID) {
-                const organizeInterpretationPrompt = `Take the following dream interpretation and organize it into a JSON object. The structure should be an array where each element is an object representing a section. Each section should have a 'title' field for the section heading and a 'content' field for the section details. The final section of the array should be a summary of the interpretation.
+                const organizeInterpretationPrompt = `Take the following dream interpretation and organize it into well-structured HTML code. The HTML should contain sections with titles, each section should have a heading (<h2>) and the corresponding content in paragraphs (<p>). The final section should be a summary of the interpretation. Ensure the HTML is valid and easy to display on a webpage. Return only the HTML code and nothing else.
 
                 Dream interpretation: ${dreamData[0].message.content}
-                
+               
                 Output format:
-                [
-                  {
-                    "title": "Section 1 Title",
-                    "content": "Details for section 1."
-                  },
-                  {
-                    "title": "Section 2 Title",
-                    "content": "Details for section 2."
-                  },
-                  {
-                    "title": "Summary",
-                    "content": "Summary of the interpretation."
-                  }
-                ]`;
+                <h2>Section 1 Title</h2>
+                <p>Details for section 1.</p>
 
-                const organizedInterpretationData = await interpretDream(organizeInterpretationPrompt);
+                <h2>Section 2 Title</h2>
+                <p>Details for section 2.</p>
+
+                <h2>Summary</h2>
+                <p>Summary of the interpretation.</p>`;
+
+                const organizedInterpretationData = await interactWithChatGPT(organizeInterpretationPrompt);
                 logger.info("organized dream interpretation: ", organizedInterpretationData);
                 
 
@@ -93,43 +96,266 @@ exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 
     });
 });
 
-async function interpretDream(dream) {
-    const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4o",
-        messages: [{ role: "user", content: dream }],
+exports.dreamSymbols = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        const { dreamText, dreamID, userID } = req.query;
+
+        try {
+            await client.connect();
+            const db = client.db('dreamsite');
+            const symbolsCollection = db.collection('dreamsymbols');
+            const userDreamSymbolsCollection = db.collection('userdreamsymbols'); // Collection to store dreamID, symbolID, and optionally userID
+            logger.info('dreamText: ', dreamText);
+            logger.info('dreamID: ', dreamID);
+            logger.info('userID: ', userID);
+
+            // Check if dreamID is provided (userID is now optional)
+            if (!dreamID) {
+                throw new Error('dreamID is required.');
+            }
+
+            // Fetch the master list of symbols from the dreamsymbols collection
+            const symbolsList = await symbolsCollection.find({}).toArray();
+
+            // Split the symbols into chunks of 100 symbols
+            const chunkSize = 75;
+            const symbolChunks = [];
+            for (let i = 0; i < symbolsList.length; i += chunkSize) {
+                symbolChunks.push(symbolsList.slice(i, i + chunkSize));
+            }
+
+            let allMatchedSymbols = new Set(); // Use a Set to collect unique symbols
+
+            // Iterate through the symbol chunks and send them to ChatGPT in separate requests
+            for (const chunk of symbolChunks) {
+                const symbolTerms = chunk.map(symbolObj => symbolObj.symbol.toLowerCase()).join(', ');
+
+                // Generate a prompt that asks ChatGPT to find matching symbols from the symbol list in the dream, without forcing symbols that don't exist
+                const symbolsPrompt = `Analyze the following dream and return any symbols from the provided list that are present in the dream. Only return symbols exactly as they are written in the list, without altering the capitalization, punctuation, or wording. If no symbols from the list are found in the dream, return nothing. The symbols are: ${symbolTerms}.
+                                
+                Dream: ${dreamText}
+                                
+                Output format (return symbols exactly as they appear in the list, or return nothing if no symbols are found):
+                Symbol1
+                Symbol2
+                Symbol3`;
+
+                // Use ChatGPT to extract matching symbols for the current chunk
+                const dreamData = await interactWithChatGPT(symbolsPrompt);
+                logger.info('dreamData: ', dreamData);
+
+                // Extract the symbols matched in the dream from the current chunk
+                const matchedSymbols = dreamData[0].message.content.split('\n').filter(symbol => symbol.trim() !== '');
+                logger.info("Matched Symbols in this chunk: ", matchedSymbols);
+
+                // Add the matched symbols to the Set to ensure uniqueness
+                matchedSymbols.forEach(symbol => allMatchedSymbols.add(symbol.trim()));
+            }
+
+            logger.info("All matched symbols (unique): ", Array.from(allMatchedSymbols));
+
+            // Iterate over the unique matched symbols and insert into userdreamsymbols collection
+            for (const symbol of allMatchedSymbols) {
+                // Find the corresponding symbol ID from the dreamsymbols collection
+                const symbolEntry = await symbolsCollection.findOne({ symbol: { $regex: new RegExp(`^${symbol.trim()}$`, 'i') } });
+
+                if (symbolEntry) {
+                    // Check if the symbol already exists for this dream (without requiring a userID)
+                    const existingEntry = await userDreamSymbolsCollection.findOne({
+                        dreamID,
+                        symbolID: symbolEntry._id,
+                        ...(userID && { userID }) // Add userID to the query only if it's provided
+                    });
+
+                    // Only insert if the symbol does not already exist for this dream
+                    if (!existingEntry) {
+                        const newUserSymbolEntry = await userDreamSymbolsCollection.insertOne({
+                            dreamID,
+                            symbolID: symbolEntry._id,
+                            analysisDate: new Date(),
+                            ...(userID && { userID }) // Save userID only if provided
+                        });
+
+                        logger.info("New user symbol entry: ", newUserSymbolEntry);
+                    } else {
+                        logger.info("Duplicate symbol entry skipped: ", symbolEntry.symbol);
+                    }
+                }
+            }
+
+            res.status(200).json({ success: true, matchedSymbols: Array.from(allMatchedSymbols) });
+        } catch (error) {
+            logger.error('Error: ', error);
+            res.status(500).json({ error: error.message });
+        }
     });
-    logger.info('chatCompletion: ', chatCompletion);
+});
 
-    return chatCompletion.choices;
-}
+exports.generateDreamImage = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        try {
+            const { dream, dreamID } = req.body;
 
-// Scheduled function to run every night at midnight for dream streaks
+            if (!dream || !dreamID) {
+                console.error("Missing dream or dreamID in request");
+                return res.status(400).json({ message: 'dream and dreamID are required!' });
+            }
+
+            // Connect to MongoDB
+            try {
+                await client.connect();
+                console.log("Connected to MongoDB successfully");
+
+                const db = client.db('dreamsite');
+                const dreamsCollection = db.collection('dreams');
+    
+                // Generate the prompt for OpenAI API
+                const prompt = `A beautiful and dreamlike scene based on the following dream: ${dream}`;
+    
+                // Request to OpenAI API
+                let imageResponse;
+                try {
+                    imageResponse = await axios.post(
+                        OPENAI_API_URL,
+                        {
+                            prompt: prompt,
+                            n: 1,
+                            size: "1024x1024",
+                            model: "dall-e-3",
+                            response_format: "url"
+                        },
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                                'Content-Type': 'application/json',
+                            }
+                        }
+                    );
+                } catch (error) {
+                    console.error("OpenAI API error: ", error.message);
+                    return res.status(500).json({ message: 'Error generating image from OpenAI' });
+                }
+    
+                if (imageResponse.data && imageResponse.data.data && imageResponse.data.data.length > 0) {
+                    const imageURL = imageResponse.data.data[0].url;
+    
+                    // Download image
+                    const imagePath = path.resolve(`/tmp`, `${dreamID}.png`); // Use temp storage for Firebase functions
+                    const imageDownloadResponse = await axios({
+                        url: imageURL,
+                        method: 'GET',
+                        responseType: 'stream',
+                    });
+    
+                    // Save the image to Firebase Storage (or use your preferred storage)
+                    const bucketName = 'dream-oracles.appspot.com';
+                    const bucket = storage.bucket(bucketName);
+                    const file = bucket.file(`${dreamID}.png`);
+                    const writeStream = file.createWriteStream();
+    
+                    imageDownloadResponse.data.pipe(writeStream);
+    
+                    writeStream.on('finish', async () => {
+                        console.log('Image successfully uploaded to Firebase Storage');
+                        const publicUrl = `https://storage.googleapis.com/${bucketName}/${dreamID}.png`;
+                        console.log("publicURL: ", publicUrl);
+    
+                        // Update MongoDB with the image URL
+                        try {
+                            const newDream = await dreamsCollection.findOneAndUpdate(
+                                { _id: new ObjectId(dreamID) },
+                                { $set: { imageURL: publicUrl } },
+                                { returnOriginal: false }
+                            );
+                            console.log("the newDream: ", newDream);
+                        } catch (error) {
+                            console.error("MongoDB update error: ", error.message);
+                            return res.status(500).json({ message: 'Error updating dream with image URL' });
+                        }
+    
+                        return res.status(200).json({ message: 'Image generated and saved successfully', imageURL: publicUrl });
+                    });
+    
+                    writeStream.on('error', (err) => {
+                        console.error("Error saving image to storage:", err);
+                        return res.status(500).json({ message: 'Error saving image to storage' });
+                    });
+                } else {
+                    console.error("Image generation failed!");
+                    return res.status(500).json({ message: 'Image generation failed!' });
+                }
+            } catch (error) {
+                console.error("MongoDB connection error: ", error.message);
+                return res.status(500).json({ message: "Error connecting to MongoDB" });
+            }
+        } catch (error) {
+            console.error("Unexpected error: ", error.message);
+            return res.status(500).json({ message: 'Error processing request!' });
+        }
+    });
+});
+
+
+
+exports.dreamSummary = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        const { dream } = req.query;
+        logger.info('the dream: ', dream);
+        try {
+            const dreamSummaryPrompt = "Here is a dream entry. Please describe the most visually significant scene in no more than 50 words. Focus on vivid imagery, avoiding inappropriate, sensitive details, and any references to famous people. The description should evoke imagination for a creative image generation. Here is the dream:\n\n" + dream;
+
+            const summarizedDream = await interactWithChatGPT(dreamSummaryPrompt);
+            logger.info('summary data: ', summarizedDream);
+            logger.info('the summary: ', summarizedDream[0].message.content);
+
+            res.status(200).json(summarizedDream);
+        } catch (error) {
+            logger.error('Error summarizing dream: ', error);
+            res.status(500).json({ error: error.message });
+        }
+    })
+})
+
+// Scheduled function to run every night at midnight for dream streaks and soul sound streaks
 exports.scheduledFunction = functions.pubsub.schedule('every day 00:00').onRun(async (context) => {
     logger.info('Scheduled function running at midnight');
     await client.connect();
     const db = client.db('dreamsite');
-    const collection = db.collection('dreamstreaks');
+    const collectionDreamStreaks = db.collection('dreamstreaks');
+    const collectionSoundStreaks = db.collection('soundstreaks');
 
     try {
-        const updateFalseResult = await collection.updateMany(
+        // first, handle dream streaks
+        const updateFalseResult = await collectionDreamStreaks.updateMany(
             { dreamedToday: false },
             { $set: { streakLength: 0 } }
         );
         logger.info('Updated documents where dreamedToday was false', updateFalseResult);
 
-        const updateTrueResult = await collection.updateMany(
+        const updateTrueResult = await collectionDreamStreaks.updateMany(
             { dreamedToday: true },
             { $set: { dreamedToday: false } }
         );
         logger.info('Updated documents where dreamedToday was true', updateTrueResult);
 
-    } catch (error) {
-        logger.error('Error updating dream streaks: ', error);
-    } finally {
-        await client.close();
-    }
+        // second, handle sound streaks
+        const updateFalseResultSound = await collectionSoundStreaks.updateMany(
+            { soundToday: false },
+            { $set: { streakLength: 0 } }
+        );
+        logger.info('Updated documents where soundToday was false', updateFalseResultSound);
 
-    return null;
+        const updateTrueResultSound = await collectionSoundStreaks.updateMany(
+            { soundToday: true },
+            { $set: { soundToday: false } }
+        )
+        logger.info('Updated documents where soundToday was true', updateTrueResultSound);
+
+    } catch (error) {
+        logger.error('Error updating streaks: ', error);
+    } finally {
+        return null;
+    }
 });
 
 // New Scheduled function to run every Sunday at midnight
@@ -186,14 +412,9 @@ exports.weeklyDreamMetaAnalysis = functions.pubsub.schedule('every sunday 00:00'
 
                 logger.info('This is the full meta analysis prompt being used: ', fullMetaAnalysisPrompt);
 
-                const resInterpret = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
-                {
-                    params: {
-                        dreamPrompt: fullMetaAnalysisPrompt
-                    }
-                });
+                const resMetaAnalysis = await interactWithChatGPT(organizeInterpretationPrompt);
 
-                const metaAnalysis = resInterpret.data[0].message.content;
+                const metaAnalysis = resMetaAnalysis.data[0].message.content;
 
                 const formattedMetaAnalysisText = formatMetaAnalysisText(metaAnalysis);
 
@@ -263,10 +484,18 @@ exports.weeklyDreamMetaAnalysis = functions.pubsub.schedule('every sunday 00:00'
 
     } catch (error) {
         logger.error('Error during meta analysis: ', error);
-    } finally {
-        await client.close();
     }
 });
+
+async function interactWithChatGPT(dream) {
+    const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [{ role: "user", content: dream }],
+    });
+    logger.info('chatCompletion: ', chatCompletion);
+
+    return chatCompletion.choices;
+}
 
 function formatMetaAnalysisText(text) {
     return text

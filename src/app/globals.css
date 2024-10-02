@@ -256,6 +256,10 @@ nav {
   border-width: 2px;
 }
 
+.bg-gold {
+  background-color: gold;
+}
+
 .border-gold-small:hover {
   border: 1px solid gold;
   border-width: 2px;

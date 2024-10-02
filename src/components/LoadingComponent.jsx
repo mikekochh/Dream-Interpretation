@@ -33,7 +33,7 @@ const LoadingComponent = ({ loadingText, altScreen }) => {
     }, [loadingText]);
 
     return (
-        <div className={`main-content text-white ${altScreen ? '' : 'flex justify-center items-center h-screen'}`}>
+        <div className={`text-white ${altScreen ? '' : 'main-content flex justify-center items-center h-screen'}`}>
             <div className='loadingContainer'>
                 {/* Attach the ref to the <p> tag */}
                 <p ref={textRef} className='loadingText'>{displayedText}</p>
