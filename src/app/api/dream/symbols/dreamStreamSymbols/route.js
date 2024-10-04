@@ -64,8 +64,6 @@ export async function GET(req) {
             },
         ]);
 
-        console.log("result: ", result);
-
         return NextResponse.json(result);
     } catch (error) {
         console.log('Error getting user dream symbols:', error);

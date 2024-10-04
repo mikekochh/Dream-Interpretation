@@ -8,7 +8,8 @@ export async function GET(request) {
 
         // Fetch the latest 5 public dreams, sorted by dreamDate (most recent first)
         const dreams = await Dream.find({ isPublic: true })
-            .sort({ dreamDate: -1 }) // -1 for descending order (most recent first)
+            .readPreference('primary')
+            .sort({ dreamDate: -1 })
             .limit(5);
 
         console.log("latest public dreams: ", dreams);
