@@ -295,8 +295,6 @@ exports.generateDreamImage = functions.runWith({ maxInstances: 10, timeoutSecond
     });
 });
 
-
-
 exports.dreamSummary = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
     cors(req, res, async () => {
         const { dream } = req.query;
@@ -486,6 +484,106 @@ exports.weeklyDreamMetaAnalysis = functions.pubsub.schedule('every sunday 00:00'
         logger.error('Error during meta analysis: ', error);
     }
 });
+
+// Scheduled function to send email reminders every day at 5 AM Eastern Standard Time
+exports.sendEmailReminders = functions.pubsub
+  .schedule('every day 05:00')
+  .timeZone('America/New_York') // Time zone set to New York Eastern Standard Time
+  .onRun(async (context) => {
+    logger.info('sendEmailReminders function running at 5 AM Eastern Standard Time');
+
+    try {
+      await client.connect();
+      const db = client.db('dreamsite');
+      const emailRemindersCollection = db.collection('emailreminders');
+
+      // Get today's date at 00:00:00 in New York time zone
+      const now = new Date();
+      const today = new Date(
+        now.toLocaleString('en-US', { timeZone: 'America/New_York' })
+      );
+      today.setHours(0, 0, 0, 0);
+
+      // Find reminders where reminderDate is today or earlier and emailSent is false
+      const reminders = await emailRemindersCollection
+        .find({
+          reminderDate: { $lte: today },
+          emailSent: false,
+        })
+        .toArray();
+
+      logger.info(`Found ${reminders.length} reminders to send`);
+
+      for (const reminder of reminders) {
+        const email = reminder.email;
+        const fromAddress = 'noreply@dreamoracles.co';
+        const domain = 'https://www.dreamoracles.co';
+
+        // Construct the email content using the email template
+        const mailOptions = {
+          from: `Dream Oracles <${fromAddress}>`,
+          to: email,
+          subject: 'Dream Reminder',
+          html: `
+          <html>
+              <body>
+                  <div style="width: 100%; display: flex; justify-content: center; background-color: #f0f0f0; padding: 20px; box-sizing: border-box;">
+                      <table style="width: 100%; margin: auto; background-color: #ffffff; border-radius: 10px; color: #000000; box-sizing: border-box; overflow: hidden;">
+                          <tr>
+                              <td style="background-color: #003366; padding: 0; color: #ffffff; font-size: 24px; max-height: 500px; position: relative; overflow: hidden;">
+                                  <a href="${domain}" style="display: block; text-decoration: none;">
+                                      <div style="position: absolute; top: 20px; left: 20px;">
+                                          <div style="display: flex; align-items: center;">
+                                              <img src="${domain}/dream_icon.webp" alt="Dream Oracles Logo" style="max-width: 40px; height: 40px; border-radius: 25%; margin-right: 10px; margin-left: 10px; margin-top: 10px;">
+                                              <span style="font-size: 18px; color: #ffffff !important; line-height: 55px;">Dream Oracles</span>
+                                          </div>
+                                      </div>
+                                      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 40px; font-weight: bold; text-align: center; color: #ffffff;">
+                                          Dream Reminder
+                                      </div>
+                                  </a>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td valign="top" style="text-align: left; color: #000000; padding: 20px; overflow: auto;">
+                                  <h1 style="color: #000000;">Good Morning!</h1>
+                                  <p style="color: black;">Did you have a curious dream last night and wonder what it could mean?</p>
+                                  <p style="color: black;">We're here to help you explore the insights hidden within your dreams.</p>
+                                  <p style="color: black;">Click the link below to enter your dream into our interpretation software and uncover its meaning:</p>
+                                  <h3 style="text-align: center;"><a href="${domain}/interpret" style="color: blue; text-decoration: underline;">Enter Your Dream</a></h3>
+                                  <p style="color: black;">Wishing you a day filled with wonder and discovery!</p>
+                                  <p style="color: black;">Warm regards,<br/>The Dream Oracles Team</p>
+                              </td>
+                          </tr>
+                      </table>
+                  </div>
+              </body>
+          </html>
+          `,
+        };
+
+        // Send the email using SendGrid
+        try {
+          await sgMail.send(mailOptions);
+          logger.info(`Email sent to ${email}`);
+
+          // Update the database entry to set emailSent to true
+          await emailRemindersCollection.updateOne(
+            { _id: reminder._id },
+            { $set: { emailSent: true } }
+          );
+          logger.info(`Updated emailSent to true for reminder ${reminder._id}`);
+        } catch (error) {
+          logger.error(`Error sending email to ${email}: `, error);
+        }
+      }
+    } catch (error) {
+      logger.error('Error in sendEmailReminders function: ', error);
+    } finally {
+      await client.close();
+    }
+});
+
 
 async function interactWithChatGPT(dream) {
     const chatCompletion = await openai.chat.completions.create({

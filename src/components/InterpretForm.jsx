@@ -176,7 +176,7 @@ const InterpretForm = () => {
                 localOracleSelected = true;  // Update local variable immediately
                 localStorage.removeItem('dreamID');
                 localStorage.removeItem('googleSignUp');
-                const resGetDream = await axios.get('/api/dream/' + dreamID);
+                const resGetDream = await axios.get('/api/dream/' + localDreamID);
                 existingDream = resGetDream.data.dream.dream;
                 setDream(existingDream);
             }
@@ -225,6 +225,9 @@ const InterpretForm = () => {
             }
     
             setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
+            const completedFreeDream = await axios.post('/api/user/usedFreeDream', {
+                userID
+            })
             
             // if they do not have an account, they need to create one to see their interpretation. Do not take them straight in this case
             setTimeout(() => {

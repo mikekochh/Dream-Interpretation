@@ -7,6 +7,13 @@ export async function POST(req) {
         // create user
         const { genderID, culturalBackground, spiritualPractices, userID, birthdate, name } = await req.json();
 
+        console.log("genderID: ", genderID);
+        console.log("culturalBackground: ", culturalBackground);
+        console.log("spiritualPractices: ", spiritualPractices);
+        console.log("userID: ", userID);
+        console.log("birthdate: ", birthdate);
+        console.log("name: ", name);
+
         await connectMongoDB();
 
         const updateFields = {};
@@ -21,6 +28,8 @@ export async function POST(req) {
             { $set: updateFields },
             { new: true, upsert: true }
         );
+
+        console.log("updatedUser: ", updatedUser);
 
         if (!updatedUser) {
             throw new Error("Problem with updating user!");

@@ -21,7 +21,8 @@ export async function POST(req) {
             password: hashedPassword, 
             credits: 2, 
             activated: false,
-            verificationTokenID: null
+            verificationTokenID: null,
+            usedFreeDream: false
         });
 
         return NextResponse.json({newUser}, { status: 200 });

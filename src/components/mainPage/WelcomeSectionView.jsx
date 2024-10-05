@@ -6,13 +6,15 @@ import PurchaseButton from '../PurchaseButton';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DreamStream from '../DreamStream';
+import EmailReminderForm from '../EmailReminderForm';
 
 const WelcomeSection = ({ 
     user, 
     dreamStreak, 
     incrementDreamStep, 
     setDream, 
-    dream 
+    dream,
+    handleScrollToTop
 }) => {
     const [isMobile, setIsMobile] = useState(false);
 
@@ -88,6 +90,8 @@ const WelcomeSection = ({
         )
     }, []);
 
+    console.log("user: ", user);
+
     return (
         <div>
             <div className="md:w-2/3 md:px-0 px-2 mx-auto">
@@ -112,7 +116,7 @@ const WelcomeSection = ({
                         value={dream}
                         onChange={(event) => setDream(event.target.value)}
                     />
-                    {!user || (user?.activated && user?.subscribed) ? (
+                    {!user || (user?.activated && user?.subscribed) || !user?.usedFreeDream ? (
                         <div className="text-center">
                             <div className="button-container">
                                 <button 
@@ -128,11 +132,12 @@ const WelcomeSection = ({
                     ) : (
                         <div className='text-center'>
                             <p className="golden-ratio-2 mt-4 mx-2 text-gold">
-                                {!user?.activated ? 'Please activate your account to continue. Check your email for the activation link.' : 'Start your subscription to continue using Dream Oracles and unlock all the features we offer'}
+                                {!user?.activated ? 'Please activate your account to continue. Check your email for the activation link.' : user?.usedFreeDream ? 'Start your subscription to continue using Dream Oracles and unlock all the features we offer' : ''}
                             </p>
-                            {!user?.subscribed && (<PurchaseButton buttonText={'Start Now'} user={user} />)}
+                            {!user?.subscribed && user?.usedFreeDream && (<PurchaseButton buttonText={'Start Now'} user={user} />)}
                         </div>
                     )}
+                    <EmailReminderForm />
                 </div>
             </div>
             
@@ -149,6 +154,7 @@ const WelcomeSection = ({
             )}
 
             <DreamStream />
+            <EmailReminderForm />
 
             {/* How It Works Section */}
             <div ref={howDoesItWorkRef}>
@@ -175,7 +181,11 @@ const WelcomeSection = ({
                     </div>
                 </div>
             </div>
-
+            <div className="text-center">
+                <button className="start-button" onClick={handleScrollToTop}>
+                    Try It Now!
+                </button>
+            </div>
             {/* Mandela Image */}
             <div className="image-container text-center mt-4">
                 <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />

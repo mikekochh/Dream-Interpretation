@@ -22,9 +22,6 @@ export async function GET(req) {
             0, 0, 0
         ));
 
-        console.log("lastSundayMidnight: ", lastSundayMidnight);
-        console.log("now: ", now);
-
         // Aggregate the user dream symbols for the week using analysisDate
         const result = await UserDreamSymbol.aggregate([
             // Match documents where analysisDate is from lastSundayMidnight to now

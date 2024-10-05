@@ -10,7 +10,6 @@ export default function RegisterForm() {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("password");
     const [error, setError] = useState("");
     const [registeringUser, setRegisteringUser] = useState(false);
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
@@ -20,7 +19,7 @@ export default function RegisterForm() {
         setRegisteringUser(true);
         setError("");
     
-        if (!name || !email || !password) {
+        if (!name || !email) {
             setError("Please fill in all fields");
             setRegisteringUser(false);
             return;
@@ -54,7 +53,7 @@ export default function RegisterForm() {
                 body: JSON.stringify({
                     name,
                     email: emailLower,
-                    password
+                    password: "password"
                 }),
             });
     
@@ -83,7 +82,7 @@ export default function RegisterForm() {
                 if (!dreamID) {
                     const resSignIn = await signIn("credentials", {
                         email: emailLower,
-                        password,
+                        password: "password",
                         redirect: false
                     });
                 }

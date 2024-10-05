@@ -76,8 +76,6 @@ const DreamStream = () => {
     fetchPublicDreams();
   }, []);
 
-  console.log("dreamStream: ", dreamStream);
-
   return (
     <div className="md:w-2/3 md:mx-auto md:px-0 md:py-8 px-3 py-8 bg-transparent">
       <h2 className="text-center mb-6 gradient-title-text golden-ratio-4">Dream Stream</h2>

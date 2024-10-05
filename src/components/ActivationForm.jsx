@@ -34,6 +34,11 @@ export default function ActivationForm() {
                 });
             }
             else {
+                const resSignIn = await signIn("credentials", {
+                    email: res.data.activatedUser.email,
+                    password: 'password',
+                    redirect: false
+                });
                 router.push('/settings');
             }
         } catch (error) {
@@ -60,8 +65,10 @@ export default function ActivationForm() {
     }, [userEmail, userName])
 
     useEffect(() => {
-        activateUser();
-    });
+        if (verificationTokenID) {
+            activateUser();
+        }
+    }, [verificationTokenID]);
 
     return (
         <div className="text-white text-3xl text-center p-4">

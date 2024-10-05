@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import Image from 'next/image';
 
 // Directly import all components without lazy loading
 import WelcomeSection from './WelcomeSectionView';
@@ -32,6 +33,7 @@ export default function JournalDreamView({
 }) {
     const isMobile = window.innerWidth < 768;
     const containerRef = useRef(null);
+    const welcomeSectionRef = useRef(null);
     const [isAnimating, setIsAnimating] = useState(false); // Track if an animation is in progress
     const [currentStep, setCurrentStep] = useState(dreamStep); // Local state for dreamStep
 
@@ -68,16 +70,25 @@ export default function JournalDreamView({
         }
     }, [dreamStep, currentStep, isAnimating]);
 
+
+    const handleScrollToTop = () => {
+        console.log("handleScrollToTop running...");
+        if (welcomeSectionRef.current) {
+            welcomeSectionRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
     return (
         <div ref={containerRef} className="flex justify-center items-center min-h-screen relative">
             {currentStep === 0 ? (
-                <div className={`overflow-y-auto hide-scrollbar h-screen ${user ? 'main-content' : 'main-content'}`}>
+                <div ref={welcomeSectionRef} className={`overflow-y-auto hide-scrollbar h-screen ${user ? 'main-content' : 'main-content'}`}>
                     <WelcomeSection
                         user={user}
                         dreamStreak={dreamStreak}
                         incrementDreamStep={incrementDreamStep}
                         setDream={setDream}
                         dream={dream}
+                        handleScrollToTop={handleScrollToTop}
                     />
                 </div>
             ) : currentStep === 1 ? (

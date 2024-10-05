@@ -6,7 +6,6 @@ import axios from 'axios';
 const PurchaseButton = ({ buttonText, user }) => {
 
     const purchaseSubscription = async () => {
-        console.log("user: ", user);
         const res = await axios.post("/api/user/purchase", {
             userID: user._id,
             paymentTypeID: 5,

@@ -1,14 +1,12 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import sgMail from '@sendgrid/mail';
-import { getNamedMiddlewareRegex } from 'next/dist/shared/lib/router/utils/route-regex';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export async function POST(req) {
 
     await connectMongoDB();
-    let newUser;
 
     try {
         const { email, name } = await req.json();

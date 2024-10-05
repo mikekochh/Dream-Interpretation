@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, lazy, useContext } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { LockClosedIcon, GlobeAltIcon } from '@heroicons/react/24/solid';
 
 import { UserContext } from '@/context/UserContext';
 
@@ -36,6 +37,8 @@ export default function DreamsForm() {
     const [userDreamSymbols, setUserDreamSymbols] = useState([]);
 
     const [isDreamExpanded, setIsDreamExpanded] = useState(false);
+
+    const [isPublic, setIsPublic] = useState(false);
 
     // modals
     const [showAddNewInterpretationModal, setShowAddNewInterpretationModal] = useState(false);
@@ -140,9 +143,10 @@ export default function DreamsForm() {
         const getDreamDetails = async () => {
             try {
                 const dreamRes = await axios.get('/api/dream/' + dreamID);
+                console.log("dreamRes: ", dreamRes);
                 setDream(dreamRes.data.dream);
                 setInterpretations(dreamRes.data.interpretations);
-                console.log("dreamRes: ", dreamRes);
+                setIsPublic(dreamRes.data.dream.isPublic);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching dream details:", error);
@@ -155,8 +159,6 @@ export default function DreamsForm() {
     }, [dreamID]);
 
     useEffect(() => {
-        console.log("user: ", user);
-        console.log("dream: ", dream);
         if (!user || user?._id !== dream?.userID) {
             setIsUsersOwnDream(false);
         }
@@ -236,6 +238,23 @@ export default function DreamsForm() {
         }
     }
 
+    const handleToggleIsPublic = async () => {
+        try {
+            // Optimistically toggle the public/private state
+            setIsPublic(!isPublic);
+
+            // Send the POST request to update the dream's public/private status
+            await axios.post('api/dream/public', {
+                dreamID,
+                isPublic: !isPublic
+            });
+        } catch (error) {
+            // If the POST request fails, revert the state back to its original value
+            console.error('Failed to update dream visibility:', error);
+            setIsPublic(isPublic);  // Revert the state
+        }
+    };
+
     if (loading || !oracles || !emotions || !dream) {
         return (
             <LoadingComponent loadingText={'Collecting Dream Details'} />
@@ -270,12 +289,12 @@ export default function DreamsForm() {
                                 );
                             })}
                             {isUsersOwnDream && (
-                            <div className="flex flex-col cursor-pointer p-2" onClick={() => setShowAddNewInterpretationModal(true)}>
-                                <div className="w-14 h-14 rounded-full border-gold-small flex items-center justify-center bg-black bg-opacity-50">
-                                    <span className="text-xl font-bold text-gold">+</span>
+                                <div className="flex flex-col cursor-pointer p-2" onClick={() => setShowAddNewInterpretationModal(true)}>
+                                    <div className="w-14 h-14 rounded-full border-gold-small flex items-center justify-center bg-black bg-opacity-50">
+                                        <span className="text-xl font-bold text-gold">+</span>
+                                    </div>
+                                    <p className="mt-1 text-sm text-gold">Add New</p>
                                 </div>
-                                <p className="mt-1 text-sm text-gold">Add New</p>
-                            </div>
                             )}
                         </div>
                     </div>
@@ -347,6 +366,44 @@ export default function DreamsForm() {
                     </p>
                     )}
                 </div>
+                {isUsersOwnDream && (
+                    <div className="mt-5">
+                        <label className="inline-flex items-center cursor-pointer">
+                            {/* Hidden checkbox for accessibility */}
+                            <input
+                                type="checkbox"
+                                checked={isPublic}
+                                onChange={handleToggleIsPublic}
+                                className="sr-only"
+                            />
+                            {/* Toggle Switch */}
+                            <div
+                                className={`relative w-14 h-8 rounded-full mr-2 transition-colors duration-300 ${
+                                    isPublic ? 'bg-gold' : 'bg-gray-300'
+                                }`}
+                            >
+                                <div
+                                    className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
+                                        isPublic ? '' : 'translate-x-6'
+                                    }`}
+                                ></div>
+                            </div>
+                            <span className="mr-3 text-lg font-semibold flex items-center">
+                                {isPublic ? (
+                                    <>
+                                        <GlobeAltIcon className="h-5 w-5 mr-1 text-gold" />
+                                        Public
+                                    </>
+                                ) : (
+                                    <>
+                                        <LockClosedIcon className="h-5 w-5 mr-1 text-gray-500" />
+                                        Private
+                                    </>
+                                )}
+                            </span>
+                        </label>
+                    </div>
+                )}
             </div>
             <DeleteDreamModal 
                 isOpen={showDeleteDreamModal}

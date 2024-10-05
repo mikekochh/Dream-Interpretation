@@ -11,8 +11,6 @@ export async function GET(request) {
             .sort({ dreamDate: -1 }) // -1 for descending order (most recent first)
             .limit(5);
 
-        console.log("latest public dreams: ", dreams);
-
         if (dreams) {
             return NextResponse.json({ dreams });
         } else {

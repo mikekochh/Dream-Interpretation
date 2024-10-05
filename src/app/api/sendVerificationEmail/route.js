@@ -29,8 +29,6 @@ export async function POST(req) {
             return NextResponse.json({message: "User not found!"}, { status: 404 })
         }
 
-        console.log("Adding this for stuff...");
-
         // send email
         const fromAddress = process.env.EMAIL_FROM_ADDRESS;
         const domain = process.env.DOMAIN;
@@ -61,7 +59,7 @@ export async function POST(req) {
                             </tr>
                             <tr>
                                 <td valign="top" style="text-align: center; color: #000000; padding: 5%; overflow: auto;">
-                                    <h1 style="color: #000000;">Hi ${data.name}!</h1>
+                                    <h1 style="color: #000000;">Hi ${data.name === "Carl Jung" ? "" : data.name}!</h1>
                                     <h3 style="color: #000000; padding: 20px;">Please verify your email address ${email} using the link below. If you did not request this link, you can safely ignore this email.</h3>
                                     <h3 style="color: #000000;"><a href="${verificationLink}">Verify Email Here!</a></h3>
                                     <h1 style="color: #000000;">Thank you for choosing Dream Oracles!</h1>

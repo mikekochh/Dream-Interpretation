@@ -130,8 +130,6 @@ const SettingsForm = () => {
 
     const { user, logout } = useContext(UserContext);
 
-    const [loading, setLoading] = useState(false);
-
     const [genders, setGenders] = useState([]);
     const [error, setError] = useState('');
     const [saving, setSaving] = useState(false);
@@ -246,7 +244,8 @@ const SettingsForm = () => {
             culturalBackground,
             spiritualPractices,
             birthdate,
-            userID: user._id
+            userID: user._id,
+            name
         };
         try {
             const response = await axios.post('/api/user/updatePersonalData', userData, {
@@ -254,6 +253,7 @@ const SettingsForm = () => {
                     'Content-Type': 'application/json'
                 }
             });
+            console.log("response: ", response);
             setError(''); // Clear any previous errors
             setSaving(false);
             setIsModalOpen(false); // Close the modal after saving

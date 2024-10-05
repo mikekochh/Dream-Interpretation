@@ -56,6 +56,9 @@ const userSchema = new Schema({
     },
     birthdate: {
         type: Date
+    },
+    usedFreeDream: {
+        type: Boolean,
     }
 }, {timestamps: true});
 
