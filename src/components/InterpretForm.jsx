@@ -159,6 +159,7 @@ const InterpretForm = () => {
         setSavingDream(true);
         setSaveMessage("Journaling Your Dream");
         const userID = user?._id;
+        console.log("userID: ", userID);
         let localOracleSelected = oracleSelected;  // Create a local variable
         let existingDream = dream;
     
@@ -171,6 +172,13 @@ const InterpretForm = () => {
                 localDreamID = resJournal.data._id;
             } else {
                 localDreamID = existingDreamID;
+                
+                // if there is an existing dream, we need to update the userID for that dream in the database
+                const resUpdateDreamUserID = await axios.post('api/dream/updateUserID', {
+                    userID,
+                    dreamID: localDreamID
+                });
+                
                 selectOracle(1); // this means they do not have an account, so must be jung interpretation
                 setOracleSelected(true);
                 localOracleSelected = true;  // Update local variable immediately

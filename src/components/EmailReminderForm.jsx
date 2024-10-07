@@ -111,7 +111,7 @@ export default function EmailReminderForm() {
         Don&apos;t Remember Your Dream?
       </h2>
       <p className="text-base mb-5">
-        Sign up now, and we'll remind you tomorrow morning to enter your dream.
+        Sign up now, and we&apos;ll remind you tomorrow morning to enter your dream.
       </p>
       <div className="space-y-4 max-w-md mx-auto">
         <div>

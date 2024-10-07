@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DreamStream from '../DreamStream';
 import EmailReminderForm from '../EmailReminderForm';
+import axios from 'axios';
 
 const WelcomeSection = ({ 
     user, 
@@ -17,6 +18,7 @@ const WelcomeSection = ({
     handleScrollToTop
 }) => {
     const [isMobile, setIsMobile] = useState(false);
+    const [sentEmailVerification, setSentEmailVerification] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -90,7 +92,10 @@ const WelcomeSection = ({
         )
     }, []);
 
-    console.log("user: ", user);
+    const handleResendVerificationEmail = async () => {
+        await axios.post('api/sendVerificationEmail', { email: user?.email });
+        setSentEmailVerification(true);
+    }
 
     return (
         <div>
@@ -130,12 +135,26 @@ const WelcomeSection = ({
                             {!user && (<Link href="/login" className="text-gold golden-ratio-1 underline text-center">Already Have Account?</Link>)}
                         </div>
                     ) : (
-                        <div className='text-center'>
-                            <p className="golden-ratio-2 mt-4 mx-2 text-gold">
-                                {!user?.activated ? 'Please activate your account to continue. Check your email for the activation link.' : user?.usedFreeDream ? 'Start your subscription to continue using Dream Oracles and unlock all the features we offer' : ''}
-                            </p>
-                            {!user?.subscribed && user?.usedFreeDream && (<PurchaseButton buttonText={'Start Now'} user={user} />)}
+                        <div>
+                            {sentEmailVerification ? (
+                                <div className="text-center">
+                                    <p className="golden-ratio-2 mt-4 mx-2 text-gold">Success! A verification email has been sent. Please check your inbox to complete your profile setup.</p>
+                                </div>
+                            ) : (
+                                <div className='text-center'>
+                                    <p className="golden-ratio-2 mt-4 mx-2 text-gold">
+                                        {!user?.activated ? 'Please activate your account to continue. Check your email for the activation link.' : user?.usedFreeDream ? 'Start your subscription to continue using Dream Oracles and unlock all the features we offer' : ''}
+                                    </p>
+                                    {!user?.subscribed && user?.usedFreeDream && user?.activated && (<PurchaseButton buttonText={'Start Now'} user={user} />)}
+                                    {!user?.activated && (
+                                        <div>
+                                            <button className="start-button" onClick={handleResendVerificationEmail}>Resend email</button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
+
                     )}
                     <EmailReminderForm />
                 </div>
@@ -154,7 +173,8 @@ const WelcomeSection = ({
             )}
 
             <DreamStream />
-            <EmailReminderForm />
+            <div className="md:mx-auto md:w-2/3"><EmailReminderForm /></div>
+            
 
             {/* How It Works Section */}
             <div ref={howDoesItWorkRef}>

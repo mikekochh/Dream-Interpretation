@@ -507,7 +507,6 @@ exports.sendEmailReminders = functions.pubsub
       // Find reminders where reminderDate is today or earlier and emailSent is false
       const reminders = await emailRemindersCollection
         .find({
-          reminderDate: { $lte: today },
           emailSent: false,
         })
         .toArray();

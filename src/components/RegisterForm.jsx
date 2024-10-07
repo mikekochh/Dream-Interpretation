@@ -13,6 +13,20 @@ export default function RegisterForm() {
     const [error, setError] = useState("");
     const [registeringUser, setRegisteringUser] = useState(false);
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
+    const [resendVerificationEmail, setResendVerificationEmail] = useState(false);
+
+    const handleResendVerificationEmail = async () => {
+        const dreamID = localStorage.getItem('dreamID');
+        const emailLower = email.toLowerCase();
+
+        if (dreamID) {
+            await axios.post('api/sendFirstInterpretationEmail', { email: emailLower, dreamID })
+        }
+        else {
+            await axios.post('api/sendVerificationEmail', { email: emailLower });
+        }
+        setSentEmailVerification(true);
+    }
 
     const register = async (e) => {
         e.preventDefault();
@@ -40,9 +54,28 @@ export default function RegisterForm() {
             });
     
             if (res.ok) {
-                setError("User already exists!");
-                setRegisteringUser(false);
-                return;
+                const resActivated = await fetch(`api/user/activated/${emailLower}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                const data = await resActivated.json();
+
+                if (resActivated.ok) {
+                    if (data.isActivated) {
+                        setError("User already exists!");
+                        setRegisteringUser(false);
+                        return;
+                    }
+                    else {
+                        setError("Please activate account");
+                        setRegisteringUser(false);
+                        setResendVerificationEmail(true);
+                        return;
+                    }
+                }
             }
     
             const resNewUser = await fetch('api/register', {
@@ -71,6 +104,7 @@ export default function RegisterForm() {
                 gtagCreateAccount();
     
                 if (dreamID) {
+                    console.log("Are we getting here?");
                     await axios.post('api/sendFirstInterpretationEmail', { email: emailLower, dreamID })
                 }
                 else {
@@ -110,7 +144,7 @@ export default function RegisterForm() {
     const signUpWithGoogle = async () => {
         localStorage.setItem("googleSignUp", true);
         await signIn('google');
-    }   
+    }
 
     return (
         <div className='text-white'>
@@ -140,11 +174,21 @@ export default function RegisterForm() {
                             </button>
                         </div>
                     )}
-                    {error && (
-                        <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                            {error}
-                        </div>
-                    )}
+                    <div className="flex items-center mt-2">
+                        {error && (
+                            <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md">
+                                {error}
+                            </div>
+                        )}
+                        {resendVerificationEmail && (
+                            <button 
+                                className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md ml-auto cursor-pointer underline"
+                                onClick={handleResendVerificationEmail}    
+                            >
+                                Resend email here
+                            </button>
+                        )}
+                    </div>
                     <div className="flex justify-center my-2">
                         <span className="text-white">Or</span>
                     </div>
