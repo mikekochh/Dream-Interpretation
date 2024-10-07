@@ -13,7 +13,6 @@ const LibraryForm = () => {
   useEffect(() => {
     const retrieveDreamSymbols = async () => {
       const res = await axios.get('/api/dream/symbols');
-      console.log("res: ", res.data);
       setDreamSymbols(res.data);
     };
 

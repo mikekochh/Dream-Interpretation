@@ -104,7 +104,6 @@ export default function RegisterForm() {
                 gtagCreateAccount();
     
                 if (dreamID) {
-                    console.log("Are we getting here?");
                     await axios.post('api/sendFirstInterpretationEmail', { email: emailLower, dreamID })
                 }
                 else {

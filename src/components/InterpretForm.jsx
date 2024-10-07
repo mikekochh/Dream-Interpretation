@@ -85,7 +85,6 @@ const InterpretForm = () => {
             googleSignUp = (googleSignUp === 'true');
             if (dreamID && googleSignUp) {
                 const userID = user?._id;
-                console.log("userID for google flow: ", userID);
                 await axios.post('/api/user/sendWelcomeEmail', {
                     email: user?.email,
                     name: user?.name
@@ -159,7 +158,6 @@ const InterpretForm = () => {
         setSavingDream(true);
         setSaveMessage("Journaling Your Dream");
         const userID = user?._id;
-        console.log("userID: ", userID);
         let localOracleSelected = oracleSelected;  // Create a local variable
         let existingDream = dream;
     
@@ -168,7 +166,6 @@ const InterpretForm = () => {
             const existingDreamID = localStorage.getItem('dreamID');
             if (!existingDreamID) {
                 const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
-                console.log("resJournal: ", resJournal);
                 localDreamID = resJournal.data._id;
             } else {
                 localDreamID = existingDreamID;
@@ -200,7 +197,6 @@ const InterpretForm = () => {
                 }
             );
             const dreamSummary = resSummarizeDream.data[0].message.content;
-            console.log("dreamSummary: ", dreamSummary);
     
             // Try generating the dream image, but don't break the flow if it fails
             setSaveMessage("Generating Dream Image");

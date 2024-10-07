@@ -72,7 +72,6 @@ export default function JournalDreamView({
 
 
     const handleScrollToTop = () => {
-        console.log("handleScrollToTop running...");
         if (welcomeSectionRef.current) {
             welcomeSectionRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }

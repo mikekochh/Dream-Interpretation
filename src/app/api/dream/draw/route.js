@@ -11,7 +11,6 @@ const OPENAI_API_URL = 'https://api.openai.com/v1/images/generations';
 
 export async function POST(req) {
     try {
-        console.log("Are we getting here?");
         await connectMongoDB();
         // Get dream and dreamID from request
         const { dream, dreamID } = await req.json();

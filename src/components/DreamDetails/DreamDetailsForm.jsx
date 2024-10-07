@@ -59,12 +59,10 @@ export default function DreamsForm() {
 
     useEffect(() => {
         const handleGoogleSignUp = async () => {
-            console.log("Are we getting here?");
             const dreamID = localStorage.getItem('dreamID');
             let googleSignUp = localStorage.getItem('googleSignUp');
             googleSignUp = (googleSignUp === 'true');
             if (dreamID && googleSignUp) {
-                console.log("What about here?");
                 localStorage.setItem('googleSignUp', false);
                 const userID = user._id;
                 await axios.post('/api/user/sendWelcomeEmail', {
@@ -91,7 +89,6 @@ export default function DreamsForm() {
         const getEmotions = async () => {
             try {
                 const resEmotions = await axios.get("/api/emotions/getEmotions");
-                console.log("Here are the emotions: ", resEmotions.data);
                 setEmotions(resEmotions.data);
             } catch (error) {
                 console.log("Error fetching emotions: ", error);
@@ -101,7 +98,6 @@ export default function DreamsForm() {
         const getOracles = async () => {
             try {
                 const resOracles = await axios.get("/api/allOracles");
-                console.log("Here are the oracles: ", resOracles.data);
                 setOracles(resOracles.data);
             } catch (error) {
                 console.log("There was an error fetching the dream oracles: ", error);
@@ -126,7 +122,6 @@ export default function DreamsForm() {
         const fetchUserDreamSymbols = async () => {
             try {
                 const res = await axios.get(`/api/dream/userDreamSymbols?dreamID=${dreamID}`);
-                console.log("user dream symbols: ", res);
                 setUserDreamSymbols(res.data);
             } catch (error) {
                 console.log("There was an error fetching the user dream symbols: ", error);
@@ -143,7 +138,6 @@ export default function DreamsForm() {
         const getDreamDetails = async () => {
             try {
                 const dreamRes = await axios.get('/api/dream/' + dreamID);
-                console.log("dreamRes: ", dreamRes);
                 setDream(dreamRes.data.dream);
                 setInterpretations(dreamRes.data.interpretations);
                 setIsPublic(dreamRes.data.dream.isPublic);

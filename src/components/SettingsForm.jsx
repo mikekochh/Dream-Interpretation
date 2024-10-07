@@ -253,7 +253,6 @@ const SettingsForm = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log("response: ", response);
             setError(''); // Clear any previous errors
             setSaving(false);
             setIsModalOpen(false); // Close the modal after saving
@@ -312,7 +311,6 @@ const SettingsForm = () => {
     };
 
     const turnOffMetaAnalysis = async () => {
-        console.log("running turnOffMetaAnalysis...");
         try {
             const userID = user._id;
             await axios.post('/api/user/updateMetaAnalysisOracleID', {

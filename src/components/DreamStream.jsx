@@ -68,7 +68,6 @@ const DreamStream = () => {
 
     const fetchPublicDreams = async () => {
       const res = await axios.get('/api/dream/dreamStream');
-      console.log("res: ", res);
       setDreamStream(res.data.dreams);
     };
 
