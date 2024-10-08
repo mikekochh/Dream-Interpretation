@@ -495,26 +495,19 @@ exports.sendEmailReminders = functions.pubsub
     try {
       await client.connect();
       const db = client.db('dreamsite');
-      const emailRemindersCollection = db.collection('emailreminders');
+      const usersCollection = db.collection('users');
 
-      // Get today's date at 00:00:00 in New York time zone
-      const now = new Date();
-      const today = new Date(
-        now.toLocaleString('en-US', { timeZone: 'America/New_York' })
-      );
-      today.setHours(0, 0, 0, 0);
-
-      // Find reminders where reminderDate is today or earlier and emailSent is false
-      const reminders = await emailRemindersCollection
+      // Find users where sendReminder is true
+      const usersToRemind = await usersCollection
         .find({
-          emailSent: false,
+          sendReminder: true,
         })
         .toArray();
 
-      logger.info(`Found ${reminders.length} reminders to send`);
+      logger.info(`Found ${usersToRemind.length} users to send reminders`);
 
-      for (const reminder of reminders) {
-        const email = reminder.email;
+      for (const user of usersToRemind) {
+        const email = user.email;
         const fromAddress = 'noreply@dreamoracles.co';
         const domain = 'https://www.dreamoracles.co';
 
@@ -566,12 +559,12 @@ exports.sendEmailReminders = functions.pubsub
           await sgMail.send(mailOptions);
           logger.info(`Email sent to ${email}`);
 
-          // Update the database entry to set emailSent to true
-          await emailRemindersCollection.updateOne(
-            { _id: reminder._id },
-            { $set: { emailSent: true } }
+          // Update the user's sendReminder field to false
+          await usersCollection.updateOne(
+            { _id: user._id },
+            { $set: { sendReminder: false } }
           );
-          logger.info(`Updated emailSent to true for reminder ${reminder._id}`);
+          logger.info(`Updated sendReminder to false for user ${user._id}`);
         } catch (error) {
           logger.error(`Error sending email to ${email}: `, error);
         }
@@ -582,7 +575,6 @@ exports.sendEmailReminders = functions.pubsub
       await client.close();
     }
 });
-
 
 async function interactWithChatGPT(dream) {
     const chatCompletion = await openai.chat.completions.create({

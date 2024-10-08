@@ -83,21 +83,30 @@ const InterpretForm = () => {
             const dreamID = localStorage.getItem('dreamID');
             let googleSignUp = localStorage.getItem('googleSignUp');
             googleSignUp = (googleSignUp === 'true');
+            console.log("Are we getting HERE!");
+            console.log("dreamID: ", dreamID);
+            console.log("googleSignUp: ", googleSignUp);
             if (dreamID && googleSignUp) {
                 const userID = user?._id;
+                console.log("Are we getting here?");
                 await axios.post('/api/user/sendWelcomeEmail', {
                     email: user?.email,
                     name: user?.name
                 })
+                console.log("How about here?");
                 await axios.post('api/dream/newUser', { userID, dreamID, googleSignUp: true });
+                console.log("And perhaps what is this?");
                 // await axios.post('/api/dream/streak/newStreak', { userID });
                 journalDream();
             }
         }
 
         const checkRegisteredAccount = async () => {
+            console.log("We must be getting here instead");
             const existingDreamID = localStorage.getItem('dreamID');
-            if (existingDreamID) {
+            let googleSignUp = localStorage.getItem('googleSignUp');
+            googleSignUp = (googleSignUp === 'true');
+            if (existingDreamID && !googleSignUp) {
                 journalDream();
             }
         }
@@ -155,15 +164,20 @@ const InterpretForm = () => {
     }
 
     const journalDream = async () => {
+        console.log("How many times is this running?");
         setSavingDream(true);
         setSaveMessage("Journaling Your Dream");
         const userID = user?._id;
         let localOracleSelected = oracleSelected;  // Create a local variable
         let existingDream = dream;
+        console.log("existingDream: ", existingDream);
     
         try {
             let localDreamID;
             const existingDreamID = localStorage.getItem('dreamID');
+            console.log("existingDreamID: ", existingDreamID);
+            localStorage.removeItem('dreamID');
+            localStorage.removeItem('googleSignUp');
             if (!existingDreamID) {
                 const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
                 localDreamID = resJournal.data._id;
@@ -175,12 +189,12 @@ const InterpretForm = () => {
                     userID,
                     dreamID: localDreamID
                 });
+
+                console.log("resUpdateDreamUserID: ", resUpdateDreamUserID);
                 
                 selectOracle(1); // this means they do not have an account, so must be jung interpretation
                 setOracleSelected(true);
                 localOracleSelected = true;  // Update local variable immediately
-                localStorage.removeItem('dreamID');
-                localStorage.removeItem('googleSignUp');
                 const resGetDream = await axios.get('/api/dream/' + localDreamID);
                 existingDream = resGetDream.data.dream.dream;
                 setDream(existingDream);

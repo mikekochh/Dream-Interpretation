@@ -156,7 +156,12 @@ const WelcomeSection = ({
                         </div>
 
                     )}
-                    <EmailReminderForm />
+                    {user?.sendReminder ? (
+                        <div className="text-center bg-gray-800 bg-opacity-30 shadow-lg rounded-3xl p-4 mt-5 golden-ratio-2">
+                            Dream Reminder Set! See you tomorrow 😁
+                        </div>
+                    ) : !user ? (<EmailReminderForm />) : (null)}
+                    
                 </div>
             </div>
             
@@ -173,9 +178,10 @@ const WelcomeSection = ({
             )}
 
             <DreamStream />
-            <div className="md:mx-auto md:w-2/3"><EmailReminderForm /></div>
+            {!user?.sendReminder && (
+                <div className="md:mx-auto md:w-2/3"><EmailReminderForm /></div>
+            )}
             
-
             {/* How It Works Section */}
             <div ref={howDoesItWorkRef}>
                 <h1 className='golden-ratio-3 mt-10 text-center'>How Does It Work?</h1>

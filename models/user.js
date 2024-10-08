@@ -59,6 +59,9 @@ const userSchema = new Schema({
     },
     usedFreeDream: {
         type: Boolean,
+    },
+    sendReminder: {
+        type: Boolean
     }
 }, {timestamps: true});
 

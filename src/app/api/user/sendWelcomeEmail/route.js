@@ -45,18 +45,15 @@ export async function POST(req) {
                                     <p style="color: black;">Welcome to Dream Oracles!! 😁</p>
                                     <p style="color: black;">We are very happy that you are here and are excited to help you on your journey of understanding your dreams.</p>
                                     <p style="color: black;">At Dream Oracles, we believe that dreams are a sacred and special phenomenon within humans, and it is important to have tools to properly explore your dreams.</p>
-                                    <p style="color: black;">Join our vibrant Dream Oracles Discord community, where you can share your dreams, connect with fellow dream enthusiasts, and explore the fascinating world of dream interpretation together!</p>
-                                    <h3 style="color: black; text-align: center;"><a href="https://discord.gg/7QZYAJnE">Join Discord Community Here!</a></h3>
                                     <p style="color: black;">To make the most of your experience, we invite you to <a href="${domain}${subscriptionLink}" style="color: blue; text-decoration: underline;">start a subscription</a> and unlock all of the powerful features Dream Oracles has to offer:</p>
                                     <ul style="color: black; padding-left: 20px;">
                                         <li style="color: black; padding: 5px 0;"><strong>Unlimited Interpretations:</strong> Gain unlimited access to all of our dream interpretation AI models.</li>
-                                        <li style="color: black; padding: 5px 0;"><strong>Intelligent Dream Oracles:</strong> Select from our ever-growing list of 5+ Dream Oracles, each offering a unique perspective on your dreams.</li>
+                                        <li style="color: black; padding: 5px 0;"><strong>Community Interpretations:</strong> Receive interpretations from fellow dream enthusiasts and engage with the community for diverse perspectives on your dreams.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Uncover Dream Symbols:</strong> Automatically match symbols from your dreams with our expansive dream dictionary for even stronger interpretations.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Dream Image Generation:</strong> Bring your dreams to life with AI-generated visuals crafted from your dream descriptions.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Weekly Meta Analysis:</strong> Discover recurring symbols and patterns in your dreams and decipher them with our advanced dream meta-analysis feature.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Intuitive Dream Journal:</strong> All of your dreams, interpretations, and notes securely stored in your personal dream journal.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Mood Recording:</strong> Capture the emotions you experienced during your dreams and incorporate them into the interpretation for deeper insights.</li>
-                                        <li style="color: black; padding: 5px 0;"><strong>Incorporate Personality Details:</strong> Update your profile to include age, gender, cultural background, and spiritual views for more personalized interpretations.</li>
                                     </ul>
                                     <p style="color: black;"><a href="${domain}${subscriptionLink}" style="color: blue; text-decoration: underline;">Start your subscription today</a> to take full advantage of these features and truly explore the depths of your dreams with Dream Oracles!</p>
                                     <h1 style="color: #000000;">Thank you for choosing Dream Oracles!</h1>

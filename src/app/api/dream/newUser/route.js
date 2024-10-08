@@ -6,6 +6,7 @@ import User from '../../../../../models/user';
 export async function POST(req) {
     try {
         // create user
+        console.log("Is this running?");
         const { userID, dreamID, googleSignUp } = await req.json();
 
         await connectMongoDB();
