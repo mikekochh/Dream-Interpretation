@@ -78,32 +78,7 @@ const DreamStream = () => {
   return (
     <div className="md:w-2/3 md:mx-auto md:px-0 md:py-8 px-3 py-8 bg-transparent">
       <h2 className="text-center mb-6 gradient-title-text golden-ratio-4">Dream Stream</h2>
-      <div className="flex items-center space-x-2">
-        <h3 className="golden-ratio-2 gradient-title-text font-bold">Top Dream Symbols This Week</h3>
-        <FontAwesomeIcon
-          icon={faAngleDown}
-          alt="close"
-          className="text-white"
-        />
-      </div>
 
-      {/* Horizontal Scroll on Mobile, Grid on Desktop */}
-      <div className="flex md:grid grid-cols-4 gap-4 md:gap-6 overflow-x-auto md:overflow-visible whitespace-nowrap md:whitespace-normal">
-        {dreamStreamSymbols.map((symbol, index) => (
-          <div
-            key={`${symbol.id}-${index}`}
-            ref={(el) => (symbolsRef.current[index] = el)} // Assign ref to each symbol
-            onClick={() => setSelectedSymbol(symbol)}
-            className="inline-block md:block p-4 cursor-pointer border border-white rounded-xl bg-transparent hover:bg-gray-500 hover:bg-opacity-30 transition-colors mx-2 md:mx-0"
-            style={{ minWidth: '200px' }} // Ensures all symbols are in a row on mobile
-          >
-            <h3 className="font-semibold gradient-title-text golden-ratio-2">
-              {index + 1}. {symbol.symbol}
-            </h3>
-            <p className="text-gray-400">Dreamt {symbol.count} times</p>
-          </div>
-        ))}
-      </div>
 
       {/* Dream Stream section */}
       <div className="mt-8">
