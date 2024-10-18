@@ -50,10 +50,8 @@ export async function GET(req) {
         await connectMongoDB();
         console.log('MongoDB connection successful');
 
-        // Use req.nextUrl.searchParams to avoid using request.url
-
-        const url = new URL(req.url);
-        const timeframeID = url.searchParams.get('timeframeID');
+        // Use req.query to get parameters
+        const { timeframeID } = req.query;
         console.log('TimeframeID:', timeframeID);
 
         // Get start_time and end_time based on the timeframeID
@@ -102,6 +100,3 @@ export async function GET(req) {
         return NextResponse.json({ error: error.message });
     }
 }
-
-
-
