@@ -16,6 +16,8 @@ const AdminPortalForm = () => {
   const [profileCheckDone, setProfileCheckDone] = useState(false);
 
   useEffect(() => {
+    console.log("userLoading: ", userLoading);
+    console.log("user: ", user);
     if (userLoading) {
       return;
     }
@@ -44,7 +46,7 @@ const AdminPortalForm = () => {
     }
   };
 
-  if (profileCheckDone) {
+  if (!profileCheckDone) {
     return <LoadingComponent loadingText={"Loading"} />
   }
 
