@@ -26,7 +26,7 @@ export default function DreamsForm() {
     const dreamID = searchParams.get('dreamID');
     const router = useRouter();
 
-    const { user } = useContext(UserContext);
+    const { user, userLoading } = useContext(UserContext);
     
     const [loading, setLoading] = useState(true);
 
@@ -70,10 +70,10 @@ export default function DreamsForm() {
             }
         }
 
-        if (!countedView) {
+        if (!countedView && !userLoading) {
             addView();
         }
-    }, []);
+    }, [userLoading]);
 
     useEffect(() => {
         const handleGoogleSignUp = async () => {
