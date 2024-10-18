@@ -272,7 +272,7 @@ const UserManagement = () => {
                 <tbody>
                   {selectedCard === 1 ? (
                     <>
-                      {users.map((user) => (
+                      {users?.map((user) => (
                         <tr className="border-b" key={user._id}>
                           <td className="px-4 py-2">{user.name}</td>
                           <td className="px-4 py-2">{user.email}</td>
@@ -290,7 +290,7 @@ const UserManagement = () => {
                     </>
                   ) : (
                     <>
-                      {subscribers.map((user) => (
+                      {subscribers?.map((user) => (
                         <tr className="border-b" key={user._id}>
                           <td className="px-4 py-2">{user.name}</td>
                           <td className="px-4 py-2">{user.email}</td>
