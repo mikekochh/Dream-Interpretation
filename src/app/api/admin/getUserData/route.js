@@ -68,8 +68,26 @@ export async function GET(req) {
             };
         }
 
-        // Fetch users from the database based on the query
-        const users = await User.find(query);
+        // Fetch users and their views from the database
+        const users = await User.aggregate([
+            {
+                $match: query // Apply the query to filter users based on the timeframe
+            },
+            {
+                $lookup: {
+                    from: 'views', // The collection name for the views table
+                    localField: '_id', // The _id field in the users table
+                    foreignField: 'userID', // The userID field in the views table
+                    as: 'views' // The alias for the joined data
+                }
+            },
+            {
+                $addFields: {
+                    viewsCount: { $size: "$views" } // Add a new field for the number of views
+                }
+            }
+        ]);
+
 
         return NextResponse.json({ data: users });
     } catch (error) {

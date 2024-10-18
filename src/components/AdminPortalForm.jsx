@@ -11,20 +11,21 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 const AdminPortalForm = () => {
   const [activeTab, setActiveTab] = useState('users');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for sidebar visibility
-  const { user } = useContext(UserContext) || {};
+  const { user, userLoading } = useContext(UserContext) || {};
   const router = useRouter();
   const [profileCheckDone, setProfileCheckDone] = useState(false);
 
-  // useEffect(() => {
-  //   console.log("user: ", user);
-  //   console.log("user is admin: ", user?.is_admin);
-  //   if (!user || !user?.is_admin) {
-  //     // router.push('/');
-  //   }
-  //   else {
-  //     setProfileCheckDone(true);
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (userLoading) {
+      return;
+    }
+    else if (!user || !user?.is_admin) {
+      router.push("/");
+    }
+    else {
+      setProfileCheckDone(true);
+    }
+  }, [user, userLoading]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -43,9 +44,9 @@ const AdminPortalForm = () => {
     }
   };
 
-  // if () {
-  //   return <LoadingComponent loadingText={"Loading"} />
-  // }
+  if (profileCheckDone) {
+    return <LoadingComponent loadingText={"Loading"} />
+  }
 
   return (
     <div className="main-content">
@@ -142,7 +143,7 @@ const UserManagement = () => {
         }
       });
 
-      console.log("responseSubscribers: ", responseSubscribers);
+      console.log("response: ", response);
 
       setUsers(response.data.data);
       setSubscribers(responseSubscribers.data.data);
@@ -174,8 +175,9 @@ const UserManagement = () => {
     };    
 
     const sortByViews = () => {
-      
-    }
+      const sortedUsers = [...users].sort((a, b) => b.viewsCount - a.viewsCount);
+      setUsers(sortedUsers);
+    };
   
     return (
       <div>
@@ -282,7 +284,7 @@ const UserManagement = () => {
                             })}
                           </td>
                           <td className="px-4 py-2">{user.dreamCount}</td>
-                          <td className="px-4 py-2">Views</td>
+                          <td className="px-4 py-2">{user.views.length}</td>
                         </tr>
                       ))}
                     </>
@@ -300,7 +302,7 @@ const UserManagement = () => {
                             })}
                           </td>
                           <td className="px-4 py-2">{user.dreamCount}</td>
-                          <td className="px-4 py-2">Views</td>
+                          <td className="px-4 py-2">{user.views.length}</td>
                         </tr>
                       ))}
                     </>
@@ -606,6 +608,22 @@ const UserManagement = () => {
       setDreams(dreams.filter(dream => dream._id !== selectedDream._id));
       closeDeleteModal();
     };
+
+    const sortByDreamDate = () => {
+      const sortedDreams = [...dreams].sort((a, b) => new Date(b.dreamDate) - new Date(a.dreamDate));
+      setDreams(sortedDreams);
+    }
+    
+    const sortByPublic = () => {
+      const sortedDreams = [...dreams].sort((a, b) => {
+        if (a.isPublic === b.isPublic) {
+          return 0; // If both dreams have the same value for isPublic, leave them in the same order
+        }
+        return a.isPublic ? -1 : 1; // If a.isPublic is true, it comes first; otherwise, b.isPublic comes first
+      });
+      setDreams(sortedDreams);
+    }
+    
   
     return (
       <div>
@@ -647,8 +665,20 @@ const UserManagement = () => {
                   <tr className="bg-gray-200 text-left">
                     <th className="px-4 py-2">Dreamer</th>
                     <th className="px-4 py-2">Interpretation</th>
-                    <th className="px-4 py-2">Dream Date</th>
-                    <th className="px-4 py-2">Public Status</th>
+                    <th className="px-4 py-2">
+                      Dream Date
+                      <i
+                        onClick={sortByDreamDate} 
+                        className={`fas fa-sort-up ml-2 cursor-pointer`}
+                      ></i>
+                    </th>
+                    <th className="px-4 py-2">
+                      Public Status
+                      <i
+                        onClick={sortByPublic} 
+                        className={`fas fa-sort-up ml-2 cursor-pointer`}
+                      ></i>
+                    </th>
                     <th className="px-4 py-2">Action</th>
                   </tr>
                 </thead>
