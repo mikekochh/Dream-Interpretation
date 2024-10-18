@@ -1,4 +1,5 @@
 // pages/admin.js
+"use client";
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
