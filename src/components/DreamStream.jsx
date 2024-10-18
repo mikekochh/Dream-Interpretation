@@ -62,6 +62,7 @@ const DreamStream = () => {
             'Cache-Control': 'no-store', // Prevent caching
           },
         });
+        console.log("res dreamStream: ", res);
         setDreamStream(res.data.dreams);
       } catch (error) {
         console.error('Error fetching dreams:', error);
