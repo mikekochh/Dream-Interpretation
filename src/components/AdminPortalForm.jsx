@@ -123,6 +123,18 @@ const UserManagement = () => {
     const [timeframe, setTimeframe] = useState(5);
     const [loading, setLoading] = useState(false);
     const [selectedCard, setSelectedCard] = useState(1);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(false);
+    const [signUpTypes, setSignUpTypes] = useState([]);
+
+    useEffect(() => {
+      const fetchSignUpTypeData = async () => {
+        const response = await axios.get('/api/admin/getSignUpTypeData');
+        setSignUpTypes(response.data.data);
+      }
+
+      fetchSignUpTypeData();
+    }, []);
 
     useEffect(() => {
         fetchUsers();
@@ -172,6 +184,28 @@ const UserManagement = () => {
       const sortedUsers = [...users].sort((a, b) => b.viewsCount - a.viewsCount);
       setUsers(sortedUsers);
     };
+
+    const handleDeleteClick = (user) => {
+      setIsDeleteModalOpen(true);
+      setSelectedUser(user);
+    }
+
+    const confirmDelete = async () => {
+      await axios.delete(`/api/admin/deleteUser`, { 
+        data: { 
+          userID: selectedUser._id,
+          is_admin: selectedUser.is_admin,
+          is_subscriber: selectedUser.subscribed
+        }
+      });
+      setUsers(users.filter(user => user._id !== selectedUser._id));
+      setIsDeleteModalOpen(false);
+    }
+
+    const getSignUpTypeNameByID = (signUpTypeID) => {
+      const signUpType = signUpTypes.find(s => s.signUpTypeID === signUpTypeID);
+      return signUpType ? signUpType.signUpTypeName : 'N/A';
+    }
   
     return (
       <div>
@@ -241,6 +275,13 @@ const UserManagement = () => {
                     ></i>
                   </th>
                   <th className="px-4 py-2 cursor-pointer">
+                    Sign Up Type
+                    <i 
+                      onClick={sortByName} 
+                      className={`fas fa-sort-up ml-2`}
+                    ></i>
+                  </th>
+                  <th className="px-4 py-2 cursor-pointer">
                     {selectedCard === 1 ? 'Create Date' : 'Subscribed Date'}
                     <i 
                       onClick={sortByCreateDate} 
@@ -261,6 +302,9 @@ const UserManagement = () => {
                       className={`fas fa-sort-up ml-2`}
                     ></i>
                   </th>
+                  <th className="px-4 py-2 cursor-pointer">
+                    Action
+                  </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -270,6 +314,7 @@ const UserManagement = () => {
                         <tr className="border-b" key={user._id}>
                           <td className="px-4 py-2">{user.name}</td>
                           <td className="px-4 py-2">{user.email}</td>
+                          <td className="px-4 py-2">{getSignUpTypeNameByID(user.signUpTypeID)}</td>
                           <td className="px-4 py-2">
                             {new Date(user.createdAt).toLocaleDateString('en-US', {
                               year: 'numeric',
@@ -279,6 +324,12 @@ const UserManagement = () => {
                           </td>
                           <td className="px-4 py-2">{user.dreamCount}</td>
                           <td className="px-4 py-2">{user.viewsCount}</td>
+                          <td className="px-4 py-2">
+                            <button 
+                              className="bg-red-500 px-2 rounded"
+                              onClick={() => handleDeleteClick(user)}
+                            >Delete</button>
+                          </td>
                         </tr>
                       ))}
                     </>
@@ -297,6 +348,12 @@ const UserManagement = () => {
                           </td>
                           <td className="px-4 py-2">{user.dreamCount}</td>
                           <td className="px-4 py-2">{user.viewsCount}</td>
+                          <td className="px-4 py-2">
+                            <button 
+                              className="bg-red-500 px-2 rounded"
+                              onClick={() => handleDeleteClick(user)}
+                            >Delete</button>
+                          </td>
                         </tr>
                       ))}
                     </>
@@ -306,8 +363,25 @@ const UserManagement = () => {
             </div>
           </div>
         )}
+        {isDeleteModalOpen && (
+          <div className="fixed bottom-0 left-0 w-full bg-white p-4 shadow-lg">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-red-600 mb-4">Are you sure you want to delete this user?</h2>
+              <p className="mb-4 text-gray-700">There is no reverting this action.</p>
+              {selectedUser && (
+                <>
+                  <p className="mb-2"><strong>Name: </strong>{selectedUser.name}</p>
+                  <p className="mb-4"><strong>Email: </strong>{selectedUser.email}</p>
+                </>
+              )}
+              <div className="flex justify-center space-x-4">
+                <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmDelete}>Confirm Delete</button>
+                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setIsDeleteModalOpen(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+      )}
       </div>
-
     );
   };
 
@@ -613,7 +687,6 @@ const UserManagement = () => {
     };
   
     const handleDeleteDream = async () => {
-      // Here you would call your API to delete the dream
       await axios.delete(`/api/admin/deleteDream`, { data: { dreamID: selectedDream._id } });
       setDreams(dreams.filter(dream => dream._id !== selectedDream._id));
       closeDeleteModal();

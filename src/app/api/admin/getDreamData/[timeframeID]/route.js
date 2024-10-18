@@ -52,6 +52,8 @@ export async function GET(req) {
         const { startTime, endTime } = getTimeFrame(timeframeID);
         
         const query = {};
+
+        console
         
         // Apply the timeframe filter only if it's not "All Time"
         if (startTime && endTime) {
