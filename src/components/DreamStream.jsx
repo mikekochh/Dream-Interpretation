@@ -57,27 +57,23 @@ const DreamStream = () => {
   useEffect(() => {
     const fetchPublicDreams = async () => {
       try {
-        const res = await axios.get(`/api/dream/dreamStream?_=${new Date().getTime()}`, {
+        const res = await fetch(`/api/dream/dreamStream?_=${new Date().getTime()}`, {
+          next: { revalidate: 0 }, // Force no caching, always fetch new data
           headers: {
             'Cache-Control': 'no-store',
           },
         });
-        setDreamStream(res.data.dreams);
+        
+        const data = await res.json();
+        setDreamStream(data.dreams);
       } catch (error) {
         console.error('Error fetching dreams:', error);
       }
     };
+    
 
     // Fetch dreams initially
     fetchPublicDreams();
-
-    // Set up a polling interval to fetch the latest dreams every 10 seconds
-    const interval = setInterval(() => {
-      fetchPublicDreams();
-    }, 10000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
   }, []);
 
   return (

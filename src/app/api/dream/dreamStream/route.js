@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import Dream from '../../../../../models/dream';
 
+export const dynamic = 'force-dynamic'; // Ensure the route is not statically cached
+
 export async function GET(request) {
     try {
         await connectMongoDB();
