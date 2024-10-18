@@ -1,7 +1,4 @@
 
-
-// at the top will be the amount of users in the table
-
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import User from '../../../../../models/user';
@@ -54,8 +51,9 @@ export async function GET(req) {
         console.log('MongoDB connection successful');
 
         // Use req.nextUrl.searchParams to avoid using request.url
-        const searchParams = req.nextUrl.searchParams;
-        const timeframeID = searchParams.get('timeframeID');
+
+        const url = new URL(req.url);
+        const timeframeID = url.searchParams.get('timeframeID');
         console.log('TimeframeID:', timeframeID);
 
         // Get start_time and end_time based on the timeframeID
