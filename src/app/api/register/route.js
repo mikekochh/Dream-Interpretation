@@ -12,7 +12,7 @@ export async function POST(req) {
 
     try {
         // create user
-        const { name, email, password } = await req.json();
+        const { name, email, password, signUpTypeID } = await req.json();
         const hashedPassword = await bcrypt.hash(password, 12);
 
         newUser = await User.create({ 
@@ -22,7 +22,8 @@ export async function POST(req) {
             credits: 2, 
             activated: false,
             verificationTokenID: null,
-            usedFreeDream: false
+            usedFreeDream: false,
+            signUpTypeID
         });
 
         return NextResponse.json({newUser}, { status: 200 });

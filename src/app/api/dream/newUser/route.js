@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import Dream from '../../../../../models/dream';
 import User from '../../../../../models/user';
+import { SIGN_UP_TYPE_DREAM_INTERPRET, SIGN_UP_TYPE_GOOGLE } from "@/types/signUpTypes";
 
 export async function POST(req) {
     try {
@@ -25,8 +26,14 @@ export async function POST(req) {
 
         const userUpdateData = { $inc: { dreamCount: 1 } };
         if (googleSignUp) {
-            console.log("Hey");
-            userUpdateData.$set = { activated: true };
+            userUpdateData.$set = { 
+                activated: true, 
+                signUpTypeID: SIGN_UP_TYPE_GOOGLE // Google sign-up
+            };
+        } else {
+            userUpdateData.$set = {
+                signUpTypeID: SIGN_UP_TYPE_DREAM_INTERPRET // Regular sign-up
+            };
         }
         
         const updatedUser = await User.findOneAndUpdate(
@@ -34,6 +41,7 @@ export async function POST(req) {
             userUpdateData,
             { new: true }
         );
+        
 
         console.log("updateUser: ", updatedUser);
         

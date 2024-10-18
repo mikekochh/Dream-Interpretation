@@ -5,6 +5,7 @@ import validator from 'validator';
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import Image from "next/image";
+import { SIGN_UP_TYPE_DREAM_INTERPRET } from "@/types/signUpTypes";
 
 export default function RegisterForm() {
 
@@ -86,7 +87,8 @@ export default function RegisterForm() {
                 body: JSON.stringify({
                     name,
                     email: emailLower,
-                    password: "password"
+                    password: "password",
+                    signUpTypeID: SIGN_UP_TYPE_DREAM_INTERPRET
                 }),
             });
     

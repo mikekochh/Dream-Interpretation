@@ -62,6 +62,9 @@ const userSchema = new Schema({
     },
     sendReminder: {
         type: Boolean
+    },
+    signUpTypeID: {
+        type: Number
     }
 }, {timestamps: true});
 

@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react';
 import React, { useState } from 'react';
 import validator from 'validator';
 import { createPortal } from 'react-dom'; // Import createPortal
+import { SIGN_UP_TYPE_DREAM_REMINDER } from '@/types/signUpTypes';
 
 export default function EmailReminderForm() {
   const [email, setEmail] = useState("");
@@ -125,7 +126,8 @@ export default function EmailReminderForm() {
             body: JSON.stringify({
                 name,
                 email: emailLower,
-                password: "password"
+                password: "password",
+                signUpTypeID: SIGN_UP_TYPE_DREAM_REMINDER
             }),
         });
 
