@@ -39,23 +39,20 @@ const InterpretForm = () => {
 
     useEffect(() => {
         const addView = async () => {
-            console.log("are we getting here?");
-            const response = await axios.post('/api/views/addView', {
-                pageID: PAGE_INTERPRET_HOME,
-                userID: user?._id
-            });
-            setCountedView(true);
+            if (window.location.hostname !== 'localhost') {
+                await axios.post('/api/views/addView', {
+                    pageID: PAGE_INTERPRET_HOME,
+                    userID: user?._id
+                });
+                setCountedView(true);
+            }
         }
-
-        console.log("userLoading: ", userLoading);
-        console.log("countedView: ", countedView);
-
+    
         if (!userLoading && !countedView) {
-            console.log("are we getting here here?");
             addView();
         }
-        console.log("are we getting here how amny times?");
     }, [userLoading]);
+    
 
     useEffect(() => {
         const selectedOracle = oracles.some(oracle => oracle.selected);

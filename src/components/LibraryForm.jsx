@@ -16,12 +16,14 @@ const LibraryForm = () => {
 
   useEffect(() => {
       const addView = async () => {
-          const response = await axios.post('/api/views/addView', {
+        if (window.location.hostname !== 'localhost') {
+          await axios.post('/api/views/addView', {
               pageID: PAGE_LIBRARY,
               userID: user?._id
           });
           setCountedView(true);
-      }
+        }
+      } 
 
       if (!userLoading && !countedView) {
           addView();

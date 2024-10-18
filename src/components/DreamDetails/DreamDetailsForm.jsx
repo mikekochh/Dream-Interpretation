@@ -61,11 +61,13 @@ export default function DreamsForm() {
 
     useEffect(() => {
         const addView = async () => {
-            const response = await axios.post('/api/views/addView', {
-                pageID: PAGE_DREAM_DETAILS,
-                userID: user?._id
-            });
-            setCountedView(true);
+            if (window.location.hostname !== 'localhost') {
+                await axios.post('/api/views/addView', {
+                    pageID: PAGE_DREAM_DETAILS,
+                    userID: user?._id
+                });
+                setCountedView(true);
+            }
         }
 
         if (!countedView) {

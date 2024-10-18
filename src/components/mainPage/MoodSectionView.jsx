@@ -9,11 +9,13 @@ const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, increment
 
     useEffect(() => {
         const addView = async () => {
-            const response = await axios.post('/api/views/addView', {
-                pageID: PAGE_INTERPRET_MOOD,
-                userID: user?._id
-            });
-            setCountedView(true);
+            if (window.location.hostname !== 'localhost') {
+                await axios.post('/api/views/addView', {
+                    pageID: PAGE_INTERPRET_MOOD,
+                    userID: user?._id
+                });
+                setCountedView(true);
+            }
         }
 
         if (!countedView) {

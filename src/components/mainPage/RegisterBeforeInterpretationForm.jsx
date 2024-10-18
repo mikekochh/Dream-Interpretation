@@ -10,10 +10,12 @@ const RegisterBeforeInterpretation = ({ isMobile }) => {
 
     useEffect(() => {
         const addView = async () => {
-            const response = await axios.post('/api/views/addView', {
-                pageID: PAGE_INTERPRET_CREATE_ACCOUNT
-            });
-            setCountedView(true);
+            if (window.location.hostname !== 'localhost') {
+                await axios.post('/api/views/addView', {
+                    pageID: PAGE_INTERPRET_CREATE_ACCOUNT
+                });
+                setCountedView(true);
+            }
         }
 
         if (!countedView) {

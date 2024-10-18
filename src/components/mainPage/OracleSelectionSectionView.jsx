@@ -22,11 +22,13 @@ const OracleSelectionSection = ({
 
     useEffect(() => {
         const addView = async () => {
-            const response = await axios.post('/api/views/addView', {
-                pageID: PAGE_INTERPRET_ORACLE,
-                userID: user?._id
-            });
-            setCountedView(true);
+            if (window.location.hostname !== 'localhost') {
+                await axios.post('/api/views/addView', {
+                    pageID: PAGE_INTERPRET_ORACLE,
+                    userID: user?._id
+                });
+                setCountedView(true);
+            }
         }
 
         if (!countedView) {
