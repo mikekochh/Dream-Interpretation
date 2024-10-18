@@ -131,25 +131,9 @@ const UserManagement = () => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const responseTesting = await axios.get('/api/admin/getUserData/' + timeframe);
-
-        console.log("users response testing: ", responseTesting);
-
-        const response = await axios.get('/api/admin/getUserData', {
-          params: {
-            timeframeID: timeframe
-          }
-        });
+        const response = await axios.get('/api/admin/getUserData/' + timeframe);
   
-        console.log("users response: ", response);
-  
-        const responseSubscribers = await axios.get('/api/admin/getSubscriberData', {
-          params: {
-            timeframeID: timeframe
-          }
-        });
-  
-        console.log("subscribers response: ", responseSubscribers);
+        const responseSubscribers = await axios.get('/api/admin/getSubscriberData/' + timeframe);
   
         setUsers(response.data.data);
         setSubscribers(responseSubscribers.data.data);

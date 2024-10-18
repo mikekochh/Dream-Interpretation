@@ -44,23 +44,17 @@ function getTimeFrame(timeframeID) {
 
 export async function GET(req) {
     try {
-        console.log('API Endpoint hit');
-        console.log("req: ", req);
+        // Connect to the MongoDB database
+        await connectMongoDB();
 
         const pathname = req.nextUrl.pathname;
         const timeframeID = pathname.split('/').pop();
 
-        // Connect to the MongoDB database
-        await connectMongoDB();
-        console.log('MongoDB connection successful');
-
         // Get start_time and end_time based on the timeframeID
         const { startTime, endTime } = getTimeFrame(timeframeID);
-        console.log('StartTime:', startTime, 'EndTime:', endTime);
 
         // Build the MongoDB query
         const query = {};
-        console.log('Initial Query:', query);
 
         // Apply the timeframe filter only if it's not "All Time"
         if (startTime && endTime) {
@@ -68,7 +62,6 @@ export async function GET(req) {
                 $gte: new Date(startTime),
                 $lte: new Date(endTime)
             };
-            console.log('Query with Timeframe Filter:', query);
         }
 
         // Fetch users and their views from the database
@@ -91,8 +84,6 @@ export async function GET(req) {
                 }
             }
         ]);
-
-        // console.log('Users fetched successfully:', users);
 
         return NextResponse.json({ data: users });
     } catch (error) {

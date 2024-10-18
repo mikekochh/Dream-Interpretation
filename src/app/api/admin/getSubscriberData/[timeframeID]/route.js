@@ -1,7 +1,6 @@
-
 import { NextResponse } from 'next/server';
-import { connectMongoDB } from '../../../../../lib/mongodb';
-import User from '../../../../../models/user';
+import User from '../../../../../../models/user';
+import { connectMongoDB } from '../../../../../../lib/mongodb';
 
 // Helper function to calculate start and end time based on the timeframeID
 function getTimeFrame(timeframeID) {
@@ -44,25 +43,17 @@ function getTimeFrame(timeframeID) {
 
 export async function GET(req) {
     try {
-        console.log('API Endpoint hit');
-        console.log("req: ", req);
-
         // Connect to the MongoDB database
         await connectMongoDB();
-        console.log('MongoDB connection successful');
 
-        // Use req.query to get parameters
-        const { searchParams } = new URL(req.url);
-        const timeframeID = searchParams.get('timeframeID'); // Safely extract query param
-        console.log('TimeframeID:', timeframeID);
+        const pathname = req.nextUrl.pathname;
+        const timeframeID = pathname.split('/').pop();
 
         // Get start_time and end_time based on the timeframeID
         const { startTime, endTime } = getTimeFrame(timeframeID);
-        console.log('StartTime:', startTime, 'EndTime:', endTime);
 
         // Build the MongoDB query
         const query = {};
-        console.log('Initial Query:', query);
 
         // Apply the timeframe filter only if it's not "All Time"
         if (startTime && endTime) {
@@ -70,31 +61,13 @@ export async function GET(req) {
                 $gte: new Date(startTime),
                 $lte: new Date(endTime)
             };
-            console.log('Query with Timeframe Filter:', query);
         }
 
-        // Fetch users and their views from the database
-        console.log('Executing MongoDB aggregate query...');
-        const users = await User.aggregate([
-            {
-                $match: query // Apply the query to filter users based on the timeframe
-            },
-            {
-                $lookup: {
-                    from: 'views', // The collection name for the views table
-                    localField: '_id', // The _id field in the users table
-                    foreignField: 'userID', // The userID field in the views table
-                    as: 'views' // The alias for the joined data
-                }
-            },
-            {
-                $addFields: {
-                    viewsCount: { $size: "$views" } // Add a new field for the number of views
-                }
-            }
-        ]);
+        // Only return subscribed users
+        query.subscribed = true;
 
-        // console.log('Users fetched successfully:', users);
+        // Fetch users from the database based on the query
+        const users = await User.find(query);
 
         return NextResponse.json({ data: users });
     } catch (error) {
@@ -102,3 +75,4 @@ export async function GET(req) {
         return NextResponse.json({ error: error.message });
     }
 }
+
