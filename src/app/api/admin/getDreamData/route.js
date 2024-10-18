@@ -94,8 +94,6 @@ export async function GET(req) {
                 }
             },
         ]);
-
-        console.log("dreams: ", dreams);
         
 
         return NextResponse.json({ data: dreams });
