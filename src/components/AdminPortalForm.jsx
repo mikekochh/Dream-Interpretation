@@ -145,8 +145,6 @@ const UserManagement = () => {
         }
       });
 
-      console.log("response: ", response);
-
       setUsers(response.data.data);
       setSubscribers(responseSubscribers.data.data);
       setLoading(false);
@@ -217,14 +215,14 @@ const UserManagement = () => {
                 onClick={() => setSelectedCard(1)}  
               >
                 <h3 className="text-xl font-bold mb-2">Users</h3>
-                <p className="text-2xl">{users.length}</p>
+                <p className="text-2xl">{users?.length}</p>
               </div>
               <div 
                 className="bg-white shadow rounded-lg p-4 text-center cursor-pointer"
                 onClick={() => setSelectedCard(2)}  
               >
                 <h3 className="text-xl font-bold mb-2">Subscribers</h3>
-                <p className="text-2xl">{subscribers.length}</p>
+                <p className="text-2xl">{subscribers?.length}</p>
               </div>
             </div>
             <div className="overflow-x-auto text-white">
@@ -286,7 +284,7 @@ const UserManagement = () => {
                             })}
                           </td>
                           <td className="px-4 py-2">{user.dreamCount}</td>
-                          <td className="px-4 py-2">{user.views.length}</td>
+                          <td className="px-4 py-2">{user.viewsCount}</td>
                         </tr>
                       ))}
                     </>
@@ -304,7 +302,7 @@ const UserManagement = () => {
                             })}
                           </td>
                           <td className="px-4 py-2">{user.dreamCount}</td>
-                          <td className="px-4 py-2">{user.views.length}</td>
+                          <td className="px-4 py-2">{user.viewsCount}</td>
                         </tr>
                       ))}
                     </>
