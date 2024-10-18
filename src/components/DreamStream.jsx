@@ -57,12 +57,11 @@ const DreamStream = () => {
   useEffect(() => {
     const fetchPublicDreams = async () => {
       try {
-        const res = await axios.get('/api/dream/dreamStream', {
+        const res = await axios.get(`/api/dream/dreamStream?_=${new Date().getTime()}`, {
           headers: {
-            'Cache-Control': 'no-store', // Prevent caching
+            'Cache-Control': 'no-store',
           },
         });
-        console.log("res dreamStream: ", res);
         setDreamStream(res.data.dreams);
       } catch (error) {
         console.error('Error fetching dreams:', error);
