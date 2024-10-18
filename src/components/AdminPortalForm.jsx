@@ -468,6 +468,17 @@ const UserManagement = () => {
       return page ? page.pageName : 'Page not found';
     };
 
+    const sortByViewDate = () => {
+      const sortedViews = [...views].sort((a, b) => new Date(b.view_date) - new Date(a.view_date));
+      setViews(sortedViews);
+    }
+
+    const sortByViewDateAscending = () => {
+      const sortedViews = [...views].sort((a, b) => new Date(a.view_date) - new Date(b.view_date));
+      setViews(sortedViews);
+    }
+    
+
 
     return (
       <div>
@@ -505,14 +516,28 @@ const UserManagement = () => {
             </div>
 
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto ">
               <h1 className="text-center text-3xl font-semibold mb-2 text-white">Views</h1>
               <table className="w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200 text-left">
                     <th className="px-4 py-2">Viewer</th>
                     <th className="px-4 py-2">Page</th>
-                    <th className="px-4 py-2">View Date & Time</th>
+                    <th className="px-4 py-2 cursor-pointer">
+                      <div className="flex items-center">
+                        View Date & Time
+                        <div className="flex flex-col ml-2">
+                          <i 
+                            onClick={sortByViewDate} 
+                            className={`fas fa-sort-up cursor-pointer`} 
+                          />
+                          <i 
+                            onClick={sortByViewDateAscending} 
+                            className={`fas fa-sort-down cursor-pointer`}
+                          ></i>
+                        </div>
+                      </div>
+                    </th>
                     <th className="px-4 py-2">Action</th>
                   </tr>
                 </thead>
