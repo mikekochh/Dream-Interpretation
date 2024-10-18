@@ -130,6 +130,7 @@ const UserManagement = () => {
     useEffect(() => {
       const fetchSignUpTypeData = async () => {
         const response = await axios.get('/api/admin/getSignUpTypeData');
+        console.log("response: ", response);
         setSignUpTypes(response.data.data);
       }
 
@@ -172,6 +173,7 @@ const UserManagement = () => {
     
     const sortByCreateDate = () => {
       const sortedUsers = [...users].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      console.log("sortedUsers: ", sortedUsers);
       setUsers(sortedUsers);
     };
     

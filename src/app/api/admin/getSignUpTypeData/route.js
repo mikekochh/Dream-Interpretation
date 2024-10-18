@@ -10,6 +10,8 @@ export async function GET(req) {
         // Fetch users from the database based on the query
         const signUpTypes = await SignUpType.find({});
 
+        console.log("signUpTypes: ", signUpTypes);
+
         return NextResponse.json({ data: signUpTypes });
     } catch (error) {
         console.error('Error fetching sign up types: ', error);
