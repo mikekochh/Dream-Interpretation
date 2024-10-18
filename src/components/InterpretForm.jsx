@@ -105,26 +105,18 @@ const InterpretForm = () => {
             const dreamID = localStorage.getItem('dreamID');
             let googleSignUp = localStorage.getItem('googleSignUp');
             googleSignUp = (googleSignUp === 'true');
-            console.log("Are we getting HERE!");
-            console.log("dreamID: ", dreamID);
-            console.log("googleSignUp: ", googleSignUp);
             if (dreamID && googleSignUp) {
                 const userID = user?._id;
-                console.log("Are we getting here?");
                 await axios.post('/api/user/sendWelcomeEmail', {
                     email: user?.email,
                     name: user?.name
                 })
-                console.log("How about here?");
                 await axios.post('api/dream/newUser', { userID, dreamID, googleSignUp: true });
-                console.log("And perhaps what is this?");
-                // await axios.post('/api/dream/streak/newStreak', { userID });
                 journalDream();
             }
         }
 
         const checkRegisteredAccount = async () => {
-            console.log("We must be getting here instead");
             const existingDreamID = localStorage.getItem('dreamID');
             let googleSignUp = localStorage.getItem('googleSignUp');
             googleSignUp = (googleSignUp === 'true');

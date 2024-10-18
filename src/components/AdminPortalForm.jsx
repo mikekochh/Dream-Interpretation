@@ -1,5 +1,3 @@
-// pages/admin.js
-"use client";
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
@@ -127,36 +125,40 @@ const UserManagement = () => {
     const [selectedCard, setSelectedCard] = useState(1);
 
     useEffect(() => {
-      const fetchUsers = async () => {
-        setLoading(true);
-        try {
-          const response = await axios.get('/api/admin/getUserData', {
-            params: {
-              timeframeID: timeframe
-            }
-          });
-    
-          console.log("users response: ", response);
-    
-          const responseSubscribers = await axios.get('/api/admin/getSubscriberData', {
-            params: {
-              timeframeID: timeframe
-            }
-          });
-    
-          console.log("subscribers response: ", responseSubscribers);
-    
-          setUsers(response.data.data);
-          setSubscribers(responseSubscribers.data.data);
-          setLoading(false);
-        } catch (error) {
-          console.log("There was an error fetching user admin data: ", error);
-          setLoading(false);
-        }
-      };
-
         fetchUsers();
     }, [timeframe]);
+
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        const responseTesting = await axios.get('/api/admin/getUserData/' + timeframe);
+
+        console.log("users response testing: ", responseTesting);
+
+        const response = await axios.get('/api/admin/getUserData', {
+          params: {
+            timeframeID: timeframe
+          }
+        });
+  
+        console.log("users response: ", response);
+  
+        const responseSubscribers = await axios.get('/api/admin/getSubscriberData', {
+          params: {
+            timeframeID: timeframe
+          }
+        });
+  
+        console.log("subscribers response: ", responseSubscribers);
+  
+        setUsers(response.data.data);
+        setSubscribers(responseSubscribers.data.data);
+        setLoading(false);
+      } catch (error) {
+        console.log("There was an error fetching user admin data: ", error);
+        setLoading(false);
+      }
+    };
 
     const handleTimeFrameChange = (value) => {
       setTimeframe(Number(value)); // Directly update the state with the numeric value
