@@ -16,8 +16,6 @@ const AdminPortalForm = () => {
   const [profileCheckDone, setProfileCheckDone] = useState(false);
 
   useEffect(() => {
-    console.log("userLoading: ", userLoading);
-    console.log("user: ", user);
     if (userLoading) {
       return;
     }
@@ -139,11 +137,15 @@ const UserManagement = () => {
         }
       });
 
+      console.log("users response: ", response);
+
       const responseSubscribers = await axios.get('/api/admin/getSubscriberData', {
         params: {
           timeframeID: timeframe
         }
       });
+
+      console.log("subscribers response: ", responseSubscribers);
 
       setUsers(response.data.data);
       setSubscribers(responseSubscribers.data.data);
