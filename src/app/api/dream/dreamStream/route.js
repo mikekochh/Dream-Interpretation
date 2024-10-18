@@ -14,7 +14,15 @@ export async function GET(request) {
         console.log("dreams from dreamStream: ", dreams);
 
         if (dreams) {
-            return NextResponse.json({ dreams });
+            const response = NextResponse.json({ dreams });
+
+            // Disable caching by setting Cache-Control headers
+            response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+            response.headers.set('Pragma', 'no-cache');
+            response.headers.set('Expires', '0');
+            response.headers.set('Surrogate-Control', 'no-store');
+
+            return response;
         } else {
             return NextResponse.json({ error: 'Public dreams not found' }, { status: 404 });
         }
