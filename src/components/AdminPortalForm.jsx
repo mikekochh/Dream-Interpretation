@@ -40,7 +40,7 @@ const AdminPortalForm = () => {
       case 'sales':
         return <SalesAndRevenue />
       default:
-        return <Dashboard />;
+        return <UserManagement />;
     }
   };
 
