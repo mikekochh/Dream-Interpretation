@@ -1,13 +1,12 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import Image from 'next/image';
 
 // Directly import all components without lazy loading
 import WelcomeSection from './WelcomeSectionView';
 import MoodSection from './MoodSectionView';
 import OracleSelectionSection from './OracleSelectionSectionView';
-import RegisterForm from '../RegisterForm';
+import RegisterBeforeInterpretation from './RegisterBeforeInterpretationForm';
 
 export default function JournalDreamView({
     user,
@@ -100,6 +99,7 @@ export default function JournalDreamView({
                         handleEmotionClick={handleEmotionClick}
                         selectedEmotions={selectedEmotions}
                         incrementDreamStep={incrementDreamStep}
+                        user={user}
                     />
                 </div>
             ) : currentStep === 2 ? (
@@ -122,13 +122,7 @@ export default function JournalDreamView({
                     />
                 </div>
             ) : (
-                <div className="text-center">
-                    <p className={`gradient-title-text ${isMobile ? 'golden-ratio-3' : 'golden-ratio-4'}`}>Create an Account</p>
-                    <p className="golden-ratio-2">Create an account with us to view your dream interpretation</p>
-                    <div className="text-center flex justify-center">
-                        <RegisterForm />
-                    </div>
-                </div>
+                <RegisterBeforeInterpretation isMobile={isMobile} />
             )}
         </div>
     );

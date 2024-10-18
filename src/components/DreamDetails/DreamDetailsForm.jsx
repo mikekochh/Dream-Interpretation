@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { LockClosedIcon, GlobeAltIcon } from '@heroicons/react/24/solid';
+import { PAGE_DREAM_DETAILS } from '@/types/pageTypes';
 
 import { UserContext } from '@/context/UserContext';
 
@@ -50,12 +51,27 @@ export default function DreamsForm() {
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const containerRef = useRef(null);
+    const [countedView, setCountedView] = useState(false);
 
     const [isUsersOwnDream, setIsUsersOwnDream] = useState(false);
 
     const handleToggleDreamExpanded = () => {
         setIsDreamExpanded(!isDreamExpanded);
     }
+
+    useEffect(() => {
+        const addView = async () => {
+            const response = await axios.post('/api/views/addView', {
+                pageID: PAGE_DREAM_DETAILS,
+                userID: user?._id
+            });
+            setCountedView(true);
+        }
+
+        if (!countedView) {
+            addView();
+        }
+    }, []);
 
     useEffect(() => {
         const handleGoogleSignUp = async () => {

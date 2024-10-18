@@ -1,6 +1,8 @@
 "use client";
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import OracleSection from '../OracleSection';
+import { PAGE_INTERPRET_ORACLE } from '@/types/pageTypes';
+import axios from 'axios';
 
 const OracleSelectionSection = ({
     user,
@@ -15,6 +17,22 @@ const OracleSelectionSection = ({
     oracleSelected,
     createAccountFlow
 }) => {
+
+    const [countedView, setCountedView] = useState(false);
+
+    useEffect(() => {
+        const addView = async () => {
+            const response = await axios.post('/api/views/addView', {
+                pageID: PAGE_INTERPRET_ORACLE,
+                userID: user?._id
+            });
+            setCountedView(true);
+        }
+
+        if (!countedView) {
+            addView();
+        }
+    }, []);
 
     const isButtonDisabled = (!user?.activated && user?.name) || (!oracleSelected && !user?.name);
 

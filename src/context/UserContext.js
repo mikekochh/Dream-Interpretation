@@ -6,12 +6,10 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(true);
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    setLoading(false);
-
     const setUserData = async () => {
         const userEmail = session?.user?.email;
         if (userEmail) {
@@ -19,16 +17,26 @@ export const UserProvider = ({ children }) => {
                 const res = await fetch(`api/user/${userEmail}`, { method: "GET", headers: { "Content-Type":"application/json" } });
                 const userData = await res.json();
                 setUser(userData);
+                setUserLoading(false);
             } catch (error) {
                 console.log("There was an error fetching user data: ", error);
+                setUserLoading(false);
             }
         }
     }
-
-    if (session && !user) {
-        setUserData();
+    if (status === 'loading') {
+      // still loading session
+      return;
     }
-  }, [session]);
+    if (session && !user) {
+      // session loaded and there is a user
+      setUserData();
+    }
+    else {
+      // session loaded and there is no user
+      setUserLoading(false);
+    }
+  }, [session, status]);
 
   const login = async (email, password) => {
     // try {
@@ -56,7 +64,7 @@ export const UserProvider = ({ children }) => {
   return (
     <UserContext.Provider value={{ 
       user,
-      loading,
+      userLoading,
       session,
       status, 
       login, 

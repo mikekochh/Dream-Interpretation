@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LockClosedIcon, GlobeAltIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 

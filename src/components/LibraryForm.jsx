@@ -1,14 +1,32 @@
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { PAGE_LIBRARY } from '@/types/pageTypes';
+import { UserContext } from '@/context/UserContext';
 
 const LibraryForm = () => {
+  const { user, userLoading } = useContext(UserContext) || {};
+
   const [dreamSymbols, setDreamSymbols] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [displayedSymbols, setDisplayedSymbols] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
   const symbolsPerPage = 10;
+  const [countedView, setCountedView] = useState(false);
+
+  useEffect(() => {
+      const addView = async () => {
+          const response = await axios.post('/api/views/addView', {
+              pageID: PAGE_LIBRARY,
+              userID: user?._id
+          });
+          setCountedView(true);
+      }
+
+      if (!userLoading && !countedView) {
+          addView();
+      }
+  }, [userLoading]);
 
   useEffect(() => {
     const retrieveDreamSymbols = async () => {

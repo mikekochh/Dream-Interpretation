@@ -1,7 +1,26 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { PAGE_INTERPRET_MOOD } from '@/types/pageTypes';
 
-const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, incrementDreamStep }) => {
+const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, incrementDreamStep, user }) => {
+
+    const [countedView, setCountedView] = useState(false);
+
+    useEffect(() => {
+        const addView = async () => {
+            const response = await axios.post('/api/views/addView', {
+                pageID: PAGE_INTERPRET_MOOD,
+                userID: user?._id
+            });
+            setCountedView(true);
+        }
+
+        if (!countedView) {
+            addView();
+        }
+    }, []);
+
     return (
         <div id="mood-selection-section">
             <MoodSelectionPopup />

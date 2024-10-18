@@ -3,13 +3,14 @@ import React, { useState, useEffect, useRef, lazy, Suspense, useContext } from '
 import axios from 'axios';
 import { UserContext } from "@/context/UserContext";
 import { useRouter } from 'next/navigation';
+import { PAGE_INTERPRET_HOME } from '@/types/pageTypes';
 
 const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 const InterpretForm = () => {
-    const { user } = useContext(UserContext)
+    const { user, userLoading } = useContext(UserContext)
 
     const router = useRouter();
 
@@ -26,7 +27,6 @@ const InterpretForm = () => {
     const [loadingEmotions, setLoadingEmotions] = useState(true);
     const [loadingDreamStreak, setLoadingDreamStreak] = useState(true);
 
-    const [dreamPublic, setDreamPublic] = useState(false);
     const [emotions, setEmotions] = useState([]);
     const [selectedEmotions, setSelectedEmotions] = useState([]);
     const [dreamStreak, setDreamStreak] = useState();
@@ -34,6 +34,28 @@ const InterpretForm = () => {
     const [dreamStep, setDreamStep] = useState(0);
 
     const scrollContainerRef = useRef(null);
+
+    const [countedView, setCountedView] = useState(false);
+
+    useEffect(() => {
+        const addView = async () => {
+            console.log("are we getting here?");
+            const response = await axios.post('/api/views/addView', {
+                pageID: PAGE_INTERPRET_HOME,
+                userID: user?._id
+            });
+            setCountedView(true);
+        }
+
+        console.log("userLoading: ", userLoading);
+        console.log("countedView: ", countedView);
+
+        if (!userLoading && !countedView) {
+            console.log("are we getting here here?");
+            addView();
+        }
+        console.log("are we getting here how amny times?");
+    }, [userLoading]);
 
     useEffect(() => {
         const selectedOracle = oracles.some(oracle => oracle.selected);
@@ -353,7 +375,7 @@ const InterpretForm = () => {
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
                 {savingDream ? (
-                    <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} />
+                    <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} user={user} />
                 ) : (
                     <JournalDreamView
                         user={user}
