@@ -47,15 +47,15 @@ function getTimeFrame(timeframeID) {
 
 export async function GET(req) {
     try {
-        console.log('API Endpoint hit'); // Initial log to verify endpoint was hit
+        console.log('API Endpoint hit');
 
         // Connect to the MongoDB database
         await connectMongoDB();
         console.log('MongoDB connection successful');
 
-        // Extract query parameters from the request URL
-        const { searchParams } = new URL(req.url);
-        const timeframeID = searchParams.get('timeframeID'); // Get the timeframeID from the query
+        // Use req.nextUrl.searchParams to avoid using request.url
+        const searchParams = req.nextUrl.searchParams;
+        const timeframeID = searchParams.get('timeframeID');
         console.log('TimeframeID:', timeframeID);
 
         // Get start_time and end_time based on the timeframeID
@@ -95,6 +95,7 @@ export async function GET(req) {
                 }
             }
         ]);
+
         console.log('Users fetched successfully:', users);
 
         return NextResponse.json({ data: users });
@@ -103,5 +104,6 @@ export async function GET(req) {
         return NextResponse.json({ error: error.message });
     }
 }
+
 
 
