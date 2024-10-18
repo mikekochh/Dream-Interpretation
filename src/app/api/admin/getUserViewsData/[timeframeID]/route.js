@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { connectMongoDB } from '../../../../../lib/mongodb';
-import View from '../../../../../models/views';
+import View from '../../../../../../models/views';
+import { connectMongoDB } from '../../../../../../lib/mongodb';
 
 // Helper function to calculate start and end time based on the timeframeID
 function getTimeFrame(timeframeID) {
@@ -46,15 +46,16 @@ export async function GET(req) {
         // Connect to the MongoDB database
         await connectMongoDB();
 
-        // Extract query parameters from the request URL
-        const { searchParams } = new URL(req.url);
-        const timeframeID = searchParams.get('timeframeID'); // Get the timeframeID from the query
+        const pathname = req.nextUrl.pathname;
+        const timeframeID = pathname.split('/').pop();
 
         // Get start_time and end_time based on the timeframeID
         const { startTime, endTime } = getTimeFrame(timeframeID);
 
         // Build the MongoDB query
-        const query = {};
+        const query = {
+            userID: { $ne: null } // Ensure userID is not null
+        };
 
         // Apply the timeframe filter only if it's not "All Time"
         if (startTime && endTime) {
@@ -67,7 +68,7 @@ export async function GET(req) {
         // Fetch views with a lookup to the users table
         const views = await View.aggregate([
             {
-                $match: query // Apply the query based on the timeframe
+                $match: query // Apply the query based on the timeframe and userID
             },
             {
                 $addFields: {
@@ -96,5 +97,6 @@ export async function GET(req) {
         return NextResponse.json({ error: error.message });
     }
 }
+
 
 

@@ -434,9 +434,6 @@ const UserManagement = () => {
     useEffect(() => {
       const fetchPageData = async () => {
         const response = await axios.get('/api/admin/getPageData');
-
-        console.log("Pages: ", response.data.data);
-
         setPages(response.data.data);
       }
 
@@ -449,13 +446,9 @@ const UserManagement = () => {
 
     const fetchViews = async () => {
       setLoading(true);
-      const response = await axios.get('/api/admin/getViewsData', {
-        params: { timeframeID: timeframe },
-      });
+      const response = await axios.get('/api/admin/getViewsData/' + timeframe);
 
-      const responseUserViews = await axios.get('/api/admin/getUserViewsData', {
-        params: { timeframeID: timeframe }
-      });
+      const responseUserViews = await axios.get('/api/admin/getUserViewsData/' + timeframe);
 
       setViews(response.data.data);
       setUserViews(responseUserViews.data.data);
@@ -575,9 +568,7 @@ const UserManagement = () => {
   
     const fetchDreams = async () => {
       setLoading(true);
-      const response = await axios.get('/api/admin/getDreamData', {
-        params: { timeframeID: timeframe },
-      });
+      const response = await axios.get('/api/admin/getDreamData/' + timeframe);
       setDreams(response.data.data);
       setLoading(false);
     };

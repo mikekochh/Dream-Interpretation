@@ -1,10 +1,6 @@
-
-
-// at the top will be the amount of users in the table
-
 import { NextResponse } from 'next/server';
-import { connectMongoDB } from '../../../../../lib/mongodb';
-import Dream from '../../../../../models/dream';
+import View from '../../../../../../models/views';
+import { connectMongoDB } from '../../../../../../lib/mongodb';
 
 // Helper function to calculate start and end time based on the timeframeID
 function getTimeFrame(timeframeID) {
@@ -50,27 +46,25 @@ export async function GET(req) {
         // Connect to the MongoDB database
         await connectMongoDB();
 
-        // Extract query parameters from the request URL
-        const { searchParams } = new URL(req.url);
-        const timeframeID = searchParams.get('timeframeID'); // Get the timeframeID from the query
+        const pathname = req.nextUrl.pathname;
+        const timeframeID = pathname.split('/').pop();
 
+        // Get start_time and end_time based on the timeframeID
         const { startTime, endTime } = getTimeFrame(timeframeID);
-        
+
+        // Build the MongoDB query
         const query = {};
-        
+
         // Apply the timeframe filter only if it's not "All Time"
         if (startTime && endTime) {
-            query.dreamDate = {
+            query.view_date = {
                 $gte: new Date(startTime),
                 $lte: new Date(endTime)
             };
         }
-        
-        query.userID = { $ne: '65639dbb9811fa19c4dca43d' };
-        
-        
-        // Fetch dreams from the database and join with user data
-        const dreams = await Dream.aggregate([
+
+        // Fetch views with a lookup to the users table
+        const views = await View.aggregate([
             {
                 $match: query // Apply the query based on the timeframe
             },
@@ -94,14 +88,12 @@ export async function GET(req) {
                 }
             },
         ]);
-        
 
-        return NextResponse.json({ data: dreams });
+        return NextResponse.json({ data: views });
     } catch (error) {
-        console.error('Error fetching dream data: ', error);
+        console.error('Error fetching views data: ', error);
         return NextResponse.json({ error: error.message });
     }
 }
-
 
 
