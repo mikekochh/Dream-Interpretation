@@ -32,7 +32,9 @@ const WelcomeSection = ({
 
     useEffect(() => {
       const timer = setTimeout(() => {
-        setIsReminderModalVisible(true);
+        if (!user) {
+            setIsReminderModalVisible(true);
+        }
         if (!countedViewOpen && window.location.hostname !== 'localhost') {
             addPageViewOpen();
         }
