@@ -183,6 +183,7 @@ const WelcomeSection = ({
 
     const openDreamReminderModal = () => {
         setIsReminderModalVisible(true);
+        addPageViewOpen();
     }
 
     return (
