@@ -13,8 +13,6 @@ const LoadingComponent = lazy(() => import('./LoadingComponent'));
 const InterpretForm = () => {
     const { user, userLoading, setUserData } = useContext(UserContext);
 
-    console.log("user: ", user);
-
     const router = useRouter();
 
     const [savingDream, setSavingDream] = useState(false);

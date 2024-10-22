@@ -33,7 +33,6 @@ const WelcomeSection = ({
 
     useEffect(() => {
       const timer = setTimeout(() => {
-        console.log("user: ", user);
         if (!user) {
             setIsReminderModalVisible(true);
         }
