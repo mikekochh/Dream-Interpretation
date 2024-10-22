@@ -10,8 +10,6 @@ export async function GET(req) {
         
         const url = new URL(req.url);
         const genderID = url.searchParams.get('genderID');
-
-        console.log("genderID: ", genderID);
         
         if (!genderID) {
             return NextResponse.json({ error: 'genderID is required' }, { status: 400 });

@@ -116,6 +116,7 @@ const InterpretForm = () => {
             } else if (googleSignUp && googleReminder) {
                 const userID = user?._id;
                 await axios.post('/api/user/sendDreamReminder', { userID, signUpTypeID: SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE });
+                localStorage.setItem('googleReminder', false);
                 setUserData();
             }
         }

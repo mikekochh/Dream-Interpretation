@@ -13,8 +13,6 @@ export async function GET(request) {
             .sort({ dreamDate: -1 }) // -1 for descending order (most recent first)
             .limit(5);
 
-        console.log("dreams from dreamStream: ", dreams);
-
         if (dreams) {
             const response = NextResponse.json({ dreams });
 

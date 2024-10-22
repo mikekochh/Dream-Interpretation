@@ -7,14 +7,15 @@ export async function POST(req) {
         await connectMongoDB();
         const { userID, signUpTypeID } = await req.json();
 
+        console.log("signUptypeID: ", signUpTypeID);
+
         let updatedUser;
 
         if (signUpTypeID) {
             // Find the user by ID and update the sendReminder field to true
             updatedUser = await User.findByIdAndUpdate(
                 userID, 
-                { sendReminder: true }, // Set sendReminder to true
-                { signUpTypeID },
+                { sendReminder: true, signUpTypeID: signUpTypeID },
                 { new: true } // Return the updated user after the change
             );
         } else {
