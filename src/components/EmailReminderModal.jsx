@@ -118,7 +118,7 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
                 name,
                 email: emailLower,
                 password: "password",
-                signUpTypeID: SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE
+                signUpTypeID: SIGN_UP_TYPE_DREAM_REMINDER
             }),
         });
 
