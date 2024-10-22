@@ -81,7 +81,6 @@ export default function JournalDreamView({
             {currentStep === 0 ? (
                 <div ref={welcomeSectionRef} className={`overflow-y-auto hide-scrollbar h-screen main-content`}>
                     <WelcomeSection
-                        user={user}
                         dreamStreak={dreamStreak}
                         incrementDreamStep={incrementDreamStep}
                         setDream={setDream}

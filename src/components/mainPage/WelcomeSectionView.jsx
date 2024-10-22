@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DreamStream from '../DreamStream';
 import EmailReminderModal from '../EmailReminderModal';
 import axios from 'axios';
+import { UserContext } from '@/context/UserContext';
 import { 
     PAGE_EMAIL_REMINDER_POPUP, 
     PAGE_EMAIL_REMINDER_POPUP_CLOSED,
@@ -15,7 +16,6 @@ import {
 } from '@/types/pageTypes';
 
 const WelcomeSection = ({ 
-    user, 
     dreamStreak, 
     incrementDreamStep, 
     setDream, 
@@ -26,6 +26,8 @@ const WelcomeSection = ({
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
     const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
     const [countedViewOpen, setCountedViewOpen] = useState(false);
+
+    const { user } = useContext(UserContext) || {};
 
     const dreamStreamRef = useRef(null);
 
