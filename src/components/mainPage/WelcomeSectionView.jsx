@@ -27,24 +27,24 @@ const WelcomeSection = ({
     const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
     const [countedViewOpen, setCountedViewOpen] = useState(false);
 
-    const { user } = useContext(UserContext) || {};
+    const { user, userLoading } = useContext(UserContext) || {};
 
     const dreamStreamRef = useRef(null);
 
     useEffect(() => {
-        if (user) {
+        if (!userLoading) {
             const timer = setTimeout(() => {
-                if (!user?.name) {
+                if (!user) {
                     setIsReminderModalVisible(true);
+                    if (!countedViewOpen && window.location.hostname !== 'localhost') {
+                        addPageViewOpen();
+                    }
                 }
-                if (!countedViewOpen && window.location.hostname !== 'localhost') {
-                    addPageViewOpen();
-                }
-              }, 4000); // 3000 ms = 3 seconds
+              }, 4000);
 
             return () => clearTimeout(timer); // Cleanup the timer on unmount
         }
-    }, [user]);
+    }, [user, userLoading]);
 
     useEffect(() => {
         const handleIntersection = (entries, observer) => {
