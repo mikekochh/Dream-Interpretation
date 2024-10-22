@@ -26,12 +26,12 @@ const WelcomeSection = ({
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
     const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
     const [countedViewOpen, setCountedViewOpen] = useState(false);
-    const [countedViewClosed, setCountedViewClosed] = useState(false);
 
     const dreamStreamRef = useRef(null);
 
     useEffect(() => {
       const timer = setTimeout(() => {
+        console.log("user: ", user);
         if (!user) {
             setIsReminderModalVisible(true);
         }
@@ -94,7 +94,6 @@ const WelcomeSection = ({
             pageID: PAGE_EMAIL_REMINDER_POPUP_CLOSED,
             userID: user?._id
         });
-        setCountedViewClosed(true);
     }
     
 

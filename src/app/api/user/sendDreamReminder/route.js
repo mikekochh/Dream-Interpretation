@@ -5,14 +5,26 @@ import User from '../../../../../models/user';
 export async function POST(req) {
     try {
         await connectMongoDB();
-        const { userID } = await req.json();
+        const { userID, signUpTypeID } = await req.json();
 
-        // Find the user by ID and update the sendReminder field to true
-        const updatedUser = await User.findByIdAndUpdate(
-            userID, 
-            { sendReminder: true }, // Set sendReminder to true
-            { new: true } // Return the updated user after the change
-        );
+        let updatedUser;
+
+        if (signUpTypeID) {
+            // Find the user by ID and update the sendReminder field to true
+            updatedUser = await User.findByIdAndUpdate(
+                userID, 
+                { sendReminder: true }, // Set sendReminder to true
+                { signUpTypeID },
+                { new: true } // Return the updated user after the change
+            );
+        } else {
+            // Find the user by ID and update the sendReminder field to true
+            updatedUser = await User.findByIdAndUpdate(
+                userID, 
+                { sendReminder: true }, // Set sendReminder to true
+                { new: true } // Return the updated user after the change
+            );
+        }
 
         console.log("updatedUser: ", updatedUser);
 

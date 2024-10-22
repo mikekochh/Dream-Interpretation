@@ -4,6 +4,7 @@ import axios from 'axios';
 import { UserContext } from "@/context/UserContext";
 import { useRouter } from 'next/navigation';
 import { PAGE_INTERPRET_HOME } from '@/types/pageTypes';
+import { SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE } from '@/types/signUpTypes';
 
 const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
@@ -114,7 +115,7 @@ const InterpretForm = () => {
                 journalDream();
             } else if (googleSignUp && googleReminder) {
                 const userID = user?._id;
-                await axios.post('/api/user/sendDreamReminder', { userID });
+                await axios.post('/api/user/sendDreamReminder', { userID, signUpTypeID: SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE });
                 setUserData();
             }
         }
