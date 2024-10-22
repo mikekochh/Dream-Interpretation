@@ -174,9 +174,8 @@ const WelcomeSection = ({
     }
 
     const onCloseReminderModal = () => {
-        console.log("running onClose...");
         setIsReminderModalVisible(false);
-        if (!countedViewClosed && window.location.hostname !== 'localhost') {
+        if (window.location.hostname !== 'localhost') {
             addPageViewClosed();
         }
     }
