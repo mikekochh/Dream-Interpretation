@@ -33,7 +33,8 @@ const WelcomeSection = ({
 
     useEffect(() => {
       const timer = setTimeout(() => {
-        if (!user) {
+        console.log("user: ", user);
+        if (!user?.name) {
             setIsReminderModalVisible(true);
         }
         if (!countedViewOpen && window.location.hostname !== 'localhost') {
