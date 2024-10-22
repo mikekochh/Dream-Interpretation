@@ -36,7 +36,7 @@ const WelcomeSection = ({
         if (!countedViewOpen && window.location.hostname !== 'localhost') {
             addPageViewOpen();
         }
-      }, 3000); // 3000 ms = 3 seconds
+      }, 4000); // 3000 ms = 3 seconds
     
       return () => clearTimeout(timer); // Cleanup the timer on unmount
     }, []);
@@ -174,6 +174,7 @@ const WelcomeSection = ({
     }
 
     const onCloseReminderModal = () => {
+        console.log("running onClose...");
         setIsReminderModalVisible(false);
         if (!countedViewClosed && window.location.hostname !== 'localhost') {
             addPageViewClosed();
@@ -255,21 +256,19 @@ const WelcomeSection = ({
                     )}
                 </div>
             </div>
-            {user?.sendReminder ? (
+            {user?.sendReminder && (
                 <div className="text-center bg-gray-800 bg-opacity-30 shadow-lg rounded-3xl p-4 mt-5 golden-ratio-2 md:w-2/3 md:mx-auto">
                     Dream Reminder Set! See you tomorrow 😁
                 </div>
-                ) : (
-                !user &&
-                isReminderModalVisible && (
-                    <div
+            )} 
+            {isReminderModalVisible && (
+                <div
                     className={`${
                         isReminderModalVisible ? "opacity-100 visible" : "opacity-0 invisible"
                     } transition-opacity duration-1000 ease-in-out`}
-                    >
+                >
                     <EmailReminderModal onClose={onCloseReminderModal} isReminderModalVisible={isReminderModalVisible} />
-                    </div>
-                )
+                </div>
             )}
 
             

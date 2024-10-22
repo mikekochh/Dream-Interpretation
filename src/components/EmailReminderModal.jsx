@@ -87,7 +87,6 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
                 }
 
                 setSettingReminder(false);
-                onClose();
                 return;
             }
             else {
@@ -97,7 +96,7 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
                   setReminderModalTitle("Check your email! 😁");
                   setReminderModalText("We've just sent a confirmation email to verify your email address. Once verified, your reminder will be set and your account will be fully set up, which will allow you to jump right into your interpretation tomorrow.");
                   setSettingReminder(false);
-                  onClose();
+                  setReminderSet(true);
                   return;
                 }
                 else {
@@ -126,12 +125,11 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
         if (resNewUser.ok) {
           // then we send them the reminder verification email
           const resSendEmail = await axios.post('api/sendReminderVerificationEmail', { email: emailLower, name: name });
-          console.log("resSendEmail: ", resSendEmail);
           if (resSendEmail.status === 200) {
             setReminderModalTitle("Check your email! 😁");
             setReminderModalText("We've just sent a confirmation email to verify your email address. Once verified, your reminder will be set and your account will be fully set up, which will allow you to jump right into your interpretation tomorrow.");
             setSettingReminder(false);
-            onClose(true);
+            setReminderSet(true);
             return;
           }
           else {
@@ -216,7 +214,6 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
               name="name"
               placeholder="Your Name"
               onChange={(e) => {
-                console.log(e.target.value);
                 setName(e.target.value);
               }}
               
@@ -262,8 +259,6 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
                 </div>
             </button>
         </div>
-
-
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
           onClick={onClose}
