@@ -32,18 +32,19 @@ const WelcomeSection = ({
     const dreamStreamRef = useRef(null);
 
     useEffect(() => {
-      const timer = setTimeout(() => {
-        console.log("user: ", user);
-        if (!user?.name) {
-            setIsReminderModalVisible(true);
+        if (user) {
+            const timer = setTimeout(() => {
+                if (!user?.name) {
+                    setIsReminderModalVisible(true);
+                }
+                if (!countedViewOpen && window.location.hostname !== 'localhost') {
+                    addPageViewOpen();
+                }
+              }, 4000); // 3000 ms = 3 seconds
+
+            return () => clearTimeout(timer); // Cleanup the timer on unmount
         }
-        if (!countedViewOpen && window.location.hostname !== 'localhost') {
-            addPageViewOpen();
-        }
-      }, 4000); // 3000 ms = 3 seconds
-    
-      return () => clearTimeout(timer); // Cleanup the timer on unmount
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         const handleIntersection = (entries, observer) => {
