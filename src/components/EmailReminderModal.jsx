@@ -157,7 +157,6 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
 
   if (reminderSet) {
     return (
-      <Modal>
         <div
           className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-1000 ease-in-out ${
             isReminderModalVisible ? "opacity-100 visible" : "opacity-0 invisible"
@@ -190,12 +189,10 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
             </div>
           </div>
         </div>
-      </Modal>
     );    
   }
 
   return (
-    <Modal>
     <div className="fixed inset-0 flex items-center justify-center z-50">
       {/* Background overlay */}
       <div className="fixed inset-0 bg-gray-800 bg-opacity-70" onClick={onClose}></div>
@@ -218,7 +215,11 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
               id="name"
               name="name"
               placeholder="Your Name"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setName(e.target.value);
+              }}
+              
               required
               className="text-black w-full px-4 py-2 mb-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -271,7 +272,6 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
         </button>
       </div>
     </div>
-    </Modal>
 
   );
 }
