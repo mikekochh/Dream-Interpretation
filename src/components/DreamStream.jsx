@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -54,6 +54,7 @@ const DreamItem = ({ dream }) => {
 const DreamStream = () => {
   const [dreamStream, setDreamStream] = useState([]);
 
+
   useEffect(() => {
     const fetchPublicDreams = async () => {
       try {
@@ -78,7 +79,8 @@ const DreamStream = () => {
 
   return (
     <div className="md:w-2/3 md:mx-auto md:px-0 md:py-8 px-3 py-8 bg-transparent">
-      <h2 className="text-center mb-6 gradient-title-text golden-ratio-4">Dream Stream</h2>
+      <h2 className="text-center gradient-title-text golden-ratio-4">Dream Stream</h2>
+      <h3 className="text-center mb-6 golden-ratio-2">Explore the dreams of others and engage with the dream community</h3>
       {/* Dream Stream section */}
       <div className="mt-8">
         {dreamStream.map((dream) => (
@@ -90,3 +92,6 @@ const DreamStream = () => {
 };
 
 export default DreamStream;
+
+
+// explore dreams 

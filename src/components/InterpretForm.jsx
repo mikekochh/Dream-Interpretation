@@ -10,7 +10,7 @@ const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
 
 const InterpretForm = () => {
-    const { user, userLoading } = useContext(UserContext)
+    const { user, userLoading, setUserData } = useContext(UserContext);
 
     const router = useRouter();
 
@@ -102,6 +102,8 @@ const InterpretForm = () => {
             const dreamID = localStorage.getItem('dreamID');
             let googleSignUp = localStorage.getItem('googleSignUp');
             googleSignUp = (googleSignUp === 'true');
+            let googleReminder = localStorage.getItem('googleReminder');
+            googleReminder = (googleReminder === 'true');
             if (dreamID && googleSignUp) {
                 const userID = user?._id;
                 await axios.post('/api/user/sendWelcomeEmail', {
@@ -110,6 +112,10 @@ const InterpretForm = () => {
                 })
                 await axios.post('api/dream/newUser', { userID, dreamID, googleSignUp: true });
                 journalDream();
+            } else if (googleSignUp && googleReminder) {
+                const userID = user?._id;
+                await axios.post('/api/user/sendDreamReminder', { userID });
+                setUserData();
             }
         }
 

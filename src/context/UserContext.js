@@ -10,20 +10,6 @@ export const UserProvider = ({ children }) => {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    const setUserData = async () => {
-        const userEmail = session?.user?.email;
-        if (userEmail) {
-            try {
-                const res = await fetch(`api/user/${userEmail}`, { method: "GET", headers: { "Content-Type":"application/json" } });
-                const userData = await res.json();
-                setUser(userData);
-                setUserLoading(false);
-            } catch (error) {
-                console.log("There was an error fetching user data: ", error);
-                setUserLoading(false);
-            }
-        }
-    }
     if (status === 'loading') {
       // still loading session
       return;
@@ -38,15 +24,20 @@ export const UserProvider = ({ children }) => {
     }
   }, [session, status]);
 
-  const login = async (email, password) => {
-    // try {
-    //   const { error, user } = await supabase.auth.signIn({ email, password });
-    //   if (error) throw error;
-    //   setUser(user);
-    // } catch (error) {
-    //   console.error('Error logging in:', error.message);
-    // }
-  };
+  const setUserData = async () => {
+    const userEmail = session?.user?.email;
+    if (userEmail) {
+        try {
+            const res = await fetch(`api/user/${userEmail}`, { method: "GET", headers: { "Content-Type":"application/json" } });
+            const userData = await res.json();
+            setUser(userData);
+            setUserLoading(false);
+        } catch (error) {
+            console.log("There was an error fetching user data: ", error);
+            setUserLoading(false);
+        }
+    }
+  }
 
   const logout = async () => {
     try {
@@ -67,9 +58,9 @@ export const UserProvider = ({ children }) => {
       userLoading,
       session,
       status, 
-      login, 
       logout, 
-      getUser  
+      getUser,
+      setUserData
     }}>
       {children}
     </UserContext.Provider>

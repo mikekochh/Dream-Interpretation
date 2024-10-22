@@ -6,8 +6,13 @@ import PurchaseButton from '../PurchaseButton';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DreamStream from '../DreamStream';
-import EmailReminderForm from '../EmailReminderForm';
+import EmailReminderModal from '../EmailReminderModal';
 import axios from 'axios';
+import { 
+    PAGE_EMAIL_REMINDER_POPUP, 
+    PAGE_EMAIL_REMINDER_POPUP_CLOSED,
+    PAGE_DREAM_STREAM
+} from '@/types/pageTypes';
 
 const WelcomeSection = ({ 
     user, 
@@ -19,6 +24,77 @@ const WelcomeSection = ({
 }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
+    const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
+    const [countedViewOpen, setCountedViewOpen] = useState(false);
+    const [countedViewClosed, setCountedViewClosed] = useState(false);
+
+    const dreamStreamRef = useRef(null);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsReminderModalVisible(true);
+        if (!countedViewOpen && window.location.hostname !== 'localhost') {
+            addPageViewOpen();
+        }
+      }, 3000); // 3000 ms = 3 seconds
+    
+      return () => clearTimeout(timer); // Cleanup the timer on unmount
+    }, []);
+
+    useEffect(() => {
+        const handleIntersection = (entries, observer) => {
+            const entry = entries[0];
+            if (entry.isIntersecting) {
+                const elementTop = entry.target.getBoundingClientRect().top;
+                const hasScrolledEnough = window.scrollY > elementTop;
+
+                if (hasScrolledEnough) {
+                    if (window.location.hostname !== 'localhost') {
+                        addDreamStreamView();
+                    }
+                    observer.disconnect(); // Stop observing once the function is triggered
+                }
+            }
+        };
+
+        const observer = new IntersectionObserver(handleIntersection, {
+            threshold: 0.25, // You can keep it at 0.25
+        });
+
+        if (dreamStreamRef.current) {
+            observer.observe(dreamStreamRef.current);
+        }
+
+        return () => {
+            if (dreamStreamRef.current) {
+                observer.unobserve(dreamStreamRef.current);
+            }
+        };
+    }, []);
+
+    const addDreamStreamView = async () => {
+        await axios.post('/api/views/addView', {
+            pageID: PAGE_DREAM_STREAM,
+            userID: user?._id
+        });
+    }
+
+    const addPageViewOpen = async () => {
+        await axios.post('/api/views/addView', {
+            pageID: PAGE_EMAIL_REMINDER_POPUP,
+            userID: user?._id
+        });
+        setCountedViewOpen(true);
+    }
+
+    const addPageViewClosed = async () => {
+        await axios.post('/api/views/addView', {
+            pageID: PAGE_EMAIL_REMINDER_POPUP_CLOSED,
+            userID: user?._id
+        });
+        setCountedViewClosed(true);
+    }
+    
 
     useEffect(() => {
         const handleResize = () => {
@@ -97,9 +173,30 @@ const WelcomeSection = ({
         setSentEmailVerification(true);
     }
 
+    const onCloseReminderModal = () => {
+        setIsReminderModalVisible(false);
+        if (!countedViewClosed && window.location.hostname !== 'localhost') {
+            addPageViewClosed();
+        }
+    }
+
+    const openDreamReminderModal = () => {
+        setIsReminderModalVisible(true);
+    }
+
     return (
         <div>
-            <div className="md:w-2/3 md:px-0 px-2 mx-auto">
+            <div className="md:w-2/3 md:px-0 px-2 mx-auto" >
+                {!user?.sendReminder && (
+                <div className="absolute top-8 right-0 m-4">
+                    <button 
+                        onClick={openDreamReminderModal}
+                        className="bg-blue-800 text-white px-2 py-1 rounded-lg shadow-lg hover:bg-blue-900 transition duration-300"
+                    >
+                        Dream Reminder?
+                    </button>
+                </div>
+                )}
                 {/* 1. Welcome Text */}
                 <p ref={titleRef} className="text-center golden-ratio-2">Welcome to</p>
 
@@ -116,7 +213,7 @@ const WelcomeSection = ({
                     <textarea
                         type="text"
                         rows={7}
-                        placeholder='Dream goes here'
+                        placeholder='Enter your dream here'
                         className="DreamBox golden-ratio-2 border-2 p-1 border-black rounded-lg text-black md:m-0 w-full"
                         value={dream}
                         onChange={(event) => setDream(event.target.value)}
@@ -156,14 +253,25 @@ const WelcomeSection = ({
                         </div>
 
                     )}
-                    {user?.sendReminder ? (
-                        <div className="text-center bg-gray-800 bg-opacity-30 shadow-lg rounded-3xl p-4 mt-5 golden-ratio-2">
-                            Dream Reminder Set! See you tomorrow 😁
-                        </div>
-                    ) : !user ? (<EmailReminderForm />) : (null)}
-                    
                 </div>
             </div>
+            {user?.sendReminder ? (
+                <div className="text-center bg-gray-800 bg-opacity-30 shadow-lg rounded-3xl p-4 mt-5 golden-ratio-2 md:w-2/3 md:mx-auto">
+                    Dream Reminder Set! See you tomorrow 😁
+                </div>
+                ) : (
+                !user &&
+                isReminderModalVisible && (
+                    <div
+                    className={`${
+                        isReminderModalVisible ? "opacity-100 visible" : "opacity-0 invisible"
+                    } transition-opacity duration-1000 ease-in-out`}
+                    >
+                    <EmailReminderModal onClose={onCloseReminderModal} isReminderModalVisible={isReminderModalVisible} />
+                    </div>
+                )
+            )}
+
             
             {/* Dream Streak */}
             {dreamStreak && (
@@ -177,10 +285,12 @@ const WelcomeSection = ({
                 </div>
             )}
 
-            <DreamStream />
-            {!user?.sendReminder && (
-                <div className="md:mx-auto md:w-2/3"><EmailReminderForm /></div>
-            )}
+            <div ref={dreamStreamRef}>
+                <DreamStream />
+            </div>
+            
+            
+            
             
             {/* How It Works Section */}
             <div ref={howDoesItWorkRef}>

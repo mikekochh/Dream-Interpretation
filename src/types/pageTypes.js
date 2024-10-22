@@ -6,3 +6,6 @@ export const PAGE_INTERPRET_LOADING = 5;
 export const PAGE_DREAM_DETAILS = 6;
 export const PAGE_LIBRARY = 7;
 export const PAGE_INTERPRET_DREAM_STREAM = 8;
+export const PAGE_EMAIL_REMINDER_POPUP = 9;
+export const PAGE_EMAIL_REMINDER_POPUP_CLOSED = 10;
+export const PAGE_DREAM_STREAM = 11;

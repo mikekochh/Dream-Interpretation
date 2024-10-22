@@ -79,7 +79,7 @@ export default function JournalDreamView({
     return (
         <div ref={containerRef} className="flex justify-center items-center min-h-screen relative">
             {currentStep === 0 ? (
-                <div ref={welcomeSectionRef} className={`overflow-y-auto hide-scrollbar h-screen ${user ? 'main-content' : 'main-content'}`}>
+                <div ref={welcomeSectionRef} className={`overflow-y-auto hide-scrollbar h-screen main-content`}>
                     <WelcomeSection
                         user={user}
                         dreamStreak={dreamStreak}
