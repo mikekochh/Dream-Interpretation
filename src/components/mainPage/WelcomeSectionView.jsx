@@ -262,7 +262,7 @@ const WelcomeSection = ({
             </div>
             {user?.sendReminder && (
                 <div className="text-center bg-gray-800 bg-opacity-30 shadow-lg rounded-3xl p-4 mt-5 golden-ratio-2 md:w-2/3 md:mx-auto">
-                    Dream Reminder Set! See you tomorrow 😁
+                    Dream reminder set! See you tomorrow 😁
                 </div>
             )} 
             {isReminderModalVisible && (

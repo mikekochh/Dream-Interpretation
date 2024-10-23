@@ -188,10 +188,10 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
       {/* Modal content */}
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative z-10 text-black">
         <h2 className="text-2xl font-semibold mb-3 text-center">
-          Don&apos;t Remember Your Dream?
+          Unlock Your Free Dream Interpretation!
         </h2>
         <p className="text-base mb-5 text-center">
-        Sign up now, and you&apos;ll receive a reminder tomorrow morning, along with a free dream interpretation to help you understand your dream.
+          Sign up now to get a reminder tomorrow morning to journal your dream and receive a free, personalized dream interpretation on us.
         </p>
         <div className="space-y-4 max-w-md mx-auto">
           <div>
