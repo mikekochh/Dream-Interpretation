@@ -34,13 +34,15 @@ const WelcomeSection = ({
     useEffect(() => {
         if (!userLoading) {
             const timer = setTimeout(() => {
-                if (!user) {
+                const popupShown = localStorage.getItem('popup_shown');
+                if (!user && !popupShown) {
                     setIsReminderModalVisible(true);
+                    localStorage.setItem('popup_shown', true);
                     if (!countedViewOpen && window.location.hostname !== 'localhost') {
                         addPageViewOpen();
                     }
                 }
-              }, 4000);
+              }, 3000);
 
             return () => clearTimeout(timer); // Cleanup the timer on unmount
         }

@@ -4,16 +4,34 @@ import axios from 'axios';
 import { SIGN_UP_TYPE_E_BOOK } from "@/types/signUpTypes";
 import { signIn } from 'next-auth/react';
 import { UserContext } from '@/context/UserContext';
+import { PAGE_E_BOOK } from '@/types/pageTypes';
 
 export default function EBookForm() {
 
-    const { user, setUserData } = useContext(UserContext) || {};
+    const { user, setUserData, userLoading } = useContext(UserContext) || {};
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [countedView, setCountedView] = useState(false);
     const [showSentEmailMessage, setShowSentEmailMessage] = useState(false);
+
+    useEffect(() => {
+        const addView = async () => {
+            if (window.location.hostname !== 'localhost') {
+                await axios.post('/api/views/addView', {
+                    pageID: PAGE_E_BOOK,
+                    userID: user?._id
+                });
+                setCountedView(true);
+            }
+        }
+    
+        if (!userLoading && !countedView) {
+            addView();
+        }
+    }, [userLoading]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
