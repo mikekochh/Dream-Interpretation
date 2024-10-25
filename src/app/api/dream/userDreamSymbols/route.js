@@ -9,6 +9,8 @@ export async function GET(req) {
         // Get dreamID from query parameters
         const { searchParams } = new URL(req.url);
         const dreamID = searchParams.get('dreamID');
+
+        console.log("dreamID: ", dreamID);
         
         if (!dreamID) {
             return NextResponse.json({ message: 'dreamID is required' }, { status: 400 });
@@ -16,6 +18,8 @@ export async function GET(req) {
         
         // Find all UserDreamSymbols with the given dreamID and populate the symbolID with the related DreamSymbol data
         const userDreamSymbols = await UserDreamSymbol.find({ dreamID }).populate('symbolID');
+
+        console.log("userDreamSymbol: ", userDreamSymbols);
 
         return NextResponse.json(userDreamSymbols);
     } catch (error) {

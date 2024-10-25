@@ -1,4 +1,5 @@
 import mongoose, { Schema, models } from "mongoose";
+import DreamSymbol from "./dreamSymbols";
 
 const userDreamSymbolsSchema = new Schema({
     userID: {
