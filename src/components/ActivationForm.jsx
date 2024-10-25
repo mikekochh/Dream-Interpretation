@@ -12,7 +12,7 @@ export default function ActivationForm() {
     const searchParams = useSearchParams();
     const verificationTokenID = searchParams.get('verificationTokenID');
     const router = useRouter();
-    const [status, setStatus] = useState("Successfully Activated! Redirecting you now...");
+    const [status, setStatus] = useState("");
     const [error, setError] = useState(false);
     const [userName, setUserName] = useState(null);
     const [userEmail, setUserEmail] = useState(null);
@@ -24,16 +24,28 @@ export default function ActivationForm() {
             setUserName(res.data.activatedUser.name);
             setUserEmail(res.data.activatedUser.email);
             const dreamID = localStorage.getItem('dreamID');
+            const ebook = localStorage.getItem('ebook');
             if (dreamID) {
-                // router.push('/dreamDetails?dreamID=' + dreamID);
+                setStatus("Successfully Activated! Redirecting you now...");
                 router.push('/interpret');
+                localStorage.removeItem('dreamID');
                 const resSignIn = await signIn("credentials", {
                     email: res.data.activatedUser.email,
                     password: 'password',
                     redirect: false
                 });
+            } else if (ebook) {
+                setStatus("Downloading Dream Interpretation E-book");
+                const resSignIn = await signIn("credentials", {
+                    email: res.data.activatedUser.email,
+                    password: 'password',
+                    redirect: false
+                });
+                localStorage.removeItem('ebook');
+                router.push('/e-book');
             }
             else {
+                setStatus("Successfully Activated! Redirecting you now...");
                 const resSignIn = await signIn("credentials", {
                     email: res.data.activatedUser.email,
                     password: 'password',

@@ -11,7 +11,6 @@ export default function EBookForm() {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [showSentEmailMessage, setShowSentEmailMessage] = useState(false);
@@ -70,6 +69,7 @@ export default function EBookForm() {
                     else {
                         await axios.post('/api/sendEBookEmail', { email, name });
                         setShowSentEmailMessage(true);
+                        localStorage.setItem('ebook', true);
                         return;
                     }
                 }
@@ -83,6 +83,7 @@ export default function EBookForm() {
                 if (responseRegister.status === 200) {
                     await axios.post('/api/sendEBookEmail', { email, name });
                     setShowSentEmailMessage(true);
+                    localStorage.setItem('ebook', true);
                 }
             }
             setLoading(false);
