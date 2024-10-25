@@ -183,18 +183,15 @@ const InterpretForm = () => {
     }
 
     const journalDream = async () => {
-        console.log("How many times is this running?");
         setSavingDream(true);
         setSaveMessage("Journaling Your Dream");
         const userID = user?._id;
         let localOracleSelected = oracleSelected;  // Create a local variable
         let existingDream = dream;
-        console.log("existingDream: ", existingDream);
     
         try {
             let localDreamID;
             const existingDreamID = localStorage.getItem('dreamID');
-            console.log("existingDreamID: ", existingDreamID);
             localStorage.removeItem('dreamID');
             localStorage.removeItem('googleSignUp');
             if (!existingDreamID) {
@@ -208,8 +205,6 @@ const InterpretForm = () => {
                     userID,
                     dreamID: localDreamID
                 });
-
-                console.log("resUpdateDreamUserID: ", resUpdateDreamUserID);
                 
                 selectOracle(1); // this means they do not have an account, so must be jung interpretation
                 setOracleSelected(true);
@@ -305,26 +300,26 @@ const InterpretForm = () => {
         let userDetails = [];
         let additionalContext = '';
 
-        if (user) {
-            if (user?.genderID) {
-                const genderName = await getGenderName(user.genderID);
-                if (genderName) {
-                    userDetails.push(`Gender: ${genderName}`);
-                }
-            }
-            if (user?.age) {
-                userDetails.push(`Age: ${user.age}`);
-            }
-            if (user?.culturalBackground) {
-                userDetails.push(`Cultural Background: ${user.culturalBackground}`);
-            }
-            if (user?.spiritualPractices) {
-                userDetails.push(`Spiritual Practices: ${user.spiritualPractices}`);
-            }
-            if (userDetails.length > 0) {
-                additionalContext = `\nIf provided, consider the following details about the dreamer to add context to the interpretation, but only if they are relevant to the dream: ${userDetails.join(', ')}. If these details do not seem relevant, feel free to disregard them.\n`;
-            }
-        }
+        // if (user) {
+        //     if (user?.genderID) {
+        //         const genderName = await getGenderName(user.genderID);
+        //         if (genderName) {
+        //             userDetails.push(`Gender: ${genderName}`);
+        //         }
+        //     }
+        //     if (user?.age) {
+        //         userDetails.push(`Age: ${user.age}`);
+        //     }
+        //     if (user?.culturalBackground) {
+        //         userDetails.push(`Cultural Background: ${user.culturalBackground}`);
+        //     }
+        //     if (user?.spiritualPractices) {
+        //         userDetails.push(`Spiritual Practices: ${user.spiritualPractices}`);
+        //     }
+        //     if (userDetails.length > 0) {
+        //         additionalContext = `\nIf provided, consider the following details about the dreamer to add context to the interpretation, but only if they are relevant to the dream: ${userDetails.join(', ')}. If these details do not seem relevant, feel free to disregard them.\n`;
+        //     }
+        // }
 
         for (let i = 0; i < oracles.length; i++) {
             if (oracles[i].selected) {
