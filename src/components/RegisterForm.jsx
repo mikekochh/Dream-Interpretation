@@ -87,7 +87,6 @@ export default function RegisterForm() {
                 body: JSON.stringify({
                     name,
                     email: emailLower,
-                    password: "password",
                     signUpTypeID: SIGN_UP_TYPE_DREAM_INTERPRET
                 }),
             });

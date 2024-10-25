@@ -107,7 +107,6 @@ export default function EmailReminderModal({ onClose, isReminderModalVisible }) 
             body: JSON.stringify({
                 name,
                 email: emailLower,
-                password: "password",
                 signUpTypeID: SIGN_UP_TYPE_DREAM_REMINDER
             }),
         });

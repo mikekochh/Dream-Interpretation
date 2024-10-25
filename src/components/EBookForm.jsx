@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import axios from 'axios';
+import { SIGN_UP_TYPE_E_BOOK } from "@/types/signUpTypes";
 
 export default function EBookForm() {
     const [name, setName] = useState("");
@@ -28,6 +29,12 @@ export default function EBookForm() {
                 setError("Please enter a valid email address.");
                 return;
             }
+
+            const responseRegister = await axios.post('api/register', {
+                name,
+                email,
+                signUpTypeID: SIGN_UP_TYPE_E_BOOK 
+            });
         } catch (error) {
             console.log("There was an error signing user up for the ebook: ", error);
             setError("Oops! Something went wrong while processing your request. Please try again in a few moments.");
