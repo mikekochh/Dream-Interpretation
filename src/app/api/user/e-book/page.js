@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { connectMongoDB } from '../../../../lib/mongodb';
-import User from '../../../../models/user';
+import { connectMongoDB } from '../../../../../lib/mongodb';
+import User from '../../../../../models/user';
 import bcrypt from 'bcryptjs';
 import { SIGN_UP_TYPE_E_BOOK } from '@/types/signUpTypes';
 

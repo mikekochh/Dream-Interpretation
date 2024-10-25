@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
-import DreamSymbol from '../../../../../models/dreamSymbols';
 import UserDreamSymbol from '../../../../../models/userDreamSymbols';
 
 export async function GET(req) {

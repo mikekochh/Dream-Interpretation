@@ -29,18 +29,18 @@ export default function EBookForm() {
                 return;
             }
     
-            const response = await axios.post('/api/user/e-book', {
-                name,
-                email
-            });
+            // const response = await axios.post('/api/user/e-book', {
+            //     name,
+            //     email
+            // });
     
-            if (response.ok) {
-                setSubmitted(true);
-                setName("");
-                setEmail("");
-            } else {
-                throw Error;
-            }
+            // if (response.ok) {
+            //     setSubmitted(true);
+            //     setName("");
+            //     setEmail("");
+            // } else {
+            //     throw Error;
+            // }
         } catch (error) {
             console.log("There was an error signing user up for the ebook: ", error);
             setError("Oops! Something went wrong while processing your request. Please try again in a few moments.");

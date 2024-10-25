@@ -38,8 +38,6 @@ const AdminPortalForm = () => {
         return <FeedbackManagement />;
       case 'library':
         return <LibraryManagement />;
-      case 'oracles':
-        return <OracleManagement />;
       case 'settings':
         return <Settings />;
       case 'sales':
@@ -641,7 +639,7 @@ const UserManagement = () => {
                 X
               </button>
               <h2 className="text-2xl font-bold mb-4">Delete Symbol</h2>
-              <p className="mb-2 text-lg font-semibold">Are you sure you want to delete the symbol "{selectedSymbol.symbol}"?</p>
+              <p className="mb-2 text-lg font-semibold">Are you sure you want to delete the symbol {selectedSymbol.symbol}?</p>
               <p className="mb-2">Meaning: {selectedSymbol.meaning}</p>
               <button onClick={handleDeleteConfirm} className="bg-red-500 text-white py-2 px-4 rounded mr-2">
                 Delete
