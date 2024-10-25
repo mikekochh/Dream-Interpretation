@@ -59,7 +59,7 @@ export default function EBookForm() {
                 if (resActivated.ok) {
                     if (data.isActivated) {
                         const resSignIn = await signIn("credentials", {
-                            email: res.data.activatedUser.email,
+                            email,
                             password: 'password',
                             redirect: false
                         });
@@ -106,7 +106,7 @@ export default function EBookForm() {
         return (
             <div className="flex items-center justify-center min-h-screen bg-transparent text-white text-center md:w-2/3 md:mx-auto">
                 <div className="space-y-4">
-                    <p className="text-4xl font-bold">Thank You!</p>
+                    <p className="text-4xl font-bold">Thank You! Check Your Email</p>
                     <p className="text-lg">We&apos;ve just sent an email to you with a link to download your free dream interpretation e-book!</p>
                     <p className="text-lg">Be sure to check your inbox (and your spam or promotions folder, just in case). If you don&apos;t see it, feel free to reach out for help. Enjoy exploring the world of dreams!</p>
                 </div>
