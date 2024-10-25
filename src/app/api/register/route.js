@@ -15,9 +15,11 @@ export async function POST(req) {
         const { name, email, signUpTypeID } = await req.json();
         const hashedPassword = await bcrypt.hash("password", 12);
 
+        const emailLower = email.toLowerCase();
+
         newUser = await User.create({ 
             name, 
-            email, 
+            email: emailLower, 
             password: hashedPassword,
             activated: false,
             verificationTokenID: null,
