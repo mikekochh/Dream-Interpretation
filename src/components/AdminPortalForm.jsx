@@ -34,6 +34,12 @@ const AdminPortalForm = () => {
         return <DreamManagement />;
       case 'views':
         return <ViewsManagement />;
+      case 'feedback':
+        return <FeedbackManagement />;
+      case 'library':
+        return <LibraryManagement />;
+      case 'oracles':
+        return <OracleManagement />;
       case 'settings':
         return <Settings />;
       case 'sales':
@@ -98,7 +104,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
 
       <h2 className="text-2xl font-bold text-center text-teal-400 mb-8">Admin Portal</h2>
       <ul>
-        {['users', 'dreams', 'views', 'sales', 'settings'].map((tab) => (
+        {['users', 'dreams', 'views', 'feedback', 'library', 'sales', 'settings'].map((tab) => (
           <li
             key={tab}
             className={`py-3 px-4 rounded cursor-pointer ${
@@ -500,6 +506,254 @@ const UserManagement = () => {
     )
   }
 
+  const LibraryManagement = () => {
+    const [library, setLibrary] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedSymbol, setSelectedSymbol] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [newSymbol, setNewSymbol] = useState({ symbol: '', meaning: '' });
+  
+    useEffect(() => {
+      fetchLibraryData();
+    }, []);
+
+    const fetchLibraryData = async () => {
+      setLoading(true);
+      const response = await axios.get('/api/dream/symbols');
+      setLibrary(response.data);
+      setLoading(false);
+    };
+  
+    const openEditModal = (symbol) => {
+      setSelectedSymbol(symbol);
+      setIsEditModalOpen(true);
+    };
+  
+    const openDeleteModal = (symbol) => {
+      setSelectedSymbol(symbol);
+      setIsDeleteModalOpen(true);
+    };
+  
+    const openAddModal = () => {
+      setNewSymbol({ symbol: '', meaning: '' });
+      setIsAddModalOpen(true);
+    };
+  
+    const handleEditSave = async () => {
+      await axios.post('/api/admin/library/editSymbol', { symbolID: selectedSymbol._id, meaning: selectedSymbol.meaning });
+      setIsEditModalOpen(false);
+      fetchLibraryData();
+    };
+  
+    const handleDeleteConfirm = async () => {
+      await axios.delete(`/api/admin/library/deleteSymbol`, { 
+        data: { 
+          symbolID: selectedSymbol._id
+        }
+      });
+      setIsDeleteModalOpen(false);
+      fetchLibraryData();
+    };
+  
+    const handleAddSymbol = async () => {
+      await axios.post('/api/admin/library/addSymbol', { symbol: newSymbol.symbol, meaning: newSymbol.meaning });
+      setIsAddModalOpen(false);
+      fetchLibraryData();
+    };
+  
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-6 text-white">Dream Symbols Library</h1>
+        <div className="flex gap-4 mb-4">
+          {/* Add Symbol Card */}
+          <div
+            onClick={openAddModal}
+            className="bg-blue-500 text-white p-6 rounded-lg cursor-pointer flex items-center justify-center w-1/2 h-24"
+          >
+            <span className="text-xl font-semibold">Add Symbol</span>
+          </div>
+
+          {/* Total Dream Symbols Card */}
+          <div className="bg-gray-200 p-6 rounded-lg flex items-center justify-center w-1/2 h-24">
+            <span className="text-xl font-semibold">Total Symbols: {library.length}</span>
+          </div>
+        </div>
+
+  
+        {loading ? (
+          <LoadingComponent loadingText={"Loading Library Data"} />
+        ) : (
+          <ul className="space-y-2">
+            {library.map((symbol) => (
+              <li key={symbol._id} className="flex justify-between items-center p-2 bg-gray-800 text-white rounded">
+                <span>{symbol.symbol}</span>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => openEditModal(symbol)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => openDeleteModal(symbol)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+  
+        {/* Edit Modal */}
+        {isEditModalOpen && selectedSymbol && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
+              <button className="absolute top-2 right-2 text-gray-500" onClick={() => setIsEditModalOpen(false)}>
+                X
+              </button>
+              <h2 className="text-2xl font-bold mb-4">Edit Symbol</h2>
+              <p className="text-gray-700 mb-4">{selectedSymbol.symbol}</p>
+              <textarea
+                value={selectedSymbol.meaning}
+                rows={6}
+                onChange={(e) => setSelectedSymbol({ ...selectedSymbol, meaning: e.target.value })}
+                className="w-full border p-2 mb-4"
+              ></textarea>
+              <button onClick={handleEditSave} className="bg-blue-500 text-white py-2 px-4 rounded mr-2">
+                Save
+              </button>
+              <button onClick={() => setIsEditModalOpen(false)} className="bg-gray-500 text-white py-2 px-4 rounded">
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+  
+        {/* Delete Modal */}
+        {isDeleteModalOpen && selectedSymbol && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
+              <button className="absolute top-2 right-2 text-gray-500" onClick={() => setIsDeleteModalOpen(false)}>
+                X
+              </button>
+              <h2 className="text-2xl font-bold mb-4">Delete Symbol</h2>
+              <p className="mb-2 text-lg font-semibold">Are you sure you want to delete the symbol "{selectedSymbol.symbol}"?</p>
+              <p className="mb-2">Meaning: {selectedSymbol.meaning}</p>
+              <button onClick={handleDeleteConfirm} className="bg-red-500 text-white py-2 px-4 rounded mr-2">
+                Delete
+              </button>
+              <button onClick={() => setIsDeleteModalOpen(false)} className="bg-gray-500 text-white py-2 px-4 rounded">
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+  
+        {/* Add Modal */}
+        {isAddModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
+              <button className="absolute top-2 right-2 text-gray-500" onClick={() => setIsAddModalOpen(false)}>
+                X
+              </button>
+              <h2 className="text-2xl font-bold mb-4">Add Symbol</h2>
+              <input
+                type="text"
+                placeholder="Symbol"
+                value={newSymbol.symbol}
+                onChange={(e) => setNewSymbol({ ...newSymbol, symbol: e.target.value })}
+                className="w-full border p-2 mb-4"
+              />
+              <textarea
+                placeholder="Meaning"
+                rows={6}
+                value={newSymbol.meaning}
+                onChange={(e) => setNewSymbol({ ...newSymbol, meaning: e.target.value })}
+                className="w-full border p-2 mb-4"
+              ></textarea>
+              <button onClick={handleAddSymbol} className="bg-blue-500 text-white py-2 px-4 rounded mr-2">
+                Add
+              </button>
+              <button onClick={() => setIsAddModalOpen(false)} className="bg-gray-500 text-white py-2 px-4 rounded">
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const FeedbackManagement = () => {
+    const [feedback, setFeedback] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedFeedback, setSelectedFeedback] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+    useEffect(() => {
+      const fetchFeedbackData = async () => {
+        setLoading(true);
+        const response = await axios.get('/api/admin/getFeedbackData');
+        setFeedback(response.data.data);
+        setLoading(false);
+      };
+  
+      fetchFeedbackData();
+    }, []);
+  
+    const openModal = (feedback) => {
+      setSelectedFeedback(feedback);
+      setIsModalOpen(true);
+    };
+  
+    const closeModal = () => {
+      setIsModalOpen(false);
+      setSelectedFeedback(null);
+    };
+  
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-6 text-white">Feedback</h1>
+        {loading ? (
+          <LoadingComponent loadingText={"Loading Feedback"} />
+        ) : (
+          <div className="grid grid-cols-1 gap-4">
+            {feedback.map((fb, index) => (
+              <div
+                key={index}
+                className="p-4 bg-gray-800 text-white rounded shadow cursor-pointer"
+                onClick={() => openModal(fb)}
+              >
+                <p className="font-semibold">{fb.userEmail}</p>
+                <p>{new Date(fb.feedbackDate).toLocaleDateString()}</p>
+              </div>
+            ))}
+          </div>
+        )}
+  
+        {isModalOpen && selectedFeedback && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
+              <button className="absolute top-2 right-2 text-gray-500" onClick={closeModal}>X</button>
+              <h2 className="text-2xl font-bold mb-4">{selectedFeedback.userEmail}</h2>
+              <p className="text-gray-700 mb-4">{selectedFeedback.feedback}</p>
+              <p className="text-sm text-gray-500">
+                {new Date(selectedFeedback.feedbackDate).toLocaleDateString()}
+              </p>
+              <button className="mt-4 bg-blue-500 text-white py-2 px-4 rounded" onClick={closeModal}>
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const ViewsManagement = () => {
     const [views, setViews] = useState([]);
     const [userViews, setUserViews] = useState([]);
@@ -856,7 +1110,6 @@ const UserManagement = () => {
   
 
 const Settings = () => {
-  // Placeholder for settings content
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Site Settings</h1>

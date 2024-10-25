@@ -6,8 +6,8 @@ export async function GET(req) {
     try {
         await connectMongoDB();
         
-        // Find oracles where the "active" field is true
-        const dreamSymbols = await DreamSymbols.find();
+        // Fetch dream symbols and sort by symbol name in ascending alphabetical order
+        const dreamSymbols = await DreamSymbols.find().sort({ symbol: 1 });
         
         return NextResponse.json(dreamSymbols);
     } catch (error) {
