@@ -30,6 +30,7 @@ const WelcomeSection = ({
     const { user, userLoading } = useContext(UserContext) || {};
 
     const dreamStreamRef = useRef(null);
+    const sendReminderRef = useRef(null);
 
     useEffect(() => {
         if (!userLoading) {
@@ -179,6 +180,20 @@ const WelcomeSection = ({
         );
 
         timeline.fromTo(
+            sendReminderRef.current,
+            { opacity: 0, x: 50 },
+            { opacity: 1, x: 0, duration: 1, ease: "power3.out" },
+            "-=0.5"
+        );
+
+        timeline.fromTo(
+            dreamStreamRef.current,
+            { opacity: 0, x: 50 },
+            { opacity: 1, x: 0, duration: 1, ease: "power3.out" },
+            "-=0.5"
+        );
+
+        timeline.fromTo(
             howDoesItWorkRef.current,
             { opacity: 0, x: 50 },
             { opacity: 1, x: 0, duration: 1, ease: "power3.out" },
@@ -206,16 +221,6 @@ const WelcomeSection = ({
     return (
         <div>
             <div className="md:w-2/3 md:px-0 px-2 mx-auto" >
-                {!user?.sendReminder && (
-                <div className="absolute top-8 right-0 m-4">
-                    <button 
-                        onClick={openDreamReminderModal}
-                        className="bg-blue-800 text-white px-2 py-1 rounded-lg shadow-lg hover:bg-blue-900 transition duration-300"
-                    >
-                        Dream Reminder?
-                    </button>
-                </div>
-                )}
                 {/* 1. Welcome Text */}
                 <p ref={titleRef} className="text-center golden-ratio-2">Welcome to</p>
 
@@ -223,12 +228,12 @@ const WelcomeSection = ({
                 <p ref={subtitleRef} className="text-center golden-ratio-5 gradient-title-text">Dream Oracles</p>
 
                 {/* 3. Description */}
-                <p ref={descriptionRef} className="text-center golden-ratio-2 mb-4">
+                <p ref={descriptionRef} className="text-center golden-ratio-2">
                     {user ? 'What was your dream ' + user?.name + "?" : 'Interpret your dreams using our intelligent dream interpretation AI models'}
                 </p>
 
                 {/* 4. Rest of the page */}
-                <div ref={restOfPageRef}>
+                <div ref={restOfPageRef} className="mt-4">
                     <textarea
                         type="text"
                         rows={7}
@@ -301,6 +306,19 @@ const WelcomeSection = ({
                     </p>
                 </div>
             )}
+            {!user?.sendReminder && (
+                <div ref={sendReminderRef} className="text-center bg-gray-800 mt-4 bg-opacity-50 py-4 mx-4 sm:mx-auto sm:w-2/3 rounded-xl hover:bg-opacity-70 hover:shadow-2xl hover:scale-105 cursor-pointer transition-transform duration-200 ease-in-out">
+                    <button 
+                        onClick={openDreamReminderModal}
+                        className="text-white mb-2 mt-2 golden-ratio-2"
+                    >
+                        Need A Dream Reminder?
+                    </button>
+                </div>
+            )}
+
+
+
 
             <div ref={dreamStreamRef}>
                 <DreamStream />
