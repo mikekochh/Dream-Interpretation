@@ -37,11 +37,11 @@ const WelcomeSection = ({
             const timer = setTimeout(() => {
                 const popupShown = localStorage.getItem('popup_shown');
                 if (!user && !popupShown) {
-                    setIsReminderModalVisible(true);
-                    localStorage.setItem('popup_shown', true);
-                    if (!countedViewOpen && window.location.hostname !== 'localhost') {
-                        addPageViewOpen();
-                    }
+                    // setIsReminderModalVisible(true);
+                    // localStorage.setItem('popup_shown', true);
+                    // if (!countedViewOpen && window.location.hostname !== 'localhost') {
+                    //     addPageViewOpen();
+                    // }
                 }
               }, 3000);
 
