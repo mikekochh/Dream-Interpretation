@@ -80,24 +80,36 @@ const WelcomeSection = ({
     }, []);
 
     const addDreamStreamView = async () => {
+        const referrer = document.referrer;
+        const isFromInstagram = referrer.includes('instagram.com');
+
         await axios.post('/api/views/addView', {
             pageID: PAGE_DREAM_STREAM,
-            userID: user?._id
+            userID: user?._id,
+            isFromInstagram
         });
     }
 
     const addPageViewOpen = async () => {
+        const referrer = document.referrer;
+        const isFromInstagram = referrer.includes('instagram.com');
+
         await axios.post('/api/views/addView', {
             pageID: PAGE_EMAIL_REMINDER_POPUP,
-            userID: user?._id
+            userID: user?._id,
+            isFromInstagram
         });
         setCountedViewOpen(true);
     }
 
     const addPageViewClosed = async () => {
+        const referrer = document.referrer;
+        const isFromInstagram = referrer.includes('instagram.com');
+
         await axios.post('/api/views/addView', {
             pageID: PAGE_EMAIL_REMINDER_POPUP_CLOSED,
-            userID: user?._id
+            userID: user?._id,
+            isFromInstagram
         });
     }
     

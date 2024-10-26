@@ -15,10 +15,14 @@ export default function SavingDreamView({
 
     useEffect(() => {
         const addView = async () => {
+            const referrer = document.referrer;
+            const isFromInstagram = referrer.includes('instagram.com');
+
             if (window.location.hostname !== 'localhost') {
                 await axios.post('/api/views/addView', {
                     pageID: PAGE_INTERPRET_LOADING,
-                    userID: user?._id
+                    userID: user?._id,
+                    isFromInstagram
                 });
                 setCountedView(true);
             }

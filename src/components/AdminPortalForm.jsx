@@ -805,8 +805,6 @@ const UserManagement = () => {
       const sortedViews = [...views].sort((a, b) => new Date(a.view_date) - new Date(b.view_date));
       setViews(sortedViews);
     }
-    
-
 
     return (
       <div>
@@ -866,6 +864,7 @@ const UserManagement = () => {
                         </div>
                       </div>
                     </th>
+                    <th className="px-4 py-2">Instagram?</th>
                     <th className="px-4 py-2">Action</th>
                   </tr>
                 </thead>
@@ -886,6 +885,9 @@ const UserManagement = () => {
                             second: '2-digit',
                             hour12: true // This will display the time in 12-hour format. You can set it to false for 24-hour format.
                           })}
+                      </td>
+                      <td className="px-4 py-2">
+                        {view.isFromInstagram == null ? 'N/A' : view.isFromInstagram ? 'Yes' : 'No'}
                       </td>
                       <td className="px-4 py-2">
                         <button

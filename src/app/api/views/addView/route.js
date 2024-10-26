@@ -5,7 +5,7 @@ import View from '../../../../../models/views';
 export async function POST(req) {
     try {
         await connectMongoDB(); // Connect to MongoDB
-        const { userID, pageID } = await req.json();
+        const { userID, pageID, isFromInstagram } = await req.json();
         
         // Get the current date
         const viewDate = new Date();
@@ -14,7 +14,8 @@ export async function POST(req) {
         const newView = new View({
             userID,
             pageID,
-            view_date: viewDate
+            view_date: viewDate,
+            isFromInstagram
         });
 
         // Save the view record

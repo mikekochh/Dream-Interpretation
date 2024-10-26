@@ -11,6 +11,10 @@ const viewsSchema = new Schema({
     pageID: {
         type: Number,
         required: [true, "What page is the view from?!"]
+    },
+    isFromInstagram: {
+        type: Boolean,
+        required: [true, "Are they from instagram?!"]
     }
 });
 

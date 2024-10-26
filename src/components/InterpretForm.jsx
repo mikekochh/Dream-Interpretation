@@ -40,10 +40,14 @@ const InterpretForm = () => {
 
     useEffect(() => {
         const addView = async () => {
+            const referrer = document.referrer;
+            const isFromInstagram = referrer.includes('instagram.com');
+    
             if (window.location.hostname !== 'localhost') {
                 await axios.post('/api/views/addView', {
                     pageID: PAGE_INTERPRET_HOME,
-                    userID: user?._id
+                    userID: user?._id,
+                    isFromInstagram // Send the Instagram referrer boolean
                 });
                 setCountedView(true);
             }
@@ -52,7 +56,7 @@ const InterpretForm = () => {
         if (!userLoading && !countedView) {
             addView();
         }
-    }, [userLoading]);
+    }, [userLoading]);    
     
 
     useEffect(() => {
