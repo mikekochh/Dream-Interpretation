@@ -212,7 +212,7 @@ export default function EBookForm() {
                     <p className="ebook-text">
                         On the surface, this dream might seem strange. Something like this would never happen in real life, and yet, this is what 
                         our unconscious mind presents us. Now this dream isn&apos;t really about school or an exam. Instead, it&apos;s the unconscious mind&apos;s 
-                        way of reflecting on the dreamer's current emotional state, and it is offering potential solutions to solve this problem.
+                        way of reflecting on the dreamer&apos;s current emotional state, and it is offering potential solutions to solve this problem.
                     </p>
                     <p className="ebook-text">
                         The dreamer is clearly stressed out about some event coming in their life. They feel unprepared, and this dream starts 
