@@ -989,5 +989,7 @@ h3.golden-ratio-2 {
   background-color: rgba(255, 215, 0, 0.7); /* Gold with 70% opacity on hover */
 }
 
-
+.ebook-text {
+  margin-bottom: 14px;
+}
 
