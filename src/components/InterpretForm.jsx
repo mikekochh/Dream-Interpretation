@@ -194,6 +194,20 @@ const InterpretForm = () => {
         let existingDream = dream;
     
         try {
+
+            // first, we journal the dream
+            // then, we create the image
+            // then we find dream symbols
+            // then we do interpretation
+
+            // first we journal the dream
+            // then we generate the questions
+            // as the user is answering the questions
+                // we are creating the image
+                // we find dream symbols
+            // once user is done answering questions
+                // we provide full interpretation
+
             let localDreamID;
             const existingDreamID = localStorage.getItem('dreamID');
             localStorage.removeItem('dreamID');
@@ -219,6 +233,29 @@ const InterpretForm = () => {
             }
 
             setDreamID(localDreamID);
+
+            // Generate Questions
+            const resQuestions = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamQuestions',
+                {
+                    params: {
+                        dream: dream ? dream : existingDream,
+                        oracleQuestionPrompt: "You are the leading expert in dream interpretation. I am sitting in your therapy session and I am telling you my dream from the night before. Ask me questions that will help the dreamer reflect upon what the dream symbols and events could represent. No more then 6 questions. Here is the dream:"
+                    }
+                }
+            );
+
+            console.log("resQuestions: ", resQuestions);
+
+            let dreamQuestions = resQuestions.data;
+            dreamQuestions = dreamQuestions.slice(dreamQuestions.indexOf('['), dreamQuestions.lastIndexOf(']') + 1);
+
+
+            console.log("Dream question 1: ", dreamQuestions[0]);
+            console.log("Dream questions: ", dreamQuestions);
+
+            const dreamQuestionsJson = dreamQuestions.json();
+
+            console.log("dreamQuestionsJson[0]: ", dreamQuestionsJson[0]);
     
             // Summarize the dream
             const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',

@@ -314,6 +314,43 @@ exports.dreamSummary = functions.runWith({ maxInstances: 10, timeoutSeconds: 180
     })
 })
 
+exports.dreamQuestions = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        try {
+            const { dream, oracleQuestionPrompt } = req.query;
+            logger.info('the dream we are questioning: ', dream);
+    
+            const questionDreamData = await interactWithChatGPT(oracleQuestionPrompt + "\n\n" + dream);
+            logger.info('the questions data: ', questionDreamData);
+            const questionDreamRaw = questionDreamData[0].message.content;
+            logger.info('the questions raw data: ', questionDreamRaw);
+    
+            const secondPrompt = "Take the following string that contains multiple questions and organize each question as a separate entry in a JSON array. The output should be only the clean JSON array, with each question as a string element in the array. Here is the input:\n\n" + questionDreamRaw;
+            console.log("secondPrompt: ", secondPrompt);
+    
+            const questionDreamJson = await interactWithChatGPT(secondPrompt);
+            console.log("questionDreamJson: ", questionDreamJson);
+
+            let questionFinalData = questionDreamJson[0].message.content;
+            console.log("questionFinalData: ", questionFinalData);
+
+            // Use regex to extract only the JSON part if there is extra text
+            const jsonMatch = questionFinalData.match(/\[.*\]/s);
+            if (jsonMatch) {
+                questionFinalData = jsonMatch[0]; // Extract JSON array content
+            }
+
+            // Parse as JSON
+            const questionArray = JSON.parse(questionFinalData);
+            res.status(200).json(questionArray);
+        } catch (error) {
+            logger.error('Error generating questions for dream: ', error);
+            res.status(500).json({ error: error.message });
+        }
+    });
+});
+
+
 // Scheduled function to run every night at midnight for dream streaks and soul sound streaks
 exports.scheduledFunction = functions.pubsub.schedule('every day 00:00').onRun(async (context) => {
     logger.info('Scheduled function running at midnight');
