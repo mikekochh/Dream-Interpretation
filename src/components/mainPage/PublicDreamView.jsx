@@ -6,6 +6,22 @@ import axios from 'axios';
 const PublicDreamView = ({ dreamID }) => {
     const [isPublic, setIsPublic] = useState(true);
 
+    useEffect(() => {
+        const checkPublicStatus = async () => {
+            try {
+                const response = await axios.get('api/dream/publicStatus/' + dreamID);
+                setIsPublic(response.data.data);
+            } catch (error) {
+                console.error('Failed to get dreams public status: ', error);
+                setIsPublic(true);
+            }
+        }
+
+        if (dreamID) {
+            checkPublicStatus();
+        }
+    }, [dreamID])
+
     const handleToggle = async () => {
         try {
             // Optimistically toggle the public/private state

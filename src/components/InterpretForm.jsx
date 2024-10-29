@@ -9,6 +9,7 @@ import { SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE } from '@/types/signUpTypes';
 const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
+const QuestionsForm = lazy(() => import('./mainPage/QuestionsForm'));
 
 const InterpretForm = () => {
     const { user, userLoading, setUserData } = useContext(UserContext);
@@ -31,6 +32,10 @@ const InterpretForm = () => {
     const [emotions, setEmotions] = useState([]);
     const [selectedEmotions, setSelectedEmotions] = useState([]);
     const [dreamStreak, setDreamStreak] = useState();
+
+    // const [dreamQuestions, setDreamQuestions] = useState(["Whats your name?", "Who are you?", "And perhaps what is this?", "And perhaps what is that?"]);
+
+    const [dreamQuestions, setDreamQuestions] = useState([]);
 
     const [dreamStep, setDreamStep] = useState(0);
 
@@ -188,7 +193,7 @@ const InterpretForm = () => {
 
     const journalDream = async () => {
         setSavingDream(true);
-        setSaveMessage("Journaling Your Dream");
+        setSaveMessage("Generating Questions");
         const userID = user?._id;
         let localOracleSelected = oracleSelected;  // Create a local variable
         let existingDream = dream;
@@ -245,17 +250,9 @@ const InterpretForm = () => {
             );
 
             console.log("resQuestions: ", resQuestions);
+            console.log("resQuestions.data: ", resQuestions.data);
 
-            let dreamQuestions = resQuestions.data;
-            dreamQuestions = dreamQuestions.slice(dreamQuestions.indexOf('['), dreamQuestions.lastIndexOf(']') + 1);
-
-
-            console.log("Dream question 1: ", dreamQuestions[0]);
-            console.log("Dream questions: ", dreamQuestions);
-
-            const dreamQuestionsJson = dreamQuestions.json();
-
-            console.log("dreamQuestionsJson[0]: ", dreamQuestionsJson[0]);
+            setDreamQuestions(resQuestions.data);
     
             // Summarize the dream
             const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
@@ -266,6 +263,8 @@ const InterpretForm = () => {
                 }
             );
             const dreamSummary = resSummarizeDream.data[0].message.content;
+
+            console.log("still summarizing dream right?");
     
             // Try generating the dream image, but don't break the flow if it fails
             setSaveMessage("Generating Dream Image");
@@ -294,19 +293,15 @@ const InterpretForm = () => {
     
             // Handle Oracle interpretation if selected
             if (localOracleSelected) {
-                await interpretDreams(localDreamID, dream || existingDream);
+                // await interpretDreams(localDreamID, dream || existingDream);
             }
     
             setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
             const completedFreeDream = await axios.post('/api/user/usedFreeDream', {
                 userID
-            })
+            });
             
             // if they do not have an account, they need to create one to see their interpretation. Do not take them straight in this case
-            setTimeout(() => {
-                router.push('/dreamDetails?dreamID=' + localDreamID);
-            }, 3000);
-    
         } catch (error) {
             console.log("the error: ", error);
             setSaveMessage("Error Journaling Dream. Please Try Again Later");
@@ -407,8 +402,13 @@ const InterpretForm = () => {
     return (
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
-                {savingDream ? (
-                    <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} user={user} />
+                {dreamQuestions.length ? (
+                    <QuestionsForm 
+                        dreamQuestions={dreamQuestions} 
+                        dreamID={dreamID}
+                    />
+                ) : savingDream > 0 ? (
+                    <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} />
                 ) : (
                     <JournalDreamView
                         user={user}
