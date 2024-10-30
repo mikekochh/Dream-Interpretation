@@ -348,7 +348,7 @@ const WelcomeSection = ({
                         <Image src="/LearnStep.svg" alt="Step 3" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
                         <p className="golden-ratio-1">Step 3:</p>
                         <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
-                        <p className="golden-ratio-1">Read a summary, generate a dream image, and discover detailed insights on your dream, all while saving it all in your dream journal</p>
+                        <p className="golden-ratio-1">Answer questions generated from your dream and discover detailed interpretations on your dream</p>
                     </div>
                 </div>
             </div>
