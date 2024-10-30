@@ -1,17 +1,18 @@
 "use client";
-import React, { lazy, useState, useEffect } from 'react';
+import React, { lazy, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { PAGE_INTERPRET_LOADING } from '@/types/pageTypes';
+import { UserContext } from '@/context/UserContext';
 
 const LoadingComponent = lazy(() => import('../LoadingComponent'));
 import PublicDreamView from './PublicDreamView';
 
 export default function SavingDreamView({
     saveMessage,
-    dreamID,
-    user
+    dreamID
 }) {  
     const [countedView, setCountedView] = useState(false);
+    const { user } = useContext(UserContext) || {};
 
     useEffect(() => {
         const addView = async () => {

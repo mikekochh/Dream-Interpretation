@@ -9,6 +9,7 @@ import { SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE } from '@/types/signUpTypes';
 const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
+const QuestionsForm = lazy(() => import('./mainPage/QuestionsForm'));
 
 const InterpretForm = () => {
     const { user, userLoading, setUserData } = useContext(UserContext);
@@ -20,6 +21,7 @@ const InterpretForm = () => {
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [saveMessage, setSaveMessage] = useState("");
     const [oracleSelected, setOracleSelected] = useState(false);
+    const [selectedOracleID, setSelectedOracleID] = useState(0);
     const [dream, setDream] = useState("");
     const [dreamID, setDreamID] = useState();
 
@@ -31,6 +33,10 @@ const InterpretForm = () => {
     const [emotions, setEmotions] = useState([]);
     const [selectedEmotions, setSelectedEmotions] = useState([]);
     const [dreamStreak, setDreamStreak] = useState();
+
+    // const [dreamQuestions, setDreamQuestions] = useState(["Whats your name?", "Who are you?", "And perhaps what is this?", "And perhaps what is that?"]);
+
+    const [dreamQuestions, setDreamQuestions] = useState([]);
 
     const [dreamStep, setDreamStep] = useState(0);
 
@@ -162,15 +168,18 @@ const InterpretForm = () => {
     }, [user])
 
     const handleSelectionChange = (selected, oracleID) => {
+        setSelectedOracleID(oracleID);
         setOracles(prev => {
-            const updatedOracles = [...prev];
-            const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
-            updatedOracles[oracleIndex].selected = !selected;
+            const updatedOracles = prev.map(oracle => ({
+                ...oracle,
+                selected: oracle.oracleID === oracleID ? !selected : false, // Deselect others, select only the clicked oracle
+            }));
             return updatedOracles;
         });
-    };
+    };    
 
     const selectOracle = (oracleID) => {
+        setSelectedOracleID(oracleID);
         setOracles(prev => {
             const updatedOracles = [...prev];
             const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
@@ -179,16 +188,9 @@ const InterpretForm = () => {
         });
     }
 
-    const createAccountFlow = async () => {
-        const resJournal = await axios.post('/api/dream/journal', { dream, interpretDream: oracleSelected, emotions: selectedEmotions });
-        const dreamID = resJournal.data._id;
-        localStorage.setItem("dreamID", dreamID);
-        incrementDreamStep();
-    }
-
     const journalDream = async () => {
         setSavingDream(true);
-        setSaveMessage("Journaling Your Dream");
+        setSaveMessage("Generating Questions");
         const userID = user?._id;
         let localOracleSelected = oracleSelected;  // Create a local variable
         let existingDream = dream;
@@ -219,6 +221,21 @@ const InterpretForm = () => {
             }
 
             setDreamID(localDreamID);
+
+            // Generate Questions
+            const resQuestions = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamQuestions',
+                {
+                    params: {
+                        dream: dream ? dream : existingDream,
+                        oracleID: selectedOracleID
+                    }
+                }
+            );
+
+            console.log("resQuestions: ", resQuestions);
+            console.log("resQuestions.data: ", resQuestions.data);
+
+            setDreamQuestions(resQuestions.data);
     
             // Summarize the dream
             const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
@@ -229,6 +246,8 @@ const InterpretForm = () => {
                 }
             );
             const dreamSummary = resSummarizeDream.data[0].message.content;
+
+            console.log("still summarizing dream right?");
     
             // Try generating the dream image, but don't break the flow if it fails
             setSaveMessage("Generating Dream Image");
@@ -257,19 +276,15 @@ const InterpretForm = () => {
     
             // Handle Oracle interpretation if selected
             if (localOracleSelected) {
-                await interpretDreams(localDreamID, dream || existingDream);
+                // await interpretDreams(localDreamID, dream || existingDream);
             }
     
             setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
             const completedFreeDream = await axios.post('/api/user/usedFreeDream', {
                 userID
-            })
+            });
             
             // if they do not have an account, they need to create one to see their interpretation. Do not take them straight in this case
-            setTimeout(() => {
-                router.push('/dreamDetails?dreamID=' + localDreamID);
-            }, 3000);
-    
         } catch (error) {
             console.log("the error: ", error);
             setSaveMessage("Error Journaling Dream. Please Try Again Later");
@@ -286,59 +301,6 @@ const InterpretForm = () => {
                 return [...prevSelectedEmotions, emotionId];
             }
         });
-    };
-
-    async function getGenderName(genderID) {
-        try {
-            const response = await axios.get(`/api/gender`, { params: { genderID } });
-            if (response.data && response.data.name) {
-                return response.data.name;
-            }
-        } catch (error) {
-            console.error('Error fetching gender name:', error);
-            return null;
-        }
-    }
-
-    const interpretDreams = async (dreamID, dreamText) => {
-        let userDetails = [];
-        let additionalContext = '';
-
-        // if (user) {
-        //     if (user?.genderID) {
-        //         const genderName = await getGenderName(user.genderID);
-        //         if (genderName) {
-        //             userDetails.push(`Gender: ${genderName}`);
-        //         }
-        //     }
-        //     if (user?.age) {
-        //         userDetails.push(`Age: ${user.age}`);
-        //     }
-        //     if (user?.culturalBackground) {
-        //         userDetails.push(`Cultural Background: ${user.culturalBackground}`);
-        //     }
-        //     if (user?.spiritualPractices) {
-        //         userDetails.push(`Spiritual Practices: ${user.spiritualPractices}`);
-        //     }
-        //     if (userDetails.length > 0) {
-        //         additionalContext = `\nIf provided, consider the following details about the dreamer to add context to the interpretation, but only if they are relevant to the dream: ${userDetails.join(', ')}. If these details do not seem relevant, feel free to disregard them.\n`;
-        //     }
-        // }
-
-        for (let i = 0; i < oracles.length; i++) {
-            if (oracles[i].selected) {
-                try {
-                    const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dreamText}`;
-                    setSaveMessage(oracles[i].oracleName + " is now interpreting your dream");
-                    await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt, dreamID, oracleID: oracles[i].oracleID } });
-                } catch (error) {
-                    setSaveMessage("Error Interpreting or Saving Interpretation. Please Try Again Later");
-                    console.log("error:", error);
-                    return;
-                }
-            }
-        }
-        setSaveMessage(user?._id ? "Dream interpretation complete! You can now view your dream interpretation under the dream details page." : "Dream interpretation complete!");
     };
 
     const scrollLeft = () => {
@@ -370,8 +332,14 @@ const InterpretForm = () => {
     return (
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
-                {savingDream ? (
-                    <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} user={user} />
+                {dreamQuestions.length ? (
+                    <QuestionsForm 
+                        dreamQuestions={dreamQuestions} 
+                        dreamID={dreamID}
+                        oracleID={selectedOracleID}
+                    />
+                ) : savingDream > 0 ? (
+                    <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} />
                 ) : (
                     <JournalDreamView
                         user={user}
@@ -393,7 +361,6 @@ const InterpretForm = () => {
                         incrementDreamStep={incrementDreamStep}
                         decrementDreamStep={decrementDreamStep}
                         oracleSelected={oracleSelected}
-                        createAccountFlow={createAccountFlow}
                     />
                 )}
             </div>

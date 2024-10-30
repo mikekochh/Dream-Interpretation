@@ -29,6 +29,111 @@ const OPENAI_API_URL = 'https://api.openai.com/v1/images/generations'; // Use th
 
 const storage = new Storage();
 
+exports.dreamLookupWithQuestions = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        const { dreamID, oracleID, questions, answers } = req.query;
+
+        try {
+            await client.connect();
+            const db = client.db('dreamsite');
+
+            const dreams = db.collection('dreams');
+            const oracles = db.collection('oracles');
+            const interpretations = db.collection('interpretations');
+            const interpretationCounter = db.collection('interpretationcounters');
+            logger.info('dreamID: ', dreamID);
+            logger.info("oracleID: ", oracleID);
+            logger.info("oracleID type of: ", typeof oracleID);
+            logger.info("questions: ", questions);
+            logger.info("answers: ", answers);
+
+            const dreamDBData = await dreams.findOne({ _id: new ObjectId(dreamID) });
+            const dreamText = dreamDBData?.dream;
+
+            if (!dreamText) {
+                throw new Error("Dream not found");
+            }
+
+            console.log("dreamText: ", dreamText);
+
+            const oracleData = await oracles.findOne({ oracleID: Number(oracleID) });
+
+            console.log("oracleData: ", oracleData);
+            const oraclePrompt = oracleData?.newPrompt;
+
+            if (!oraclePrompt) {
+                throw new Error("Oracle prompt not found");
+            }
+
+            console.log("oraclePrompt: ", oraclePrompt);
+
+            // Combine the dream prompt with questions and answers
+            let fullPrompt = oraclePrompt + '\n\nDream:\n' + dreamText + '\n\nQuestions and Answers:\n';
+
+            // Append each question and answer to the prompt
+            questions.forEach((question, index) => {
+                fullPrompt += `\nQ${index + 1}: ${question}\nA${index + 1}: ${answers[index] || "No answer provided"}\n`;
+            });
+
+            logger.info('fullPrompt: ', fullPrompt);
+
+            // Send the fullPrompt to ChatGPT
+            const dreamData = await interactWithChatGPT(fullPrompt);
+
+            logger.info('dreamData: ', dreamData);
+            logger.info("the interpretation: ", dreamData[0].message.content);
+
+            if (dreamID && oracleID) {
+                const organizeInterpretationPrompt = `Take the following dream interpretation and organize it into well-structured HTML code. The HTML should contain sections with titles, each section should have a heading (<h2>) and the corresponding content in paragraphs (<p>). The final section should be a summary of the interpretation. Ensure the HTML is valid and easy to display on a webpage. Return only the HTML code and nothing else.
+
+                Dream interpretation: ${dreamData[0].message.content}
+               
+                Output format:
+                <h2>Section 1 Title</h2>
+                <p>Details for section 1.</p>
+
+                <h2>Section 2 Title</h2>
+                <p>Details for section 2.</p>
+
+                <h2>Summary</h2>
+                <p>Summary of the interpretation.</p>`;
+
+                const organizedInterpretationData = await interactWithChatGPT(organizeInterpretationPrompt);
+                logger.info("organized dream interpretation: ", organizedInterpretationData);
+                
+
+                const newInterpretation = await interpretations.insertOne({
+                    dreamID,
+                    oracleID,
+                    interpretation: organizedInterpretationData[0].message.content,
+                    interpretationDate: new Date()
+                });
+
+                logger.info("the new interpretation: ", newInterpretation);
+
+                if (!newInterpretation) {
+                    throw new Error('Interpretation creation failed!');
+                }
+
+                await interpretationCounter.findOneAndUpdate({
+                    _id: "65a58ab10d04881df7e5a2a7",
+                }, {
+                    $inc: { counter: 1 }
+                });
+
+                if (!interpretationCounter) {
+                    console.log('Interpretation counter update failed!');
+                }
+            }
+
+            res.status(200).json(dreamData);
+        } catch (error) {
+            logger.error('Error: ', error);
+            res.status(500).json({ error: error.message });
+        }
+    });
+});
+
 exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
     cors(req, res, async () => {
         const { dreamPrompt, dreamID, oracleID } = req.query;
@@ -313,6 +418,54 @@ exports.dreamSummary = functions.runWith({ maxInstances: 10, timeoutSeconds: 180
         }
     })
 })
+
+exports.dreamQuestions = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        try {
+            const { dream, oracleID } = req.query;
+            logger.info('the dream we are questioning: ', dream);
+            logger.info('the oracle we are using: ', oracleID);
+
+            await client.connect();
+            const db = client.db('dreamsite');
+            const oracles = db.collection('oracles');
+
+            const selectedOracleData = await oracles.findOne({ oracleID: Number(oracleID) });
+
+            console.log("selectedOracleData: ", selectedOracleData);
+
+            const fullPrompt = selectedOracleData.questionPrompt + "\n\n" + dream;
+    
+            const questionDreamData = await interactWithChatGPT(fullPrompt);
+            logger.info('the questions data: ', questionDreamData);
+            const questionDreamRaw = questionDreamData[0].message.content;
+            logger.info('the questions raw data: ', questionDreamRaw);
+    
+            const secondPrompt = "Take the following string that contains multiple questions and organize each question as a separate entry in a JSON array. The output should be only the clean JSON array, with each question as a string element in the array. Here is the input:\n\n" + questionDreamRaw;
+            console.log("secondPrompt: ", secondPrompt);
+    
+            const questionDreamJson = await interactWithChatGPT(secondPrompt);
+            console.log("questionDreamJson: ", questionDreamJson);
+
+            let questionFinalData = questionDreamJson[0].message.content;
+            console.log("questionFinalData: ", questionFinalData);
+
+            // Use regex to extract only the JSON part if there is extra text
+            const jsonMatch = questionFinalData.match(/\[.*\]/s);
+            if (jsonMatch) {
+                questionFinalData = jsonMatch[0]; // Extract JSON array content
+            }
+
+            // Parse as JSON
+            const questionArray = JSON.parse(questionFinalData);
+            res.status(200).json(questionArray);
+        } catch (error) {
+            logger.error('Error generating questions for dream: ', error);
+            res.status(500).json({ error: error.message });
+        }
+    });
+});
+
 
 // Scheduled function to run every night at midnight for dream streaks and soul sound streaks
 exports.scheduledFunction = functions.pubsub.schedule('every day 00:00').onRun(async (context) => {

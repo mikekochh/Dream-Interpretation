@@ -109,8 +109,8 @@ export default function LoginForm() {
 
     return (
         <div>
-            <div className='text-white grid place-items-center h-screen z-0'>
-                <div className="p-5 rounded-lg border-t-4 border-white-400 border">
+            <div className='text-white grid place-items-center h-screen z-0 '>
+                <div className="p-5 rounded-lg border-t-4 border-white-400 border Width350">
                     <h1 className="text-xl font-bold my-4">Enter Login Details</h1>
                     <form className="flex flex-col gap-3" onSubmit={(e) => {e.preventDefault(); login(e);}}>
                         <input type="text" placeholder="Email" className="LoginInput rounded-lg text-black" onChange={(e) => setEmail(e.target.value)} />

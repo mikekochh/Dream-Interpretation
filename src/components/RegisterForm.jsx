@@ -7,7 +7,7 @@ import axios from "axios";
 import Image from "next/image";
 import { SIGN_UP_TYPE_DREAM_INTERPRET } from "@/types/signUpTypes";
 
-export default function RegisterForm() {
+export default function RegisterForm({ viewInterpretation = false }) {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -103,7 +103,6 @@ export default function RegisterForm() {
     
             if (resNewUser.ok) {
                 gtagCreateAccount();
-    
                 if (dreamID) {
                     await axios.post('api/sendFirstInterpretationEmail', { email: emailLower, dreamID })
                 }
@@ -112,6 +111,8 @@ export default function RegisterForm() {
                 }
                 
                 setSentEmailVerification(true);
+
+                // do not sign them in until they activate their account
 
                 if (!dreamID) {
                     const resSignIn = await signIn("credentials", {
@@ -147,20 +148,20 @@ export default function RegisterForm() {
     }
 
     return (
-        <div className='text-white'>
-            <div className="p-5 rounded-lg border-t-4 border-white-400 border">
-                <h1 className="golden-ratio-2 font-bold my-4">Create Account</h1>
-                <form className="flex flex-col gap-3" onSubmit={(e) => {register(e)}}>
+        <div className={`text-white ${viewInterpretation && 'bg-black rounded-xl bg-opacity-80'}`}>
+            <div className={`p-5 rounded-lg border-t-4 border-white-400 border ${!viewInterpretation && 'Width350'}`}>
+                <h1 className="golden-ratio-2 font-bold my-4 text-center w-2/3 mx-auto">{viewInterpretation ? 'Create Account to View Interpretation' : 'Create Account'}</h1>
+                <form className="flex flex-col gap-3 w-full" onSubmit={(e) => {register(e)}}>
                     <input
                         type="text"
                         placeholder="Name"
-                        className="LoginInput golden-ratio-1 rounded-lg text-black"
+                        className="LoginInput golden-ratio-1 rounded-lg text-black w-full"
                         onChange={(e) => setName(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="Email"
-                        className="LoginInput golden-ratio-1 rounded-lg text-black"
+                        className="LoginInput golden-ratio-1 rounded-lg text-black w-full"
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     {registeringUser ? (

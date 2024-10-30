@@ -18,6 +18,7 @@ import DreamSettingsModal from './DreamSettingsModal';
 import OracleInterpretations from './OracleInterpretations';
 import AddNewInterpretationModal from './AddNewInterpretationModal';
 import SymbolCard from './SymbolCard';
+import RegisterForm from '../RegisterForm';
 
 const LoadingComponent = lazy(() => import('../LoadingComponent'));
 
@@ -279,7 +280,12 @@ export default function DreamsForm() {
 
     return (
         <div className="main-content">
-            <div className="flex flex-col mb-10 text-white md:w-6/12 mx-auto p-2">
+            {!user && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <RegisterForm viewInterpretation={true} />
+                </div>
+            )}
+            <div className={`flex flex-col mb-10 text-white md:w-6/12 mx-auto p-2 ${!user && 'blur'}`}>
                 <div className="md:flex md:flex-row">
                     <div className="interpretations-section md:w-1/3 relative">
                         {/* Three Dots Button */}

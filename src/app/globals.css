@@ -67,13 +67,16 @@ textarea.DreamBox {
   color: white; /* Ensures the text stands out */
 }
 
+.Width350 {
+  width: 350px;
+}
+
 
 .LoginInput {
   background: transparent;
   border: 1px solid white;
   color: white;
   padding: 5px;
-  width: 350px;
 }
 
 .DreamCard {
@@ -277,21 +280,6 @@ nav {
   background-color: #00FFFF;
 }
 
-.secondary-button {
-  background-color: transparent;
-  border: 2px solid white;
-  color: white;
-  border-radius: 0.5rem; /* Adjust the radius as needed */
-  padding: 1rem; /* Equivalent to p-4 */
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-
-.secondary-button:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Slight background on hover */
-  border-color: #ccc; /* Lighter border on hover */
-}
-
 .start-button-small {
   color: black;
   border-radius: 7px;
@@ -318,7 +306,12 @@ nav {
   background-color: #00FFFF;
 }
 
-.start-button-hollow {
+.secondary-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Slight background on hover */
+  border-color: #ccc; /* Lighter border on hover */
+}
+
+.secondary-button {
   color: white;
   border-radius: 7px;
   padding-left: 5px;
