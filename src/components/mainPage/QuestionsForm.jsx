@@ -76,7 +76,6 @@ export default function QuestionsForm({
             } 
         });
         router.push('/dreamDetails?dreamID=' + dreamID);
-        setSavingInterpretation(false);
     };
 
     if (savingInterpretation) {
