@@ -4,9 +4,7 @@ import { gsap } from 'gsap';
 
 // Directly import all components without lazy loading
 import WelcomeSection from './WelcomeSectionView';
-import MoodSection from './MoodSectionView';
 import OracleSelectionSection from './OracleSelectionSectionView';
-import RegisterBeforeInterpretation from './RegisterBeforeInterpretationForm';
 
 export default function JournalDreamView({
     user,
@@ -20,16 +18,12 @@ export default function JournalDreamView({
     scrollLeft,
     scrollRight,
     scrollContainerRef,
-    emotions,
-    handleEmotionClick,
-    selectedEmotions,
     dreamStreak,
     dreamStep,
     incrementDreamStep,
     decrementDreamStep,
     oracleSelected
 }) {
-    const isMobile = window.innerWidth < 768;
     const containerRef = useRef(null);
     const welcomeSectionRef = useRef(null);
     const [isAnimating, setIsAnimating] = useState(false); // Track if an animation is in progress
@@ -87,20 +81,7 @@ export default function JournalDreamView({
                         handleScrollToTop={handleScrollToTop}
                     />
                 </div>
-            ) : currentStep === 1 ? (
-                <div>
-                    <div className="back-button-container">
-                        <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
-                    </div>
-                    <MoodSection
-                        emotions={emotions}
-                        handleEmotionClick={handleEmotionClick}
-                        selectedEmotions={selectedEmotions}
-                        incrementDreamStep={incrementDreamStep}
-                        user={user}
-                    />
-                </div>
-            ) : currentStep === 2 ? (
+            ) : (
                 <div>
                     <div className="back-button-container">
                         <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
@@ -118,8 +99,6 @@ export default function JournalDreamView({
                         oracleSelected={oracleSelected}
                     />
                 </div>
-            ) : (
-                <RegisterBeforeInterpretation isMobile={isMobile} />
             )}
         </div>
     );
