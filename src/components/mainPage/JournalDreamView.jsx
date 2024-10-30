@@ -27,8 +27,7 @@ export default function JournalDreamView({
     dreamStep,
     incrementDreamStep,
     decrementDreamStep,
-    oracleSelected,
-    createAccountFlow
+    oracleSelected
 }) {
     const isMobile = window.innerWidth < 768;
     const containerRef = useRef(null);
@@ -117,7 +116,6 @@ export default function JournalDreamView({
                         journalDream={journalDream}
                         buttonText={buttonText}
                         oracleSelected={oracleSelected}
-                        createAccountFlow={createAccountFlow}
                     />
                 </div>
             ) : (

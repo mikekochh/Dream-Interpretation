@@ -67,13 +67,16 @@ textarea.DreamBox {
   color: white; /* Ensures the text stands out */
 }
 
+.Width350 {
+  width: 350px;
+}
+
 
 .LoginInput {
   background: transparent;
   border: 1px solid white;
   color: white;
   padding: 5px;
-  width: 350px;
 }
 
 .DreamCard {

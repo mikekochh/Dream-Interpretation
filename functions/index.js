@@ -422,10 +422,21 @@ exports.dreamSummary = functions.runWith({ maxInstances: 10, timeoutSeconds: 180
 exports.dreamQuestions = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
     cors(req, res, async () => {
         try {
-            const { dream, oracleQuestionPrompt } = req.query;
+            const { dream, oracleID } = req.query;
             logger.info('the dream we are questioning: ', dream);
+            logger.info('the oracle we are using: ', oracleID);
+
+            await client.connect();
+            const db = client.db('dreamsite');
+            const oracles = db.collection('oracles');
+
+            const selectedOracleData = await oracles.findOne({ oracleID: Number(oracleID) });
+
+            console.log("selectedOracleData: ", selectedOracleData);
+
+            const fullPrompt = selectedOracleData.questionPrompt + "\n\n" + dream;
     
-            const questionDreamData = await interactWithChatGPT(oracleQuestionPrompt + "\n\n" + dream);
+            const questionDreamData = await interactWithChatGPT(fullPrompt);
             logger.info('the questions data: ', questionDreamData);
             const questionDreamRaw = questionDreamData[0].message.content;
             logger.info('the questions raw data: ', questionDreamRaw);

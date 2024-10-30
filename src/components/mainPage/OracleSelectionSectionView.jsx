@@ -14,8 +14,7 @@ const OracleSelectionSection = ({
     scrollRight,
     journalDream,
     buttonText,
-    oracleSelected,
-    createAccountFlow
+    oracleSelected
 }) => {
 
     const [countedView, setCountedView] = useState(false);
@@ -69,7 +68,7 @@ const OracleSelectionSection = ({
             <div className="flex flex-col items-center">
                 <button
                     className={`start-button ${isButtonDisabled ? 'disabled-button' : ''}`}
-                    onClick={user ? journalDream : createAccountFlow}
+                    onClick={journalDream}
                     disabled={isButtonDisabled}
                 >
                     {buttonText}

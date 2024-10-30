@@ -8,12 +8,15 @@ import SavingDreamView from './SavingDreamView';
 export default function QuestionsForm({
     dreamQuestions,
     dreamID,
+    oracleID
 }) {  
     const [countedView, setCountedView] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
     const [error, setError] = useState("");
     const [savingInterpretation, setSavingInterpretation] = useState(false);
+
+    // make sure the questions are thought provoking, getting the dreamer to reflect upon their dream and almost help them interpret the dream themselves
 
     const router = useRouter();
 
@@ -67,7 +70,7 @@ export default function QuestionsForm({
         const response = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookupWithQuestions', { 
             params: { 
                 dreamID,
-                oracleID: 3,
+                oracleID: oracleID,
                 questions: dreamQuestions,
                 answers: answers
             } 

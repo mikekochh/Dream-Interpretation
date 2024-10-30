@@ -21,6 +21,7 @@ const InterpretForm = () => {
     const [buttonText, setButtonText] = useState("Journal Dream");
     const [saveMessage, setSaveMessage] = useState("");
     const [oracleSelected, setOracleSelected] = useState(false);
+    const [selectedOracleID, setSelectedOracleID] = useState(0);
     const [dream, setDream] = useState("");
     const [dreamID, setDreamID] = useState();
 
@@ -167,28 +168,24 @@ const InterpretForm = () => {
     }, [user])
 
     const handleSelectionChange = (selected, oracleID) => {
+        setSelectedOracleID(oracleID);
         setOracles(prev => {
-            const updatedOracles = [...prev];
-            const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
-            updatedOracles[oracleIndex].selected = !selected;
+            const updatedOracles = prev.map(oracle => ({
+                ...oracle,
+                selected: oracle.oracleID === oracleID ? !selected : false, // Deselect others, select only the clicked oracle
+            }));
             return updatedOracles;
         });
-    };
+    };    
 
     const selectOracle = (oracleID) => {
+        setSelectedOracleID(oracleID);
         setOracles(prev => {
             const updatedOracles = [...prev];
             const oracleIndex = updatedOracles.findIndex(oracle => oracle.oracleID === oracleID);
             updatedOracles[oracleIndex].selected = true;
             return updatedOracles;
         });
-    }
-
-    const createAccountFlow = async () => {
-        const resJournal = await axios.post('/api/dream/journal', { dream, interpretDream: oracleSelected, emotions: selectedEmotions });
-        const dreamID = resJournal.data._id;
-        localStorage.setItem("dreamID", dreamID);
-        incrementDreamStep();
     }
 
     const journalDream = async () => {
@@ -199,20 +196,6 @@ const InterpretForm = () => {
         let existingDream = dream;
     
         try {
-
-            // first, we journal the dream
-            // then, we create the image
-            // then we find dream symbols
-            // then we do interpretation
-
-            // first we journal the dream
-            // then we generate the questions
-            // as the user is answering the questions
-                // we are creating the image
-                // we find dream symbols
-            // once user is done answering questions
-                // we provide full interpretation
-
             let localDreamID;
             const existingDreamID = localStorage.getItem('dreamID');
             localStorage.removeItem('dreamID');
@@ -244,7 +227,7 @@ const InterpretForm = () => {
                 {
                     params: {
                         dream: dream ? dream : existingDream,
-                        oracleQuestionPrompt: "You are the leading expert in dream interpretation. I am sitting in your therapy session and I am telling you my dream from the night before. Ask me questions that will help the dreamer reflect upon what the dream symbols and events could represent. No more then 6 questions. Here is the dream:"
+                        oracleID: selectedOracleID
                     }
                 }
             );
@@ -320,59 +303,6 @@ const InterpretForm = () => {
         });
     };
 
-    async function getGenderName(genderID) {
-        try {
-            const response = await axios.get(`/api/gender`, { params: { genderID } });
-            if (response.data && response.data.name) {
-                return response.data.name;
-            }
-        } catch (error) {
-            console.error('Error fetching gender name:', error);
-            return null;
-        }
-    }
-
-    const interpretDreams = async (dreamID, dreamText) => {
-        let userDetails = [];
-        let additionalContext = '';
-
-        // if (user) {
-        //     if (user?.genderID) {
-        //         const genderName = await getGenderName(user.genderID);
-        //         if (genderName) {
-        //             userDetails.push(`Gender: ${genderName}`);
-        //         }
-        //     }
-        //     if (user?.age) {
-        //         userDetails.push(`Age: ${user.age}`);
-        //     }
-        //     if (user?.culturalBackground) {
-        //         userDetails.push(`Cultural Background: ${user.culturalBackground}`);
-        //     }
-        //     if (user?.spiritualPractices) {
-        //         userDetails.push(`Spiritual Practices: ${user.spiritualPractices}`);
-        //     }
-        //     if (userDetails.length > 0) {
-        //         additionalContext = `\nIf provided, consider the following details about the dreamer to add context to the interpretation, but only if they are relevant to the dream: ${userDetails.join(', ')}. If these details do not seem relevant, feel free to disregard them.\n`;
-        //     }
-        // }
-
-        for (let i = 0; i < oracles.length; i++) {
-            if (oracles[i].selected) {
-                try {
-                    const dreamPrompt = `${oracles[i].prompt}${additionalContext}\nHere is the dream:\n###\n${dreamText}`;
-                    setSaveMessage(oracles[i].oracleName + " is now interpreting your dream");
-                    await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup', { params: { dreamPrompt, dreamID, oracleID: oracles[i].oracleID } });
-                } catch (error) {
-                    setSaveMessage("Error Interpreting or Saving Interpretation. Please Try Again Later");
-                    console.log("error:", error);
-                    return;
-                }
-            }
-        }
-        setSaveMessage(user?._id ? "Dream interpretation complete! You can now view your dream interpretation under the dream details page." : "Dream interpretation complete!");
-    };
-
     const scrollLeft = () => {
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
@@ -406,6 +336,7 @@ const InterpretForm = () => {
                     <QuestionsForm 
                         dreamQuestions={dreamQuestions} 
                         dreamID={dreamID}
+                        oracleID={selectedOracleID}
                     />
                 ) : savingDream > 0 ? (
                     <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} />
@@ -430,7 +361,6 @@ const InterpretForm = () => {
                         incrementDreamStep={incrementDreamStep}
                         decrementDreamStep={decrementDreamStep}
                         oracleSelected={oracleSelected}
-                        createAccountFlow={createAccountFlow}
                     />
                 )}
             </div>
