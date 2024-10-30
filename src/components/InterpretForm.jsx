@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef, lazy, Suspense, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from "@/context/UserContext";
-import { useRouter } from 'next/navigation';
 import { PAGE_INTERPRET_HOME } from '@/types/pageTypes';
 import { SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE } from '@/types/signUpTypes';
 
@@ -13,8 +12,6 @@ const QuestionsForm = lazy(() => import('./mainPage/QuestionsForm'));
 
 const InterpretForm = () => {
     const { user, userLoading, setUserData } = useContext(UserContext);
-
-    const router = useRouter();
 
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
@@ -232,9 +229,6 @@ const InterpretForm = () => {
                 }
             );
 
-            console.log("resQuestions: ", resQuestions);
-            console.log("resQuestions.data: ", resQuestions.data);
-
             setDreamQuestions(resQuestions.data);
     
             // Summarize the dream
@@ -246,8 +240,6 @@ const InterpretForm = () => {
                 }
             );
             const dreamSummary = resSummarizeDream.data[0].message.content;
-
-            console.log("still summarizing dream right?");
     
             // Try generating the dream image, but don't break the flow if it fails
             setSaveMessage("Generating Dream Image");
@@ -273,18 +265,6 @@ const InterpretForm = () => {
                     } 
                 }
             );
-    
-            // Handle Oracle interpretation if selected
-            if (localOracleSelected) {
-                // await interpretDreams(localDreamID, dream || existingDream);
-            }
-    
-            setSaveMessage("Dream interpretation complete! Taking you to your personalized Dream Page");
-            const completedFreeDream = await axios.post('/api/user/usedFreeDream', {
-                userID
-            });
-            
-            // if they do not have an account, they need to create one to see their interpretation. Do not take them straight in this case
         } catch (error) {
             console.log("the error: ", error);
             setSaveMessage("Error Journaling Dream. Please Try Again Later");
