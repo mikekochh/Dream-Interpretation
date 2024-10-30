@@ -91,7 +91,7 @@ const OracleSelectionPopup = ({ user }) => {
                 <p className={`gradient-title-text ${isMobile ? 'golden-ratio-3' : 'golden-ratio-4'}`}>Choose an Oracle</p>
             </div>
             <div className="inline-flex items-center flex-col mb-3">
-                <p className="golden-ratio-2">Select a Dream Oracle, with each oracle being one of our intelligent AI interpretation models</p>
+                <p className="golden-ratio-2">Select a Dream Oracle, with each taking you on a different journey of interpretation</p>
                 {!user && (
                     <p className="golden-ratio-1 text-gold mt-1">Complete your first interpretation to unlock all oracles</p>
                 )}

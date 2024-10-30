@@ -283,11 +283,9 @@ nav {
 .start-button-small {
   color: black;
   border-radius: 7px;
-  padding-left: 5px;
-  padding-right: 5px;
   margin: 5px;
   --tw-bg-opacity: 1;
-  padding: 4px;
+  padding: 6px;
   padding-left: 20px;
   padding-right: 20px;
   background-color: #00FFFF;
@@ -296,8 +294,6 @@ nav {
 .start-button {
   color: black;
   border-radius: 7px;
-  padding-left: 5px;
-  padding-right: 5px;
   margin: 5px;
   --tw-bg-opacity: 1;
   padding: 6px;
@@ -314,14 +310,28 @@ nav {
 .secondary-button {
   color: white;
   border-radius: 7px;
-  padding-left: 5px;
-  padding-right: 5px;
   margin: 5px;
   padding: 6px;
   padding-left: 40px;
   padding-right: 40px;
   background-color: transparent;
   border: 2px solid #00FFFF;
+}
+
+.secondary-button-mobile {
+  color: white;
+  border-radius: 7px;
+  margin: 5px;
+  padding: 6px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: transparent;
+  border: 2px solid #00FFFF;
+}
+
+.secondary-button-mobile:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Slight background on hover */
+  border-color: #ccc; /* Lighter border on hover */
 }
 
 .start-button.disabled-button {

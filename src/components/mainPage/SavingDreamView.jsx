@@ -5,11 +5,12 @@ import { PAGE_INTERPRET_LOADING } from '@/types/pageTypes';
 import { UserContext } from '@/context/UserContext';
 
 const LoadingComponent = lazy(() => import('../LoadingComponent'));
-import PublicDreamView from './PublicDreamView';
+import QuestionsPreview from './QuestionsPreview';
 
 export default function SavingDreamView({
     saveMessage,
-    dreamID
+    setContinueToQuestions,
+    questionsReady
 }) {  
     const [countedView, setCountedView] = useState(false);
     const { user } = useContext(UserContext) || {};
@@ -36,8 +37,15 @@ export default function SavingDreamView({
 
     return (
         <div className="flex justify-center items-center flex-col h-screen">
-            <PublicDreamView dreamID={dreamID} />
-            <LoadingComponent loadingText={saveMessage} altScreen={true} />
+            <QuestionsPreview setContinueToQuestions={setContinueToQuestions} questionsReady={questionsReady} />
+            {questionsReady ? (
+                <div>
+                    <button className="start-button" onClick={() => setContinueToQuestions(true)}>Start Answering</button>
+                </div>
+            ) : (
+                <LoadingComponent loadingText={saveMessage} altScreen={true} />
+            )}
+            
         </div>
     );   
 }

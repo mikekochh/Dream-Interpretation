@@ -4,12 +4,15 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { PAGE_QUESTIONS } from '@/types/pageTypes';
 import SavingDreamView from './SavingDreamView';
+import LoadingComponent from '../LoadingComponent';
 
 export default function QuestionsForm({
     dreamQuestions,
     dreamID,
     oracleID
 }) {  
+    const isMobile = window.innerWidth <= 768;
+
     const [countedView, setCountedView] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
@@ -80,20 +83,19 @@ export default function QuestionsForm({
 
     if (savingInterpretation) {
         return (
-            <SavingDreamView saveMessage={"Finishing Interpretation"} dreamID={dreamID} />
+            <LoadingComponent loadingText={"Finishing Interpretation"} />
         )
     }
 
     return (
         <div className="flex justify-center items-center flex-col h-screen">
-            <h1 className="gradient-title-text golden-ratio-5">Dream Questions</h1>
-            <h2 className="golden-ratio-2 mb-5">Please answer these questions to uncover more details and context for your interpretation</h2>
+            <h1 className="gradient-title-text golden-ratio-4 text-center mb-4">Dream Questions</h1>
             <div className="flex flex-col items-center w-full text-center">
-                <h2 className="mb-4 golden-ratio-2 w-2/3">{dreamQuestions[currentQuestionIndex]}</h2>
+                <h2 className="mb-4 golden-ratio-2 md:w-2/3 mx-2">{dreamQuestions[currentQuestionIndex]}</h2>
                 <textarea
                     value={answers[currentQuestionIndex] || ""}
                     onChange={handleAnswerChange}
-                    className="DreamBox golden-ratio-2 border-2 p-3 border-black rounded-lg text-black md:m-0 w-2/3 h-48"
+                    className="DreamBox golden-ratio-2 border-2 p-3 border-black rounded-lg text-black md:m-0 w-full md:w-2/3 h-48"
                     placeholder="Write your answer here"
                 />
                 <p>Question {currentQuestionIndex + 1} / {dreamQuestions.length}</p>
@@ -102,7 +104,7 @@ export default function QuestionsForm({
                     {currentQuestionIndex > 0 && (
                         <button
                             onClick={handlePreviousQuestion}
-                            className="secondary-button"
+                            className={`${isMobile ? 'secondary-button-mobile' : 'secondary-button'}`}
                         >
                             Previous Question
                         </button>
@@ -110,14 +112,14 @@ export default function QuestionsForm({
                     {currentQuestionIndex < dreamQuestions.length - 1 ? (
                         <button
                             onClick={handleNextQuestion}
-                            className="start-button"
+                            className={`${isMobile ? 'start-button-small' : 'start-button'}`}
                         >
                             Next Question
                         </button>
                     ) : (
                         <button
                             onClick={handleInterpretDream}
-                            className="start-button"
+                            className={`${isMobile ? 'start-button-small' : 'start-button'}`}
                         >
                             Interpret Dream
                         </button>

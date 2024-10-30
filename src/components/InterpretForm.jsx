@@ -31,9 +31,8 @@ const InterpretForm = () => {
     const [selectedEmotions, setSelectedEmotions] = useState([]);
     const [dreamStreak, setDreamStreak] = useState();
 
-    // const [dreamQuestions, setDreamQuestions] = useState(["Whats your name?", "Who are you?", "And perhaps what is this?", "And perhaps what is that?"]);
-
     const [dreamQuestions, setDreamQuestions] = useState([]);
+    const [continueToQuestions, setContinueToQuestions] = useState(false);
 
     const [dreamStep, setDreamStep] = useState(0);
 
@@ -312,14 +311,14 @@ const InterpretForm = () => {
     return (
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
-                {dreamQuestions.length ? (
+                {dreamQuestions.length > 0 && continueToQuestions ? (
                     <QuestionsForm 
                         dreamQuestions={dreamQuestions} 
                         dreamID={dreamID}
                         oracleID={selectedOracleID}
                     />
-                ) : savingDream > 0 ? (
-                    <SavingDreamView saveMessage={saveMessage} dreamID={dreamID} />
+                ) : savingDream ? (
+                    <SavingDreamView saveMessage={saveMessage} setContinueToQuestions={setContinueToQuestions} questionsReady={dreamQuestions.length > 0} />
                 ) : (
                     <JournalDreamView
                         user={user}
