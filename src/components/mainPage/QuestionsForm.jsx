@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { PAGE_QUESTIONS } from '@/types/pageTypes';
 import LoadingComponent from '../LoadingComponent';
 import PublicDreamView from './PublicDreamView';
+import { UserContext } from '@/context/UserContext';
 
 export default function QuestionsForm({
     dreamQuestions,
@@ -12,6 +13,8 @@ export default function QuestionsForm({
     oracleID
 }) {  
     const isMobile = window.innerWidth <= 768;
+
+    const { user } = useContext(UserContext) || {};
 
     const [countedView, setCountedView] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -27,6 +30,8 @@ export default function QuestionsForm({
         const addView = async () => {
             const referrer = document.referrer;
             const isFromInstagram = referrer.includes('instagram.com');
+
+            console.log("adding a view on questions form");
 
             if (window.location.hostname !== 'localhost') {
                 await axios.post('/api/views/addView', {
