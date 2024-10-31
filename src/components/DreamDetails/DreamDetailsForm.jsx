@@ -303,9 +303,10 @@ export default function DreamsForm() {
                         <div className="flex md:flex-col flex-row md:space-y-2">
                             {interpretations.map((interpretation) => {
                                 const oracle = oracles.find((oracle) => oracle.oracleID === interpretation.oracleID);
-                                
+
                                 return (
                                     <OracleInterpretations
+                                        key={oracle.oracleID}
                                         interpretation={interpretation}
                                         oracle={oracle}
                                         openInterpretation={openInterpretation}
