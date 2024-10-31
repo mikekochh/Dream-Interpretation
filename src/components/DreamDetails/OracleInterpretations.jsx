@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ViewInterpretation from './ViewInterpretation'; // Assuming ViewInterpretation is in the same folder
 
-const OracleInterpretations = ({ interpretation, oracle }) => {
+const OracleInterpretations = ({ interpretation, oracle, openInterpretation }) => {
   const [showInterpretationModal, setShowInterpretationModal] = useState(false);
+
+  useEffect(() => {
+    if (openInterpretation) {
+      openInterpretationModal();
+    }
+  }, [])
 
   const openInterpretationModal = () => {
     setShowInterpretationModal(true);

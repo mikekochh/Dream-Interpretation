@@ -25,6 +25,8 @@ const LoadingComponent = lazy(() => import('../LoadingComponent'));
 export default function DreamsForm() {
     const searchParams = useSearchParams();
     const dreamID = searchParams.get('dreamID');
+    const openInterpretation = searchParams.get('openInterpretation') === 'true';
+
     const router = useRouter();
 
     const { user, userLoading } = useContext(UserContext);
@@ -301,23 +303,15 @@ export default function DreamsForm() {
                         <div className="flex md:flex-col flex-row md:space-y-2">
                             {interpretations.map((interpretation) => {
                                 const oracle = oracles.find((oracle) => oracle.oracleID === interpretation.oracleID);
-
+                                
                                 return (
                                     <OracleInterpretations
-                                        key={interpretation.oracleID}
                                         interpretation={interpretation}
                                         oracle={oracle}
+                                        openInterpretation={openInterpretation}
                                     />
                                 );
                             })}
-                            {isUsersOwnDream && (
-                                <div className="flex flex-col cursor-pointer p-2" onClick={() => setShowAddNewInterpretationModal(true)}>
-                                    <div className="w-14 h-14 rounded-full border-gold-small flex items-center justify-center bg-black bg-opacity-50">
-                                        <span className="text-xl font-bold text-gold">+</span>
-                                    </div>
-                                    <p className="mt-1 text-sm text-gold">Add New</p>
-                                </div>
-                            )}
                         </div>
                     </div>
                     <div className="image-section relative md:w-2/3 md:ml-4">

@@ -1,10 +1,10 @@
 "use client";
-import React, { lazy, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { PAGE_QUESTIONS } from '@/types/pageTypes';
-import SavingDreamView from './SavingDreamView';
 import LoadingComponent from '../LoadingComponent';
+import PublicDreamView from './PublicDreamView';
 
 export default function QuestionsForm({
     dreamQuestions,
@@ -78,12 +78,15 @@ export default function QuestionsForm({
                 answers: answers
             } 
         });
-        router.push('/dreamDetails?dreamID=' + dreamID);
+        router.push('/dreamDetails?dreamID=' + dreamID + '&openInterpretation=true');
     };
 
     if (savingInterpretation) {
         return (
-            <LoadingComponent loadingText={"Finishing Interpretation"} />
+            <div className="flex flex-col justify-center items-center h-screen">
+                <PublicDreamView dreamID={dreamID}/>
+                <LoadingComponent loadingText={"Finishing Interpretation"} altScreen={true} />
+            </div>
         )
     }
 
