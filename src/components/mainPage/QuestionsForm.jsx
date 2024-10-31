@@ -21,6 +21,7 @@ export default function QuestionsForm({
     const [answers, setAnswers] = useState({});
     const [error, setError] = useState("");
     const [savingInterpretation, setSavingInterpretation] = useState(false);
+    const [interpretationComplete, setInterpretationComplete] = useState(false);
 
     // make sure the questions are thought provoking, getting the dreamer to reflect upon their dream and almost help them interpret the dream themselves
 
@@ -30,8 +31,6 @@ export default function QuestionsForm({
         const addView = async () => {
             const referrer = document.referrer;
             const isFromInstagram = referrer.includes('instagram.com');
-
-            console.log("adding a view on questions form");
 
             if (window.location.hostname !== 'localhost') {
                 await axios.post('/api/views/addView', {
@@ -83,14 +82,20 @@ export default function QuestionsForm({
                 answers: answers
             } 
         });
-        router.push('/dreamDetails?dreamID=' + dreamID + '&openInterpretation=true');
+        setInterpretationComplete(true);
     };
 
     if (savingInterpretation) {
         return (
             <div className="flex flex-col justify-center items-center h-screen">
                 <PublicDreamView dreamID={dreamID}/>
-                <LoadingComponent loadingText={"Finishing Interpretation"} altScreen={true} />
+                {interpretationComplete ? (
+                    <button className="start-button" onClick={() => router.push('/dreamDetails?dreamID=' + dreamID + '&openInterpretation=true')}>
+                        View Interpretation
+                    </button>
+                ) : (
+                    <LoadingComponent loadingText={"Finishing Interpretation"} altScreen={true} />
+                )}
             </div>
         )
     }

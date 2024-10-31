@@ -27,14 +27,15 @@ export default function DreamsForm() {
     const dreamID = searchParams.get('dreamID');
     const openInterpretation = searchParams.get('openInterpretation') === 'true';
 
+
+    // if a user comes to this page, and the dream does not have a userID associated with it, set the userID to the current users id. 
+
     const router = useRouter();
 
     const { user, userLoading } = useContext(UserContext);
     
     const [loading, setLoading] = useState(true);
 
-    const [dreamEmotions, setDreamEmotions] = useState([]);
-    const [emotions, setEmotions] = useState([]);
     const [dream, setDream] = useState(null);
     const [interpretations, setInterpretations] = useState(null);
     const [oracles, setOracles] = useState(null);
@@ -111,15 +112,6 @@ export default function DreamsForm() {
             }
         }
 
-        const getEmotions = async () => {
-            try {
-                const resEmotions = await axios.get("/api/emotions/getEmotions");
-                setEmotions(resEmotions.data);
-            } catch (error) {
-                console.log("Error fetching emotions: ", error);
-            }
-        }
-
         const getOracles = async () => {
             try {
                 const resOracles = await axios.get("/api/allOracles");
@@ -130,20 +122,10 @@ export default function DreamsForm() {
         }
 
         checkPage();
-        getEmotions();
         getOracles();
     }, [])
 
     useEffect(() => {
-        const fetchDreamEmotions = async () => {
-            try {
-                const res = await axios.get(`/api/emotions/getDreamEmotions?dreamID=${dreamID}`);
-                setDreamEmotions(res.data);
-            } catch (error) {
-                console.log('Error fetching dream emotions:', error);
-            }
-        };
-
         const fetchUserDreamSymbols = async () => {
             try {
                 const res = await axios.get(`/api/dream/userDreamSymbols?dreamID=${dreamID}`);
@@ -154,7 +136,6 @@ export default function DreamsForm() {
         }
 
         if (dreamID) {
-            fetchDreamEmotions();
             fetchUserDreamSymbols();
         }
     }, [dreamID]);
@@ -178,6 +159,31 @@ export default function DreamsForm() {
     }, [dreamID]);
 
     useEffect(() => {
+        const checkDreamUser = async () => {
+            if (user && dream) {
+                if (!dream?.userID && user?._id) {
+                    // if dream has no userID, set the dream to have the current user's ID
+                    const response = await axios.post('/api/dream/updateUserID', {
+                        dreamID: dream._id,
+                        userID: user?._id
+                    });
+
+                    setDream(prevDream => ({ ...prevDream, userID: user._id }));
+                    setIsUsersOwnDream(true);
+                } else if (user._id === dream.userID) {
+                    setIsUsersOwnDream(true);
+                } else {
+                    setIsUsersOwnDream(false);
+                }
+            } else {
+                setIsUsersOwnDream(false);
+            }
+        }
+
+        checkDreamUser();
+    }, [user, dream]);
+
+    useEffect(() => {
         if (!user || user?._id !== dream?.userID) {
             setIsUsersOwnDream(false);
         }
@@ -185,11 +191,6 @@ export default function DreamsForm() {
             setIsUsersOwnDream(true);
         }
     }, [user, dream]);
-
-    const getEmotionEmoji = (emotionID) => {
-        const emotion = emotions.find(e => e.emotionID === emotionID);
-        return emotion ? emotion.emotionEmoji : '';
-    };
 
     const sliceDream = (dream) => {
         if (dream.length <= 100 || isDreamExpanded) {
@@ -274,7 +275,7 @@ export default function DreamsForm() {
         }
     };
 
-    if (loading || !oracles || !emotions || !dream) {
+    if (loading || !oracles || !dream) {
         return (
             <LoadingComponent loadingText={'Collecting Dream Details'} />
         );
@@ -367,20 +368,10 @@ export default function DreamsForm() {
                 </div>
                 <div>
                     <p className='golden-ratio-2 px-1'>{isDreamExpanded ? dream.dream : sliceDream(dream.dream)}</p>
-                    <div className='flex flex-wrap gap-2'>
-                        {dreamEmotions.map((emotion) => (
-                            <div 
-                                key={emotion._id} 
-                                className=""
-                            >
-                                {getEmotionEmoji(emotion.emotionID)}
-                            </div>
-                        ))}
-                    </div>
                     {isUsersOwnDream && (
-                    <p className="golden-ratio-2 text-right cursor-pointer" onClick={() => setShowEditDreamModal(true)}>
-                        Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2" />
-                    </p>
+                        <p className="golden-ratio-2 text-right cursor-pointer" onClick={() => setShowEditDreamModal(true)}>
+                            Edit Dream <FontAwesomeIcon icon={faPencil} className="cursor-pointer golden-ratio-2" />
+                        </p>
                     )}
                 </div>
                 {isUsersOwnDream && (
