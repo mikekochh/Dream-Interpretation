@@ -13,6 +13,20 @@ const AdminPortalForm = () => {
   const { user, userLoading } = useContext(UserContext) || {};
   const router = useRouter();
   const [profileCheckDone, setProfileCheckDone] = useState(false);
+  const [hasUnreadFeedback, setHasUnreadFeedback] = useState(false);
+
+  useEffect(() => {
+    const checkUnreadFeedback = async () => {
+      try {
+        const response = await axios.get('/api/admin/unreadFeedback');
+        setHasUnreadFeedback(response.data.hasUnreadFeedback);
+      } catch (error) {
+        console.error('Error checking for unread feedback:', error);
+      }
+    };
+
+    checkUnreadFeedback();
+  }, []);
 
   useEffect(() => {
     if (userLoading) {
@@ -69,6 +83,7 @@ const AdminPortalForm = () => {
           setActiveTab={setActiveTab}
           isOpen={isSidebarOpen}
           setIsOpen={setIsSidebarOpen}
+          hasUnreadFeedback={hasUnreadFeedback}
         />
 
         {/* Overlay for mobile when sidebar is open */}
@@ -86,7 +101,7 @@ const AdminPortalForm = () => {
   );
 };
 
-const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
+const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen, hasUnreadFeedback }) => {
   return (
     <nav
       className={`bg-gray-800 text-gray-200 p-6 md:block ${
@@ -105,7 +120,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
         {['users', 'dreams', 'views', 'feedback', 'library', 'sales', 'settings'].map((tab) => (
           <li
             key={tab}
-            className={`py-3 px-4 rounded cursor-pointer ${
+            className={`py-3 px-4 rounded cursor-pointer flex items-center justify-between ${
               activeTab === tab ? 'bg-teal-400 text-gray-800' : 'hover:bg-gray-700'
             }`}
             onClick={() => {
@@ -113,7 +128,10 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
               setIsOpen(false); // Close sidebar on mobile after selecting
             }}
           >
-            {tab.charAt(0).toUpperCase() + tab.slice(1).replace(/([A-Z])/g, ' $1')}
+            <span>{tab.charAt(0).toUpperCase() + tab.slice(1).replace(/([A-Z])/g, ' $1')}</span>
+            {tab === 'feedback' && hasUnreadFeedback && (
+              <span className="ml-2 w-2 h-2 bg-red-500 rounded-full"></span>
+            )}
           </li>
         ))}
       </ul>
@@ -702,11 +720,26 @@ const UserManagement = () => {
   
       fetchFeedbackData();
     }, []);
-  
-    const openModal = (feedback) => {
+    
+    const openModal = async (feedback) => {
       setSelectedFeedback(feedback);
+    
+      // Mark feedback as read in the backend
+      const response = await axios.post('/api/admin/readFeedback', {
+        feedbackID: feedback._id
+      });
+    
+      // Update the feedback state locally
+      if (response.data.message === 'Feedback marked as read') {
+        setFeedback((prevFeedback) =>
+          prevFeedback.map((fb) =>
+            fb._id === feedback._id ? { ...fb, hasBeenRead: true } : fb
+          )
+        );
+      }
+    
       setIsModalOpen(true);
-    };
+    };    
   
     const closeModal = () => {
       setIsModalOpen(false);
@@ -723,11 +756,16 @@ const UserManagement = () => {
             {feedback.map((fb, index) => (
               <div
                 key={index}
-                className="p-4 bg-gray-800 text-white rounded shadow cursor-pointer"
+                className="p-4 bg-gray-800 text-white rounded shadow cursor-pointer flex justify-between items-center"
                 onClick={() => openModal(fb)}
               >
-                <p className="font-semibold">{fb.userEmail}</p>
-                <p>{new Date(fb.feedbackDate).toLocaleDateString()}</p>
+                <div>
+                  <p className="font-semibold">{fb.userEmail}</p>
+                  <p>{new Date(fb.feedbackDate).toLocaleDateString()}</p>
+                </div>
+                {!fb.hasBeenRead && (
+                  <span className="ml-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                )}
               </div>
             ))}
           </div>
@@ -755,9 +793,11 @@ const UserManagement = () => {
   const ViewsManagement = () => {
     const [views, setViews] = useState([]);
     const [userViews, setUserViews] = useState([]);
+    const [displayData, setDisplayData] = useState([]);
     const [pages, setPages] = useState([]);
-    const [timeframe, setTimeframe] = useState(5);
+    const [timeframe, setTimeframe] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [selectedCard, setSelectedCard] = useState(1);
 
     useEffect(() => {
       const fetchPageData = async () => {
@@ -767,6 +807,15 @@ const UserManagement = () => {
 
       fetchPageData();
     }, [])
+
+    useEffect(() => {
+      if (selectedCard === 1) {
+        setDisplayData(views);
+      }
+      else {
+        setDisplayData(userViews);
+      }
+    }, [selectedCard])
 
     useEffect(() => {
       fetchViews();
@@ -830,12 +879,12 @@ const UserManagement = () => {
         ) : (
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div className="bg-gray-100 p-6 rounded-lg shadow text-center">
+              <div className="bg-gray-100 p-6 rounded-lg shadow text-center cursor-pointer" onClick={() => setSelectedCard(1)}>
                 <h3 className="text-xl font-semibold mb-2">Total Views</h3>
                 <p className="text-2xl font-bold">{views.length}</p>
               </div>
               
-              <div className="bg-gray-100 p-6 rounded-lg shadow text-center">
+              <div className="bg-gray-100 p-6 rounded-lg shadow text-center cursor-pointer" onClick={() => setSelectedCard(2)}>
                 <h3 className="text-xl font-semibold mb-2">User Views</h3>
                 <p className="text-2xl font-bold">{userViews.length}</p>
               </div>
@@ -843,7 +892,9 @@ const UserManagement = () => {
 
 
             <div className="overflow-x-auto ">
-              <h1 className="text-center text-3xl font-semibold mb-2 text-white">Views</h1>
+              <h1 className="text-center text-3xl font-semibold mb-2 text-white">
+                {selectedCard === 1 ? 'Total Views' : 'User Views'}
+              </h1>
               <table className="w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200 text-left">
@@ -869,7 +920,7 @@ const UserManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="text-white">
-                  {views.map((view) => (
+                  {displayData.map((view) => (
                     <tr className="border-b" key={view._id}>
                       <td className="px-4 py-2">
                         {view.user?.name || "No Account"}

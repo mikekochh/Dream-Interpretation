@@ -13,6 +13,11 @@ const feedbackSchema = new Schema({
         type: Date,
         required: [true, "Please enter character ID!"]
     },
+    hasBeenRead: {
+        type: Boolean,
+        required: [true, "Please enter if this feedback has been read!"],
+        default: false
+    }
 });
 
 const Feedback = models.Feedback || mongoose.model("Feedback", feedbackSchema);
