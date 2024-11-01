@@ -16,7 +16,7 @@ const WhatsInsideView = ({ handleScrollToTop }) => {
         {
             title: "Diverse Interpretations",
             description: "Experience varied approaches to dream analysis with oracles offering Jungian, Freudian, and other unique perspectives.",
-            imageSrc: "/jung.webp"
+            imageSrc: "/Jung.webp"
         },              
         {
             title: "Dream Journal",
