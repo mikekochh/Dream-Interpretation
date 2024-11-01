@@ -1,7 +1,9 @@
 "use client";
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const WhatsInsideView = ({ handleScrollToTop }) => {
+    const router = useRouter();
     const sections = [
         {
             title: "Smartest AI Models Available",
@@ -51,7 +53,7 @@ const WhatsInsideView = ({ handleScrollToTop }) => {
 
             <div className="text-center mt-10">
                 <button className="start-button" onClick={handleScrollToTop}>Try It Out</button>
-                <button className="secondary-button">Join Now</button>
+                <button className="secondary-button" onClick={() => router.push('/pricing')}>Join Now</button>
             </div>
         </div>
     );
