@@ -25,6 +25,7 @@ export const UserProvider = ({ children }) => {
   }, [session, status]);
 
   const setUserData = async () => {
+    setUserLoading(true);
     const userEmail = session?.user?.email;
     if (userEmail) {
         try {

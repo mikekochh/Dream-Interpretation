@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import validator from 'validator';
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import Image from "next/image";
 import { SIGN_UP_TYPE_DREAM_INTERPRET } from "@/types/signUpTypes";
+import { UserContext } from "@/context/UserContext";
 
 export default function RegisterForm({ viewInterpretation = false }) {
 

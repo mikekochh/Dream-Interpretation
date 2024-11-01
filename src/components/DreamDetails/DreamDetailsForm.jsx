@@ -19,6 +19,7 @@ import OracleInterpretations from './OracleInterpretations';
 import AddNewInterpretationModal from './AddNewInterpretationModal';
 import SymbolCard from './SymbolCard';
 import RegisterForm from '../RegisterForm';
+import { SIGN_UP_TYPE_DREAM_INTERPRET } from '@/types/signUpTypes';
 
 const LoadingComponent = lazy(() => import('../LoadingComponent'));
 
@@ -27,12 +28,15 @@ export default function DreamsForm() {
     const dreamID = searchParams.get('dreamID');
     const openInterpretation = searchParams.get('openInterpretation') === 'true';
 
-
-    // if a user comes to this page, and the dream does not have a userID associated with it, set the userID to the current users id. 
-
     const router = useRouter();
+    const { user, userLoading, session, setUserData } = useContext(UserContext);
 
-    const { user, userLoading } = useContext(UserContext);
+    useEffect(() => {
+        if (session?.user && !user) {
+            console.log("Are we getting here?");
+            setUserData();
+        }
+    }, [session])
     
     const [loading, setLoading] = useState(true);
 
@@ -97,6 +101,7 @@ export default function DreamsForm() {
                 })
                 await axios.post('api/dream/newUser', { userID, dreamID, googleSignUp: true });
                 await axios.post('/api/dream/streak/newStreak', { userID });
+                await axios.post('/api/user/updateSignUpType', { userID, signUpTypeID: SIGN_UP_TYPE_GOOGLE });
             }
         }
 

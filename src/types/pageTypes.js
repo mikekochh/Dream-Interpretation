@@ -11,3 +11,4 @@ export const PAGE_EMAIL_REMINDER_POPUP_CLOSED = 10;
 export const PAGE_DREAM_STREAM = 11;
 export const PAGE_E_BOOK = 12;
 export const PAGE_QUESTIONS = 13;
+export const PAGE_LANDING_PAGE = 14;

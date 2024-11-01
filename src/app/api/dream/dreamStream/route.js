@@ -11,7 +11,7 @@ export async function GET(request) {
         // Fetch the latest 5 public dreams that have an imageURL, sorted by dreamDate (most recent first)
         const dreams = await Dream.find({ isPublic: true, imageURL: { $exists: true, $ne: '' } })
             .sort({ dreamDate: -1 }) // -1 for descending order (most recent first)
-            .limit(5);
+            .limit(3);
 
         if (dreams) {
             const response = NextResponse.json({ dreams });
