@@ -1,12 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import validator from 'validator';
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import Image from "next/image";
 import { SIGN_UP_TYPE_DREAM_INTERPRET } from "@/types/signUpTypes";
-import { UserContext } from "@/context/UserContext";
 
 export default function RegisterForm({ viewInterpretation = false }) {
 
@@ -16,6 +15,7 @@ export default function RegisterForm({ viewInterpretation = false }) {
     const [registeringUser, setRegisteringUser] = useState(false);
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
     const [resendVerificationEmail, setResendVerificationEmail] = useState(false);
+    const [isTermsChecked, setIsTermsChecked] = useState(false);
 
     const handleResendVerificationEmail = async () => {
         const dreamID = localStorage.getItem('dreamID');
@@ -151,8 +151,10 @@ export default function RegisterForm({ viewInterpretation = false }) {
     return (
         <div className={`text-white ${viewInterpretation && 'bg-black rounded-xl bg-opacity-80'}`}>
             <div className={`p-5 rounded-lg border-t-4 border-white-400 border ${!viewInterpretation && 'Width350'}`}>
-                <h1 className="golden-ratio-2 font-bold my-4 text-center w-2/3 mx-auto">{viewInterpretation ? 'Create Account to View Interpretation' : 'Create Account'}</h1>
-                <form className="flex flex-col gap-3 w-full" onSubmit={(e) => {register(e)}}>
+                <h1 className="golden-ratio-2 font-bold my-4 text-center w-2/3 mx-auto">
+                    {viewInterpretation ? 'Create Account to View Interpretation' : 'Create Account'}
+                </h1>
+                <form className="flex flex-col gap-3 w-full" onSubmit={(e) => register(e)}>
                     <input
                         type="text"
                         placeholder="Name"
@@ -171,12 +173,18 @@ export default function RegisterForm({ viewInterpretation = false }) {
                         </div>
                     ) : (
                         <div className="flex justify-center">
-                            <button className="bg-blue-500 rounded-lg py-2 text-white font-bold text-center w-full" type="submit">
+                            <button
+                                className={`rounded-lg py-2 text-center w-full font-bold ${
+                                    isTermsChecked ? 'bg-blue-500 text-white' : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                }`}
+                                type="submit"
+                                disabled={!isTermsChecked}
+                            >
                                 Register
                             </button>
                         </div>
                     )}
-                    <div className="flex items-center mt-2">
+                    <div className="flex items-center">
                         {error && (
                             <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md">
                                 {error}
@@ -191,20 +199,35 @@ export default function RegisterForm({ viewInterpretation = false }) {
                             </button>
                         )}
                     </div>
-                    <div className="flex justify-center my-2">
+                    <div className="flex justify-center">
                         <span className="text-white">Or</span>
                     </div>
                     <div className="flex justify-center">
                         <button
                             type="button"
                             onClick={() => signUpWithGoogle()}
-                            className="flex items-center bg-white rounded-lg py-1 text-black font-bold text-center w-full"
+                            className={`flex items-center rounded-lg py-1 text-center w-full font-bold ${
+                                isTermsChecked ? 'bg-white text-black' : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                            }`}
+                            disabled={!isTermsChecked}
                         >
                             <div className="flex items-center justify-center w-full">
                                 <Image src="/GoogleLogo.webp" className="rounded-lg mr-2" width={32} height={32} alt="logo" />
                                 Sign up with Google
                             </div>
                         </button>
+                    </div>
+                    <div className="flex items-center mt-3">
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            checked={isTermsChecked}
+                            onChange={() => setIsTermsChecked(!isTermsChecked)}
+                            className="mr-2"
+                        />
+                        <label htmlFor="terms" className="text-sm">
+                            I agree to the <a href="/terms" className="underline">Terms of Service</a> and <a href="/privacyNotice" className="underline">Privacy Policy</a>
+                        </label>
                     </div>
                     <Link href={'/login'} className="mt-3 text-right golden-ratio-1">
                         Already have an account? <span className="underline">Log In</span>
@@ -218,7 +241,6 @@ export default function RegisterForm({ viewInterpretation = false }) {
             )}
         </div>
     );
-    
 }
 
 const PopUpMessage = ({ message }) => {
