@@ -720,7 +720,7 @@ const UserManagement = () => {
   
       fetchFeedbackData();
     }, []);
-    
+
     const openModal = async (feedback) => {
       setSelectedFeedback(feedback);
     
@@ -809,13 +809,13 @@ const UserManagement = () => {
     }, [])
 
     useEffect(() => {
-      if (selectedCard === 1) {
+      if (selectedCard === 1 && views.length) {
         setDisplayData(views);
       }
       else {
         setDisplayData(userViews);
       }
-    }, [selectedCard])
+    }, [selectedCard, views, userViews])
 
     useEffect(() => {
       fetchViews();
@@ -846,13 +846,13 @@ const UserManagement = () => {
     };
 
     const sortByViewDate = () => {
-      const sortedViews = [...views].sort((a, b) => new Date(b.view_date) - new Date(a.view_date));
-      setViews(sortedViews);
+      const sortedViewsData = [...displayData].sort((a, b) => new Date(b.view_date) - new Date(a.view_date));
+      setDisplayData(sortedViewsData);
     }
 
     const sortByViewDateAscending = () => {
-      const sortedViews = [...views].sort((a, b) => new Date(a.view_date) - new Date(b.view_date));
-      setViews(sortedViews);
+      const sortedViewsData = [...displayData].sort((a, b) => new Date(a.view_date) - new Date(b.view_date));
+      setViews(sortedViewsData);
     }
 
     return (

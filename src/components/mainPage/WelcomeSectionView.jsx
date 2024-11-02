@@ -55,8 +55,8 @@ const WelcomeSection = ({
                 <div>
                     <p className="text-center golden-ratio-4 gradient-title-text">Understand Your Dreams</p>
                     <p className="text-center golden-ratio-2">
-                        Use our dream interpretation AI software to gain insights that foster self-awareness, guide personal growth, 
-                        and lead to mental clarity. Join the Dream Oracles community to transform your dreams into insights.
+                        Use our dream interpretation AI software to turn your dreams into insights that foster self-awareness, guide 
+                        personal growth, and lead to mental clarity.
                     </p>
                 </div>
 
@@ -97,7 +97,7 @@ const WelcomeSection = ({
             
             {/* How It Works Section */}
             <div>
-                <h1 className='golden-ratio-3 mt-10 text-center'>How Does It Work?</h1>
+                <h1 className='golden-ratio-4 gradient-title-text mt-10 text-center'>How Does It Work?</h1>
                 <div className="image-container flex flex-col md:flex-row">
                     {/* Steps */}
                     <div className={`${isMobile ? 'border-bottom step-section-mobile' : 'border-right step-section'}`}>
