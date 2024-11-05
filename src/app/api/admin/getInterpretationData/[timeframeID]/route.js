@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import Dream from '../../../../../../models/dream';
+import Interpretation from '../../../../../../models/interpretation';
 import { connectMongoDB } from '../../../../../../lib/mongodb';
 
 // Helper function to calculate start and end time based on the timeframeID
@@ -55,43 +55,49 @@ export async function GET(req) {
         
         // Apply the timeframe filter only if it's not "All Time"
         if (startTime && endTime) {
-            query.dreamDate = {
+            query.interpretationDate = {
                 $gte: new Date(startTime),
                 $lte: new Date(endTime)
             };
         }
-        
+
         query.userID = { $ne: '65639dbb9811fa19c4dca43d' };
-        
-        
+
         // Fetch dreams from the database and join with user data
-        const dreams = await Dream.aggregate([
+        const interpretations = await Interpretation.aggregate([
             {
                 $match: query // Apply the query based on the timeframe
             },
             {
                 $addFields: {
-                    userIDObject: { $toObjectId: "$userID" } // Convert userID to ObjectId
+                    dreamIDObject: { $toObjectId: "$dreamID" } // Convert dreamID to ObjectId
                 }
             },
             {
                 $lookup: {
-                    from: 'users', // The collection name for the users table
-                    localField: 'userIDObject', // Use the newly converted ObjectId field
-                    foreignField: '_id', // The _id field in the users table (which is ObjectId)
-                    as: 'user' // The alias for the joined data
+                    from: 'dreams', // The collection name for the dreams table
+                    localField: 'dreamIDObject', // Use the newly converted ObjectId field
+                    foreignField: '_id', // The _id field in the dreams table
+                    as: 'dream' // The alias for the joined data
                 }
             },
             {
                 $unwind: {
-                    path: '$user', // Unwind the user data to extract individual user information
-                    preserveNullAndEmptyArrays: true // In case there's no matching user, return null
+                    path: '$dream', // Unwind the dream data to extract individual dream information
+                    preserveNullAndEmptyArrays: true // In case there's no matching dream, return null
                 }
             },
-        ]);
-        
+            {
+                $match: {
+                    'dream.userID': { $ne: '65639dbb9811fa19c4dca43d' } // Exclude interpretations linked to this userID
+                }
+            }
+        ]);        
+              
 
-        return NextResponse.json({ data: dreams });
+        console.log("interpretations: ", interpretations);
+
+        return NextResponse.json({ data: interpretations });
     } catch (error) {
         console.error('Error fetching dream data: ', error);
         return NextResponse.json({ error: error.message });

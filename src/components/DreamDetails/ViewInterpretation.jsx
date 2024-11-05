@@ -1,6 +1,8 @@
+import axios from 'axios';
 import Image from 'next/image';
+import '@fortawesome/fontawesome-free/css/all.min.css'; // Import Font Awesome CSS
 
-const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose }) => {
+const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback }) => {
   if (!isOpen) return null; // Don't render the modal if it's not open
 
   function cleanHTML(interpretation) {
@@ -17,6 +19,14 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose }) => {
     }
 
     return interpretation; // In case there is no valid HTML, return as is
+  }
+
+  const likeInterpretation = async (liked) => {
+    await axios.post('/api/dream/interpretationFeedback', {
+      liked,
+      interpretationID: interpretation._id
+    });
+    updateInterpretationFeedback(interpretation._id, liked);
   }
 
   // Clean the interpretation HTML content
@@ -53,6 +63,33 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose }) => {
         {/* Interpretation Text */}
         <div className="text-gray-200 text-center">
           <div dangerouslySetInnerHTML={{ __html: cleanInterpretation }} />
+        </div>
+
+        {/* Feedback Section */}
+        <div className="text-gray-200 text-center border border-1 rounded-xl mt-5 p-3">
+          <p>Was This Interpretation Helpful?</p>
+          <div className="flex justify-center gap-4 mt-2">
+            <button 
+              className="bg-transparent focus:outline-none"
+              onClick={() => likeInterpretation(true)}
+            >
+              <i 
+                className={`fas fa-thumbs-up text-2xl ${
+                  interpretation.liked === true ? 'text-gold' : 'text-gray-500 hover:text-green-500'
+                }`}
+              ></i>
+            </button>
+            <button 
+              className="bg-transparent focus:outline-none"
+              onClick={() => likeInterpretation(false)}  
+            >
+              <i 
+                className={`fas fa-thumbs-down text-2xl ${
+                  interpretation.liked === false ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
+                }`}
+              ></i>
+            </button>
+          </div>
         </div>
 
         {/* Modal Footer */}

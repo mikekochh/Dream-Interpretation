@@ -46,6 +46,8 @@ const AdminPortalForm = () => {
         return <UserManagement />;
       case 'dreams':
         return <DreamManagement />;
+      case 'interpretations':
+        return <InterpretationManagement />;
       case 'views':
         return <ViewsManagement />;
       case 'feedback':
@@ -117,7 +119,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen, hasUnreadFeedback
 
       <h2 className="text-2xl font-bold text-center text-teal-400 mb-8">Admin Portal</h2>
       <ul>
-        {['users', 'dreams', 'views', 'feedback', 'library', 'sales', 'settings'].map((tab) => (
+        {['users', 'dreams', 'interpretations', 'views', 'feedback', 'library', 'sales', 'settings'].map((tab) => (
           <li
             key={tab}
             className={`py-3 px-4 rounded cursor-pointer flex items-center justify-between ${
@@ -946,6 +948,154 @@ const UserManagement = () => {
                           onClick={() => handleDeleteView()}
                         >
                           Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const InterpretationManagement = () => {
+    const [interpretations, setInterpretations] = useState([]);
+    const [oracles, setOracles] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [timeframe, setTimeframe] = useState(1);
+    const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
+
+    useEffect(() => {
+      fetchInterpretations();
+      fetchOracles();
+      fetchUsers();
+    }, [timeframe]);
+
+    const fetchOracles = async () => {
+      const response = await axios.get('/api/allOracles');
+      setOracles(response.data);
+    }
+
+    const fetchUsers = async () => {
+      const response = await axios.get('/api/admin/getUserData/5');
+      setUsers(response.data.data);
+    }
+
+    const fetchInterpretations = async () => {
+      setLoading(true);
+      const response = await axios.get('/api/admin/getInterpretationData/' + timeframe);
+
+      console.log("response: ", response.data.data);
+
+      setInterpretations(response.data.data);
+      setLoading(false);
+    }
+
+    const sortByInterpretationDate = () => {
+      const sortedInterpretations = [...interpretations].sort((a, b) => new Date(b.interpretationDate) - new Date(a.interpretationDate));
+      setInterpretations(sortedInterpretations);
+    }
+
+    const convertOracleIDToOracleName = (oracleID) => {
+      const oracle = oracles.find(oracle => String(oracle.oracleID) === String(oracleID));
+      return oracle ? oracle.oracleName : 'Oracle not found';
+    }; 
+    
+    const convertUserIDToUserName = (userID) => {
+      const user = users.find(user => String(user._id) === String(userID));
+      return user ? user.name : "No User";
+    }
+
+
+    // we need to get the dream its connected to, who they selected for interpretation, the date, and like or disliked it, and who got the interpretation
+    const handleTimeFrameChange = (value) => {
+      setTimeframe(Number(value));
+    };
+
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-6 text-white">Interpretations Management</h1>
+        <div className="mb-4 text-center">
+          <label htmlFor="timeFrame" className="mr-2 font-semibold text-xl text-white">
+            Interpretation Data For
+          </label>
+          <select
+            id="timeFrame"
+            className="border border-gray-300 rounded px-3 py-2"
+            value={timeframe}
+            onChange={(e) => handleTimeFrameChange(e.target.value)}
+          >
+            <option value={0}>Today</option>
+            <option value={1}>Last 7 Days</option>
+            <option value={2}>Last 30 Days</option>
+            <option value={3}>Last 90 Days</option>
+            <option value={4}>Last Year</option>
+            <option value={5}>All Time</option>
+          </select>
+        </div>
+
+        {loading ? (
+          <LoadingComponent loadingText={"Loading Interpretation Data"} />
+        ) : (
+          <div>
+            <div className="mb-6">
+              <div className="bg-white shadow rounded-lg p-4 text-center cursor-pointer">
+                <h3 className="text-xl font-bold mb-2">Interpretations</h3>
+                <p className="text-2xl">{interpretations.length}</p>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <h1 className="text-center text-3xl font-semibold mb-2 text-white">Interpretations</h1>
+              <table className="w-full table-auto">
+                <thead>
+                  <tr className="bg-gray-200 text-left">
+                    <th className="px-4 py-2">Dreamer</th>
+                    <th className="px-4 py-2">
+                      Interpretation Date
+                      <i
+                        onClick={sortByInterpretationDate} 
+                        className={`fas fa-sort-up ml-2 cursor-pointer`}
+                      ></i>
+                    </th>
+                    <th className="px-4 py-2">
+                      Oracle
+                      <i
+                        className={`fas fa-sort-up ml-2 cursor-pointer`}
+                      ></i>
+                    </th>
+                    <th className="px-4 py-2">Feedback</th>
+                    <th className="px-4 py-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="text-white">
+                  {interpretations.map((interpretation) => (
+                    <tr className="border-b" key={interpretation._id}>
+                      <td className="px-4 py-2">
+                        {convertUserIDToUserName(interpretation.dream?.userID)}
+                      </td>
+                      <td className="px-4 py-2">
+                        {new Date(interpretation.interpretationDate).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}
+                      </td>
+                      <td className="px-4 py-2">{convertOracleIDToOracleName(interpretation.oracleID)}</td>
+                      <td className="px-4 py-2">
+                        {interpretation.liked === true ? 'Liked' : interpretation.liked === false ? 'Disliked' : 'N/A'}
+                      </td>
+                      <td className="px-4 py-2">
+                        <button
+                          className="px-3 py-1 bg-blue-500 text-white rounded mr-1"
+                          onClick={() => router.push('/dreamDetails?dreamID=' + interpretation.dreamID)}
+                        >
+                          View
                         </button>
                       </td>
                     </tr>

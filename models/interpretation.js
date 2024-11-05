@@ -17,6 +17,9 @@ const interpretationSchema = new Schema({
         type: Date,
         required: [true, "Please enter dream date!"]
     },
+    liked: {
+        type: Boolean
+    }
 });
 
 const Interpretation = models.Interpretation || mongoose.model("Interpretation", interpretationSchema);

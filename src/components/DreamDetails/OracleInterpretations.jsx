@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ViewInterpretation from './ViewInterpretation'; // Assuming ViewInterpretation is in the same folder
 
-const OracleInterpretations = ({ interpretation, oracle, openInterpretation }) => {
+const OracleInterpretations = ({ interpretation, oracle, openInterpretation, updateInterpretationFeedback }) => {
   const [showInterpretationModal, setShowInterpretationModal] = useState(false);
 
   useEffect(() => {
@@ -48,6 +48,7 @@ const OracleInterpretations = ({ interpretation, oracle, openInterpretation }) =
           oracle={oracle}
           isOpen={showInterpretationModal}
           onClose={closeInterpretationModal}
+          updateInterpretationFeedback={updateInterpretationFeedback}
         />
     </div>
   );

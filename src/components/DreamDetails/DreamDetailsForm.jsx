@@ -19,7 +19,6 @@ import OracleInterpretations from './OracleInterpretations';
 import AddNewInterpretationModal from './AddNewInterpretationModal';
 import SymbolCard from './SymbolCard';
 import RegisterForm from '../RegisterForm';
-import { SIGN_UP_TYPE_DREAM_INTERPRET } from '@/types/signUpTypes';
 
 const LoadingComponent = lazy(() => import('../LoadingComponent'));
 
@@ -218,6 +217,16 @@ export default function DreamsForm() {
         );
     };
 
+    const updateInterpretationFeedback = (interpretationID, liked) => {
+        setInterpretations((prevInterpretations) =>
+          prevInterpretations.map((interpretation) =>
+            interpretation._id === interpretationID
+              ? { ...interpretation, liked }
+              : interpretation
+          )
+        );
+      };
+
     const handleSaveDream = (updatedDreamText) => {
         setDream((prev) => ({...prev, dream: updatedDreamText}));
     }
@@ -316,6 +325,7 @@ export default function DreamsForm() {
                                         interpretation={interpretation}
                                         oracle={oracle}
                                         openInterpretation={openInterpretation}
+                                        updateInterpretationFeedback={updateInterpretationFeedback}
                                     />
                                 );
                             })}
