@@ -236,7 +236,7 @@ export default function RegisterForm({ viewInterpretation = false }) {
             </div>
             {sentEmailVerification && (
                 <PopUpMessage
-                    message="A verification email has been sent to you. Please verify your email address to interpret your dream. Thank you!"
+                    message="A verification email has been sent to you. Please verify your email address to continue using Dream Oracles. Thank you!"
                 />
             )}
         </div>

@@ -93,7 +93,7 @@ const OracleSelectionPopup = ({ user }) => {
             <div className="inline-flex items-center flex-col mb-3">
                 <p className="golden-ratio-2">Select a Dream Oracle, with each taking you on a different journey of interpretation</p>
                 {!user && (
-                    <p className="golden-ratio-1 text-gold mt-1">Complete your first interpretation to unlock all oracles</p>
+                    <p className="golden-ratio-1 text-gold mt-1">Become a member to unlock all oracles</p>
                 )}
             </div>
         </div>
