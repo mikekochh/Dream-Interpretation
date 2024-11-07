@@ -91,8 +91,7 @@ const PublicDreamPopup = () => {
             </div>
             <div className="inline-flex items-center">
                 <p className="mb-2 golden-ratio-2">
-                    Add your dream to the dream stream, receive interpretations from the community,
-                    and turn your dream into a video.
+                    Add your dream to the dream stream and receive interpretations from the community.
                 </p>
             </div>
             <p className="text-gold font-bold">* Your name and profile will remain anonymous *</p>

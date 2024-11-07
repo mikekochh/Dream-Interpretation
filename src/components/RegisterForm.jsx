@@ -152,9 +152,28 @@ export default function RegisterForm({ viewInterpretation = false }) {
         <div className={`text-white ${viewInterpretation && 'bg-black rounded-xl bg-opacity-80'}`}>
             <div className={`p-5 rounded-lg border-t-4 border-white-400 border ${!viewInterpretation && 'Width350'}`}>
                 <h1 className="golden-ratio-2 font-bold my-4 text-center w-2/3 mx-auto">
-                    {viewInterpretation ? 'Create Account to View Interpretation' : 'Create Account'}
+                    {viewInterpretation ? 'Create Account to View Interpretation and...' : 'Create Account'}
                 </h1>
-                <form className="flex flex-col gap-3 w-full" onSubmit={(e) => register(e)}>
+
+                {/* New "What's inside if you create an account" section */}
+                <div className="mt-4 text-center mb-4">
+                    <div className="flex justify-center mt-4 space-x-4 text-md">
+                        <div className="flex items-center space-x-2">
+                            <span className="text-green-500">✓</span>
+                            <p className="text-white">Unlimited Interpretations</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <span className="text-green-500">✓</span>
+                            <p className="text-white">Access to Community</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <span className="text-green-500">✓</span>
+                            <p className="text-white">Access to all Oracles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form className="flex flex-col gap-3 w-3/4 mx-auto" onSubmit={(e) => register(e)}>
                     <input
                         type="text"
                         placeholder="Name"
@@ -234,11 +253,11 @@ export default function RegisterForm({ viewInterpretation = false }) {
                     </Link>
                 </form>
             </div>
-            {sentEmailVerification && (
+            {/* {sentEmailVerification && (
                 <PopUpMessage
                     message="A verification email has been sent to you. Please verify your email address to continue using Dream Oracles. Thank you!"
                 />
-            )}
+            )} */}
         </div>
     );
 }

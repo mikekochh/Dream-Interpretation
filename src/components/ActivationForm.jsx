@@ -25,7 +25,8 @@ export default function ActivationForm() {
             setUserEmail(res.data.activatedUser.email);
             const dreamID = localStorage.getItem('dreamID');
             const ebook = localStorage.getItem('ebook');
-            if (dreamID) {
+            // if (dreamID)
+            if (true) {
                 setStatus("Successfully Activated! Redirecting you now...");
                 router.push('/interpret');
                 localStorage.removeItem('dreamID');

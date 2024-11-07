@@ -13,7 +13,7 @@ const OracleSection = ({ oracle, handleSelectionChange, selectOracle, user }) =>
         }
     }, [])
     
-    const hasAccess = () => user?.subscribed || oracle.oracleID === 1;
+    const hasAccess = () => user || oracle.oracleID === 1;
 
     const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''} ${!hasAccess() ? 'filter grayscale blur-sm' : ''}`;
 

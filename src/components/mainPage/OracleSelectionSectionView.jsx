@@ -39,7 +39,7 @@ const OracleSelectionSection = ({
         }
     }, []);
 
-    const isButtonDisabled = (!user?.activated && user?.name) || (!oracleSelected && !user?.name);
+    // const isButtonDisabled = (!user?.activated && user?.name) || (!oracleSelected && !user?.name);
 
     return (
         <div id="interpretation-section" className="relative">
@@ -67,15 +67,14 @@ const OracleSelectionSection = ({
             </div>
             <div className="flex flex-col items-center">
                 <button
-                    className={`start-button ${isButtonDisabled ? 'disabled-button' : ''}`}
+                    className={`start-button`}
                     onClick={journalDream}
-                    disabled={isButtonDisabled}
                 >
                     {buttonText}
                 </button>
-                {!user?.activated && user?.name && (
+                {/* {!user?.activated && user?.name && (
                     <a className="text-gold golden-ratio-1 underline cursor-pointer" href={`/emailVerification?email=${user?.email}`}>Finish registering your account to continue</a>
-                )}
+                )} */}
             </div>
         </div>
     )
@@ -93,7 +92,7 @@ const OracleSelectionPopup = ({ user }) => {
             <div className="inline-flex items-center flex-col mb-3">
                 <p className="golden-ratio-2">Select a Dream Oracle, with each taking you on a different journey of interpretation</p>
                 {!user && (
-                    <p className="golden-ratio-1 text-gold mt-1">Become a member to unlock all oracles</p>
+                    <p className="golden-ratio-1 text-gold mt-1">Sign up to unlock all oracles</p>
                 )}
             </div>
         </div>

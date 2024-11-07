@@ -51,43 +51,63 @@ const WelcomeSection = ({
 
     return (
         <div>
-            <div className="md:w-2/3 md:px-0 px-2 mx-auto" >
-                <div>
-                    <p className="text-center golden-ratio-4 gradient-title-text">Understand Your Dreams</p>
-                    <p className="text-center golden-ratio-2">
-                        Use our dream interpretation AI software to turn your dreams into insights that foster self-awareness, guide 
-                        personal growth, and lead to mental clarity.
-                    </p>
-                </div>
+<div className="md:w-2/3 md:px-0 px-2 mx-auto">
+    <div>
+        <p className="text-center golden-ratio-4 gradient-title-text">Understand Your Dreams</p>
+        <p className="text-center golden-ratio-2">
+            Use our dream interpretation AI software to turn your dreams into insights that foster self-awareness, guide 
+            personal growth, and lead to mental clarity.
+        </p>
+    </div>
 
-                <div className="mt-4">
-                    <div className="border border-white rounded-xl p-4 bg-white bg-opacity-10 shadow-2xl">
-                        <p className="text-white golden-ratio-2 font-semibold">
-                            Start by entering your dream below
-                        </p>
-                        <p className="text-white golden-ratio-1 mb-4">
-                            No credit card required.
-                        </p>
-                        <textarea
-                            type="text"
-                            rows={7}
-                            placeholder='Enter your dream here'
-                            className="DreamBox golden-ratio-2 p-1 rounded-lg text-black md:m-0 w-full"
-                            value={dream}
-                            onChange={(event) => setDream(event.target.value)}
-                        />
-                        <div className="text-center">
-                            <button 
-                                className={`start-button golden-ratio-1 ${dream.length < 20 && 'disabled-button'}`}
-                                onClick={incrementDreamStep}
-                                disabled={dream.length < 20}
-                            >
-                                {dream.length === 0 ? 'Enter Dream Above' : dream.length < 20 ? 'Keep Going!' : 'Interpret Your Dream'}
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <div className="mt-4">
+        <div className="border border-white rounded-xl p-4 bg-white bg-opacity-10 shadow-2xl">
+            <p className="text-white golden-ratio-2 font-semibold">
+                Start by entering your dream below
+            </p>
+            <p className="text-white golden-ratio-1 mb-4">
+                No credit card required.
+            </p>
+            <textarea
+                type="text"
+                rows={7}
+                placeholder="Enter your dream here"
+                className="DreamBox golden-ratio-2 p-1 rounded-lg text-black md:m-0 w-full"
+                value={dream}
+                onChange={(event) => setDream(event.target.value)}
+            />
+            <div className="text-center">
+                <button 
+                    className={`start-button golden-ratio-1 ${dream.length < 20 && 'disabled-button'}`}
+                    onClick={incrementDreamStep}
+                    disabled={dream.length < 20}
+                >
+                    {dream.length === 0 ? 'Enter Dream Above' : dream.length < 20 ? 'Keep Going!' : 'Interpret Your Dream'}
+                </button>
             </div>
+        </div>
+    </div>
+
+    {/* New "Signing up is free!" section */}
+    <div className="mt-8 text-center">
+        <p className="text-white text-xl font-bold">Signing up is free!</p>
+        <div className="flex justify-center mt-4 space-x-4">
+            <div className="flex items-center space-x-2">
+                <span className="text-green-500">✓</span>
+                <p className="text-white">Unlimited Interpretations</p>
+            </div>
+            <div className="flex items-center space-x-2">
+                <span className="text-green-500">✓</span>
+                <p className="text-white">Access to Community</p>
+            </div>
+            <div className="flex items-center space-x-2">
+                <span className="text-green-500">✓</span>
+                <p className="text-white">Access to all Oracles</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 
             {/* join the dream oracles community to take the path of exploring the meaning behind your dreams */}
             <WhatsInsideView handleScrollToTop={handleScrollToTop} />
