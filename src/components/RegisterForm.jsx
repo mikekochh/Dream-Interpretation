@@ -150,7 +150,7 @@ export default function RegisterForm({ viewInterpretation = false }) {
 
     return (
         <div className={`text-white ${viewInterpretation && 'bg-black rounded-xl bg-opacity-80'}`}>
-            <div className={`p-5 rounded-lg border-t-4 border-white-400 border ${!viewInterpretation && 'Width350'}`}>
+            <div className={`p-5 rounded-lg border-t-4 border-white-400 border`}>
                 <h1 className="golden-ratio-2 font-bold my-4 text-center w-2/3 mx-auto">
                     {viewInterpretation ? 'Create Account to View Interpretation and...' : 'Create Account'}
                 </h1>

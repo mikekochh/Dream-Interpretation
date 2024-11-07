@@ -53,7 +53,7 @@ const WhatsInsideView = ({ handleScrollToTop }) => {
 
             <div className="text-center mt-10">
                 <button className="start-button" onClick={handleScrollToTop}>Try It Out</button>
-                <button className="secondary-button" onClick={() => router.push('/pricing')}>Join Now</button>
+                <button className="secondary-button" onClick={() => router.push('/register')}>Join Now</button>
             </div>
         </div>
     );
