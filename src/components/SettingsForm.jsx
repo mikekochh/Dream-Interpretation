@@ -128,7 +128,7 @@ const SettingsForm = () => {
     const router = useRouter();
     const { data: session, status } = useSession();
 
-    const { user, logout } = useContext(UserContext);
+    const { user, logout, toggleEmailNotifications, toggleEmailMarketing } = useContext(UserContext);
 
     const [genders, setGenders] = useState([]);
     const [error, setError] = useState('');
@@ -340,6 +340,16 @@ const SettingsForm = () => {
         setIsModalOpen(false)
     }
 
+    const handleClickEmailNotification = async () => {
+        console.log("handleClickEmailNotification running...");
+        toggleEmailNotifications();
+    }
+
+    const handleClickEmailMarketing = async () => {
+        console.log("handleClickEmailMarketing running...");
+        toggleEmailMarketing();
+    }
+
     if (!user) {
         return (
             <LoadingComponent loadingText={'Transporting to Dream Profile'} />
@@ -486,6 +496,47 @@ const SettingsForm = () => {
                         <PurchaseButton buttonText={"Start Now"} user={user}></PurchaseButton>
                     </div>
                 )}
+        <div>
+            <div className="pl-4 pb-4 pt-8">
+                <div className="golden-ratio-3 font-bold">Notification Settings</div>
+
+                <div className="mt-5">
+                    <label className="flex items-center cursor-pointer">
+                        <span className="mr-3 text-lg font-semibold">Email Notifications</span>
+                        <button
+                            onClick={handleClickEmailNotification}
+                            className={`relative w-12 h-6 flex items-center rounded-full transition-colors duration-300 ${
+                                user?.optOutEmailNotifications ? 'bg-gray-300' : 'bg-gold'
+                            }`}
+                        >
+                            <span
+                                className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
+                                    user?.optOutEmailNotifications ? 'translate-x-6' : 'translate-x-1'
+                                }`}
+                            ></span>
+                        </button>
+                    </label>
+                </div>
+
+                <div className="mt-5">
+                    <label className="flex items-center cursor-pointer">
+                        <span className="mr-3 text-lg font-semibold">Marketing Emails</span>
+                        <button
+                            onClick={handleClickEmailMarketing}
+                            className={`relative w-12 h-6 flex items-center rounded-full transition-colors duration-300 ${
+                                user?.optOutEmailMarketing ? 'bg-gray-300' : 'bg-gold'
+                            }`}
+                        >
+                            <span
+                                className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
+                                    user?.optOutEmailMarketing ? 'translate-x-6' : 'translate-x-1'
+                                }`}
+                            ></span>
+                        </button>
+                    </label>
+                </div>
+            </div>
+        </div>
                 <div>
                     <div className="pl-4 pb-4 pt-8">
                         <div className="golden-ratio-3 font-bold">Support & Policies</div>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import DreamStream from '../DreamStream';
+import DreamStream from '../DreamStreamPreview';
 import WhatsInsideView from './WhatsInsideView';
 import { PAGE_LANDING_PAGE } from '@/types/pageTypes';
 

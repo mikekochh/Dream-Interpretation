@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
-import DreamStream from '../DreamStream';
+import DreamStreamPreview from '../DreamStreamPreview';
 import axios from 'axios';
 import { UserContext } from '@/context/UserContext';
 import { 
@@ -162,7 +162,7 @@ const StartPageView = ({
                     </button>
                 </div>
             )}
-            <DreamStream />
+            <DreamStreamPreview />
             {/* Mandela Image */}
             <div className="image-container text-center mt-4">
                 <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />

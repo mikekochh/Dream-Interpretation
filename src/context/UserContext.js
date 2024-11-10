@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
+import axios from 'axios';
 
 export const UserContext = createContext();
 
@@ -40,6 +41,56 @@ export const UserProvider = ({ children }) => {
     }
   }
 
+  const toggleEmailNotifications = async () => {
+      setUserLoading(true);
+      try {
+          const updatedNotificationStatus = user.optOutEmailNotifications == null ? true : !user.optOutEmailNotifications;
+
+          console.log("updatedNotificationStatus: ", updatedNotificationStatus);
+
+          setUser(prevUser => ({
+              ...prevUser,
+              optOutEmailNotifications: updatedNotificationStatus,
+          }));
+
+          // Call the API to update the email notification setting
+          await axios.post('/api/user/updateEmailNotification', {
+            emailNotification: updatedNotificationStatus,
+            userID: user._id
+          });
+
+      } catch (error) {
+          console.error("Failed to toggle email notification setting:", error);
+      } finally {
+          setUserLoading(false);
+      }
+  };
+
+  const toggleEmailMarketing = async () => {
+      setUserLoading(true);
+      try {
+          const updatedMarketingStatus = user.optOutEmailMarketing == null ? true : !user.optOutEmailMarketing;
+
+          setUser(prevUser => ({
+              ...prevUser,
+              optOutEmailMarketing: updatedMarketingStatus,
+          }));
+
+          // Call the API to update the email marketing setting
+          await axios.post('/api/user/updateEmailMarketing', {
+            emailMarketing: updatedMarketingStatus,
+            userID: user._id
+          });
+
+      } catch (error) {
+          console.error("Failed to toggle email marketing setting:", error);
+      } finally {
+          setUserLoading(false);
+      }
+  };
+
+
+
   const logout = async () => {
     try {
       await signOut({ redirect: true, callbackUrl: '/interpret' });
@@ -61,7 +112,9 @@ export const UserProvider = ({ children }) => {
       status, 
       logout, 
       getUser,
-      setUserData
+      setUserData,
+      toggleEmailNotifications,
+      toggleEmailMarketing
     }}>
       {children}
     </UserContext.Provider>

@@ -32,7 +32,6 @@ export default function DreamsForm() {
 
     useEffect(() => {
         if (session?.user && !user) {
-            console.log("Are we getting here?");
             setUserData();
         }
     }, [session])

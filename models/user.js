@@ -17,9 +17,6 @@ const userSchema = new Schema({
     credits: {
         type: Number,
     },
-    characterID: {
-        type: Number,
-    },
     activated: {
         type: Boolean,
     },
@@ -65,6 +62,14 @@ const userSchema = new Schema({
     },
     signUpTypeID: {
         type: Number
+    },
+    optOutEmailNotifications: {
+        type: Boolean,
+        default: false
+    },
+    optOutEmailMarketing: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true});
 
