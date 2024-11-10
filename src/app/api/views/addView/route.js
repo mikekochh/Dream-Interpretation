@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import View from '../../../../../models/views';
 import requestIp from 'request-ip';
+import axios from 'axios';
 
 export async function POST(req) {
     try {
