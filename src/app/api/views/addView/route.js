@@ -1,11 +1,28 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import View from '../../../../../models/views';
+import requestIp from 'request-ip';
 
 export async function POST(req) {
     try {
         await connectMongoDB(); // Connect to MongoDB
         const { userID, pageID, isFromInstagram } = await req.json();
+
+        // Attempt to get the IP address from headers
+        let clientIp = requestIp.getClientIp(req);
+
+        // Fallback options for IP if requestIp fails
+        if (!clientIp) {
+            clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] || 
+                        req.headers.get('x-real-ip') || 
+                        req.headers.get('cf-connecting-ip'); // Cloudflare specific header
+        }
+
+        const geoData = await axios.get(`https://ipinfo.io/${clientIp}?token=ef0ca1e947eb04`);
+
+        const { region, country, city } = geoData.data;
+
+        const location = city + ", " + region + " " + country;
         
         // Get the current date
         const viewDate = new Date();
@@ -15,7 +32,8 @@ export async function POST(req) {
             userID,
             pageID,
             view_date: viewDate,
-            isFromInstagram
+            isFromInstagram,
+            location
         });
 
         // Save the view record

@@ -838,10 +838,6 @@ const UserManagement = () => {
       setTimeframe(Number(value)); // Directly update the state with the numeric value
     };
 
-    const handleDeleteView = async () => {
-      const response = await axios.delete('/api/admin/deleteAllViews');
-    }
-
     const getPageNameByID = (pageID) => {
       const page = pages.find(p => p.pageID === pageID);
       return page ? page.pageName : 'Page not found';
@@ -917,8 +913,9 @@ const UserManagement = () => {
                         </div>
                       </div>
                     </th>
+                    <th className="px-4 py-2">Session Duration</th>
+                    <th className="px-4 py-2">Location</th>
                     <th className="px-4 py-2">Instagram?</th>
-                    <th className="px-4 py-2">Action</th>
                   </tr>
                 </thead>
                 <tbody className="text-white">
@@ -940,15 +937,13 @@ const UserManagement = () => {
                           })}
                       </td>
                       <td className="px-4 py-2">
-                        {view.isFromInstagram == null ? 'N/A' : view.isFromInstagram ? 'Yes' : 'No'}
+                        Testing
                       </td>
                       <td className="px-4 py-2">
-                        <button
-                          className="px-3 py-1 bg-red-500 text-white rounded"
-                          onClick={() => handleDeleteView()}
-                        >
-                          Delete
-                        </button>
+                        Testing
+                      </td>
+                      <td className="px-4 py-2">
+                        {view.isFromInstagram == null ? 'N/A' : view.isFromInstagram ? 'Yes' : 'No'}
                       </td>
                     </tr>
                   ))}

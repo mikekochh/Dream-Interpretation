@@ -15,6 +15,9 @@ const viewsSchema = new Schema({
     isFromInstagram: {
         type: Boolean,
         required: [true, "Are they from instagram?!"]
+    },
+    location: {
+        type: String
     }
 });
 
