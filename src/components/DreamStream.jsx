@@ -156,7 +156,7 @@ const DreamStream = () => {
     <div className="w-full h-screen main-content overflow-y-auto px-3">
       <h2 className="text-center gradient-title-text golden-ratio-4 mb-4">Dream Stream</h2>
       <h3 className="text-center mb-6 text-gray-100 w-2/3 mx-auto">
-        Welcome to the Dream Oracles community! Share your dreams and engage with fellow dreamers, offering supportive insights and interpretations. Let's keep our space positive, respectful, and inspiring as we explore dreams together.
+        Welcome to the Dream Oracles community! Share your dreams and engage with fellow dreamers, offering supportive insights and interpretations. Let&apos;s keep our space positive, respectful, and inspiring as we explore dreams together.
       </h3>
       <div className="mt-8 flex flex-col gap-4 md:w-1/3 md:mx-auto">
         {dreamStream.map((dream) => (
