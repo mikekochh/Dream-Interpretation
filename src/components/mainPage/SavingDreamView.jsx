@@ -39,13 +39,10 @@ export default function SavingDreamView({
         <div className="flex justify-center items-center flex-col h-screen">
             <QuestionsPreview setContinueToQuestions={setContinueToQuestions} questionsReady={questionsReady} />
             {questionsReady ? (
-                <div>
-                    <button className="start-button" onClick={() => setContinueToQuestions(true)}>Start Answering</button>
-                </div>
+                <button className="start-button" onClick={() => setContinueToQuestions(true)}>Start Answering</button>
             ) : (
                 <LoadingComponent loadingText={saveMessage} altScreen={true} />
             )}
-            
         </div>
-    );   
+    );     
 }

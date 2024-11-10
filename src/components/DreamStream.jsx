@@ -84,47 +84,53 @@ const DreamItem = ({ dream }) => {
         </div>
       </div>
 
-      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-white w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 max-h-full overflow-y-auto rounded-lg p-6 relative">
-            <button
-              onClick={toggleModal}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-            >
-              &times;
-            </button>
-            <div className="flex flex-col md:flex-row">
-              {/* Dream Image and Text */}
-              <div className="md:w-2/3 p-4">
-                <Image
-                  src={dream.imageURL}
-                  alt={"Dream Image"}
-                  className="w-full h-auto object-cover rounded-lg"
-                  layout="responsive"
-                  width={1}
-                  height={1}
-                />
-                <p className="mt-4 text-gray-800 text-lg">{dream.dream}</p>
-              </div>
-
-              {/* Comments Section */}
-              <div className="md:w-1/3 md:border-l md:border-gray-300 p-4">
-                <h3 className="text-gray-700 font-semibold mb-2">Comments</h3>
-                {dream.comments.length > 0 ? (
-                  dream.comments.map((comment, index) => (
-                    <p key={index} className="text-gray-600 text-sm mb-2">
-                      {comment.dreamCommentContent}
-                    </p>
-                  ))
-                ) : (
-                  <p className="text-gray-600 text-sm">No comments yet.</p>
-                )}
-              </div>
-            </div>
-          </div>
+  <div
+    className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    onClick={toggleModal}
+  >
+    <div
+      className="bg-white w-10/12 md:w-2/3 lg:w-1/2 xl:w-1/3 max-h-[80vh] overflow-y-auto rounded-lg p-4 relative"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        onClick={toggleModal}
+        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl"
+      >
+        &times;
+      </button>
+      <div className="flex flex-col md:flex-row">
+        {/* Dream Image and Text */}
+        <div className="md:w-2/3 p-4">
+          <Image
+            src={dream.imageURL}
+            alt="Dream Image"
+            className="w-full h-auto object-cover rounded-lg"
+            layout="responsive"
+            width={1}
+            height={1}
+          />
+          <p className="mt-4 text-gray-800 text-lg">{dream.dream}</p>
         </div>
-      )}
+
+        {/* Comments Section */}
+        <div className="md:w-1/3 md:border-l md:border-gray-300 p-4">
+          <h3 className="text-gray-700 font-semibold mb-2">Comments</h3>
+          {dream.comments.length > 0 ? (
+            dream.comments.map((comment, index) => (
+              <p key={index} className="text-gray-600 text-sm mb-2">
+                {comment.dreamCommentContent}
+              </p>
+            ))
+          ) : (
+            <p className="text-gray-600 text-sm">No comments yet.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
     </>
   );
 };

@@ -318,7 +318,11 @@ const InterpretForm = () => {
                         oracleID={selectedOracleID}
                     />
                 ) : savingDream ? (
-                    <SavingDreamView saveMessage={saveMessage} setContinueToQuestions={setContinueToQuestions} questionsReady={dreamQuestions.length > 0} />
+                    <SavingDreamView 
+                        saveMessage={saveMessage} 
+                        setContinueToQuestions={setContinueToQuestions} 
+                        questionsReady={dreamQuestions.length > 0}
+                    />
                 ) : (
                     <JournalDreamView
                         user={user}

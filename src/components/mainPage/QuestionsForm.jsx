@@ -18,12 +18,9 @@ export default function QuestionsForm({
 
     const [countedView, setCountedView] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState({});
-    const [error, setError] = useState("");
+    const [answers, setAnswers] = useState([]);
     const [savingInterpretation, setSavingInterpretation] = useState(false);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
-
-    // make sure the questions are thought provoking, getting the dreamer to reflect upon their dream and almost help them interpret the dream themselves
 
     const router = useRouter();
 
@@ -55,24 +52,22 @@ export default function QuestionsForm({
     };
 
     const handlePreviousQuestion = () => {
-        setError("");
         setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
 
     const handleNextQuestion = () => {
-        if (answers[currentQuestionIndex] === undefined || answers[currentQuestionIndex] === "") {
-            setError("Please answer this question");
-        }
-        else {
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
-            setError("");
-        }
+        setAnswers(prev => {
+            const updatedAnswers = [...prev];
+            // If the current answer is empty, set it to an empty string to indicate a skipped question
+            if (!updatedAnswers[currentQuestionIndex]) {
+                updatedAnswers[currentQuestionIndex] = "";
+            }
+            return updatedAnswers;
+        });
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
     };
 
     const handleInterpretDream = async () => {
-        if (answers[currentQuestionIndex] === undefined || answers[currentQuestionIndex] === "") {
-            setError("Please answer this question");
-        }
         setSavingInterpretation(true);
         const response = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookupWithQuestions', { 
             params: { 
@@ -112,7 +107,6 @@ export default function QuestionsForm({
                     placeholder="Write your answer here"
                 />
                 <p>Question {currentQuestionIndex + 1} / {dreamQuestions.length}</p>
-                {error && (<p className="text-red-500 golden-ratio-1">* {error}</p>)}
                 <div className="mt-5">
                     {currentQuestionIndex > 0 && (
                         <button
@@ -125,9 +119,13 @@ export default function QuestionsForm({
                     {currentQuestionIndex < dreamQuestions.length - 1 ? (
                         <button
                             onClick={handleNextQuestion}
-                            className={`${isMobile ? 'start-button-small' : 'start-button'}`}
+                            className={`${
+                                (answers[currentQuestionIndex]?.length || 0) === 0
+                                    ? isMobile ? 'secondary-button-mobile' : 'secondary-button'
+                                    : isMobile ? 'start-button-small' : 'start-button'
+                            }`}
                         >
-                            Next Question
+                            {(answers[currentQuestionIndex]?.length || 0) === 0 ? 'Skip Question' : 'Next Question'}
                         </button>
                     ) : (
                         <button
@@ -137,9 +135,9 @@ export default function QuestionsForm({
                             Interpret Dream
                         </button>
                     )}
-
                 </div>
             </div>
         </div>
-    );   
+    );
+    
 }
