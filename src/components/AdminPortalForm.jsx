@@ -913,7 +913,6 @@ const UserManagement = () => {
                         </div>
                       </div>
                     </th>
-                    <th className="px-4 py-2">Session Duration</th>
                     <th className="px-4 py-2">Location</th>
                     <th className="px-4 py-2">Instagram?</th>
                   </tr>
@@ -937,10 +936,7 @@ const UserManagement = () => {
                           })}
                       </td>
                       <td className="px-4 py-2">
-                        Testing
-                      </td>
-                      <td className="px-4 py-2">
-                        Testing
+                        {view.location}
                       </td>
                       <td className="px-4 py-2">
                         {view.isFromInstagram == null ? 'N/A' : view.isFromInstagram ? 'Yes' : 'No'}
