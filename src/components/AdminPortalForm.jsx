@@ -1311,10 +1311,21 @@ const UserManagement = () => {
   
 
 const Settings = () => {
+
+  const handleSendMissYouEmails = async () => {
+    const response = await axios.post('/api/sendMissYouEmails');
+  }
+
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Site Settings</h1>
-      <p>Site settings content goes here.</p>
+      <h1 className="text-3xl font-bold mb-6 text-white">Site Settings</h1>
+      <p className="text-white">Site settings content goes here.</p>
+      <button 
+        className="start-button"
+        onClick={handleSendMissYouEmails}  
+      >
+        Send Miss You Emails
+      </button>
     </div>
   );
 };
