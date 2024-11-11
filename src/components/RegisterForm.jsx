@@ -168,7 +168,7 @@ export default function RegisterForm({ viewInterpretation = false }) {
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="text-green-500">✓</span>
-                            <p className="text-white">Access to all Oracles</p>
+                            <p className="text-white">Access to all AI Models</p>
                         </div>
                     </div>
                 </div>

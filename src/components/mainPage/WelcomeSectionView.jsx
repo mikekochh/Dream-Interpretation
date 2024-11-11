@@ -4,6 +4,7 @@ import Image from 'next/image';
 import DreamStream from '../DreamStreamPreview';
 import WhatsInsideView from './WhatsInsideView';
 import { PAGE_LANDING_PAGE } from '@/types/pageTypes';
+import axios from 'axios';
 
 const WelcomeSection = ({ 
     incrementDreamStep, 
@@ -102,7 +103,7 @@ const WelcomeSection = ({
             </div>
             <div className="flex items-center space-x-2">
                 <span className="text-green-500">✓</span>
-                <p className="text-white">Access to all Oracles</p>
+                <p className="text-white">Access to all AI Models</p>
             </div>
         </div>
     </div>
