@@ -16,7 +16,6 @@ export default function QuestionsForm({
 
     const { user } = useContext(UserContext) || {};
 
-    const [countedView, setCountedView] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState(Array(dreamQuestions.length).fill("")); 
     const [savingInterpretation, setSavingInterpretation] = useState(false);
@@ -42,50 +41,24 @@ export default function QuestionsForm({
     }, [startTime]);
 
     const handleEndView = async () => {
-        console.log("handleEndView running...");
-        const endTime = Date.now();
-        const sessionLength = Math.floor((endTime - startTime) / 1000);
-        const referrer = document.referrer;
-        const isFromInstagram = referrer.includes('instagram.com');
-
-        // window.location.hostname !== 'localhost'
-
-        if (true) {
-            await axios.post('/api/views/addView', {
-                pageID: PAGE_QUESTIONS,
-                userID: user?._id,
-                isFromInstagram,
-                sessionLength
-            });
-            setCountedView(true);
-        }
-
         try {
-
+            const endTime = Date.now();
+            const sessionLength = Math.floor((endTime - startTime) / 1000);
+            const referrer = document.referrer;
+            const isFromInstagram = referrer.includes('instagram.com');
+    
+            if (window.location.hostname !== 'localhost') {
+                await axios.post('/api/views/addView', {
+                    pageID: PAGE_QUESTIONS,
+                    userID: user?._id,
+                    isFromInstagram,
+                    sessionLength
+                });
+            }
         } catch (error) {
             console.error('Error tracking view on page leave: ', error);
         }
     }
-
-    // useEffect(() => {
-    //     const addView = async () => {
-    //         const referrer = document.referrer;
-    //         const isFromInstagram = referrer.includes('instagram.com');
-
-    //         if (window.location.hostname !== 'localhost') {
-    //             await axios.post('/api/views/addView', {
-    //                 pageID: PAGE_QUESTIONS,
-    //                 userID: user?._id,
-    //                 isFromInstagram
-    //             });
-    //             setCountedView(true);
-    //         }
-    //     };
-
-    //     if (!countedView) {
-    //         addView();
-    //     }
-    // }, []);
 
     const handleAnswerChange = (event) => {
         setAnswers(prev => {

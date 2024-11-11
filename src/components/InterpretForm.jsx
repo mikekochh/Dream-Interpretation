@@ -35,13 +35,31 @@ const InterpretForm = () => {
     const [continueToQuestions, setContinueToQuestions] = useState(false);
 
     const [dreamStep, setDreamStep] = useState(0);
+    const [startTime, setStartTime] = useState(Date.now());
 
     const scrollContainerRef = useRef(null);
-
-    const [countedView, setCountedView] = useState(false);
+    
 
     useEffect(() => {
-        const addView = async () => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') {
+                handleEndView();
+            }
+        }
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleEndView);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleEndView);
+        };
+    }, [startTime]);
+
+    const handleEndView = async () => {
+        try {
+            const endTime = Date.now();
+            const sessionLength = Math.floor((endTime - startTime) / 1000);
             const referrer = document.referrer;
             const isFromInstagram = referrer.includes('instagram.com');
     
@@ -49,16 +67,14 @@ const InterpretForm = () => {
                 await axios.post('/api/views/addView', {
                     pageID: PAGE_INTERPRET_HOME,
                     userID: user?._id,
-                    isFromInstagram // Send the Instagram referrer boolean
+                    isFromInstagram,
+                    sessionLength
                 });
-                setCountedView(true);
             }
+        } catch (error) {
+            console.error('Error tracking view on page leave: ', error);
         }
-    
-        if (!userLoading && !countedView) {
-            addView();
-        }
-    }, [userLoading]);    
+    }   
     
 
     useEffect(() => {
@@ -185,6 +201,7 @@ const InterpretForm = () => {
     }
 
     const journalDream = async () => {
+        handleEndView();
         setSavingDream(true);
         setSaveMessage("Generating Questions");
         const userID = user?._id;

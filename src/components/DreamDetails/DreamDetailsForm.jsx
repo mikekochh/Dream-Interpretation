@@ -58,7 +58,7 @@ export default function DreamsForm() {
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const containerRef = useRef(null);
-    const [countedView, setCountedView] = useState(false);
+    const [startTime, setStartTime] = useState(Date.now());
 
     const [isUsersOwnDream, setIsUsersOwnDream] = useState(false);
 
@@ -67,24 +67,41 @@ export default function DreamsForm() {
     }
 
     useEffect(() => {
-        const addView = async () => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') {
+                handleEndView();
+            }
+        }
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleEndView);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleEndView);
+        };
+    }, [startTime]);
+
+
+    const handleEndView = async () => {
+        try {
+            const endTime = Date.now();
+            const sessionLength = Math.floor((endTime - startTime) / 1000);
             const referrer = document.referrer;
             const isFromInstagram = referrer.includes('instagram.com');
-
+    
             if (window.location.hostname !== 'localhost') {
                 await axios.post('/api/views/addView', {
                     pageID: PAGE_DREAM_DETAILS,
                     userID: user?._id,
-                    isFromInstagram
+                    isFromInstagram,
+                    sessionLength
                 });
-                setCountedView(true);
             }
+        } catch (error) {
+            console.error('Error tracking view on page leave: ', error);
         }
-
-        if (!countedView && !userLoading) {
-            addView();
-        }
-    }, [userLoading]);
+    }
 
     useEffect(() => {
         const handleGoogleSignUp = async () => {
