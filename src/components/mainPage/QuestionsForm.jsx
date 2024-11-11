@@ -42,12 +42,15 @@ export default function QuestionsForm({
     }, [startTime]);
 
     const handleEndView = async () => {
+        console.log("handleEndView running...");
         const endTime = Date.now();
         const sessionLength = Math.floor((endTime - startTime) / 1000);
         const referrer = document.referrer;
         const isFromInstagram = referrer.includes('instagram.com');
 
-        if (window.location.hostname !== 'localhost') {
+        // window.location.hostname !== 'localhost'
+
+        if (true) {
             await axios.post('/api/views/addView', {
                 pageID: PAGE_QUESTIONS,
                 userID: user?._id,
@@ -64,25 +67,25 @@ export default function QuestionsForm({
         }
     }
 
-    useEffect(() => {
-        const addView = async () => {
-            const referrer = document.referrer;
-            const isFromInstagram = referrer.includes('instagram.com');
+    // useEffect(() => {
+    //     const addView = async () => {
+    //         const referrer = document.referrer;
+    //         const isFromInstagram = referrer.includes('instagram.com');
 
-            if (window.location.hostname !== 'localhost') {
-                await axios.post('/api/views/addView', {
-                    pageID: PAGE_QUESTIONS,
-                    userID: user?._id,
-                    isFromInstagram
-                });
-                setCountedView(true);
-            }
-        };
+    //         if (window.location.hostname !== 'localhost') {
+    //             await axios.post('/api/views/addView', {
+    //                 pageID: PAGE_QUESTIONS,
+    //                 userID: user?._id,
+    //                 isFromInstagram
+    //             });
+    //             setCountedView(true);
+    //         }
+    //     };
 
-        if (!countedView) {
-            addView();
-        }
-    }, []);
+    //     if (!countedView) {
+    //         addView();
+    //     }
+    // }, []);
 
     const handleAnswerChange = (event) => {
         setAnswers(prev => {

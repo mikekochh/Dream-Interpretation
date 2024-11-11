@@ -1,3 +1,5 @@
+// /api/views/addView
+
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import View from '../../../../../models/views';
@@ -7,7 +9,7 @@ import axios from 'axios';
 export async function POST(req) {
     try {
         await connectMongoDB(); // Connect to MongoDB
-        const { userID, pageID, isFromInstagram } = await req.json();
+        const { userID, pageID, isFromInstagram, sessionLength } = await req.json();
 
         // Attempt to get the IP address from headers
         let clientIp = requestIp.getClientIp(req);
@@ -34,7 +36,8 @@ export async function POST(req) {
             pageID,
             view_date: viewDate,
             isFromInstagram,
-            location
+            location,
+            sessionLength
         });
 
         // Save the view record
