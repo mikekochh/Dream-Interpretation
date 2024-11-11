@@ -122,6 +122,7 @@ export default function QuestionsForm({
                 answers: answers
             } 
         });
+        console.log("response: ", response);
         setInterpretationComplete(true);
     };
 
