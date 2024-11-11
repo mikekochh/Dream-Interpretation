@@ -18,7 +18,7 @@ export default function QuestionsForm({
 
     const [countedView, setCountedView] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState([]);
+    const [answers, setAnswers] = useState(Array(dreamQuestions.length).fill("")); 
     const [savingInterpretation, setSavingInterpretation] = useState(false);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
 
@@ -45,10 +45,11 @@ export default function QuestionsForm({
     }, []);
 
     const handleAnswerChange = (event) => {
-        setAnswers(prev => ({
-            ...prev,
-            [currentQuestionIndex]: event.target.value
-        }));
+        setAnswers(prev => {
+            const updatedAnswers = [...prev];
+            updatedAnswers[currentQuestionIndex] = event.target.value;
+            return updatedAnswers;
+        });
     };
 
     const handlePreviousQuestion = () => {
@@ -69,6 +70,8 @@ export default function QuestionsForm({
 
     const handleInterpretDream = async () => {
         setSavingInterpretation(true);
+        console.log("questions: ", dreamQuestions);
+        console.log("answers: ", answers);
         const response = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookupWithQuestions', { 
             params: { 
                 dreamID,

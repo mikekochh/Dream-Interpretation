@@ -74,11 +74,11 @@ export async function POST(req) {
                                 <tr>
                                     <td valign="top" style="text-align: center; color: #000000; padding: 5%; overflow: auto;">
                                         <h1 style="color: #000000;">Hello ${userData.name}!</h1>
-                                        <h3 style="color: #000000;">Someone in the Dream Oracles community has shared their thoughts on your recent dream post! Dive in to see their comment and join the conversation:</h3>
+                                        <h3 style="color: #000000;">Someone in the Dream Oracles community has shared their thoughts on your recent dream post! Dive in to see their comment and join the conversation.</h3>
                                         <h3><a href="${domain}/dreamDetails?dreamID=${dreamID}" style="color: #0000FF;">View Comment</a></h3>
                                         <h1 style="color: #000000;">Thank you for being part of Dream Oracles!</h1>
                                         <p style="color: #a9a9a9; font-size: 0.8em; font-weight: 300;">
-                                            <a href="${domain}/profile" style="color: #0000FF; text-decoration: none;">Turn Off Email Notifications</a>
+                                            <a href="${domain}/settings" style="color: #0000FF; text-decoration: none;">Turn Off Email Notifications</a>
                                         </p>
                                     </td>
                                 </tr>
