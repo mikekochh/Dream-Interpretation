@@ -82,6 +82,11 @@ export async function GET(req) {
                 $addFields: {
                     viewsCount: { $size: "$views" } // Add a new field for the number of views
                 }
+            },
+            {
+                $sort: {
+                    createdAt: -1
+                }
             }
         ]);
 

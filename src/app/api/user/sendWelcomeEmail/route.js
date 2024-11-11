@@ -53,7 +53,11 @@ export async function POST(req) {
                                         <li style="color: black; padding: 5px 0;"><strong>Uncover Dream Symbols:</strong> Automatically discover symbols in your dreams and enhance your interpretations with our extensive dream dictionary.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Dream Image Generation:</strong> Visualize your dreams with AI-generated images created from your descriptions.</li>
                                         <li style="color: black; padding: 5px 0;"><strong>Intuitive Dream Journal:</strong> Securely store all your dreams, interpretations, and notes in your personal journal.</li>
+                                        <li style="color: black; padding: 5px 0;"><strong>Interpretation eBook:</strong> Unlock deeper insights with our free Interpretation eBook, offering guidance on understanding your dreams and recognizing symbolism.</li>
                                     </ul>
+                                    <p style="color: black; text-align: center; padding-top: 10px;">
+                                        <a href="${domain}/e-book" style="color: #0073e6; text-decoration: none; font-weight: bold;">Download the Interpretation eBook</a>
+                                    </p>
                                     <p style="color: black;">Explore these powerful tools and take your dream journey to new heights with Dream Oracles. Let’s get started!</p>
                                     <h1 style="color: #000000;">Thank you for being a part of Dream Oracles!</h1>
                                 </td>
