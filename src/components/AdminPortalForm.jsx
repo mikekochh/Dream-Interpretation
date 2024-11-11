@@ -913,6 +913,7 @@ const UserManagement = () => {
                         </div>
                       </div>
                     </th>
+                    <th className="px-4 py-2">Session Length</th>
                     <th className="px-4 py-2">Location</th>
                     <th className="px-4 py-2">Instagram?</th>
                   </tr>
@@ -920,9 +921,7 @@ const UserManagement = () => {
                 <tbody className="text-white">
                   {displayData.map((view) => (
                     <tr className="border-b" key={view._id}>
-                      <td className="px-4 py-2">
-                        {view.user?.name || "No Account"}
-                      </td>
+                      <td className="px-4 py-2">{view.user?.name || "No Account"}</td>
                       <td className="px-4 py-2">{getPageNameByID(view.pageID)}</td>
                       <td className="px-4 py-2">
                           {new Date(view.view_date).toLocaleString('en-US', {
@@ -935,12 +934,9 @@ const UserManagement = () => {
                             hour12: true // This will display the time in 12-hour format. You can set it to false for 24-hour format.
                           })}
                       </td>
-                      <td className="px-4 py-2">
-                        {view.location}
-                      </td>
-                      <td className="px-4 py-2">
-                        {view.isFromInstagram == null ? 'N/A' : view.isFromInstagram ? 'Yes' : 'No'}
-                      </td>
+                      <td className="px-4 py-2">{view.sessionLength}</td>
+                      <td className="px-4 py-2">{view.location}</td>
+                      <td className="px-4 py-2">{view.isFromInstagram == null ? 'N/A' : view.isFromInstagram ? 'Yes' : 'No'}</td>
                     </tr>
                   ))}
                 </tbody>
