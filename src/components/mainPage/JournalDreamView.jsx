@@ -23,7 +23,7 @@ export default function JournalDreamView({
     dreamStep,
     incrementDreamStep,
     decrementDreamStep,
-    oracleSelected
+    selectedOracle
 }) {
     const containerRef = useRef(null);
     const welcomeSectionRef = useRef(null);
@@ -107,6 +107,7 @@ export default function JournalDreamView({
                         scrollRight={scrollRight}
                         journalDream={journalDream}
                         buttonText={buttonText}
+                        selectedOracle={selectedOracle}
                     />
                 </div>
             )}

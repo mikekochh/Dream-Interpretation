@@ -11,7 +11,8 @@ const OracleSelectionSection = ({
     selectOracle,
     scrollRight,
     journalDream,
-    buttonText
+    buttonText,
+    selectedOracle
 }) => {
     // const isButtonDisabled = (!user?.activated && user?.name) || (!oracleSelected && !user?.name);
 
@@ -41,14 +42,12 @@ const OracleSelectionSection = ({
             </div>
             <div className="flex flex-col items-center">
                 <button
-                    className={`start-button`}
+                    className={`start-button ${!selectedOracle ? 'disabled-button' : ''}`}
                     onClick={journalDream}
+                    disabled={!selectedOracle}
                 >
                     {buttonText}
                 </button>
-                {/* {!user?.activated && user?.name && (
-                    <a className="text-gold golden-ratio-1 underline cursor-pointer" href={`/emailVerification?email=${user?.email}`}>Finish registering your account to continue</a>
-                )} */}
             </div>
         </div>
     )

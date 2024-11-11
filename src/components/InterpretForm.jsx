@@ -330,6 +330,7 @@ const InterpretForm = () => {
                         dreamStep={dreamStep}
                         incrementDreamStep={incrementDreamStep}
                         decrementDreamStep={decrementDreamStep}
+                        selectedOracle={selectedOracleID}
                     />
                 )}
             </div>
