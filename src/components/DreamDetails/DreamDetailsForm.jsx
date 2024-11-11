@@ -42,6 +42,7 @@ export default function DreamsForm() {
     const [interpretations, setInterpretations] = useState(null);
     const [oracles, setOracles] = useState(null);
     const [userDreamSymbols, setUserDreamSymbols] = useState([]);
+    const [dreamComments, setDreamComments] = useState([]);
 
     const [isDreamExpanded, setIsDreamExpanded] = useState(false);
 
@@ -138,8 +139,19 @@ export default function DreamsForm() {
             }
         }
 
+        const fetchDreamComments = async () => {
+            try {
+                const res = await axios.get(`/api/dream/comment/getComments/${dreamID}`);
+                console.log("res: ", res.data);
+                setDreamComments(res.data);
+            } catch (error) {
+                console.log("There was an error fetching the dream comments: ", error);
+            }
+        }
+
         if (dreamID) {
             fetchUserDreamSymbols();
+            fetchDreamComments();
         }
     }, [dreamID]);
 
@@ -388,6 +400,18 @@ export default function DreamsForm() {
                         </p>
                     )}
                 </div>
+                {dreamComments.length > 0 && (
+                    <div>
+                        <p className="golden-ratio-2">Comments</p>
+                        {dreamComments.map((comment, index) => (
+                            <div key={index} className="comment">
+                                <p>{comment.dreamCommentContent}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+
                 {isUsersOwnDream && (
                     <div className="mt-5">
                         <label className="inline-flex items-center cursor-pointer">
