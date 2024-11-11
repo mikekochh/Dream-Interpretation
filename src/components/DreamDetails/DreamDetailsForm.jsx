@@ -142,7 +142,6 @@ export default function DreamsForm() {
         const fetchDreamComments = async () => {
             try {
                 const res = await axios.get(`/api/dream/comment/getComments/${dreamID}`);
-                console.log("res: ", res.data);
                 setDreamComments(res.data);
             } catch (error) {
                 console.log("There was an error fetching the dream comments: ", error);

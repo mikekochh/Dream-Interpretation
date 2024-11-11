@@ -21,8 +21,48 @@ export default function QuestionsForm({
     const [answers, setAnswers] = useState(Array(dreamQuestions.length).fill("")); 
     const [savingInterpretation, setSavingInterpretation] = useState(false);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
+    const [startTime, setStartTime] = useState(Date.now());
 
     const router = useRouter();
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') {
+                handleEndView();
+            }
+        }
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleEndView);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleEndView);
+        };
+    }, [startTime]);
+
+    const handleEndView = async () => {
+        const endTime = Date.now();
+        const sessionLength = Math.floor((endTime - startTime) / 1000);
+        const referrer = document.referrer;
+        const isFromInstagram = referrer.includes('instagram.com');
+
+        if (window.location.hostname !== 'localhost') {
+            await axios.post('/api/views/addView', {
+                pageID: PAGE_QUESTIONS,
+                userID: user?._id,
+                isFromInstagram,
+                sessionLength
+            });
+            setCountedView(true);
+        }
+
+        try {
+
+        } catch (error) {
+            console.error('Error tracking view on page leave: ', error);
+        }
+    }
 
     useEffect(() => {
         const addView = async () => {
@@ -70,8 +110,7 @@ export default function QuestionsForm({
 
     const handleInterpretDream = async () => {
         setSavingInterpretation(true);
-        console.log("questions: ", dreamQuestions);
-        console.log("answers: ", answers);
+        handleEndView();
         const response = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookupWithQuestions', { 
             params: { 
                 dreamID,

@@ -18,6 +18,9 @@ const viewsSchema = new Schema({
     },
     location: {
         type: String
+    },
+    sessionLength: {
+        type: Number
     }
 });
 

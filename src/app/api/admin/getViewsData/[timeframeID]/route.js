@@ -1,3 +1,5 @@
+// /api/admin/getViewsData
+
 import { NextResponse } from 'next/server';
 import View from '../../../../../../models/views';
 import { connectMongoDB } from '../../../../../../lib/mongodb';
@@ -87,6 +89,9 @@ export async function GET(req) {
                     preserveNullAndEmptyArrays: true // In case there's no matching user, return null
                 }
             },
+            {
+                $sort: { view_date: -1 }
+            }
         ]);
 
         return NextResponse.json({ data: views });
