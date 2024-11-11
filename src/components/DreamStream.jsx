@@ -148,7 +148,6 @@ const DreamStream = () => {
           },
         });
         const data = await res.json();
-        console.log("dreams: ", data.dreams);
         setDreamStream(data.dreams);
       } catch (error) {
         console.error('Error fetching dreams:', error);

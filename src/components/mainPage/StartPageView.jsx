@@ -1,16 +1,11 @@
 "use client";
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PurchaseButton from '../PurchaseButton';
 import DreamStreamPreview from '../DreamStreamPreview';
 import axios from 'axios';
 import { UserContext } from '@/context/UserContext';
-import { 
-    PAGE_EMAIL_REMINDER_POPUP, 
-    PAGE_EMAIL_REMINDER_POPUP_CLOSED,
-    PAGE_DREAM_STREAM
-} from '@/types/pageTypes';
 
 const StartPageView = ({ 
     dreamStreak, 
@@ -19,31 +14,12 @@ const StartPageView = ({
     dream
 }) => {
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
-    const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
-    const [countedViewOpen, setCountedViewOpen] = useState(false);
 
     const { user } = useContext(UserContext) || {};
-
-    const addPageViewOpen = async () => {
-        const referrer = document.referrer;
-        const isFromInstagram = referrer.includes('instagram.com');
-
-        await axios.post('/api/views/addView', {
-            pageID: PAGE_EMAIL_REMINDER_POPUP,
-            userID: user?._id,
-            isFromInstagram
-        });
-        setCountedViewOpen(true);
-    }
 
     const handleResendVerificationEmail = async () => {
         await axios.post('api/sendVerificationEmail', { email: user?.email });
         setSentEmailVerification(true);
-    }
-
-    const openDreamReminderModal = () => {
-        setIsReminderModalVisible(true);
-        addPageViewOpen();
     }
 
     return (
@@ -121,16 +97,6 @@ const StartPageView = ({
                     <p className="text-xl mt-2 text-gray-300">
                         You&apos;re on fire! Keep up the cosmic connection.
                     </p>
-                </div>
-            )}
-            {!user?.sendReminder && (
-                <div className="text-center bg-gray-800 mt-4 bg-opacity-50 py-4 mx-4 sm:mx-auto sm:w-2/3 rounded-xl hover:bg-opacity-70 hover:shadow-2xl hover:scale-105 cursor-pointer transition-transform duration-200 ease-in-out">
-                    <button 
-                        onClick={openDreamReminderModal}
-                        className="text-white mb-2 mt-2 golden-ratio-2"
-                    >
-                        Need A Dream Reminder?
-                    </button>
                 </div>
             )}
             <DreamStreamPreview />

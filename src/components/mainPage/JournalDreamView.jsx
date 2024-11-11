@@ -107,7 +107,6 @@ export default function JournalDreamView({
                         scrollRight={scrollRight}
                         journalDream={journalDream}
                         buttonText={buttonText}
-                        oracleSelected={oracleSelected}
                     />
                 </div>
             )}

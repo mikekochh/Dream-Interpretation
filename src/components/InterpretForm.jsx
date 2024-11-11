@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, lazy, Suspense, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from "@/context/UserContext";
-import { PAGE_INTERPRET_HOME } from '@/types/pageTypes';
+import { PAGE_INTERPRET_HOME, PAGE_INTERPRET_LOADING, PAGE_INTERPRET_ORACLE } from '@/types/pageTypes';
 import { SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE } from '@/types/signUpTypes';
 
 const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
@@ -11,7 +11,7 @@ const LoadingComponent = lazy(() => import('./LoadingComponent'));
 const QuestionsForm = lazy(() => import('./mainPage/QuestionsForm'));
 
 const InterpretForm = () => {
-    const { user, userLoading, setUserData } = useContext(UserContext);
+    const { user, setUserData, handleChangeSection } = useContext(UserContext);
 
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
@@ -35,46 +35,8 @@ const InterpretForm = () => {
     const [continueToQuestions, setContinueToQuestions] = useState(false);
 
     const [dreamStep, setDreamStep] = useState(0);
-    const [startTime, setStartTime] = useState(Date.now());
 
     const scrollContainerRef = useRef(null);
-    
-
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (document.visibilityState === 'hidden') {
-                handleEndView();
-            }
-        }
-
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        window.addEventListener('beforeunload', handleEndView);
-
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            window.removeEventListener('beforeunload', handleEndView);
-        };
-    }, [startTime]);
-
-    const handleEndView = async () => {
-        try {
-            const endTime = Date.now();
-            const sessionLength = Math.floor((endTime - startTime) / 1000);
-            const referrer = document.referrer;
-            const isFromInstagram = referrer.includes('instagram.com');
-    
-            if (window.location.hostname !== 'localhost') {
-                await axios.post('/api/views/addView', {
-                    pageID: PAGE_INTERPRET_HOME,
-                    userID: user?._id,
-                    isFromInstagram,
-                    sessionLength
-                });
-            }
-        } catch (error) {
-            console.error('Error tracking view on page leave: ', error);
-        }
-    }   
     
 
     useEffect(() => {
@@ -201,7 +163,7 @@ const InterpretForm = () => {
     }
 
     const journalDream = async () => {
-        handleEndView();
+        handleChangeSection(PAGE_INTERPRET_LOADING);
         setSavingDream(true);
         setSaveMessage("Generating Questions");
         const userID = user?._id;
@@ -312,11 +274,19 @@ const InterpretForm = () => {
     };
 
     const incrementDreamStep = () => {
-        setDreamStep(prevStep => prevStep + 1);
+        setDreamStep(prevStep => {
+            console.log("prevStep: ", prevStep);
+            handleChangeSection(PAGE_INTERPRET_ORACLE);
+            return prevStep + 1;
+        });
     };
 
     const decrementDreamStep = () => {
-        setDreamStep(prevStep => Math.max(prevStep - 1, 0)); // Ensure it doesn't go below 0
+        setDreamStep(prevStep => {
+            console.log("prevStep: ", prevStep);
+            handleChangeSection(PAGE_INTERPRET_HOME);
+            return Math.max(prevStep - 1, 0);
+        })
     };
 
     if (loading) {
@@ -360,7 +330,6 @@ const InterpretForm = () => {
                         dreamStep={dreamStep}
                         incrementDreamStep={incrementDreamStep}
                         decrementDreamStep={decrementDreamStep}
-                        oracleSelected={oracleSelected}
                     />
                 )}
             </div>

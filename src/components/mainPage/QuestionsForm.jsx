@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { PAGE_QUESTIONS } from '@/types/pageTypes';
+import { PAGE_DREAM_DETAILS, PAGE_INTERPRET_LOADING } from '@/types/pageTypes';
 import LoadingComponent from '../LoadingComponent';
 import PublicDreamView from './PublicDreamView';
 import { UserContext } from '@/context/UserContext';
@@ -14,51 +14,14 @@ export default function QuestionsForm({
 }) {  
     const isMobile = window.innerWidth <= 768;
 
-    const { user } = useContext(UserContext) || {};
+    const { handleChangeSection } = useContext(UserContext) || {};
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState(Array(dreamQuestions.length).fill("")); 
     const [savingInterpretation, setSavingInterpretation] = useState(false);
     const [interpretationComplete, setInterpretationComplete] = useState(false);
-    const [startTime, setStartTime] = useState(Date.now());
 
     const router = useRouter();
-
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (document.visibilityState === 'hidden') {
-                handleEndView();
-            }
-        }
-
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        window.addEventListener('beforeunload', handleEndView);
-
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            window.removeEventListener('beforeunload', handleEndView);
-        };
-    }, [startTime]);
-
-    const handleEndView = async () => {
-        try {
-            const endTime = Date.now();
-            const sessionLength = Math.floor((endTime - startTime) / 1000);
-            const referrer = document.referrer;
-            const isFromInstagram = referrer.includes('instagram.com');
-    
-            if (window.location.hostname !== 'localhost') {
-                await axios.post('/api/views/addView', {
-                    pageID: PAGE_QUESTIONS,
-                    userID: user?._id,
-                    isFromInstagram,
-                    sessionLength
-                });
-            }
-        } catch (error) {
-            console.error('Error tracking view on page leave: ', error);
-        }
-    }
 
     const handleAnswerChange = (event) => {
         setAnswers(prev => {
@@ -86,7 +49,7 @@ export default function QuestionsForm({
 
     const handleInterpretDream = async () => {
         setSavingInterpretation(true);
-        handleEndView();
+        handleChangeSection(PAGE_INTERPRET_LOADING);
         const response = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookupWithQuestions', { 
             params: { 
                 dreamID,
@@ -95,16 +58,20 @@ export default function QuestionsForm({
                 answers: answers
             } 
         });
-        console.log("response: ", response);
         setInterpretationComplete(true);
     };
+
+    const handleViewInterpretation = async () => {
+        handleChangeSection(PAGE_DREAM_DETAILS);
+        router.push('/dreamDetails?dreamID=' + dreamID + '&openInterpretation=true')
+    }
 
     if (savingInterpretation) {
         return (
             <div className="flex flex-col justify-center items-center h-screen">
                 <PublicDreamView dreamID={dreamID}/>
                 {interpretationComplete ? (
-                    <button className="start-button" onClick={() => router.push('/dreamDetails?dreamID=' + dreamID + '&openInterpretation=true')}>
+                    <button className="start-button" onClick={handleViewInterpretation}>
                         View Interpretation
                     </button>
                 ) : (

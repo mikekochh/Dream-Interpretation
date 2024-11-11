@@ -1,10 +1,9 @@
 "use client";
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import { SIGN_UP_TYPE_E_BOOK } from "@/types/signUpTypes";
 import { signIn } from 'next-auth/react';
 import { UserContext } from '@/context/UserContext';
-import { PAGE_E_BOOK } from '@/types/pageTypes';
 import { useRouter } from 'next/navigation';
 import LoadingComponent from './LoadingComponent';
 
@@ -19,25 +18,6 @@ export default function EBookForm() {
     const [showSentEmailMessage, setShowSentEmailMessage] = useState(false);
 
     const router = useRouter();
-
-    useEffect(() => {
-        const addView = async () => {
-            const referrer = document.referrer;
-            const isFromInstagram = referrer.includes('instagram.com');
-
-            if (window.location.hostname !== 'localhost') {
-                await axios.post('/api/views/addView', {
-                    pageID: PAGE_E_BOOK,
-                    userID: user?._id,
-                    isFromInstagram
-                });
-            }
-        }
-    
-        if (!userLoading ) {
-            addView();
-        }
-    }, [userLoading]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

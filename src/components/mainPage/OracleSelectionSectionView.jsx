@@ -1,8 +1,6 @@
 "use client";
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense } from 'react';
 import OracleSection from '../OracleSection';
-import { PAGE_INTERPRET_ORACLE } from '@/types/pageTypes';
-import axios from 'axios';
 
 const OracleSelectionSection = ({
     user,
@@ -13,27 +11,8 @@ const OracleSelectionSection = ({
     selectOracle,
     scrollRight,
     journalDream,
-    buttonText,
-    oracleSelected
+    buttonText
 }) => {
-
-    useEffect(() => {
-        const addView = async () => {
-            const referrer = document.referrer;
-            const isFromInstagram = referrer.includes('instagram.com');
-
-            if (window.location.hostname !== 'localhost') {
-                await axios.post('/api/views/addView', {
-                    pageID: PAGE_INTERPRET_ORACLE,
-                    userID: user?._id,
-                    isFromInstagram
-                });
-            }
-        }
-
-        addView();
-    }, []);
-
     // const isButtonDisabled = (!user?.activated && user?.name) || (!oracleSelected && !user?.name);
 
     return (

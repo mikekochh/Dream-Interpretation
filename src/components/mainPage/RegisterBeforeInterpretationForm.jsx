@@ -1,26 +1,8 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { PAGE_INTERPRET_CREATE_ACCOUNT } from '@/types/pageTypes';
+import React from 'react';
 import RegisterForm from '../RegisterForm';
 
 const RegisterBeforeInterpretation = ({ isMobile }) => {
-
-    useEffect(() => {
-        const addView = async () => {
-            const referrer = document.referrer;
-            const isFromInstagram = referrer.includes('instagram.com');
-
-            if (window.location.hostname !== 'localhost') {
-                await axios.post('/api/views/addView', {
-                    pageID: PAGE_INTERPRET_CREATE_ACCOUNT,
-                    isFromInstagram
-                });
-            }
-        }
-
-        addView();
-    }, []);
 
     return (
         <div className="text-center">

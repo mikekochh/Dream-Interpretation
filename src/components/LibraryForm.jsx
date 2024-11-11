@@ -1,36 +1,14 @@
 import Image from 'next/image';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { PAGE_LIBRARY } from '@/types/pageTypes';
-import { UserContext } from '@/context/UserContext';
 
 const LibraryForm = () => {
-  const { user, userLoading } = useContext(UserContext) || {};
 
   const [dreamSymbols, setDreamSymbols] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [displayedSymbols, setDisplayedSymbols] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const symbolsPerPage = 10;
-
-  useEffect(() => {
-      const addView = async () => {
-        const referrer = document.referrer;
-        const isFromInstagram = referrer.includes('instagram.com');
-
-        if (window.location.hostname !== 'localhost') {
-          await axios.post('/api/views/addView', {
-              pageID: PAGE_LIBRARY,
-              userID: user?._id,
-              isFromInstagram
-          });
-        }
-      } 
-
-      if (!userLoading) {
-          addView();
-      }
-  }, [userLoading]);
 
   useEffect(() => {
     const retrieveDreamSymbols = async () => {

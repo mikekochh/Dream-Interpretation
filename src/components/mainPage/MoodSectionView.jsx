@@ -1,27 +1,7 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { PAGE_INTERPRET_MOOD } from '@/types/pageTypes';
+import React from 'react';
 
-const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, incrementDreamStep, user }) => {
-
-    useEffect(() => {
-        const addView = async () => {
-            const referrer = document.referrer;
-            const isFromInstagram = referrer.includes('instagram.com');
-
-            if (window.location.hostname !== 'localhost') {
-                await axios.post('/api/views/addView', {
-                    pageID: PAGE_INTERPRET_MOOD,
-                    userID: user?._id,
-                    isFromInstagram
-                });
-            }
-        }
-
-        addView();
-    }, []);
-
+const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, incrementDreamStep }) => {
     return (
         <div id="mood-selection-section">
             <MoodSelectionPopup />

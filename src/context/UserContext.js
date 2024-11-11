@@ -1,7 +1,16 @@
 "use client";
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, startTransition } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import axios from 'axios';
+import { usePathname } from 'next/navigation';
+import { 
+  PAGE_INTERPRET_HOME,
+  PAGE_DREAM_DETAILS,
+  PAGE_LIBRARY,
+  PAGE_DREAM_STREAM,
+  PAGE_E_BOOK,
+  PAGE_JOURNAL_MAIN
+} from '@/types/pageTypes';
 
 export const UserContext = createContext();
 
@@ -9,6 +18,96 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const { data: session, status } = useSession();
+  const pathname = usePathname();
+  const [viewStartTime, setViewStartTime] = useState(Date.now());
+  const [currentPage, setCurrentPage] = useState();
+  
+  // if they change the page they are on, we just update what page they are on, and end the view
+  // if they change what section they are on, we just update the page, and then end the view
+  // if they leave the website, we log the view with the current page
+
+  const getPageType = (pathname) => {
+    if (pathname.startsWith('/interpret')) {
+      return PAGE_INTERPRET_HOME;
+    } else if (pathname.startsWith('/dream-stream')) {
+      return PAGE_DREAM_STREAM;
+    } else if (pathname.startsWith('/library')) {
+      return PAGE_LIBRARY;
+    } else if (pathname.startsWith('/dreamDetails')) {
+      return PAGE_DREAM_DETAILS;
+    } else if (pathname.startsWith('/e-book')) {
+      return PAGE_E_BOOK;
+    } else if (pathname.startsWith('/dreams')) {
+      return PAGE_JOURNAL_MAIN;
+    } 
+    else {
+      return null;
+    }
+  }
+
+  useEffect(() => {
+      const handleVisibilityChange = () => {
+          if (document.visibilityState === 'hidden') {
+              handleEndView();
+          } else if (document.visibilityState === 'visible') {
+              // Restart the viewStartTime when the user returns to the page
+              setViewStartTime(new Date());
+          }
+      };
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      window.addEventListener('beforeunload', handleEndView);
+
+      return () => {
+          document.removeEventListener('visibilitychange', handleVisibilityChange);
+          window.removeEventListener('beforeunload', handleEndView);
+      };
+  }, [viewStartTime]);
+
+
+  useEffect(() => {
+    if (viewStartTime !== Date.now()) {
+      handleEndView();
+      updatePageID();
+      setViewStartTime(Date.now());
+    }
+  }, [pathname]);
+
+  const handleChangeSection = (newPageID) => {
+    handleEndView();
+    setCurrentPage(newPageID);
+    setViewStartTime(Date.now());
+  }
+
+  const handleEndView = async () => {
+    const endTime = Date.now();
+    const sessionLength = Math.floor((endTime - viewStartTime) / 1000);
+
+    if (currentPage === null) {
+      return;
+    }
+
+    try {
+      if (window.location.hostname !== 'localhost') {
+        const referrer = document.referrer;
+        const isFromInstagram = referrer.includes('instagram.com');
+  
+        await axios.post('/api/views/addView', {
+          pageID: currentPage,
+          userID: user?._id,
+          isFromInstagram,
+          sessionLength
+        });
+      }
+    } catch (error) {
+      console.error("There was an error tracking the view: ", error);
+    }
+  }
+
+  const updatePageID = () => {
+    const pageID = getPageType(pathname);
+    setCurrentPage(pageID);
+  }
 
   useEffect(() => {
     if (status === 'loading') {
@@ -114,7 +213,8 @@ export const UserProvider = ({ children }) => {
       getUser,
       setUserData,
       toggleEmailNotifications,
-      toggleEmailMarketing
+      toggleEmailMarketing,
+      handleChangeSection
     }}>
       {children}
     </UserContext.Provider>
