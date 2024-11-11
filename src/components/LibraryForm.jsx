@@ -12,7 +12,6 @@ const LibraryForm = () => {
   const [displayedSymbols, setDisplayedSymbols] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const symbolsPerPage = 10;
-  const [countedView, setCountedView] = useState(false);
 
   useEffect(() => {
       const addView = async () => {
@@ -25,11 +24,10 @@ const LibraryForm = () => {
               userID: user?._id,
               isFromInstagram
           });
-          setCountedView(true);
         }
       } 
 
-      if (!userLoading && !countedView) {
+      if (!userLoading) {
           addView();
       }
   }, [userLoading]);

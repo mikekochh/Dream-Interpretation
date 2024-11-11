@@ -16,7 +16,6 @@ export default function EBookForm() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [countedView, setCountedView] = useState(false);
     const [showSentEmailMessage, setShowSentEmailMessage] = useState(false);
 
     const router = useRouter();
@@ -32,11 +31,10 @@ export default function EBookForm() {
                     userID: user?._id,
                     isFromInstagram
                 });
-                setCountedView(true);
             }
         }
     
-        if (!userLoading && !countedView) {
+        if (!userLoading ) {
             addView();
         }
     }, [userLoading]);

@@ -6,8 +6,6 @@ import RegisterForm from '../RegisterForm';
 
 const RegisterBeforeInterpretation = ({ isMobile }) => {
 
-    const [countedView, setCountedView] = useState(false);
-
     useEffect(() => {
         const addView = async () => {
             const referrer = document.referrer;
@@ -18,13 +16,10 @@ const RegisterBeforeInterpretation = ({ isMobile }) => {
                     pageID: PAGE_INTERPRET_CREATE_ACCOUNT,
                     isFromInstagram
                 });
-                setCountedView(true);
             }
         }
 
-        if (!countedView) {
-            addView();
-        }
+        addView();
     }, []);
 
     return (

@@ -5,8 +5,6 @@ import { PAGE_INTERPRET_MOOD } from '@/types/pageTypes';
 
 const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, incrementDreamStep, user }) => {
 
-    const [countedView, setCountedView] = useState(false);
-
     useEffect(() => {
         const addView = async () => {
             const referrer = document.referrer;
@@ -18,13 +16,10 @@ const MoodSection = ({ emotions, handleEmotionClick, selectedEmotions, increment
                     userID: user?._id,
                     isFromInstagram
                 });
-                setCountedView(true);
             }
         }
 
-        if (!countedView) {
-            addView();
-        }
+        addView();
     }, []);
 
     return (

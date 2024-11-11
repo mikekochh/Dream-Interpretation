@@ -12,7 +12,6 @@ export default function SavingDreamView({
     setContinueToQuestions,
     questionsReady
 }) {  
-    const [countedView, setCountedView] = useState(false);
     const { user } = useContext(UserContext) || {};
 
     useEffect(() => {
@@ -26,13 +25,10 @@ export default function SavingDreamView({
                     userID: user?._id,
                     isFromInstagram
                 });
-                setCountedView(true);
             }
         }
 
-        if (!countedView) {
-            addView();
-        }
+        addView();
     }, []);
 
     return (

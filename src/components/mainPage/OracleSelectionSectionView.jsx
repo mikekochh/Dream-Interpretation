@@ -17,8 +17,6 @@ const OracleSelectionSection = ({
     oracleSelected
 }) => {
 
-    const [countedView, setCountedView] = useState(false);
-
     useEffect(() => {
         const addView = async () => {
             const referrer = document.referrer;
@@ -30,13 +28,10 @@ const OracleSelectionSection = ({
                     userID: user?._id,
                     isFromInstagram
                 });
-                setCountedView(true);
             }
         }
 
-        if (!countedView) {
-            addView();
-        }
+        addView();
     }, []);
 
     // const isButtonDisabled = (!user?.activated && user?.name) || (!oracleSelected && !user?.name);

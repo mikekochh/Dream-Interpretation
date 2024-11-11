@@ -18,7 +18,6 @@ const StartPageView = ({
     setDream, 
     dream
 }) => {
-    const [isMobile, setIsMobile] = useState(false);
     const [sentEmailVerification, setSentEmailVerification] = useState(false);
     const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
     const [countedViewOpen, setCountedViewOpen] = useState(false);
@@ -36,23 +35,6 @@ const StartPageView = ({
         });
         setCountedViewOpen(true);
     }
-    
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-
-        // Set the initial state based on window size
-        handleResize();
-
-        // Listen to window resize
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
 
     const handleResendVerificationEmail = async () => {
         await axios.post('api/sendVerificationEmail', { email: user?.email });

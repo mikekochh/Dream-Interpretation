@@ -13,7 +13,6 @@ const WelcomeSection = ({
     handleScrollToTop
 }) => {
     const [isMobile, setIsMobile] = useState(false);
-    const [countedView, setCountedView] = useState(false);
 
     useEffect(() => {
         const addPageView = async () => {
@@ -25,14 +24,11 @@ const WelcomeSection = ({
                     pageID: PAGE_LANDING_PAGE,
                     isFromInstagram
                 });
-                setCountedView(true);
             }
         }
-
-        if (!countedView) {
-            addPageView();
-        }
-    }, [countedView])
+        
+        addPageView();
+    }, [])
 
     useEffect(() => {
         const handleResize = () => {
