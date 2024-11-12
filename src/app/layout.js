@@ -12,10 +12,12 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Dream Oracles',
-  description: 'Find out what your dreams mean using cutting-edge AI technology.',
+  description: 'Turn your dreams into insights with our cutting-edge dream interpretation AI technology. Visualize your dreams and join the community of dreamers',
   url: 'https://dreamoracles.co',
   robots: 'index, follow',
 }
+
+// 
 
 export default function RootLayout({ children }) {
   return (
