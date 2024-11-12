@@ -20,26 +20,6 @@ const NavBar = () => {
     const pathname = usePathname();
     const [noNavBar, setNoNavBar] = useState(false);
 
-    const getPageType = (pathname) => {
-        if (pathname === '/') {
-          return PAGE_TYPE_HOME;
-        } else if (pathname.startsWith('/create-account')) {
-          return PAGE_TYPE_CREATE_ACCOUNT;
-        } else if (pathname.startsWith('/add-project')) {
-          return PAGE_TYPE_ADD_PROJECT;
-        } else if (pathname.startsWith('/profile')) {
-          return PAGE_TYPE_PROFILE;
-        } else if (pathname.startsWith('/project-details')) {
-          return PAGE_TYPE_PROJECT_DETAILS;
-        } else if (pathname.startsWith('/projects')) {
-          return PAGE_TYPE_SEARCH_PROJECTS;
-        } else if (pathname.startsWith('/messages')) {
-          return PAGE_TYPE_MESSAGES;
-        } else {
-          return null; // Default or undefined for untracked paths
-        }
-      };
-
     useEffect(() => {
         if (!userLoading) {
             if (!user) {
