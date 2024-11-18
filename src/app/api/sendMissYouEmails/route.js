@@ -30,8 +30,7 @@ export async function POST(req) {
             const domain = process.env.DOMAIN;
             const mailOptions = { 
                 from: `Dream Oracles <${fromAddress}>`,
-                // to: user.email,
-                to: 'mkoch@michaelgkoch.com',
+                to: user.email,
                 subject: "We Miss You! Come Explore Your Dreams",
                 html: `
                 <html>
@@ -94,8 +93,6 @@ export async function POST(req) {
             const emailResult = await sgMail.send(mailOptions);
     
             console.log("emailResult: ", emailResult);
-
-            return NextResponse.json({message: "Verification Email Sent!"}, { status: 200 });
         }
 
         return NextResponse.json({message: "Verification Email Sent!"}, { status: 200 });
