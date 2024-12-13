@@ -12,10 +12,16 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Dream Oracles',
-  description: 'Turn your dreams into insights with our cutting-edge dream interpretation AI technology. Visualize your dreams and join the community of dreamers',
+  description: 'Turn your dreams into insights with our cutting-edge dream interpretation AI technology. Visualize your dreams and join the community of dreamers.',
   url: 'https://dreamoracles.co',
   robots: 'index, follow',
-}
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
+};
+
 
 // 
 
@@ -23,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Head>
-        <link rel="icon" href="/icon.webp" type="image/webp" />
+        <link rel="icon" href="/icon.png" type="image/png" />
       </Head>
       <body>
         <AuthProvider>
