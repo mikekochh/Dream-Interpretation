@@ -136,14 +136,28 @@ exports.dreamLookupWithQuestions = functions.runWith({ maxInstances: 10, timeout
 
 exports.dreamLookup = functions.runWith({ maxInstances: 10, timeoutSeconds: 180 }).https.onRequest(async (req, res) => {
     cors(req, res, async () => {
-        const { dreamPrompt, dreamID, oracleID } = req.query;
+        const { dream, dreamID, oracleID } = req.body;
 
         try {
             await client.connect();
             const db = client.db('dreamsite');
             const interpretations = db.collection('interpretations');
             const interpretationCounter = db.collection('interpretationcounters');
-            logger.info('dreamPrompt: ', dreamPrompt);
+            const oracles = db.collection('oracles')
+
+            logger.info('dream: ', dream);
+            logger.info('dreamID: ', dreamID);
+            logger.info('oracleID: ', oracleID);
+
+            const oracle = await oracles.findOne({ oracleID: Number(oracleID) });
+
+            logger.info('oracle: ', oracle);
+
+            logger.info("oracle prompt: ", oracle.prompt);
+
+            const dreamPrompt = oracle.prompt + '\n###\n' + dream;
+
+            logger.info("dreamPrompt: ", dreamPrompt);
             logger.info('dreamID: ', dreamID);
             logger.info("oracleID: ", oracleID);
             const dreamData = await interactWithChatGPT(dreamPrompt);

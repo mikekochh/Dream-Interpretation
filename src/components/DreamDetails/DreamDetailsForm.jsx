@@ -42,6 +42,7 @@ export default function DreamsForm() {
     const [oracles, setOracles] = useState(null);
     const [userDreamSymbols, setUserDreamSymbols] = useState([]);
     const [dreamComments, setDreamComments] = useState([]);
+    const [dreamImage, setDreamImage] = useState();
 
     const [isDreamExpanded, setIsDreamExpanded] = useState(false);
 
@@ -108,15 +109,6 @@ export default function DreamsForm() {
     }, [])
 
     useEffect(() => {
-        const fetchUserDreamSymbols = async () => {
-            try {
-                const res = await axios.get(`/api/dream/userDreamSymbols?dreamID=${dreamID}`);
-                setUserDreamSymbols(res.data);
-            } catch (error) {
-                console.log("There was an error fetching the user dream symbols: ", error);
-            }
-        }
-
         const fetchDreamComments = async () => {
             try {
                 const res = await axios.get(`/api/dream/comment/getComments/${dreamID}`);
@@ -126,19 +118,13 @@ export default function DreamsForm() {
             }
         }
 
-        if (dreamID) {
-            fetchUserDreamSymbols();
-            fetchDreamComments();
-        }
-    }, [dreamID]);
-
-    useEffect(() => {
         const getDreamDetails = async () => {
             try {
                 const dreamRes = await axios.get('/api/dream/' + dreamID);
                 setDream(dreamRes.data.dream);
                 setInterpretations(dreamRes.data.interpretations);
                 setIsPublic(dreamRes.data.dream.isPublic);
+                setDreamImage(dreamRes.data.dream.imageURL);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching dream details:", error);
@@ -146,9 +132,70 @@ export default function DreamsForm() {
         };
 
         if (dreamID) {
+            fetchUserDreamSymbols();
+            fetchDreamComments();
             getDreamDetails();
         }
     }, [dreamID]);
+
+    useEffect(() => {
+        const generateDreamImage = async () => {
+            try {
+                const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
+                    {
+                        params: {
+                            dream: dream.dream
+                        }
+                    }
+                );
+
+                const dreamSummary = resSummarizeDream.data[0].message.content;
+
+                const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
+                    { 
+                        dreamID, 
+                        dream: dreamSummary 
+                    }
+                );
+
+                if (resDrawDream.data.imageURL) {
+                    setDreamImage(resDrawDream.data.imageURL);
+                }
+            } catch (error) {
+                console.error("There was an error drawing the dream: ", error);
+            }
+        }
+
+        if (dream && !dreamImage) {
+            generateDreamImage();
+        }
+    }, [dream, dreamImage])
+
+    useEffect(() => {
+        const generateUserDreamSymbols = async () => {
+            try {
+                const resDreamSymbols = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSymbols', 
+                    { 
+                        params: { 
+                            dreamText: dream.dream, 
+                            dreamID, 
+                            userID: user._id 
+                        } 
+                    }
+                );
+
+                if (resDreamSymbols.data.success) {
+                    fetchUserDreamSymbols();
+                }
+            } catch (error) {
+                console.error("There was an error fetching the user dream symbols: ", error);
+            }
+        }
+
+        if (dream && userDreamSymbols.length === 0 && user?._id) {
+            generateUserDreamSymbols();
+        }
+    }, [dream, userDreamSymbols])
 
     useEffect(() => {
         const checkDreamUser = async () => {
@@ -183,6 +230,15 @@ export default function DreamsForm() {
             setIsUsersOwnDream(true);
         }
     }, [user, dream]);
+
+    const fetchUserDreamSymbols = async () => {
+        try {
+            const res = await axios.get(`/api/dream/userDreamSymbols?dreamID=${dreamID}`);
+            setUserDreamSymbols(res.data);
+        } catch (error) {
+            console.log("There was an error fetching the user dream symbols: ", error);
+        }
+    }
 
     const sliceDream = (dream) => {
         if (dream.length <= 100 || isDreamExpanded) {
@@ -330,9 +386,9 @@ export default function DreamsForm() {
                         )}
                         {/* Image Section */}
                         <div className="w-full md:w-full h-full md:h-auto">
-                            {dream.imageURL ? (
+                            {dreamImage ? (
                                 <Image
-                                    src={dream.imageURL}
+                                    src={dreamImage}
                                     alt="the dream image"
                                     className="w-full h-full rounded-lg"
                                     width={500} // Adjust to your preferred fixed width
@@ -340,35 +396,42 @@ export default function DreamsForm() {
                                     unoptimized={true}
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center border-2 border-dashed rounded-lg">
-                                    <span className="text-gray-500">+ Add Picture</span>
+
+                                <div className="w-full h-full flex items-center justify-center border-2 border-dashed rounded-lg pb-8">
+                                    <LoadingComponent loadingText={"Generating Dream Image"} altScreen={true} />
                                 </div>
                             )}
                         </div>
                     </div>
                 </div>
-                <div className="w-full mt-2">
-                    <h3 className="text-xl font-bold text-white">Dream Symbols Found</h3>
-                    <div
-                        className="flex gap-4 mb-2 py-1 px-1 overflow-x-auto whitespace-nowrap hide-scrollbar cursor-grab"
-                        ref={containerRef}
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUpOrLeave}
-                        onMouseLeave={handleMouseUpOrLeave}
-                        style={{ userSelect: "none" }}
-                    >
-                        {userDreamSymbols && userDreamSymbols.length > 0 ? (
-                            userDreamSymbols.map((symbol, index) => (
-                                <SymbolCard key={index} symbol={symbol} className="inline-block" />
-                            ))
-                        ) : (
-                            <div className="p-4 bg-gradient-to-r from-gray-700 to-gray-900 rounded-lg shadow-lg text-white text-center">
-                                No symbols found
-                            </div>
-                        )}
+                {userDreamSymbols.length ? (
+                    <div className="w-full mt-2">
+                        <h3 className="text-xl font-bold text-white">Dream Symbols Found</h3>
+                        <div
+                            className="flex gap-4 mb-2 py-1 px-1 overflow-x-auto whitespace-nowrap hide-scrollbar cursor-grab"
+                            ref={containerRef}
+                            onMouseDown={handleMouseDown}
+                            onMouseMove={handleMouseMove}
+                            onMouseUp={handleMouseUpOrLeave}
+                            onMouseLeave={handleMouseUpOrLeave}
+                            style={{ userSelect: "none" }}
+                        >
+                            {userDreamSymbols && userDreamSymbols.length > 0 ? (
+                                userDreamSymbols.map((symbol, index) => (
+                                    <SymbolCard key={index} symbol={symbol} className="inline-block" />
+                                ))
+                            ) : (
+                                <div className="p-4 bg-gradient-to-r from-gray-700 to-gray-900 rounded-lg shadow-lg text-white text-center">
+                                    No symbols found
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="border border-1 border-white rounded-xl p-4 my-4 pb-8">
+                        <LoadingComponent loadingText={'Finding Dream Symbols'} altScreen={true} />
+                    </div>
+                )}
                 <div>
                     <p className='golden-ratio-2 px-1'>{isDreamExpanded ? dream.dream : sliceDream(dream.dream)}</p>
                     {isUsersOwnDream && (

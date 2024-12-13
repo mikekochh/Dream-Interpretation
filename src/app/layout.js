@@ -23,8 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Head>
-        <link rel="icon" href="/favicon.ico" />
-        
+        <link rel="icon" href="/icon.webp" type="image/webp" />
       </Head>
       <body>
         <AuthProvider>

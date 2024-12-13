@@ -7,7 +7,7 @@ import DreamStreak from '../../../../../models/dreamStreaks';
 
 export async function POST(req) {
     try {
-        const { dream, userID, interpretDream, emotions } = await req.json();
+        const { dream, userID, interpretDream } = await req.json();
         const dreamDate = new Date();
 
         await connectMongoDB();
@@ -62,15 +62,6 @@ export async function POST(req) {
             if (!newDream) {
                 return NextResponse.json({ message: "Dream creation failed!" }, { status: 500 });
             }
-        }
-
-        // Add DreamEmotion entries
-        if (emotions && emotions.length > 0) {
-            const dreamEmotions = emotions.map(emotionID => ({
-                emotionID,
-                dreamID: newDream._id
-            }));
-            await DreamEmotion.insertMany(dreamEmotions);
         }
 
         return NextResponse.json(newDream);

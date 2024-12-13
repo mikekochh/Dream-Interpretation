@@ -4,6 +4,7 @@ import { LockClosedIcon, GlobeAltIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 
 const PublicDreamView = ({ dreamID }) => {
+    console.log("dreamID: ", dreamID);
     const [isPublic, setIsPublic] = useState(true);
 
     useEffect(() => {

@@ -4,14 +4,16 @@ import axios from 'axios';
 import { UserContext } from "@/context/UserContext";
 import { PAGE_INTERPRET_HOME, PAGE_INTERPRET_LOADING, PAGE_INTERPRET_ORACLE } from '@/types/pageTypes';
 import { SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE } from '@/types/signUpTypes';
+import { useRouter } from 'next/navigation';
 
-const SavingDreamView = lazy(() => import('./mainPage/SavingDreamView'));
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
-const QuestionsForm = lazy(() => import('./mainPage/QuestionsForm'));
+import PublicDreamView from './mainPage/PublicDreamView';
+
 
 const InterpretForm = () => {
     const { user, setUserData, handleChangeSection } = useContext(UserContext);
+    const router = useRouter();
 
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
@@ -24,20 +26,13 @@ const InterpretForm = () => {
 
     const [loading, setLoading] = useState(true);
     const [loadingOracles, setLoadingOracles] = useState(true);
-    const [loadingEmotions, setLoadingEmotions] = useState(true);
     const [loadingDreamStreak, setLoadingDreamStreak] = useState(true);
 
-    const [emotions, setEmotions] = useState([]);
-    const [selectedEmotions, setSelectedEmotions] = useState([]);
     const [dreamStreak, setDreamStreak] = useState();
-
-    const [dreamQuestions, setDreamQuestions] = useState([]);
-    const [continueToQuestions, setContinueToQuestions] = useState(false);
 
     const [dreamStep, setDreamStep] = useState(0);
 
     const scrollContainerRef = useRef(null);
-    
 
     useEffect(() => {
         const selectedOracle = oracles.some(oracle => oracle.selected);
@@ -47,17 +42,6 @@ const InterpretForm = () => {
 
     // if google sign up is true, send users to a new page
     useEffect(() => {
-        const getEmotions = async () => {
-            try {
-                const res = await axios.get('api/emotions/getEmotions');
-                setEmotions(res.data);
-            } catch (error) {
-                console.log('Error fetching emotions: ', error);
-            } finally {
-                setLoadingEmotions(false);
-            }
-        };
-
         const getOracles = async () => {
             try {
                 const res = await axios.get('/api/oracles');
@@ -70,17 +54,13 @@ const InterpretForm = () => {
         };
 
         getOracles();
-        getEmotions();
     }, [])
 
     useEffect(() => {
-        if (!loadingOracles &&
-            !loadingEmotions &&
-            !loadingDreamStreak
-        ) {
+        if (!loadingOracles && !loadingDreamStreak) {
             setLoading(false);
         }
-    }, [loadingOracles, loadingEmotions, loadingDreamStreak]);
+    }, [loadingOracles, loadingDreamStreak]);
 
     useEffect(() => {
         const checkGoogleSignUp = async () => {
@@ -165,9 +145,8 @@ const InterpretForm = () => {
     const journalDream = async () => {
         handleChangeSection(PAGE_INTERPRET_LOADING);
         setSavingDream(true);
-        setSaveMessage("Generating Questions");
+        setSaveMessage("Interpreting Your Dream");
         const userID = user?._id;
-        let localOracleSelected = oracleSelected;  // Create a local variable
         let existingDream = dream;
     
         try {
@@ -176,89 +155,40 @@ const InterpretForm = () => {
             localStorage.removeItem('dreamID');
             localStorage.removeItem('googleSignUp');
             if (!existingDreamID) {
-                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, emotions: selectedEmotions });
+                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected });
                 localDreamID = resJournal.data._id;
+                setDreamID(localDreamID);
             } else {
                 localDreamID = existingDreamID;
+                setDreamID(localDreamID);
                 
                 // if there is an existing dream, we need to update the userID for that dream in the database
-                const resUpdateDreamUserID = await axios.post('api/dream/updateUserID', {
+                await axios.post('api/dream/updateUserID', {
                     userID,
                     dreamID: localDreamID
                 });
                 
                 selectOracle(1); // this means they do not have an account, so must be jung interpretation
                 setOracleSelected(true);
-                localOracleSelected = true;  // Update local variable immediately
                 const resGetDream = await axios.get('/api/dream/' + localDreamID);
                 existingDream = resGetDream.data.dream.dream;
                 setDream(existingDream);
             }
 
-            setDreamID(localDreamID);
-
-            // Generate Questions
-            const resQuestions = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamQuestions',
+            /// Interpret dream
+            const resInterpretDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/dreamLookup',
                 {
-                    params: {
-                        dream: dream ? dream : existingDream,
-                        oracleID: selectedOracleID
-                    }
+                    dream: dream ? dream : existingDream,
+                    dreamID: localDreamID,
+                    oracleID: selectedOracleID
                 }
-            );
+            )
 
-            setDreamQuestions(resQuestions.data);
-    
-            // Summarize the dream
-            const resSummarizeDream = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSummary',
-                {
-                    params: {
-                        dream: dream ? dream : existingDream
-                    }
-                }
-            );
-            const dreamSummary = resSummarizeDream.data[0].message.content;
-    
-            // Try generating the dream image, but don't break the flow if it fails
-            setSaveMessage("Generating Dream Image");
-            try {
-                const resDrawDream = await axios.post('https://us-central1-dream-oracles.cloudfunctions.net/generateDreamImage', 
-                    { 
-                        dreamID: localDreamID, 
-                        dream: dreamSummary 
-                    }
-                );
-            } catch (error) {
-                console.log("Error generating dream image, continuing without image.");
-            }
-    
-            // Uncovering Dream Symbols
-            setSaveMessage("Uncovering Dream Symbols");
-            const resDreamSymbols = await axios.get('https://us-central1-dream-oracles.cloudfunctions.net/dreamSymbols', 
-                { 
-                    params: { 
-                        dreamText: dream ? dream : existingDream, 
-                        dreamID: localDreamID, 
-                        userID: userID 
-                    } 
-                }
-            );
+            router.push('/dreamDetails?dreamID=' + localDreamID + "&openInterpretation=true");
         } catch (error) {
             console.log("the error: ", error);
-            setSaveMessage("Error Journaling Dream. Please Try Again Later");
+            setSaveMessage("Error Interpretating Dream. Please Try Again Later");
         }
-    };    
-    
-
-    const handleEmotionClick = (emotionId) => {
-        setSelectedEmotions(prevSelectedEmotions => {
-            if (!prevSelectedEmotions) prevSelectedEmotions = [];
-            if (prevSelectedEmotions.includes(emotionId)) {
-                return prevSelectedEmotions.filter(id => id !== emotionId);
-            } else {
-                return [...prevSelectedEmotions, emotionId];
-            }
-        });
     };
 
     const scrollLeft = () => {
@@ -275,7 +205,6 @@ const InterpretForm = () => {
 
     const incrementDreamStep = () => {
         setDreamStep(prevStep => {
-            console.log("prevStep: ", prevStep);
             handleChangeSection(PAGE_INTERPRET_ORACLE);
             return prevStep + 1;
         });
@@ -283,7 +212,6 @@ const InterpretForm = () => {
 
     const decrementDreamStep = () => {
         setDreamStep(prevStep => {
-            console.log("prevStep: ", prevStep);
             handleChangeSection(PAGE_INTERPRET_HOME);
             return Math.max(prevStep - 1, 0);
         })
@@ -298,18 +226,11 @@ const InterpretForm = () => {
     return (
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
-                {dreamQuestions.length > 0 && continueToQuestions ? (
-                    <QuestionsForm 
-                        dreamQuestions={dreamQuestions} 
-                        dreamID={dreamID}
-                        oracleID={selectedOracleID}
-                    />
-                ) : savingDream ? (
-                    <SavingDreamView 
-                        saveMessage={saveMessage} 
-                        setContinueToQuestions={setContinueToQuestions} 
-                        questionsReady={dreamQuestions.length > 0}
-                    />
+                {savingDream ? (
+                    <div class="flex flex-col items-center justify-center min-h-screen">
+                        <PublicDreamView dreamID={dreamID}/>
+                        <LoadingComponent loadingText={saveMessage} altScreen={true}/>
+                    </div>
                 ) : (
                     <JournalDreamView
                         user={user}
@@ -323,9 +244,6 @@ const InterpretForm = () => {
                         scrollLeft={scrollLeft}
                         scrollRight={scrollRight}
                         scrollContainerRef={scrollContainerRef}
-                        emotions={emotions}
-                        handleEmotionClick={handleEmotionClick}
-                        selectedEmotions={selectedEmotions}
                         dreamStreak={dreamStreak}
                         dreamStep={dreamStep}
                         incrementDreamStep={incrementDreamStep}
