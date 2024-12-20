@@ -151,6 +151,8 @@ const UserManagement = () => {
     const [selectedUser, setSelectedUser] = useState(false);
     const [signUpTypes, setSignUpTypes] = useState([]);
 
+    const [usersWithMultipleDreamsCount, setUsersWithMultipleDreamsCount] = useState(0);
+
     useEffect(() => {
       const fetchSignUpTypeData = async () => {
         const response = await axios.get('/api/admin/getSignUpTypeData');
@@ -169,17 +171,25 @@ const UserManagement = () => {
       setLoading(true);
       try {
         const response = await axios.get('/api/admin/getUserData/' + timeframe);
-  
         const responseSubscribers = await axios.get('/api/admin/getSubscriberData/' + timeframe);
-  
-        setUsers(response.data.data);
+    
+        const users = response.data.data;
+    
+        // Calculate the count of users with dreamsCount >= 2
+        const multipleDreamsUsersCount = users.filter(user => user.dreamCount >= 2).length;
+    
+        // Update state variables
+        setUsers(users);
         setSubscribers(responseSubscribers.data.data);
+        setUsersWithMultipleDreamsCount(multipleDreamsUsersCount);
+    
         setLoading(false);
       } catch (error) {
         console.log("There was an error fetching user admin data: ", error);
         setLoading(false);
       }
     };
+    
 
     const handleTimeFrameChange = (value) => {
       setTimeframe(Number(value)); // Directly update the state with the numeric value
@@ -279,6 +289,32 @@ const UserManagement = () => {
                 <p className="text-2xl">{subscribers?.length}</p>
               </div>
             </div>
+            <div className="text-white mb-6">
+              <p className="font-semibold text-3xl text-center mb-6">Stats</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* # of users with multiple dreams */}
+                <div className="bg-blue-900 shadow-lg rounded-lg p-6 text-center">
+                  <p className="text-xl font-bold"># of Users with Multiple Dreams</p>
+                  <p className="text-2xl mt-2">{usersWithMultipleDreamsCount}</p>
+                </div>
+
+                {/* # of dreams excluding the current user */}
+                <div className="bg-blue-900 shadow-lg rounded-lg p-6 text-center">
+                  <p className="text-xl font-bold">% of Users with Multiple Dreams</p>
+                  <p className="text-2xl mt-2">
+                    {users.length > 0
+                      ? Math.floor((usersWithMultipleDreamsCount / users.length) * 100) + "%"
+                      : "0%"}
+                  </p>
+                </div>
+
+                {/* # of dreams with no user */}
+                <div className="bg-blue-900 shadow-lg rounded-lg p-6 text-center">
+                  <p className="text-xl font-bold">Dreams with No User</p>
+                </div>
+              </div>
+            </div>
+
             <div className="overflow-x-auto text-white">
               <h1 className="text-center text-3xl font-semibold mb-2">
                 {selectedCard === 1 ? 'Users' : 'Subscribers'}
