@@ -484,13 +484,15 @@ exports.dreamQuestions = functions.runWith({ maxInstances: 10, timeoutSeconds: 1
 // Scheduled function to run every night at midnight for dream streaks and soul sound streaks
 exports.scheduledFunction = functions.pubsub.schedule('every day 00:00').onRun(async (context) => {
     logger.info('Scheduled function running at midnight');
+    logger.info('Update dream streaks, and make sure dream count is accurate for each user');
     await client.connect();
     const db = client.db('dreamsite');
     const collectionDreamStreaks = db.collection('dreamstreaks');
-    const collectionSoundStreaks = db.collection('soundstreaks');
+    const collectionDreams = db.collection('dreams');
+    const collectionUsers = db.collection('users');
 
     try {
-        // first, handle dream streaks
+        // First, handle dream streaks
         const updateFalseResult = await collectionDreamStreaks.updateMany(
             { dreamedToday: false },
             { $set: { streakLength: 0 } }
@@ -503,21 +505,38 @@ exports.scheduledFunction = functions.pubsub.schedule('every day 00:00').onRun(a
         );
         logger.info('Updated documents where dreamedToday was true', updateTrueResult);
 
-        // second, handle sound streaks
-        const updateFalseResultSound = await collectionSoundStreaks.updateMany(
-            { soundToday: false },
-            { $set: { streakLength: 0 } }
-        );
-        logger.info('Updated documents where soundToday was false', updateFalseResultSound);
+        // Second, update dream count for users with dreamCountAligned as false or null
+        const usersToUpdate = await collectionUsers.find({
+            $or: [
+                { dreamCountAligned: false },
+                { dreamCountAligned: null }
+            ]
+        }).toArray();
 
-        const updateTrueResultSound = await collectionSoundStreaks.updateMany(
-            { soundToday: true },
-            { $set: { soundToday: false } }
-        )
-        logger.info('Updated documents where soundToday was true', updateTrueResultSound);
+        // const usersToUpdate = await collectionUsers.find({}).toArray();
+
+        for (const user of usersToUpdate) {
+            // Convert ObjectId to string
+            const userIdString = user._id.toString();
+            
+            // Count dreams for the user using the string version of the ID
+            const dreamCount = await collectionDreams.countDocuments({ userID: userIdString });
+            
+            // Update user's dream count and alignment status
+            await collectionUsers.updateOne(
+                { _id: user._id },
+                {
+                    $set: {
+                        dreamCount: dreamCount,
+                        dreamCountAligned: true
+                    }
+                }
+            );
+            logger.info(`Updated dream count for user ${userIdString} to ${dreamCount}`);
+        }
 
     } catch (error) {
-        logger.error('Error updating streaks: ', error);
+        logger.error('Error updating streaks or dream counts: ', error);
     } finally {
         return null;
     }

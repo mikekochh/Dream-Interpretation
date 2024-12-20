@@ -1,9 +1,12 @@
 import axios from 'axios';
 import Image from 'next/image';
 import '@fortawesome/fontawesome-free/css/all.min.css'; // Import Font Awesome CSS
+import { useRouter } from 'next/navigation';
 
-const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback }) => {
+
+const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback, dreamID }) => {
   if (!isOpen) return null; // Don't render the modal if it's not open
+  const router = useRouter();
 
   function cleanHTML(interpretation) {
     const start = interpretation.indexOf('<');
@@ -91,6 +94,16 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInt
             </button>
           </div>
         </div>
+
+        {/* <div className="max-w-lg mx-auto my-8 p-6 bg-white rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Want to Dive Deeper?</h2>
+          <p className="text-gray-600">
+            Answer a few more questions about your dream to uncover more insights into what it might mean for you.
+          </p>
+          <div className="text-center">
+            <button className="start-button" onClick={() => router.push("/questions?dreamID=" + dreamID)}>Start Answering</button>
+          </div>
+        </div> */}
 
         {/* Modal Footer */}
         <div className="mt-4 flex justify-end">

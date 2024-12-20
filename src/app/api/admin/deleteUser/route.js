@@ -10,6 +10,8 @@ export async function DELETE(req) {
         // Extract the dreamID from the request body
         const { userID, is_admin, is_subscriber } = await req.json(); // Assuming the dreamID is sent in the request body
 
+        console.log("userID: ", userID);
+
         if (!userID) {
             return NextResponse.json({ error: 'Dream ID is required' }, { status: 400 });
         }

@@ -370,6 +370,7 @@ export default function DreamsForm() {
                                         oracle={oracle}
                                         openInterpretation={openInterpretation}
                                         updateInterpretationFeedback={updateInterpretationFeedback}
+                                        dreamID={dreamID}
                                     />
                                 );
                             })}

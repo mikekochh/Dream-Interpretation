@@ -70,6 +70,10 @@ const userSchema = new Schema({
     optOutEmailMarketing: {
         type: Boolean,
         default: false
+    },
+    dreamCountAligned: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true});
 
