@@ -1097,24 +1097,98 @@ const UserManagement = () => {
   }
   
   const DreamManagement = () => {
-    const [dreams, setDreams] = useState([]);
+    const [originalDreams, setOriginalDreams] = useState([]);
+
+    const [totalDreamsLength, setTotalDreamsLength] = useState(0);
+    const [userDreamsLength, setUserDreamsLength] = useState(0);
+    const [nonuserDreamsLength, setNonuserDreamsLength] = useState(0);
+    const [totalDreamsLengthIncludeMe, setTotalDreamsLengthIncludeMe] = useState(0);
+    const [userDreamsLengthIncludeMe, setUserDreamsLengthIncludeMe] = useState(0)
+    const [nonuserDreamsLengthIncludeMe, setNonuserDreamsLengthIncludeMe] = useState(0);
+
+
+    const [displayDreams, setDisplayDreams] = useState([]);
     const [timeframe, setTimeframe] = useState(5);
     const [loading, setLoading] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedDream, setSelectedDream] = useState(null);
+    const [selectedCard, setSelectedCard] = useState(1);
+    const [includeMe, setIncludeMe] = useState(true);
   
     const router = useRouter();
   
     useEffect(() => {
       fetchDreams();
     }, [timeframe]);
+
+    useEffect(() => {
+      let filteredDreams;
+
+      console.log('running...');
+      setLoading(true);
+      if (selectedCard === 1) {
+        if (includeMe) {
+          // Include all dreams
+          filteredDreams = originalDreams;
+        } else {
+          // Exclude dreams with your userID
+          filteredDreams = originalDreams.filter(dream => dream.userID !== '65639dbb9811fa19c4dca43d');
+        }
+      } else if (selectedCard === 2) {
+        if (includeMe) {
+          // Include all dreams with a userID
+          filteredDreams = originalDreams.filter(dream => dream.userID);
+        } else {
+          // Exclude dreams with your userID among those with a userID
+          filteredDreams = originalDreams.filter(dream => dream.userID && dream.userID !== '65639dbb9811fa19c4dca43d');
+        }
+      } else {
+        // Get all dreams without a userID
+        filteredDreams = originalDreams.filter(dream => !dream.userID);
+      }
+    
+      setDisplayDreams(filteredDreams);
+      setLoading(false);
+    }, [selectedCard, includeMe, originalDreams]);    
+    
   
     const fetchDreams = async () => {
-      setLoading(true);
-      const response = await axios.get('/api/admin/getDreamData/' + timeframe);
-      setDreams(response.data.data);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const response = await axios.get('/api/admin/getDreamData/' + timeframe);
+    
+        const fetchedDreams = response.data.data;
+    
+        // Filter dreams with and without userID
+        const userDreams = fetchedDreams.filter(dream => dream.userID);
+        const nonuserDreams = fetchedDreams.filter(dream => !dream.userID);
+    
+        // Exclude dreams with your userID
+        const dreamsExcludeMe = fetchedDreams.filter(dream => dream.userID !== '65639dbb9811fa19c4dca43d');
+        const userDreamsExcludeMe = userDreams.filter(dream => dream.userID !== '65639dbb9811fa19c4dca43d');
+        const nonuserDreamsExcludeMe = nonuserDreams.filter(dream => dream.userID !== '65639dbb9811fa19c4dca43d');
+    
+        // IncludeMe counts (default)
+        const userDreamsIncludeMe = userDreams.length;
+        const nonuserDreamsIncludeMe = nonuserDreams.length;
+    
+        // Update state variables
+        setTotalDreamsLength(dreamsExcludeMe.length); // Exclude your dreams
+        setUserDreamsLength(userDreamsExcludeMe.length);
+        setNonuserDreamsLength(nonuserDreamsExcludeMe.length);
+        setTotalDreamsLengthIncludeMe(fetchedDreams.length); // All dreams including yours
+        setUserDreamsLengthIncludeMe(userDreamsIncludeMe);
+        setNonuserDreamsLengthIncludeMe(nonuserDreamsIncludeMe);
+    
+        // Save original fetched dreams
+        setOriginalDreams(fetchedDreams);
+      } catch (error) {
+        console.error("Error fetching dreams:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+    
   
     const handleTimeFrameChange = (value) => {
       setTimeframe(Number(value));
@@ -1132,23 +1206,23 @@ const UserManagement = () => {
   
     const handleDeleteDream = async () => {
       await axios.delete(`/api/admin/deleteDream`, { data: { dreamID: selectedDream._id } });
-      setDreams(dreams.filter(dream => dream._id !== selectedDream._id));
+      setOriginalDreams(originalDreams.filter(dream => dream._id !== selectedDream._id));
       closeDeleteModal();
     };
 
     const sortByDreamDate = () => {
-      const sortedDreams = [...dreams].sort((a, b) => new Date(b.dreamDate) - new Date(a.dreamDate));
-      setDreams(sortedDreams);
+      const sortedDreams = [...originalDreams].sort((a, b) => new Date(b.dreamDate) - new Date(a.dreamDate));
+      setOriginalDreams(sortedDreams);
     }
     
     const sortByPublic = () => {
-      const sortedDreams = [...dreams].sort((a, b) => {
+      const sortedDreams = [...originalDreams].sort((a, b) => {
         if (a.isPublic === b.isPublic) {
           return 0; // If both dreams have the same value for isPublic, leave them in the same order
         }
         return a.isPublic ? -1 : 1; // If a.isPublic is true, it comes first; otherwise, b.isPublic comes first
       });
-      setDreams(sortedDreams);
+      setOriginalDreams(sortedDreams);
     }
     
   
@@ -1178,15 +1252,35 @@ const UserManagement = () => {
           <LoadingComponent loadingText={"Loading Dream Data"} />
         ) : (
           <div>
-            <div className="mb-6">
-              <div className="bg-white shadow rounded-lg p-4 text-center cursor-pointer">
-                <h3 className="text-xl font-bold mb-2">Dreams</h3>
-                <p className="text-2xl">{dreams.length}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-white shadow rounded-lg p-4 text-center cursor-pointer" onClick={() => setSelectedCard(1)}>
+                <h3 className="text-xl font-bold mb-2">Total Dreams</h3>
+                <p className="text-2xl">{includeMe ? totalDreamsLengthIncludeMe : totalDreamsLength}</p>
               </div>
+              <div className="bg-white shadow rounded-lg p-4 text-center cursor-pointer" onClick={() => setSelectedCard(2)}>
+                <h3 className="text-xl font-bold mb-2">User Dreams</h3>
+                <p className="text-2xl">{includeMe ? userDreamsLengthIncludeMe : userDreamsLength}</p>
+              </div>
+              <div className="bg-white shadow rounded-lg p-4 text-center cursor-pointer" onClick={() => setSelectedCard(3)}>
+                <h3 className="text-xl font-bold mb-2">Non-User Dreams</h3>
+                <p className="text-2xl">{includeMe ? nonuserDreamsLengthIncludeMe : nonuserDreamsLength}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center mt-4">
+              <input
+                type="checkbox"
+                id="includeMe"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                onChange={(e) => setIncludeMe(e.target.checked)}
+              />
+              <label htmlFor="includeMe" className="ml-2 text-sm font-semibold text-white">
+                Include Me
+              </label>
             </div>
   
             <div className="overflow-x-auto">
-              <h1 className="text-center text-3xl font-semibold mb-2 text-white">Dreams</h1>
+              <h1 className="text-center text-3xl font-semibold mb-2 text-white">{selectedCard === 1 ? 'Total Dreams' : selectedCard === 2 ? 'User Dreams' : 'Non-User Dreams'}</h1>
               <table className="w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200 text-left">
@@ -1210,7 +1304,7 @@ const UserManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="text-white">
-                  {dreams.map((dream) => (
+                  {displayDreams.map((dream) => (
                     <tr className="border-b" key={dream._id}>
                       <td className="px-4 py-2">
                         {dream.userID !== 0 && dream.user?.name ? (

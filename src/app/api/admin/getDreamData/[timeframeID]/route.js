@@ -61,7 +61,7 @@ export async function GET(req) {
             };
         }
         
-        query.userID = { $ne: '65639dbb9811fa19c4dca43d' };
+        // query.userID = { $ne: '65639dbb9811fa19c4dca43d' };
         
         
         // Fetch dreams from the database and join with user data
@@ -88,6 +88,11 @@ export async function GET(req) {
                     preserveNullAndEmptyArrays: true // In case there's no matching user, return null
                 }
             },
+            {
+                $sort: {
+                    dreamDate: -1
+                }
+            }
         ]);
         
 
