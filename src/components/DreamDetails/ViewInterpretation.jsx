@@ -1,12 +1,10 @@
 import axios from 'axios';
 import Image from 'next/image';
-import '@fortawesome/fontawesome-free/css/all.min.css'; // Import Font Awesome CSS
-import { useRouter } from 'next/navigation';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback, dreamID }) => {
-  if (!isOpen) return null; // Don't render the modal if it's not open
-  const router = useRouter();
+  if (!isOpen) return null;
 
   function cleanHTML(interpretation) {
     const start = interpretation.indexOf('<');

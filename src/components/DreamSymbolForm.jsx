@@ -1,14 +1,13 @@
 'use client';
 import axios from 'axios';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import LoadingComponent from './LoadingComponent';
-import { useRouter } from 'next/navigation';
 
 const DreamSymbolPage = () => {
     const pathname = usePathname();
-    const sanitizedSymbol = pathname.split('/').pop();
     const router = useRouter();
+    const sanitizedSymbol = pathname.split('/').pop();
 
     const [symbolData, setSymbolData] = useState();
     const [loading, setLoading] = useState(true);
