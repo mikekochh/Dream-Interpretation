@@ -36,7 +36,7 @@ const DreamSymbolPage = () => {
                 <div className="text-center p-8 max-w-md bg-white bg-opacity-10 rounded-lg shadow-lg">
                     <h1 className="text-3xl font-bold mb-4">Symbol Not Found</h1>
                     <p className="text-lg text-gray-300 mb-6">
-                        It seems we couldn’t find the symbol you’re looking for. Perhaps it’s a rare or unexplored dream sign.
+                        It seems we couldn&apos;t find the symbol you&apos;re looking for. Perhaps it&apos;s a rare or unexplored dream sign.
                     </p>
                     <button
                         onClick={() => window.history.back()}
