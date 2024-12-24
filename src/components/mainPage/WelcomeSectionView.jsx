@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import DreamStream from '../DreamStreamPreview';
 import WhatsInsideView from './WhatsInsideView';
+import LibraryHomeScreen from '../LibraryHomeScreen';
 
 const WelcomeSection = ({ 
     incrementDreamStep, 
@@ -44,9 +45,6 @@ const WelcomeSection = ({
                         <p className="text-white golden-ratio-2 font-semibold">
                             Start by entering your dream below
                         </p>
-                        <p className="text-white golden-ratio-1 mb-4">
-                            No credit card required.
-                        </p>
                         <textarea
                             type="text"
                             rows={7}
@@ -66,34 +64,7 @@ const WelcomeSection = ({
                         </div>
                     </div>
                 </div>
-
-                {/* New "Signing up is free!" section */}
-                <div className="mt-8 text-center">
-                    <p className="text-white text-xl font-bold">Signing up is free!</p>
-                    <div className="flex justify-center mt-4 space-x-4">
-                        <div className="flex items-center space-x-2">
-                            <span className="text-green-500">✓</span>
-                            <p className="text-white">Unlimited Interpretations</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <span className="text-green-500">✓</span>
-                            <p className="text-white">Access to Community</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <span className="text-green-500">✓</span>
-                            <p className="text-white">Access to all AI Models</p>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-
-            <WhatsInsideView handleScrollToTop={handleScrollToTop} />
-            <div className="my-4 mx-4" style={{ borderTop: '0.5px solid rgba(229, 231, 235, 0.5)' }}></div>
-            <DreamStream />
-            <div className="my-4 mx-4" style={{ borderTop: '0.5px solid rgba(229, 231, 235, 0.5)' }}></div>
-            
-            {/* How It Works Section */}
             <div>
                 <h1 className='golden-ratio-4 gradient-title-text mt-10 text-center'>How Does It Work?</h1>
                 <div className="image-container flex flex-col md:flex-row">
@@ -114,7 +85,7 @@ const WelcomeSection = ({
                         <Image src="/LearnStep.svg" alt="Step 3" width={50} height={50} className={`${isMobile ? 'step-image-mobile' : 'step-image'}`} />
                         <p className="golden-ratio-1">Step 3:</p>
                         <p className="golden-ratio-2 reduce-line-spacing">Learn about your dream</p>
-                        <p className="golden-ratio-1">Answer questions generated from your dream and discover detailed interpretations on your dream</p>
+                        <p className="golden-ratio-1">Discover detailed interpretations of your dream, uncovering its hidden meanings and insights</p>
                     </div>
                 </div>
             </div>
@@ -123,6 +94,14 @@ const WelcomeSection = ({
                     Try It Now!
                 </button>
             </div>
+            {/* Library section */}
+            {/* Also add here a search bar where they can search for symbols from their dream */}
+
+            <LibraryHomeScreen />
+            <div className="my-4 mx-4" style={{ borderTop: '0.5px solid rgba(229, 231, 235, 0.5)' }}></div>
+            <DreamStream />
+            <div className="my-4 mx-4" style={{ borderTop: '0.5px solid rgba(229, 231, 235, 0.5)' }}></div>
+        
             {/* Mandela Image */}
             <div className="image-container text-center mt-4">
                 <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />

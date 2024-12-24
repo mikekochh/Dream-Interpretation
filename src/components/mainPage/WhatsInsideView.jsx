@@ -11,11 +11,6 @@ const WhatsInsideView = ({ handleScrollToTop }) => {
             imageSrc: "/baseModel.webp"
         },
         {
-            title: "Intuitive Questioning",
-            description: "Our AI models generate questions to help better understand the context of your dream and encourage self-reflection.",
-            imageSrc: "/imageQuestioning.webp"
-        },
-        {
             title: "Diverse Interpretations",
             description: "Experience varied approaches to dream analysis with oracles offering Jungian, Freudian, and other unique perspectives.",
             imageSrc: "/Jung.webp"
@@ -38,7 +33,7 @@ const WhatsInsideView = ({ handleScrollToTop }) => {
             <h2 className="text-center golden-ratio-4 gradient-title-text mb-2">The Dream Oracles Platform</h2>
             <h3 className="text-center mb-10 text-lg text-gray-100">An all-in-one interpretation tool to help you understand what your dreams are trying to tell you.</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {sections.map((section, index) => (
                     <div 
                         key={index} 

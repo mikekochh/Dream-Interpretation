@@ -6,6 +6,7 @@ import PurchaseButton from '../PurchaseButton';
 import DreamStreamPreview from '../DreamStreamPreview';
 import axios from 'axios';
 import { UserContext } from '@/context/UserContext';
+import LibraryHomeScreen from '../LibraryHomeScreen';
 
 const StartPageView = ({ 
     dreamStreak, 
@@ -99,6 +100,7 @@ const StartPageView = ({
                     </p>
                 </div>
             )}
+            <LibraryHomeScreen />
             <DreamStreamPreview />
             {/* Mandela Image */}
             <div className="image-container text-center mt-4">

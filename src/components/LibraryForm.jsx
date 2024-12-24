@@ -76,7 +76,7 @@ const LibraryForm = () => {
         {displayedSymbols.map((symbol, index) => (
           <div className="border-b border-gray-200 py-4" key={index}>
             <div className="text-2xl font-bold text-gray-100">{symbol.symbol}</div>
-            <div className="text-md text-gray-400 mt-1">{symbol.meaning}</div>
+            <div className="text-md text-gray-400 mt-1">{symbol.short_meaning}</div>
           </div>
         ))}
       </div>
