@@ -216,10 +216,6 @@ const SettingsForm = () => {
         router.push("/interpret");
     };
 
-    const subscription = async () => {
-        window.location.href = '/cancelSubscription';
-    };
-
     const createAccount = () => {
         router.push("/register");
     };

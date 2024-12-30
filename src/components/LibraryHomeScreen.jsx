@@ -44,8 +44,6 @@ const LibraryHomeScreen = () => {
     );
     const canViewMore = displayedSymbols.length < filteredSymbols.length;
 
-    console.log("dreamSymbols.length: ", dreamSymbols.length);
-
     return (
         <div className="md:w-2/3 md:mx-auto md:px-0 md:py-8 px-3 py-8 bg-transparent">
             <h3 className="text-center font-thin golden-ratio-2 text-gray-200">2000+ Dream Symbols</h3>

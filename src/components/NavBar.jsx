@@ -61,7 +61,7 @@ const NavBar = () => {
                                     <Link href="/library">Dictionary</Link>
                                 </li>
                                 {!noAccount && (
-                                    <li className={`cursor-pointer ${pathname === '/settings' || pathname === '/cancelSubscription' ? 'font-bold' : ''}`}>
+                                    <li className={`cursor-pointer ${pathname === '/settings' ? 'font-bold' : ''}`}>
                                         <Link href="/settings">Profile</Link>
                                     </li>
                                 )}
