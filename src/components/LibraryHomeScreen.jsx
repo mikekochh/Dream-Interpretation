@@ -1,27 +1,17 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Link from 'next/link';
+import { useRecoilValue } from 'recoil';
+import { dreamSymbolsState } from '@/recoil/atoms';
+import LoadingComponent from './LoadingComponent';
 
 const LibraryHomeScreen = () => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [dreamSymbols, setDreamSymbols] = useState([]);
     const [displayedSymbols, setDisplayedSymbols] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const maxSymbols = 10;
 
-    useEffect(() => {
-        const fetchSymbols = async () => {
-            try {
-                const response = await axios.get('/api/dream/symbols')
-                setDreamSymbols(response.data);
-            } catch (error) {
-                console.error("There was an error fetching the dream symbols: ", error);
-            }
-        }
-
-        fetchSymbols();
-    }, [])
+    const dreamSymbols = useRecoilValue(dreamSymbolsState);
 
     const loadSymbols = () => {
         const query = searchQuery.toLowerCase();
@@ -34,7 +24,9 @@ const LibraryHomeScreen = () => {
     }
 
     useEffect(() => {
-        loadSymbols();
+        if (dreamSymbols && dreamSymbols.length > 0) {
+            loadSymbols();
+        }
     }, [searchQuery, currentPage, dreamSymbols]);
 
     const handleSearchInputChange = (event) => {
@@ -48,9 +40,11 @@ const LibraryHomeScreen = () => {
 
     const query = searchQuery.toLowerCase();
     const filteredSymbols = dreamSymbols.filter(symbol =>
-        symbol.symbol.toLowerCase().includes(query)
+        symbol.symbol?.toLowerCase().includes(query)
     );
     const canViewMore = displayedSymbols.length < filteredSymbols.length;
+
+    console.log("dreamSymbols.length: ", dreamSymbols.length);
 
     return (
         <div className="md:w-2/3 md:mx-auto md:px-0 md:py-8 px-3 py-8 bg-transparent">
@@ -69,22 +63,25 @@ const LibraryHomeScreen = () => {
                     className="w-full p-4 text-lg text-black border border-gray-300 rounded-xl"
                 />
             </div>
-            <div className="mt-8">
-                <h3 className="text-center font-thin text-gray-200">Top Dream Symbols</h3>
-                <ul className="mt-4 space-y-4">
-                    {displayedSymbols.map((symbol) => (
-                        <Link href={`/dream-symbols/${symbol.sanitizedSymbol}`} key={symbol._id}>
-                            <li
-                                className="p-4 border text-white border-gray-300 rounded-xl bg-white bg-opacity-10 shadow-2xl mt-4 cursor-pointer transition-transform duration-500 hover:scale-105 hover:bg-opacity-20"
-                            >
-                                <h4 className="font-bold text-lg">{symbol.symbol}</h4>
-                                <p className="mt-2">{symbol.short_meaning}</p>
-                                <p className="mt-2 text-gray-100 underline">Click to learn more</p>
-                            </li>
-                        </Link>
-                    ))}
-                </ul>
-            </div>
+            {dreamSymbols.length ? (
+                <div className="mt-8">
+                    <ul className="mt-4 space-y-4">
+                        {displayedSymbols.map((symbol) => (
+                            <Link href={`/dream-symbols/${symbol.sanitizedSymbol}`} key={symbol._id}>
+                                <li
+                                    className="p-4 border text-white border-gray-300 rounded-xl bg-white bg-opacity-10 shadow-2xl mt-4 cursor-pointer transition-transform duration-500 hover:scale-105 hover:bg-opacity-20"
+                                >
+                                    <h4 className="font-bold text-lg">{symbol.symbol}</h4>
+                                    <p className="mt-2">{symbol.short_meaning}</p>
+                                    <p className="mt-2 text-gray-100 underline">Click to learn more</p>
+                                </li>
+                            </Link>
+                        ))}
+                    </ul>
+                </div>
+            ) : (
+                <LoadingComponent loadingText={"Loading Dream Symbols"} altScreen={true} />
+            )}
         </div>
     );
 };

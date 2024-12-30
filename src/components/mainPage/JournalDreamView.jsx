@@ -2,8 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
-// Directly import all components without lazy loading
-import WelcomeSection from './WelcomeSectionView';
 import StartPageView from './StartPageView';
 import OracleSelectionSection from './OracleSelectionSectionView';
 
@@ -74,23 +72,13 @@ export default function JournalDreamView({
         <div ref={containerRef} className="flex justify-center items-center min-h-screen relative">
             {currentStep === 0 ? (
                 <div ref={welcomeSectionRef} className={`overflow-y-auto hide-scrollbar h-screen main-content`}>
-                    {user ? (
-                        <StartPageView
-                            dreamStreak={dreamStreak}
-                            incrementDreamStep={incrementDreamStep}
-                            setDream={setDream}
-                            dream={dream}
-                        />
-                    ) : (
-                        <WelcomeSection
-                            dreamStreak={dreamStreak}
-                            incrementDreamStep={incrementDreamStep}
-                            setDream={setDream}
-                            dream={dream}
-                            handleScrollToTop={handleScrollToTop}
-                        />
-                    )}
-
+                    <StartPageView
+                        dreamStreak={dreamStreak}
+                        incrementDreamStep={incrementDreamStep}
+                        setDream={setDream}
+                        dream={dream}
+                        handleScrollToTop={handleScrollToTop}
+                    />
                 </div>
             ) : (
                 <div>
