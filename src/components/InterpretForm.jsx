@@ -184,7 +184,7 @@ const InterpretForm = () => {
                 }
             )
 
-            router.push('/dreamDetails?dreamID=' + localDreamID + "&openInterpretation=true");
+            router.push('/dream-details?dreamID=' + localDreamID + "&openInterpretation=true");
         } catch (error) {
             console.log("the error: ", error);
             setSaveMessage("Error Interpretating Dream. Please Try Again Later");

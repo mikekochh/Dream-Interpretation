@@ -15,7 +15,6 @@ import EditDreamModal from './EditDreamModal';
 import DeleteDreamModal from './DeleteDreamModal';
 import DreamSettingsModal from './DreamSettingsModal';
 import OracleInterpretations from './OracleInterpretations';
-import AddNewInterpretationModal from './AddNewInterpretationModal';
 import SymbolCard from './SymbolCard';
 import RegisterForm from '../RegisterForm';
 
@@ -49,7 +48,6 @@ export default function DreamsForm() {
     const [isPublic, setIsPublic] = useState(false);
 
     // modals
-    const [showAddNewInterpretationModal, setShowAddNewInterpretationModal] = useState(false);
     const [showEditDreamModal, setShowEditDreamModal] = useState(false);
     const [showDreamSettingsModal, setShowDreamSettingsModal] = useState(false);
     const [showDeleteDreamModal, setShowDeleteDreamModal] = useState(false);
@@ -508,12 +506,6 @@ export default function DreamsForm() {
                 isOpen={showEditDreamModal}
                 onClose={() => setShowEditDreamModal(false)}
                 onSave={handleSaveDream}
-            />
-            <AddNewInterpretationModal
-                oracles={oracles}
-                isOpen={showAddNewInterpretationModal}
-                onClose={() => setShowAddNewInterpretationModal(false)}
-                onInterpret={handleInterpretDream}
             />
         </div>
     );

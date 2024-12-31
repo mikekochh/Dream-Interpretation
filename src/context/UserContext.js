@@ -33,7 +33,7 @@ export const UserProvider = ({ children }) => {
       return PAGE_DREAM_STREAM;
     } else if (pathname.startsWith('/library')) {
       return PAGE_LIBRARY;
-    } else if (pathname.startsWith('/dreamDetails')) {
+    } else if (pathname.startsWith('/dream-details')) {
       return PAGE_DREAM_DETAILS;
     } else if (pathname.startsWith('/e-book')) {
       return PAGE_E_BOOK;

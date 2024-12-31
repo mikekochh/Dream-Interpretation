@@ -1116,7 +1116,7 @@ const UserManagement = () => {
                       <td className="px-4 py-2">
                         <button
                           className="px-3 py-1 bg-blue-500 text-white rounded mr-1"
-                          onClick={() => router.push('/dreamDetails?dreamID=' + interpretation.dreamID)}
+                          onClick={() => router.push('/dream-details?dreamID=' + interpretation.dreamID)}
                         >
                           View
                         </button>
@@ -1363,7 +1363,7 @@ const UserManagement = () => {
                       <td className="px-4 py-2">
                         <button
                           className="px-3 py-1 bg-blue-500 text-white rounded mr-1"
-                          onClick={() => router.push('/dreamDetails?dreamID=' + dream._id)}
+                          onClick={() => router.push('/dream-details?dreamID=' + dream._id)}
                         >
                           View
                         </button>

@@ -168,7 +168,7 @@ const DreamCard = ({ dream }) => {
     return (
         <div className="relative p-1 rounded-lg overflow-hidden dream-card">
             <Link href={{
-                pathname: '/dreamDetails',
+                pathname: '/dream-details',
                 query: { dreamID: dream._id },
             }}>
                 <div>
