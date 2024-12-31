@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongodb';
 import Dream from '../../../../../models/dream';
 import User from '../../../../../models/user';
-import DreamEmotion from '../../../../../models/journaledEmotions';
 import DreamStreak from '../../../../../models/dreamStreaks';
 
 export async function POST(req) {

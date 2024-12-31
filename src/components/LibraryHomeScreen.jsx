@@ -9,7 +9,7 @@ const LibraryHomeScreen = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [displayedSymbols, setDisplayedSymbols] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const maxSymbols = 10;
+    const maxSymbols = 5;
 
     const dreamSymbols = useRecoilValue(dreamSymbolsState);
 

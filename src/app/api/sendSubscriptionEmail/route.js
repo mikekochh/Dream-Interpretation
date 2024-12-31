@@ -61,7 +61,6 @@ export async function POST(req) {
                                         <li style="color: black;"><strong>Dream Image Generation:</strong> Bring your dreams to life with AI-generated visuals crafted from your dream descriptions.</li>
                                         <li style="color: black;"><strong>Weekly Meta Analysis:</strong> Discover recurring themes and patterns in your dreams and decipher them with our advanced dream meta-analysis feature.</li>
                                         <li style="color: black;"><strong>Intuitive Dream Journal:</strong> Securely store all your dreams, interpretations, and notes in your personal dream journal.</li>
-                                        <li style="color: black;"><strong>Mood Recording:</strong> Track the emotions you experience during your dreams for deeper, more insightful interpretations.</li>
                                         <li style="color: black;"><strong>Personalized Interpretations:</strong> Tailor your dream analysis by updating your profile with details like age, gender, cultural background, and spiritual views.</li>
                                     </ul>
                                     <p style="color: black;">Once you have updated your profile (you can do that <a href="${domain}/settings" style="color: blue; text-decoration: underline;">here</a>), our Dream Oracles will begin to incorporate your personality details provided into the interpretations, making your dream analyses deeper and richer.</p>

@@ -9,6 +9,7 @@ import { UserContext } from '@/context/UserContext';
 import LibraryHomeScreen from '../LibraryHomeScreen';
 import { RecoilRoot } from 'recoil';
 import DreamSymbolsProvider from "@/components/Providers/DreamSymbolsProvider";
+import DreamArticles from '../DreamArticles';
 
 const StartPageView = ({ 
     dreamStreak, 
@@ -169,6 +170,9 @@ const StartPageView = ({
                     </p>
                 </div>
             )}
+
+            <DreamArticles />
+
             <RecoilRoot>
                 <DreamSymbolsProvider>
                     <LibraryHomeScreen />
