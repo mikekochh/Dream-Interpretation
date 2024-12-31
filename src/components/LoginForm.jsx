@@ -13,7 +13,6 @@ export default function LoginForm() {
     const [password, setPassword] = useState("password");
     const [error, setError] = useState(""); 
     const [sendVerifyEmail, setSendVerifyEmail] = useState(false);
-    const [forgotPassword, setForgotPassword] = useState(false);
     const [logginIn, setLogginIn] = useState(false);
 
     const router = useRouter();
@@ -21,7 +20,6 @@ export default function LoginForm() {
     const login = async (e) => {
         e.preventDefault();
         setSendVerifyEmail(false);
-        setForgotPassword(false);
         setLogginIn(true);
 
         if (!email || !password) {
@@ -56,7 +54,6 @@ export default function LoginForm() {
 
             if (res.error) {
                 setError("Invalid Credentials");
-                setForgotPassword(true);
                 setLogginIn(false);
                 return;
             }
@@ -86,25 +83,6 @@ export default function LoginForm() {
         }
 
         router.replace(`/emailVerification?email=${email}`);
-    }
-
-    const sendForgotPassword = async (e) => {
-        const res = await fetch('api/forgotPassword', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email
-            }),
-        });
-
-        if (!res.ok) {
-            setError("Failed to send password reset email");
-            return;
-        }
-
-        router.replace(`/passwordReset?email=${email}`);
     }
 
     return (
@@ -146,13 +124,6 @@ export default function LoginForm() {
                             { logginIn && (
                                 <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md">
                                     Loggin in...
-                                </div>
-                            )}
-                            { forgotPassword && (
-                                <div className="bg-blue-500 text-white w-fit text-sm py-1 px-3 rounded-md">
-                                    <button onClick={sendForgotPassword} className="underline">
-                                        Forgot Password?
-                                    </button>
                                 </div>
                             )}
                         </div>

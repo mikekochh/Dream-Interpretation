@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import LoadingComponent from './LoadingComponent';
 import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -56,8 +55,6 @@ const AdminPortalForm = () => {
         return <LibraryManagement />;
       case 'settings':
         return <Settings />;
-      case 'sales':
-        return <SalesAndRevenue />
       default:
         return <UserManagement />;
     }
@@ -446,119 +443,6 @@ const UserManagement = () => {
       </div>
     );
   };
-
-  const SalesAndRevenue = () => {
-    const [timeframe, setTimeframe] = useState(5);
-    const [loading, setLoading] = useState(false);
-    const [totalRevenue, setTotalRevenue] = useState(0);
-
-    const [purchases, setPurchases] = useState([]);
-
-    const handleTimeFrameChange = (value) => {
-      setTimeframe(Number(value)); // Directly update the state with the numeric value
-    };
-
-    useEffect(() => {
-      const fetchSalesData = async () => {
-        setLoading(true);
-        const response = await axios.get('/api/sales/getBidSales', {
-          params: {
-            timeframeID: timeframe
-          },
-        });
-
-        console.log("response: ", response);
-
-        const responseTotalRevenue = await axios.get('/api/sales/getTotalRevenue', {
-          params: {
-            timeframeID: timeframe
-          },
-        });
-
-        console.log("responseTotalRevenue: ", responseTotalRevenue);
-
-        setPurchases(response.data.data);
-        setTotalRevenue(responseTotalRevenue.data.totalRevenue);
-        setLoading(false);
-      }
-
-      fetchSalesData();
-    }, [timeframe]);
-
-    return (
-      <div>
-        <h1 className="text-3xl font-bold mb-6">Sales & Revenue</h1>
-        <div className="mb-4 text-center">
-          <label htmlFor="timeFrame" className="mr-2 font-semibold text-xl">Sales Data For </label>
-          <select 
-            id="timeFrame" 
-            className="border border-gray-300 rounded px-3 py-2" 
-            value={timeframe}
-            onChange={(e) => handleTimeFrameChange(e.target.value)}
-          >
-            <option value={0}>Today</option>
-            <option value={1}>Last 7 Days</option>
-            <option value={2}>Last 30 Days</option>
-            <option value={3}>Last 90 Days</option>
-            <option value={4}>Last Year</option>
-            <option value={5}>All Time</option>
-          </select>
-        </div>
-        {loading ? (
-          <LoadingComponent loadingText={"Loading Sales Data"} />
-        ) : (
-          <div>
-            <div className="bg-gray-100 p-6 rounded-lg shadow text-center">
-              <h3 className="text-xl font-semibold mb-2">Total Revenue</h3>
-              <p className="text-2xl font-bold">${totalRevenue}</p>
-            </div>
-            <div className="overflow-x-auto">
-                <h1 className="text-center text-3xl font-semibold mb-2 mt-2">
-                  Bid Sales
-                </h1>
-                <table className="w-full table-auto">
-                  <thead>
-                    <tr className="bg-gray-200 text-left">
-                      <th className="px-4 py-2">Purchaser</th>
-                      <th className="px-4 py-2">Bids Purchases</th>
-                      <th className="px-4 py-2">Amount Spent</th>
-                      <th className="px-4 py-2">Purchase Date</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-sm">
-                    {purchases.map((purchase) => (
-                      <tr className="border-b" key={purchase.id}>
-                        <td className="px-4 py-2">
-                          <Link
-                            href={`/profile/${purchase.user_id?.id}`}
-                            className="text-blue-500 hover:underline"
-                          >
-                            {purchase.user_id?.first_name + ' ' + purchase.user_id?.last_name}
-                          </Link>
-                        </td>
-                        <td className="px-4 py-2">
-                          {purchase.amount_quantity}
-                        </td>
-                        <td className="px-4 py-2">
-                          ${purchase.amount_dollars}
-                        </td>
-                        <td className="px-4 py-2">
-                          {new Date(purchase.created_at).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-          </div>
-        )}
-      </div>
-    )
-  }
 
   const LibraryManagement = () => {
     const [library, setLibrary] = useState([]);
@@ -1429,20 +1313,10 @@ const UserManagement = () => {
 
 const Settings = () => {
 
-  const handleSendMissYouEmails = async () => {
-    const response = await axios.post('/api/sendMissYouEmails');
-  }
-
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6 text-white">Site Settings</h1>
       <p className="text-white">Site settings content goes here.</p>
-      <button 
-        className="start-button"
-        onClick={handleSendMissYouEmails}  
-      >
-        Send Miss You Emails
-      </button>
     </div>
   );
 };
