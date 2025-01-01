@@ -3,10 +3,12 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Head from 'next/head';
 import Link from 'next/link';
+import RelatedSymbolsComponent from './RelatedSymbolsComponent';
 
 const DreamAboutSomeoneArticle = () => {
 
     const router = useRouter();
+    const symbols = ["emotions", "affection", "reflection", "people", "crossroads", "telepathy", "anxiety", "boss", "family", "friend"];
 
   return (
     <>
@@ -181,6 +183,7 @@ const DreamAboutSomeoneArticle = () => {
       <p>
         <strong>Sweet dreams, and may your nocturnal journeys reveal what you need to know!</strong>
       </p>
+      <RelatedSymbolsComponent symbols={symbols} />
       <div className="image-container text-center mt-4">
           <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
       </div>
