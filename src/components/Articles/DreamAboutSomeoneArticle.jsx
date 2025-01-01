@@ -154,7 +154,7 @@ const DreamAboutSomeoneArticle = () => {
         </li>
       </ul>
 
-      <h2 className="font-thin text-2xl mt-4">7. Dive Deeper with Our AI-Powered Dream Analysis</h2>
+      <h2 className="font-thin text-2xl mt-4">7. Dive Deeper with Our Dream Interpretation AI</h2>
         <p>
             Exploring dream dictionaries and symbols can be a fun introduction to dream interpretation. 
             However, if you’re looking to uncover truly personalized insights, we invite you to use our dream 
@@ -178,8 +178,8 @@ const DreamAboutSomeoneArticle = () => {
         <strong>Sweet dreams, and may your nocturnal journeys reveal what you need to know!</strong>
       </p>
       <div className="image-container text-center mt-4">
-            <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
-        </div>
+          <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
+      </div>
     </article>
     </div>
     </>
