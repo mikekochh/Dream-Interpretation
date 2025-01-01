@@ -57,8 +57,8 @@ const NavBar = () => {
                                 <li className={`cursor-pointer mr-4 ${pathname === '/dream-stream' ? 'font-bold' : ''}`}>
                                     <Link href="/dream-stream">Stream</Link>
                                 </li>
-                                <li className={`cursor-pointer mr-4 ${pathname === '/dictionary' ? 'font-bold' : ''}`}>
-                                    <Link href="/dictionary">Dictionary</Link>
+                                <li className={`cursor-pointer mr-4 ${pathname === '/dream-dictionary' ? 'font-bold' : ''}`}>
+                                    <Link href="/dream-dictionary">Dictionary</Link>
                                 </li>
                                 {!noAccount && (
                                     <li className={`cursor-pointer ${pathname === '/settings' ? 'font-bold' : ''}`}>
@@ -124,8 +124,8 @@ const MenuItems = ({setIsOpen, pathname, noAccount}) => {
                 <li className={`cursor-pointer p-4 ${pathname === '/dream-stream' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/dream-stream">Stream</Link>
                 </li>
-                <li className={`cursor-pointer p-4 ${pathname === '/dictionary' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                    <Link href="/dictionary">Dictionary</Link>
+                <li className={`cursor-pointer p-4 ${pathname === '/dream-dictionary' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                    <Link href="/dream-dictionary">Dictionary</Link>
                 </li>
                 {!noAccount && (
                 <li className={`cursor-pointer p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
