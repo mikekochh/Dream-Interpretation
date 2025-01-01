@@ -40,7 +40,7 @@ const DreamAboutSomeoneArticle = () => {
       <p>
         One of the most straightforward explanations for dreaming about someone is that you have
         unfinished emotional business with them—positive, negative, or somewhere in between.
-        Emotions that you haven&apos;t fully processed during your waking hours can resurface in dreams.
+        <a href="/dream-dictionary/emotions" className="font-bold underline">emotions</a> that you haven&apos;t fully processed during your waking hours can resurface in dreams.
         This can involve:
       </p>
       <ul>
@@ -78,6 +78,9 @@ const DreamAboutSomeoneArticle = () => {
           something you secretly fear or desire, bringing those hidden thoughts to the surface.
         </li>
       </ul>
+      <p>
+        This process of self-discovery often comes down to <a href="/dream-dictionary/reflection" className="font-bold underline">reflection</a> on who you are and what you want.
+      </p>
 
       <h2 className="font-thin text-2xl mt-4">3. Memory and Daily Life Influences</h2>
       <p>
@@ -131,13 +134,13 @@ const DreamAboutSomeoneArticle = () => {
         <li>
           <strong>Telepathy or shared energy:</strong> If you dream of someone out of the blue,
           there are spiritual or esoteric perspectives suggesting they might also be thinking about
-          you or that you share a unique energetic bond.
+          you or that you share a unique energetic bond. This phenomenon, often referred to as <a href="/dream-dictionary/telepathy" className="underline font-bold">telepathy</a>, has fascinated dreamers for centuries.
         </li>
       </ul>
 
       <h2 className="font-thin text-2xl mt-4">6. Anxiety and Worries</h2>
       <p>
-        We can&apos;t ignore the role of stress and anxiety in shaping our dreams. If a relationship is
+        We can&apos;t ignore the role of stress and <a href="/dream-dictionary/anxiety" className="underline font-bold">anxiety</a> in shaping our dreams. If a relationship is
         causing you worry—whether it&apos;s a boss, a family member, or a friend—your subconscious might
         rehearse scenarios in your sleep.
       </p>

@@ -65,7 +65,7 @@ const LibraryHomeScreen = () => {
                 <div className="mt-8">
                     <ul className="mt-4 space-y-4">
                         {displayedSymbols.map((symbol) => (
-                            <Link href={`/dream-symbols/${symbol.sanitizedSymbol}`} key={symbol._id}>
+                            <Link href={`/dream-dictionary/${symbol.sanitizedSymbol}`} key={symbol._id}>
                                 <li
                                     className="p-4 border text-white border-gray-300 rounded-xl bg-white bg-opacity-10 shadow-2xl mt-4 cursor-pointer transition-transform duration-500 hover:scale-105 hover:bg-opacity-20"
                                 >
