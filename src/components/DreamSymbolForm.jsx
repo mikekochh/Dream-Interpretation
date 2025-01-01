@@ -1,33 +1,22 @@
 'use client';
-import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import LoadingComponent from './LoadingComponent';
+import { useRecoilValue } from 'recoil';
+import { dreamSymbolsState } from '@/recoil/atoms';
 
-const DreamSymbolPage = () => {
+const DreamSymbolForm = () => {
     const pathname = usePathname();
     const router = useRouter();
     const sanitizedSymbol = pathname.split('/').pop();
 
-    const [symbolData, setSymbolData] = useState();
-    const [loading, setLoading] = useState(true);
-    const [symbolNotFound, setSymbolNotFound] = useState(false);
+    let symbolNotFound = false;
 
-    useEffect(() => {
-        const fetchSymbolData = async () => {
-            try {
-                const response = await axios.get('/api/dream/symbols/fetchSymbolData/' + sanitizedSymbol);
-                setSymbolData(response.data);
-                setLoading(false);
-            } catch (error) {
-                setSymbolNotFound(true);
-            }
-        }
-
-        if (sanitizedSymbol) {
-            fetchSymbolData();
-        }
-    }, [sanitizedSymbol])
+    const dreamSymbols = useRecoilValue(dreamSymbolsState);
+    
+    const symbolData = dreamSymbols.find(dreamSymbol => dreamSymbol.sanitizedSymbol === sanitizedSymbol);
+    
+    if (!symbolData) {
+        symbolNotFound = true;
+    }
 
     if (symbolNotFound) {
         return (
@@ -46,13 +35,6 @@ const DreamSymbolPage = () => {
                 </div>
             </div>
         );
-    }
-    
-
-    if (loading) {
-        return (
-            <LoadingComponent loadingText={"Dreaming"} />
-        )
     }
 
     return (
@@ -76,4 +58,4 @@ const DreamSymbolPage = () => {
     );
 };
 
-export default DreamSymbolPage;
+export default DreamSymbolForm;
