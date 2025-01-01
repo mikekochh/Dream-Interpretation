@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Head from 'next/head';
+import Link from 'next/link';
 
 const DreamAboutSomeoneArticle = () => {
 
@@ -40,7 +41,7 @@ const DreamAboutSomeoneArticle = () => {
       <p>
         One of the most straightforward explanations for dreaming about someone is that you have
         unfinished emotional business with them—positive, negative, or somewhere in between.
-        <a href="/dream-dictionary/emotions" className="font-bold underline">emotions</a> that you haven&apos;t fully processed during your waking hours can resurface in dreams.
+        <Link href="/dream-dictionary/emotions" className="font-bold underline">emotions</Link> that you haven&apos;t fully processed during your waking hours can resurface in dreams.
         This can involve:
       </p>
       <ul>
@@ -50,7 +51,7 @@ const DreamAboutSomeoneArticle = () => {
           placing them in your dream.
         </li>
         <li>
-          <strong>Deep affection or admiration:</strong> Powerful feelings of love, gratitude, or
+          <strong>Deep <Link href="/dream-dictionary/affection" className="font-bold underline">affection</Link> or admiration:</strong> Powerful feelings of love, gratitude, or
           admiration can also show up in dreams as a way of reinforcing those emotions.
         </li>
         <li>
@@ -79,12 +80,12 @@ const DreamAboutSomeoneArticle = () => {
         </li>
       </ul>
       <p>
-        This process of self-discovery often comes down to <a href="/dream-dictionary/reflection" className="font-bold underline">reflection</a> on who you are and what you want.
+        This process of self-discovery often comes down to <Link href="/dream-dictionary/reflection" className="font-bold underline">reflection</Link> on who you are and what you want.
       </p>
 
       <h2 className="font-thin text-2xl mt-4">3. Memory and Daily Life Influences</h2>
       <p>
-        Dreams can be influenced by your day-to-day experiences, and sometimes people in your dreams
+        Dreams can be influenced by your day-to-day experiences, and sometimes <Link href="/dream-dictionary/people" className="font-bold underline">people</Link> in your dreams
         simply show up because your mind is sorting through recent events, conversations, and
         memories.
       </p>
@@ -115,7 +116,7 @@ const DreamAboutSomeoneArticle = () => {
         <li>
           <strong>Life stage transitions:</strong> In dreams, seeing someone could reflect an
           ongoing shift in your life. For instance, dreaming of an old friend who you associate with
-          childhood innocence might pop up when you&apos;re at a crossroads in your adult life, reminding
+          childhood innocence might pop up when you&apos;re at a <Link href="/dream-dictionary/crossroads" className="font-bold underline">crossroads</Link> in your adult life, reminding
           you of simpler times or guiding you to reconsider old values.
         </li>
       </ul>
@@ -134,14 +135,14 @@ const DreamAboutSomeoneArticle = () => {
         <li>
           <strong>Telepathy or shared energy:</strong> If you dream of someone out of the blue,
           there are spiritual or esoteric perspectives suggesting they might also be thinking about
-          you or that you share a unique energetic bond. This phenomenon, often referred to as <a href="/dream-dictionary/telepathy" className="underline font-bold">telepathy</a>, has fascinated dreamers for centuries.
+          you or that you share a unique energetic bond. This phenomenon, often referred to as <Link href="/dream-dictionary/telepathy" className="underline font-bold">telepathy</Link>, has fascinated dreamers for centuries.
         </li>
       </ul>
 
       <h2 className="font-thin text-2xl mt-4">6. Anxiety and Worries</h2>
       <p>
-        We can&apos;t ignore the role of stress and <a href="/dream-dictionary/anxiety" className="underline font-bold">anxiety</a> in shaping our dreams. If a relationship is
-        causing you worry—whether it&apos;s a boss, a family member, or a friend—your subconscious might
+        We can&apos;t ignore the role of stress and <Link href="/dream-dictionary/anxiety" className="underline font-bold">anxiety</Link> in shaping our dreams. If a relationship is
+        causing you worry—whether it&apos;s a <Link href="/dream-dictionary/boss" className="font-bold underline">boss</Link>, a <Link href="/dream-dictionary/family" className="font-bold underline">family</Link> member, or a <Link href="/dream-dictionary/friend" className="font-bold underline">friend</Link>, your subconscious might
         rehearse scenarios in your sleep.
       </p>
       <ul>
