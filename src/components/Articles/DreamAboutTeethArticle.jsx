@@ -2,9 +2,12 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Head from 'next/head';
+import RelatedSymbolsComponent from './RelatedSymbolsComponent';
+import Link from 'next/link';
 
 const DreamAboutTeethArticle = () => {
   const router = useRouter();
+  const symbols = ["anxiety", "breaking", "dentist", "eating", "emotions", "falling", "job", "losing teeth", "rebirth", "rejection", "rotting", "smiling", "teeth", "transformation"]
 
   return (
     <>
@@ -49,17 +52,17 @@ const DreamAboutTeethArticle = () => {
           {/* 1. Symbol of Change or Transition */}
           <h2 className="font-thin text-2xl mt-8">1. Symbol of Change or Transition</h2>
           <p className="mt-2">
-            In many dream traditions, <strong>teeth represent a symbol of personal transformation</strong>. 
+            In many dream traditions, <strong><Link href="/dream-dictionary/teeth" className="font-bold underline">teeth</Link> represent a symbol of personal <Link href="/dream-dictionary/transformation" className="font-bold underline">transformation</Link></strong>. 
             When you dream of them falling out, it could indicate that you are in the middle of a life 
             transition. This transition might be:
           </p>
           <ul className="list-disc pl-6 mt-2">
             <li className="mt-1">
               <strong>Emotional:</strong> You may be going through a phase of emotional upheaval, 
-              such as the end of a relationship, a new job, or moving to a new city.
+              such as the end of a relationship, a new <Link href="/dream-dictionary/job" className="font-bold underline">job</Link>, or moving to a new city.
             </li>
             <li className="mt-1">
-              <strong>Physical:</strong> A dream about losing teeth can also mark changes in the body 
+              <strong>Physical:</strong> A dream about <Link href="/dream-dictionary/losing-teeth" className="font-bold underline">losing teeth</Link> can also mark changes in the body 
               (e.g., aging or concerns about health).
             </li>
             <li className="mt-1">
@@ -75,8 +78,8 @@ const DreamAboutTeethArticle = () => {
           {/* 2. Anxiety About Appearance and Communication */}
           <h2 className="font-thin text-2xl mt-8">2. Anxiety About Appearance and Communication</h2>
           <p className="mt-2">
-            Teeth are one of our <strong>most visible physical traits</strong>. Smiling, talking, or even 
-            eating are social activities that place our teeth on display. Consequently, dreams about 
+            Teeth are one of our <strong>most visible physical traits</strong>. <Link href="/dream-dictionary/smiling" className="font-bold underline">smiling</Link>, talking, or even 
+            <Link href="/dream-dictionary/eating" className="font-bold underline">eating</Link> are social activities that place our teeth on display. Consequently, dreams about 
             losing them often connect to concerns regarding:
           </p>
           <ul className="list-disc pl-6 mt-2">
@@ -85,12 +88,12 @@ const DreamAboutTeethArticle = () => {
               can surface subconsciously in a dream.
             </li>
             <li className="mt-1">
-              <strong>Communication:</strong> If your teeth are falling out as you talk, you might be 
+              <strong>Communication:</strong> If your teeth are <Link href="/dream-dictionary/falling" className="font-bold underline">falling</Link> out as you talk, you might be 
               worried about being misunderstood or judged in your interactions.
             </li>
             <li className="mt-1">
               <strong>Social acceptance:</strong> Teeth are also closely tied to attractiveness and 
-              social standards. A dream about missing teeth can suggest fear of rejection or loss of 
+              social standards. A dream about missing teeth can suggest fear of <Link href="/dream-dictionary/rejection" className="font-bold underline">rejection</Link> or loss of 
               social standing.
             </li>
           </ul>
@@ -137,7 +140,7 @@ const DreamAboutTeethArticle = () => {
             <p className="mt-2">
             From a spiritual perspective, the <strong>teeth falling out dream spiritual meaning</strong> often revolves 
             around a transformative inner journey. In some traditions, losing teeth is seen as shedding old attachments, 
-            negative energy, or outdated beliefs—akin to a symbolic rebirth. Much like teeth represent foundational tools 
+            negative energy, or outdated beliefs—akin to a symbolic <Link href="/dream-dictionary/rebirth" className="font-bold underline">rebirth</Link>. Much like teeth represent foundational tools 
             for nourishment in the physical world, they can also represent core principles and values in the spiritual 
             realm. When they fall out in a dream, it may indicate the need to release what no longer serves you in order 
             to evolve. The unsettling nature of these dreams can reflect the natural apprehension and vulnerability that 
@@ -159,7 +162,7 @@ const DreamAboutTeethArticle = () => {
           </p>
 
           {/* 6b. Teeth Breaking or Crumbling */}
-          <h3 className="font-semibold text-xl mt-4">b) Teeth Breaking or Crumbling</h3>
+          <h3 className="font-semibold text-xl mt-4">b) Teeth <Link href="/dream-dictionary/breaking" className="font-bold underline">Breaking</Link> or Crumbling</h3>
           <p className="mt-2">
             In these dreams, you might find pieces of your teeth in your mouth or watch them crumble 
             to dust. This can symbolize:
@@ -196,7 +199,7 @@ const DreamAboutTeethArticle = () => {
           {/* 6d. Dental Procedures or Braces */}
           <h3 className="font-semibold text-xl mt-4">d) Dental Procedures or Braces</h3>
           <p className="mt-2">
-            <strong>Dreams about visiting the dentist, getting braces, or undergoing procedures</strong> 
+            <strong>Dreams about visiting the <Link href="/dream-dictionary/dentist" className="font-bold underline">dentist</Link>, getting braces, or undergoing procedures</strong> 
             can represent the desire for self-improvement or healing. It hints at actively 
             <em> fixing what is broken</em> or making a conscious effort to enhance some aspect of your life.
           </p>
@@ -219,15 +222,16 @@ const DreamAboutTeethArticle = () => {
           {/* Conclusion */}
           <h2 className="font-thin text-2xl mt-8">Conclusion</h2>
             <p className="mt-2 mb-8">
-            Dream of teeth falling out can stir up a variety of emotions—alarm, confusion, or even relief once you
-            awaken. Whether this dream symbolizes transition, anxiety about appearance, fear of loss, or the
+            Dream of teeth falling out can stir up a variety of <Link href="/dream-dictionary/emotions" className="font-bold underline">emotions</Link>, confusion, or even relief once you
+            awaken. Whether this dream symbolizes transition, <Link href="/dream-dictionary/anxiety" className="font-bold underline">anxiety</Link> about appearance, fear of loss, or the
             stress you’ve been carrying, these unsettling visions can function as mirrors reflecting your subconscious
-            concerns. By examining related themes—such as rotting teeth, teeth being pulled out, or braces—you
+            concerns. By examining related themes—such as <Link href="/dream-dictionary/rotting" className="font-bold underline">rotting</Link> teeth, teeth being pulled out, or braces—you
             can gain a broader perspective on what your dream might truly signify. Ultimately, deciphering its
             personal meaning involves combining cultural, psychological, and emotional factors in a way that resonates
             with your own life’s path.
             </p>
 
+            <RelatedSymbolsComponent symbols={symbols} />
           <div className="image-container text-center mt-4">
             <Image src="/mandela.webp" alt="Mandela" width={500} height={500} className="mandela-image" />
         </div>
