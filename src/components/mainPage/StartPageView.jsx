@@ -48,21 +48,11 @@ const StartPageView = ({
     return (
         <div>
             <div className="md:w-2/3 md:px-0 px-2 mx-auto" >
-                {user ? (
-                    <>
-                        <p className="text-center golden-ratio-2">Welcome back {user?.name}</p>
-                        <p className="text-center golden-ratio-5 gradient-title-text">Dream Oracles</p>
-                    </>
-                ) : (
-                    <>
-                        <p className="text-center golden-ratio-4 gradient-title-text">Understand Your Dreams</p>
-                        <p className="text-center golden-ratio-2">
-                            Use our dream interpretation AI software to turn your dreams into insights that foster self-awareness, guide 
-                            personal growth, and lead to mental clarity.
-                        </p>
-                    </>
-                )}
-
+                <h1 className="text-center golden-ratio-4 gradient-title-text">Dream Interpretation AI</h1>
+                <h3 className="text-center golden-ratio-2">
+                    Understand your dreams like never before using our dream interpretation AI software, turning your dreams
+                    into insights that foster self-awareness, guide personal growth, and lead to mental clarity.
+                </h3>
 
                 <div className="border border-white rounded-xl p-4 bg-white bg-opacity-10 shadow-2xl mt-4">
                     <p className="text-white golden-ratio-2 font-semibold mb-2">
