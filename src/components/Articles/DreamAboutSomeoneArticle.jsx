@@ -169,7 +169,7 @@ const DreamAboutSomeoneArticle = () => {
             interpretation. Try it out for free below!
         </p>
         <div className="text-center mt-5">
-            <button className="start-button" onClick={() => router.push('/interpret')}>AI Dream Interpretation</button>
+            <button className="start-button" onClick={() => router.push('/')}>AI Dream Interpretation</button>
         </div>
       <h2 className="font-thin text-2xl mt-4">Final Thoughts</h2>
       <p>

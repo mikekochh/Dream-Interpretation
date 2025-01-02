@@ -18,6 +18,10 @@ export default function ActivationForm() {
     const [userEmail, setUserEmail] = useState(null);
 
     const activateUser = async function() {
+
+        console.log("Do we ever get here?");
+
+
         try {
             const res = await axios.post('api/activate', { verificationTokenID });
 
@@ -28,32 +32,14 @@ export default function ActivationForm() {
             // if (dreamID)
             if (true) {
                 setStatus("Successfully Activated! Redirecting you now...");
-                router.push('/interpret');
+                router.push('/');
                 localStorage.removeItem('dreamID');
                 const resSignIn = await signIn("credentials", {
                     email: res.data.activatedUser.email,
                     password: 'password',
                     redirect: false
                 });
-            } else if (ebook) {
-                setStatus("Downloading Dream Interpretation E-book");
-                const resSignIn = await signIn("credentials", {
-                    email: res.data.activatedUser.email,
-                    password: 'password',
-                    redirect: false
-                });
-                localStorage.removeItem('ebook');
-                router.push('/e-book');
-            }
-            else {
-                setStatus("Successfully Activated! Redirecting you now...");
-                const resSignIn = await signIn("credentials", {
-                    email: res.data.activatedUser.email,
-                    password: 'password',
-                    redirect: false
-                });
-                router.push('/settings');
-            }
+            } 
         } catch (error) {
             setStatus("Error Activating User");
             setError(true);

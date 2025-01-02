@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
   // if they leave the website, we log the view with the current page
 
   const getPageType = (pathname) => {
-    if (pathname.startsWith('/interpret')) {
+    if (pathname.startsWith('/')) {
       return PAGE_INTERPRET_HOME;
     } else if (pathname.startsWith('/dream-stream')) {
       return PAGE_DREAM_STREAM;
@@ -188,11 +188,9 @@ export const UserProvider = ({ children }) => {
       }
   };
 
-
-
   const logout = async () => {
     try {
-      await signOut({ redirect: true, callbackUrl: '/interpret' });
+      await signOut({ redirect: true, callbackUrl: '/' });
       setUser({});
     } catch (error) {
       console.error('Error logging out:', error.message);

@@ -9,7 +9,7 @@ export default function LoginPage() {
     const { user } = useContext(UserContext);
 
     if (user) {
-        redirect("/interpret");
+        redirect("/");
     }
 
     return (<LoginForm />)

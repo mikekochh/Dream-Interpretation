@@ -58,7 +58,7 @@ export default function LoginForm() {
                 return;
             }
 
-            router.push('/interpret');  
+            router.push('/');  
         } catch (error) {
             setError("Login failed!");
             setLogginIn(false);

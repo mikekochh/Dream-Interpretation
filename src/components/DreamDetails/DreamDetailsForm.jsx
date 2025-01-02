@@ -89,7 +89,7 @@ export default function DreamsForm() {
     useEffect(() => {
         const checkPage = () => {
             if (!dreamID) {
-                router.push('/interpret');
+                router.push('/');
             }
         }
 

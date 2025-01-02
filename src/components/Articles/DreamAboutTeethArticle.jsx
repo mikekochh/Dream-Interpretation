@@ -213,7 +213,7 @@ const DreamAboutTeethArticle = () => {
                 can illuminate your subconscious world.
             </p>
             <div className="text-center mt-5">
-                <button className="start-button" onClick={() => router.push('/interpret')}>
+                <button className="start-button" onClick={() => router.push('/')}>
                     AI Dream Interpretation
                 </button>
             </div>

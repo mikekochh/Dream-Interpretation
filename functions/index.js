@@ -728,7 +728,7 @@ exports.sendEmailReminders = functions.pubsub
                                   <p style="color: black;">Did you have a curious dream last night and wonder what it could mean?</p>
                                   <p style="color: black;">We're here to help you explore the insights hidden within your dreams.</p>
                                   <p style="color: black;">Click the link below to enter your dream into our interpretation software and uncover its meaning:</p>
-                                  <h3 style="text-align: center;"><a href="${domain}/interpret" style="color: blue; text-decoration: underline;">Enter Your Dream</a></h3>
+                                  <h3 style="text-align: center;"><a href="${domain}/" style="color: blue; text-decoration: underline;">Enter Your Dream</a></h3>
                                   <p style="color: black;">Wishing you a day filled with wonder and discovery!</p>
                                   <p style="color: black;">Warm regards,<br/>The Dream Oracles Team</p>
                               </td>

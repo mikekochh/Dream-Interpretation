@@ -46,8 +46,8 @@ const NavBar = () => {
                         {/* Section on the right */}
                         <div className="relative justify-end items-center text-white md:flex hidden">
                             <ul className="flex">
-                                <li className={`cursor-pointer mr-4 ${pathname === '/interpret' ? 'font-bold' : ''}`}>
-                                    <Link href="/interpret">Interpret</Link>
+                                <li className={`cursor-pointer mr-4 ${pathname === '/' ? 'font-bold' : ''}`}>
+                                    <Link href="/">Home</Link>
                                 </li>
                                 {!noAccount && (
                                 <li className={`cursor-pointer mr-4 ${pathname === '/dreams' || pathname === '/dream-details' ? 'font-bold' : ''}`}>
@@ -113,8 +113,8 @@ const MenuItems = ({setIsOpen, pathname, noAccount}) => {
     return (
         <div className="h-full golden-ratio-3 text-white">
             <ul className='list-none flex flex-col h-full text-center inset-0 justify-center mobile-list' style={{ position: 'relative', zIndex: 1000 }}>
-                <li className={`cursor-pointer p-4 ${pathname === '/interpret' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
-                    <Link href="/interpret">Interpret</Link>
+                <li className={`cursor-pointer p-4 ${pathname === '/' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                    <Link href="/">Interpret</Link>
                 </li>
                 {!noAccount && (
                 <li className={`cursor-pointer p-4 ${pathname === '/dreams' || pathname === '/dream-details' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
