@@ -109,7 +109,7 @@ export default function DreamAboutSomeoneDyingArticle() {
 
           <h3 className="text-xl font-semibold mt-4">Spiritual Growth and Lessons</h3>
           <p>
-            These dreams sometimes serve as markers of spiritual lessons. Perhaps you're discarding
+            These dreams sometimes serve as markers of spiritual lessons. Perhaps you&apos;re discarding
             outdated beliefs or approaching a personal growth spurt. The death of a familiar figure
             may signify letting go of old self-concepts, fostering deeper spiritual understanding.
           </p>
@@ -117,7 +117,7 @@ export default function DreamAboutSomeoneDyingArticle() {
           <h3 className="text-xl font-semibold mt-4">Warning or Precognitive Element</h3>
           <p>
             Some believe that dreams can carry premonitions or warnings. If you hold this
-            perspective, a dream of someone's death might act as a call to cherish the time you have,
+            perspective, a dream of someone&apos;s death might act as a call to cherish the time you have,
             stay vigilant about health or well-being, or attend to unresolved issues. Keep in mind
             that such interpretations vary by belief system and personal intuition.
           </p>
