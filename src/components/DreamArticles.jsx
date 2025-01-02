@@ -30,7 +30,7 @@ const DreamArticles = () => {
       {/* Articles grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-6">
         {dreamArticles.map((article, index) => (
-          <Link key={index} href={article.articleURL}>
+          <Link key={index} href={`/dream-meaning/${article.articleURL}`}>
             <div className="bg-gray-800 rounded-md overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer">
               <img
                 src={article.articlePicture}
