@@ -6,52 +6,57 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
+<!-- High Priority Pages -->
 <url>
   <loc>https://www.dreamoracles.co/</loc>
   <lastmod>2025-01-02T20:41:37+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://www.dreamoracles.co/dreams</loc>
-  <lastmod>2025-01-02T20:41:37+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.dreamoracles.co/dream-stream</loc>
-  <lastmod>2025-01-02T20:41:37+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
   <loc>https://www.dreamoracles.co/dream-dictionary</loc>
   <lastmod>2025-01-02T20:41:37+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.dreamoracles.co/settings</loc>
-  <lastmod>2025-01-02T20:41:37+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.dreamoracles.co/feedback</loc>
-  <lastmod>2025-01-02T20:41:37+00:00</lastmod>
-  <priority>0.80</priority>
+  <priority>0.90</priority>
 </url>
 
 <!-- Articles -->
 <url>
   <loc>https://www.dreamoracles.co/dream-meaning/dream-about-someone</loc>
   <lastmod>2025-01-01</lastmod>
-  <priority>0.80</priority>
+  <priority>0.90</priority>
 </url>
 <url>
   <loc>https://www.dreamoracles.co/dream-meaning/dream-about-someone-dying</loc>
   <lastmod>2025-01-01</lastmod>
-  <priority>0.80</priority>
+  <priority>0.90</priority>
 </url>
 <url>
   <loc>https://www.dreamoracles.co/dream-meaning/dream-about-teeth</loc>
   <lastmod>2025-01-01</lastmod>
-  <priority>0.80</priority>
+  <priority>0.90</priority>
+</url>
+
+<!-- Medium Priority Pages -->
+<url>
+  <loc>https://www.dreamoracles.co/dreams</loc>
+  <lastmod>2025-01-02T20:41:37+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://www.dreamoracles.co/dream-stream</loc>
+  <lastmod>2025-01-02T20:41:37+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+
+<!-- Low Priority Pages -->
+<url>
+  <loc>https://www.dreamoracles.co/settings</loc>
+  <lastmod>2025-01-02T20:41:37+00:00</lastmod>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://www.dreamoracles.co/feedback</loc>
+  <lastmod>2025-01-02T20:41:37+00:00</lastmod>
+  <priority>0.50</priority>
 </url>
 
 </urlset>
