@@ -42,7 +42,7 @@ const StarBackground = ({ children }) => {
             ) : (
                 <Link
                     className="absolute left-0 bottom-0 dream-button golden-ratio-1 z-10"
-                    href={'/interpret'}
+                    href={'/'}
                 >
                     Back Home
                 </Link>

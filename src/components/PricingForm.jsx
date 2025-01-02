@@ -23,7 +23,7 @@ const PricingForm = () => {
             <span className="text-green-400 mr-2">✓</span> Dream interpretation eBook
           </li>
         </ul>
-        <button className="secondary-button" onClick={() => router.push('/interpret')}>
+        <button className="secondary-button" onClick={() => router.push('/')}>
           Get Started
         </button>
       </div>

@@ -213,7 +213,7 @@ const SettingsForm = () => {
 
     const handleLogout = async () => {
         await logout();
-        router.push("/interpret");
+        router.push("/");
     };
 
     const createAccount = () => {
