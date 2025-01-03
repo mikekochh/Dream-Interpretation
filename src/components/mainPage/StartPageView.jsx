@@ -47,7 +47,8 @@ const StartPageView = ({
 
     return (
         <div>
-            <div className="md:w-2/3 md:px-0 px-2 mx-auto" >
+            <div className="md:w-2/3 md:px-0 px-2 mx-auto">
+                {user && (<h3 className="text-center font-thin golden-ratio-2 text-gray-200">Welcome back {user.name}</h3>)}
                 <h1 className="text-center golden-ratio-4 gradient-title-text">Dream Interpretation AI</h1>
                 <h3 className="text-center golden-ratio-2">
                     Understand your dreams like never before using our dream interpretation AI software, turning your dreams
