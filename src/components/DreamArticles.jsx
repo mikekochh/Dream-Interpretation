@@ -11,7 +11,7 @@ const DreamArticles = () => {
   useEffect(() => {
     const fetchDreamArticles = async () => {
       try {
-        const response = await axios.get('/api/dream/articles');
+        const response = await axios.get('/api/dream/articles/preview');
         setDreamArticles(response.data);
       } catch (error) {
         console.error('Error fetching dream articles:', error);
