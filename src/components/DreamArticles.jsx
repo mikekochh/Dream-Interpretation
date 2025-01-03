@@ -2,9 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const DreamArticles = () => {
   const [dreamArticles, setDreamArticles] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDreamArticles = async () => {
@@ -48,6 +50,9 @@ const DreamArticles = () => {
             </div>
           </Link>
         ))}
+      </div>
+      <div className="text-center mt-3">
+        <button onClick={() => router.push('/dream-meaning')} className="start-button">View More Articles</button>
       </div>
     </div>
   );

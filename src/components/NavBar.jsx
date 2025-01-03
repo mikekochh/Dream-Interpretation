@@ -44,7 +44,7 @@ const NavBar = () => {
 
                     <div>
                         {/* Section on the right */}
-                        <div className="relative justify-end items-center text-white md:flex hidden">
+                        <div className="relative justify-end items-center text-white md:flex hidden text-base">
                             <ul className="flex">
                                 <li className={`cursor-pointer mr-4 ${pathname === '/' ? 'font-bold' : ''}`}>
                                     <Link href="/">Home</Link>
@@ -54,12 +54,16 @@ const NavBar = () => {
                                     <Link href="/dreams">Journal</Link>
                                 </li>
                                 )}
+                                <li className={`cursor-pointer mr-4 ${pathname.startsWith('/dream-meaning') ? 'font-bold' : ''}`}>
+                                    <Link href="/dream-meaning">Meanings</Link>
+                                </li>
                                 <li className={`cursor-pointer mr-4 ${pathname === '/dream-stream' ? 'font-bold' : ''}`}>
                                     <Link href="/dream-stream">Stream</Link>
                                 </li>
-                                <li className={`cursor-pointer mr-4 ${pathname === '/dream-dictionary' ? 'font-bold' : ''}`}>
+                                <li className={`cursor-pointer mr-4 ${pathname.startsWith('/dream-dictionary') ? 'font-bold' : ''}`}>
                                     <Link href="/dream-dictionary">Dictionary</Link>
                                 </li>
+
                                 {!noAccount && (
                                     <li className={`cursor-pointer ${pathname === '/settings' ? 'font-bold' : ''}`}>
                                         <Link href="/settings">Profile</Link>
@@ -121,12 +125,22 @@ const MenuItems = ({setIsOpen, pathname, noAccount}) => {
                     <Link href="/dreams">Journal</Link>
                 </li>
                 )}
+                <li 
+                    className={`cursor-pointer p-4 ${pathname.startsWith('/dream-dictionary') ? 'font-bold' : ''}`}
+                    onClick={() => setIsOpen(false)}
+                >
+                    <Link href="/dream-meaning">Meanings</Link>
+                </li>
                 <li className={`cursor-pointer p-4 ${pathname === '/dream-stream' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/dream-stream">Stream</Link>
                 </li>
-                <li className={`cursor-pointer p-4 ${pathname === '/dream-dictionary' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+                <li
+                    className={`cursor-pointer p-4 ${pathname.startsWith('/dream-dictionary') ? 'font-bold' : ''}`}
+                    onClick={() => setIsOpen(false)}
+                >
                     <Link href="/dream-dictionary">Dictionary</Link>
                 </li>
+
                 {!noAccount && (
                 <li className={`cursor-pointer p-4 ${pathname === '/settings' ? 'font-bold' : ''}`} onClick={() => setIsOpen(false)}>
                     <Link href="/settings">Profile</Link>
