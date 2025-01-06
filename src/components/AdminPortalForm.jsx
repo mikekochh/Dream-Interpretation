@@ -53,6 +53,8 @@ const AdminPortalForm = () => {
         return <FeedbackManagement />;
       case 'library':
         return <LibraryManagement />;
+      case 'articles':
+        return <ArticleManagement />;
       case 'settings':
         return <Settings />;
       default:
@@ -116,7 +118,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen, hasUnreadFeedback
 
       <h2 className="text-2xl font-bold text-center text-teal-400 mb-8">Admin Portal</h2>
       <ul>
-        {['users', 'dreams', 'interpretations', 'views', 'feedback', 'library', 'sales', 'settings'].map((tab) => (
+        {['users', 'dreams', 'interpretations', 'views', 'feedback', 'library', 'articles', 'settings'].map((tab) => (
           <li
             key={tab}
             className={`py-3 px-4 rounded cursor-pointer flex items-center justify-between ${
@@ -443,6 +445,163 @@ const UserManagement = () => {
       </div>
     );
   };
+
+  const ArticleManagement = () => {
+    const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedArticle, setSelectedArticle] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [newArticle, setNewArticle] = useState({
+      articleTitle: '',
+      articleURL: '',
+      articlePicture: '',
+      prompt: '',
+      replyTweet: ''
+    });
+
+    useEffect(() => {
+      fetchArticlesData();
+    }, []);
+
+    const fetchArticlesData = async () => {
+      setLoading(true);
+      const response = await axios.get('/api/dream/articles');
+      setArticles(response.data);
+      setLoading(false);
+    }
+
+    const openAddArticle = () => {
+
+    }
+
+    const openEditModal = (article) => {
+      setSelectedArticle(article);
+      setIsEditModalOpen(true);
+    }
+
+    const handleEditSave = () => {
+
+    }
+
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-6 text-white">Dream Articles</h1>
+        {loading ? (
+          <LoadingComponent loadingText={"Loading Dream Articles"} />
+        ) : (
+          <ul className="space-y-2">
+            {articles.map((article) => (
+              <li key={article._id} className="flex justify-between items-center p-2 bg-gray-800 text-white rounded">
+                <span>{article.articleTitle}</span>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => openEditModal(article)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        {isEditModalOpen && selectedArticle && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div
+              className="bg-white p-6 rounded shadow-lg w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto relative"
+            >
+              <button
+                className="absolute top-2 right-2 text-gray-500"
+                onClick={() => setIsEditModalOpen(false)}
+              >
+                X
+              </button>
+              <h2 className="text-2xl font-bold mb-4">Edit Article</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Article Title</label>
+                  <input
+                    type="text"
+                    value={selectedArticle.articleTitle}
+                    onChange={(e) =>
+                      setSelectedArticle({ ...selectedArticle, articleTitle: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Article URL</label>
+                  <input
+                    type="text"
+                    value={selectedArticle.articleURL}
+                    onChange={(e) =>
+                      setSelectedArticle({ ...selectedArticle, articleURL: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Article Picture URL</label>
+                  <input
+                    type="text"
+                    value={selectedArticle.articlePicture}
+                    onChange={(e) =>
+                      setSelectedArticle({ ...selectedArticle, articlePicture: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Prompt</label>
+                  <textarea
+                    value={selectedArticle.prompt}
+                    rows={4}
+                    onChange={(e) =>
+                      setSelectedArticle({ ...selectedArticle, prompt: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  ></textarea>
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Reply Tweet</label>
+                  <textarea
+                    value={selectedArticle.replyTweet}
+                    rows={4}
+                    onChange={(e) =>
+                      setSelectedArticle({ ...selectedArticle, replyTweet: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  ></textarea>
+                </div>
+              </div>
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={handleEditSave}
+                  className="bg-blue-500 text-white py-2 px-4 rounded mr-2"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="bg-gray-500 text-white py-2 px-4 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+
+
+
+      </div>
+    )
+
+
+  }
 
   const LibraryManagement = () => {
     const [library, setLibrary] = useState([]);
