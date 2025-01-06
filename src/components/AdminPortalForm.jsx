@@ -472,7 +472,14 @@ const UserManagement = () => {
     }
 
     const openAddArticle = () => {
-
+      setNewArticle({
+        articleTitle: '',
+        articleURL: '',
+        articlePicture: '',
+        prompt: '',
+        replyTweet: ''
+      });
+      setIsAddModalOpen(true);
     }
 
     const openEditModal = (article) => {
@@ -480,13 +487,43 @@ const UserManagement = () => {
       setIsEditModalOpen(true);
     }
 
-    const handleEditSave = () => {
+    const handleEditSave = async () => {
+      await axios.post('/api/admin/article/editArticle', {
+        articleTitle: selectedArticle.articleTitle,
+        articleURL: selectedArticle.articleURL,
+        articlePicture: selectedArticle.articlePicture,
+        prompt: selectedArticle.prompt,
+        replyTweet: selectedArticle.replyTweet,
+        articleID: selectedArticle.articleID
+      });
+      setIsEditModalOpen(false);
+      setSelectedArticle(null);
+    }
 
+    const handleAddArticle = async () => {
+      await axios.post('/api/admin/article/addArticle', {
+        articleTitle: newArticle.articleTitle,
+        articleURL: newArticle.articleURL,
+        articlePicture: newArticle.articlePicture,
+        prompt: newArticle.prompt,
+        replyTweet: newArticle.replyTweet,
+        articleID: articles.length + 1
+      });
+      setIsAddModalOpen(false);
+      fetchArticlesData();
     }
 
     return (
       <div>
         <h1 className="text-3xl font-bold mb-6 text-white">Dream Articles</h1>
+        <div className="flex gap-4 mb-4">
+          <div onClick={openAddArticle} className="bg-blue-500 text-white p-6 rounded-lg cursor-pointer flex items-center justify-center w-1/2 h-24">
+            <span className="text-xl font-semibold">Add Article</span>
+          </div>
+          <div className="bg-gray-200 p-6 rounded-lg flex items-center justify-center w-1/2 h-24">
+            <span className="text-xl font-semibold">Total Articles: {articles.length}</span>
+          </div>
+        </div>
         {loading ? (
           <LoadingComponent loadingText={"Loading Dream Articles"} />
         ) : (
@@ -507,7 +544,7 @@ const UserManagement = () => {
           </ul>
         )}
         {isEditModalOpen && selectedArticle && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div
               className="bg-white p-6 rounded shadow-lg w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto relative"
             >
@@ -592,11 +629,97 @@ const UserManagement = () => {
             </div>
           </div>
         )}
-
-
-
-
-
+        {isAddModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div
+              className="bg-white p-6 rounded shadow-lg w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto relative"
+            >
+              <button
+                className="absolute top-2 right-2 text-gray-500"
+                onClick={() => setIsAddModalOpen(false)}
+              >
+                X
+              </button>
+              <h2 className="text-2xl font-bold mb-4">Add Article</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Article Title</label>
+                  <input
+                    type="text"
+                    placeholder="Enter article title"
+                    value={newArticle.articleTitle || ''}
+                    onChange={(e) =>
+                      setNewArticle({ ...newArticle, articleTitle: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Article URL</label>
+                  <input
+                    type="text"
+                    placeholder="Enter article URL"
+                    value={newArticle.articleURL || ''}
+                    onChange={(e) =>
+                      setNewArticle({ ...newArticle, articleURL: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Article Picture URL</label>
+                  <input
+                    type="text"
+                    placeholder="Enter article picture URL"
+                    value={newArticle.articlePicture || ''}
+                    onChange={(e) =>
+                      setNewArticle({ ...newArticle, articlePicture: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Prompt</label>
+                  <textarea
+                    placeholder="Enter prompt"
+                    rows={4}
+                    value={newArticle.prompt || ''}
+                    onChange={(e) =>
+                      setNewArticle({ ...newArticle, prompt: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  ></textarea>
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2">Reply Tweet</label>
+                  <textarea
+                    placeholder="Enter reply tweet"
+                    rows={4}
+                    value={newArticle.replyTweet || ''}
+                    onChange={(e) =>
+                      setNewArticle({ ...newArticle, replyTweet: e.target.value })
+                    }
+                    className="w-full border p-2"
+                  ></textarea>
+                </div>
+              </div>
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={handleAddArticle}
+                  className="bg-blue-500 text-white py-2 px-4 rounded mr-2"
+                >
+                  Add
+                </button>
+                <button
+                  onClick={() => setIsAddModalOpen(false)}
+                  className="bg-gray-500 text-white py-2 px-4 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
 

@@ -16,6 +16,14 @@ const dreamArticleSchema = new Schema({
     articlePicture: {
         type: String,
         required: [true, "Please enter article picture URL!"]
+    },
+    prompt: {
+        type: String,
+        requried: [true, "Please enter the prompt for article!"]
+    },
+    replyTweet: {
+        type: String,
+        requried: [true, "Please enter reply tweet!"]
     }
 })
 
