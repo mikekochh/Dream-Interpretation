@@ -234,7 +234,7 @@ function DreamAboutPregnancyArticle() {
             While traditional dream dictionaries offer general interpretations, uncovering the true 
             significance of your dreams requires a more personalized approach. Our advanced dream 
             interpretation AI analyzes your dreams through the lens of your unique emotions and life 
-            experiences. Whether you're exploring recent events or seeking understanding of recurring 
+            experiences. Whether you&apos;re exploring recent events or seeking understanding of recurring 
             patterns, this AI provides insights crafted just for you. Begin your journey into the mysteries 
             of your dreams today.
         </p>
