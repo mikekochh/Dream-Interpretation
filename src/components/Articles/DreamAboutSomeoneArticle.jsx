@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -7,7 +6,6 @@ import RelatedSymbolsComponent from './RelatedSymbolsComponent';
 
 const DreamAboutSomeoneArticle = () => {
 
-    const router = useRouter();
     const symbols = ["emotions", "affection", "reflection", "people", "crossroads", "telepathy", "anxiety", "boss", "family", "friend"];
 
   return (
@@ -169,7 +167,7 @@ const DreamAboutSomeoneArticle = () => {
             interpretation. Try it out for free below!
         </p>
         <div className="text-center mt-5">
-            <button className="start-button" onClick={() => router.push('/')}>AI Dream Interpretation</button>
+            <Link className="start-button" href={'/'}>AI Dream Interpretation</Link>
         </div>
       <h2 className="font-thin text-2xl mt-4">Final Thoughts</h2>
       <p>

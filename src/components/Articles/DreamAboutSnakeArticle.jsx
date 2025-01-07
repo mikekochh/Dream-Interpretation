@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -8,7 +7,6 @@ import RelatedSymbolsComponent from './RelatedSymbolsComponent';
 function DreamAboutSnakeArticle() {
 
     const symbols = ["emotions", "mother", "snake"];
-    const router = useRouter();
 
   return (
     <>
@@ -187,9 +185,9 @@ function DreamAboutSnakeArticle() {
             insights tailored specifically to you. Start your journey into the deeper meaning of your dreams today.
         </p>
         <div className="text-center mt-5">
-            <button className="start-button" onClick={() => router.push('/')}>
+            <Link className="start-button" href={'/'}>
                 Try AI Dream Interpretation
-            </button>
+            </Link>
         </div>
 
 

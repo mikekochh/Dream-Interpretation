@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -7,7 +6,6 @@ import RelatedSymbolsComponent from './RelatedSymbolsComponent';
 
 export default function DreamAboutSomeoneDyingArticle() {
 
-  const router = useRouter();
   const symbols = ["animals", "anxiety", "celebrity", "death", "emotions", "fear", "friend", "home", "losing", "mortality", "pets", "rebirth", "relationships"];
 
   return (
@@ -219,9 +217,9 @@ export default function DreamAboutSomeoneDyingArticle() {
               with a tailored approach that considers your unique experience.
             </p>
             <div className="text-center mt-5">
-                <button className="start-button" onClick={() => router.push('/')}>
+                <Link className="start-button" href={'/'}>
                     AI Dream Interpretation
-                </button>
+                </Link>
             </div>
 
           <h2 className="font-thin text-2xl mt-8">Conclusion</h2>

@@ -1,12 +1,10 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Head from 'next/head';
 import RelatedSymbolsComponent from './RelatedSymbolsComponent';
 import Link from 'next/link';
 
 const DreamAboutTeethArticle = () => {
-  const router = useRouter();
   const symbols = ["anxiety", "breaking", "dentist", "eating", "emotions", "falling", "job", "losing teeth", "rebirth", "rejection", "rotting", "smiling", "teeth", "transformation"]
 
   return (
@@ -213,9 +211,9 @@ const DreamAboutTeethArticle = () => {
                 can illuminate your subconscious world.
             </p>
             <div className="text-center mt-5">
-                <button className="start-button" onClick={() => router.push('/')}>
+                <Link className="start-button" href={'/'}>
                     AI Dream Interpretation
-                </button>
+                </Link>
             </div>
 
 

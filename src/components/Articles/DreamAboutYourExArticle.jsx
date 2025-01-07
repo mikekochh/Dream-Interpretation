@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Head from 'next/head';
 import RelatedSymbolsComponent from './RelatedSymbolsComponent';
@@ -7,7 +6,6 @@ import Link from 'next/link';
 
 const DreamAboutYourEx = () => {
 
-    const router = useRouter();
     const symbols = ["address", "emotions", "ex", "fear", "guilt", "job", "lost", "love", "marriage", "past", "people", "regret", "waiting"];
 
   return (
@@ -216,9 +214,9 @@ const DreamAboutYourEx = () => {
             tool can bring clarity to your dreams and offer guidance that feels truly relevant to you.
         </p>
         <div className="text-center mt-5">
-            <button className="start-button" onClick={() => router.push('/')}>
+            <Link className="start-button" href={'/'}>
                 AI Dream Interpretation
-            </button>
+            </Link>
         </div>
 
         {/* Final Thoughts */}
