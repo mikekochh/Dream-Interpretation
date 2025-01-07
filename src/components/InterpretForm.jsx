@@ -3,16 +3,17 @@ import React, { useState, useEffect, useRef, lazy, Suspense, useContext } from '
 import axios from 'axios';
 import { UserContext } from "@/context/UserContext";
 import { PAGE_INTERPRET_HOME, PAGE_INTERPRET_LOADING, PAGE_INTERPRET_ORACLE } from '@/types/pageTypes';
-import { SIGN_UP_TYPE_DREAM_REMINDER_GOOGLE } from '@/types/signUpTypes';
 import { useRouter } from 'next/navigation';
+import { RecoilRoot } from 'recoil';
+import DreamSymbolsProvider from "@/components/Providers/DreamSymbolsProvider";
 
 const JournalDreamView = lazy(() => import('./mainPage/JournalDreamView'));
 const LoadingComponent = lazy(() => import('./LoadingComponent'));
-import PublicDreamView from './mainPage/PublicDreamView';
+import FunFacts from './FunFacts';
 
 
 const InterpretForm = () => {
-    const { user, setUserData, handleChangeSection } = useContext(UserContext);
+    const { user, handleChangeSection } = useContext(UserContext);
     const router = useRouter();
 
     const [savingDream, setSavingDream] = useState(false);
@@ -23,6 +24,7 @@ const InterpretForm = () => {
     const [selectedOracleID, setSelectedOracleID] = useState(0);
     const [dream, setDream] = useState("");
     const [dreamID, setDreamID] = useState();
+    const [publicDream, setPublicDream] = useState(true);
 
     const [loading, setLoading] = useState(true);
     const [loadingOracles, setLoadingOracles] = useState(true);
@@ -148,7 +150,7 @@ const InterpretForm = () => {
             localStorage.removeItem('dreamID');
             localStorage.removeItem('googleSignUp');
             if (!existingDreamID) {
-                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected });
+                const resJournal = await axios.post('/api/dream/journal', { userID, dream, interpretDream: oracleSelected, isPublic: publicDream });
                 localDreamID = resJournal.data._id;
                 setDreamID(localDreamID);
             } else {
@@ -219,10 +221,21 @@ const InterpretForm = () => {
     return (
         <Suspense fallback={<div /> }>
             <div className="text-white relative">
+                <div
+                    className="absolute top-1 left-0 h-1 bg-gold"
+                    style={{
+                        width: savingDream ? "100%" : `${(dreamStep / 3) * 100}%`, // 100% if savingDream is true, otherwise based on dreamStep
+                        transition: "width 0.3s ease", // Smooth transition effect
+                    }}
+                />
                 {savingDream ? (
                     <div class="flex flex-col items-center justify-center min-h-screen">
-                        <PublicDreamView dreamID={dreamID}/>
-                        <LoadingComponent loadingText={saveMessage} altScreen={true}/>
+                        <LoadingComponent loadingText={saveMessage} altScreen={true} altText={"Your dream interpretation is on its way! This may take about 15 seconds. Please stay on this page to receive your results."}/>
+                        <RecoilRoot>
+                            <DreamSymbolsProvider>
+                                <FunFacts />
+                            </DreamSymbolsProvider>
+                        </RecoilRoot>
                     </div>
                 ) : (
                     <JournalDreamView
@@ -242,6 +255,8 @@ const InterpretForm = () => {
                         incrementDreamStep={incrementDreamStep}
                         decrementDreamStep={decrementDreamStep}
                         selectedOracle={selectedOracleID}
+                        setPublicDream={setPublicDream}
+                        publicDream={publicDream}
                     />
                 )}
             </div>

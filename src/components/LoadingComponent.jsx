@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-const LoadingComponent = ({ loadingText, altScreen }) => {
+const LoadingComponent = ({ loadingText, altScreen, altText }) => {
     const [displayedText, setDisplayedText] = useState(loadingText);
     const textRef = useRef(null);
 
@@ -36,7 +36,9 @@ const LoadingComponent = ({ loadingText, altScreen }) => {
         <div className={`text-white ${altScreen ? '' : 'main-content flex justify-center items-center h-screen'}`}>
             <div className='loadingContainer'>
                 {/* Attach the ref to the <p> tag */}
-                <p ref={textRef} className='loadingText'>{displayedText}</p>
+                {/* <p ref={textRef} className='loadingText'>{displayedText}</p> */}
+                <p ref={textRef} className='loadingText p-4 pb-0'>Interpreting Your Dream</p>
+                <p className="mb-5">{altText}</p>
                 <div className='dotsContainer'>
                     <div className='dot delay200'></div>
                     <div className='dot delay400'></div>

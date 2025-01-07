@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 
 import StartPageView from './StartPageView';
 import OracleSelectionSection from './OracleSelectionSectionView';
+import PublicDreamView from './PublicDreamView';
 
 export default function JournalDreamView({
     user,
@@ -21,7 +22,9 @@ export default function JournalDreamView({
     dreamStep,
     incrementDreamStep,
     decrementDreamStep,
-    selectedOracle
+    selectedOracle,
+    setPublicDream,
+    publicDream
 }) {
     const containerRef = useRef(null);
     const welcomeSectionRef = useRef(null);
@@ -79,6 +82,13 @@ export default function JournalDreamView({
                         dream={dream}
                         handleScrollToTop={handleScrollToTop}
                     />
+                </div>
+            ) : currentStep === 1 ? (
+                <div>
+                    <div className="back-button-container">
+                        <button className="back-button golden-ratio-1" onClick={decrementDreamStep}>Back</button>
+                    </div>
+                    <PublicDreamView incrementDreamStep={incrementDreamStep} publicDream={publicDream} setPublicDream={setPublicDream} />
                 </div>
             ) : (
                 <div>

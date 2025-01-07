@@ -711,11 +711,6 @@ h3.golden-ratio-2 {
 
 .loadingText {
   font-size: 2rem;
-  padding: 1rem;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.loadingText {
   transition: opacity 0.3s ease-in-out;
 }
 
