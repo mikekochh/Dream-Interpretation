@@ -340,7 +340,7 @@ export default function CommonNightmaresArticle() {
         <p>
             Nightmares can feel overwhelming, but they often hold powerful insights into your life. Our dream 
             interpretation AI goes beyond generic dream dictionaries, analyzing your nightmares within the context 
-            of your unique emotions and experiences. Whether you're uncovering hidden fears, addressing unresolved 
+            of your unique emotions and experiences. Whether you&apos;re uncovering hidden fears, addressing unresolved 
             conflicts, or interpreting recurring themes, our AI provides personalized insights to help you make sense 
             of even your most unsettling dreams. Take control of your subconscious messages and find clarity today.
         </p>
