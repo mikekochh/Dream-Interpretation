@@ -11,6 +11,8 @@ const OracleSelectionSection = ({
     selectedOracle
 }) => {
 
+    console.log("selectedOracle: ", selectedOracle);
+
     return (
         <div id="interpretation-section" className="relative">
             <OracleSelectionPopup user={user} />
@@ -48,13 +50,10 @@ const OracleSelectionPopup = ({ user }) => {
     return (
         <div className="justify-center golden-ratio-3 text-center px-1">
             <div className="flex flex-col justify-center items-center golden-ratio-2">
-                <p className={`gradient-title-text ${isMobile ? 'golden-ratio-3' : 'golden-ratio-4'}`}>Choose an Oracle</p>
+                <p className={`gradient-title-text text-4xl md:text-5xl`}>Choose an Oracle</p>
             </div>
             <div className="inline-flex items-center flex-col mb-3">
-                <p className="golden-ratio-2">Select a Dream Oracle, with each taking you on a different journey of interpretation</p>
-                {/* {!user && (
-                    <p className="golden-ratio-1 text-gold mt-1">Sign up to unlock all oracles</p>
-                )} */}
+                <p className="text-xl">Select a Dream Oracle, with each taking you on a different journey of interpretation</p>
             </div>
         </div>
     )

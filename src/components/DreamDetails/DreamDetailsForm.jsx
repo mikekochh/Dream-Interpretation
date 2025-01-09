@@ -46,6 +46,7 @@ export default function DreamsForm() {
     const [isDreamExpanded, setIsDreamExpanded] = useState(false);
 
     const [isPublic, setIsPublic] = useState(false);
+    const [createAccount, setCreateAccount] = useState(false);
 
     // modals
     const [showEditDreamModal, setShowEditDreamModal] = useState(false);
@@ -339,12 +340,12 @@ export default function DreamsForm() {
 
     return (
         <div className="main-content">
-            {!user && (
+            {createAccount && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <RegisterForm viewInterpretation={true} />
                 </div>
             )}
-            <div className={`flex flex-col mb-10 text-white md:w-6/12 mx-auto p-2 ${!user && 'blur'}`}>
+            <div className={`flex flex-col mb-10 text-white md:w-6/12 mx-auto p-2 ${createAccount && 'blur'}`}>
                 <div className="md:flex md:flex-row">
                     <div className="interpretations-section md:w-1/3 relative">
                         {/* Three Dots Button */}
@@ -369,6 +370,7 @@ export default function DreamsForm() {
                                         openInterpretation={openInterpretation}
                                         updateInterpretationFeedback={updateInterpretationFeedback}
                                         dreamID={dreamID}
+                                        setCreateAccount={setCreateAccount}
                                     />
                                 );
                             })}

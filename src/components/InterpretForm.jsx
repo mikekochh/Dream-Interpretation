@@ -18,7 +18,7 @@ const InterpretForm = () => {
 
     const [savingDream, setSavingDream] = useState(false);
     const [oracles, setOracles] = useState([]);
-    const [buttonText, setButtonText] = useState("Journal Dream");
+    const [buttonText, setButtonText] = useState("Select an Oracle");
     const [saveMessage, setSaveMessage] = useState("");
     const [oracleSelected, setOracleSelected] = useState(false);
     const [selectedOracleID, setSelectedOracleID] = useState(0);
@@ -39,7 +39,7 @@ const InterpretForm = () => {
     useEffect(() => {
         const selectedOracle = oracles.some(oracle => oracle.selected);
         setOracleSelected(selectedOracle);
-        setButtonText(selectedOracle ? "Interpret Dream" : "Journal Dream");
+        setButtonText(selectedOracle ? "Interpret Dream" : "Select an Oracle");
     }, [oracles]);
 
     // if google sign up is true, send users to a new page
@@ -117,15 +117,26 @@ const InterpretForm = () => {
     }, [user])
 
     const handleSelectionChange = (selected, oracleID) => {
-        setSelectedOracleID(oracleID);
-        setOracles(prev => {
-            const updatedOracles = prev.map(oracle => ({
+        setSelectedOracleID(prevSelectedOracleID => {
+            if (prevSelectedOracleID === oracleID) {
+                // Deselect if the same oracle is clicked again
+                setOracles(prev => prev.map(oracle => ({
+                    ...oracle,
+                    selected: false, // Deselect all oracles
+                })));
+                return null; // Clear the selected oracle ID
+            }
+    
+            // Select the clicked oracle and deselect others
+            setOracles(prev => prev.map(oracle => ({
                 ...oracle,
-                selected: oracle.oracleID === oracleID ? !selected : false, // Deselect others, select only the clicked oracle
-            }));
-            return updatedOracles;
+                selected: oracle.oracleID === oracleID, // Select only the clicked oracle
+            })));
+    
+            return oracleID; // Update selectedOracleID
         });
-    };    
+    };
+     
 
     const selectOracle = (oracleID) => {
         setSelectedOracleID(oracleID);

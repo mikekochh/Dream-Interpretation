@@ -121,6 +121,7 @@ export default function RegisterForm({ viewInterpretation = false }) {
                         password: "password",
                         redirect: false
                     });
+                    window.location.reload();
                 }
             }
         } catch (error) {
@@ -152,7 +153,7 @@ export default function RegisterForm({ viewInterpretation = false }) {
         <div className={`text-white ${viewInterpretation && 'bg-black rounded-xl bg-opacity-80'}`}>
             <div className={`p-5 rounded-lg border-t-4 border-white-400 border`}>
                 <h1 className="golden-ratio-2 font-bold my-4 text-center w-2/3 mx-auto">
-                    {viewInterpretation ? 'Create Account to View Interpretation and...' : 'Create Account'}
+                    Create Account
                 </h1>
 
                 {/* New "What's inside if you create an account" section */}
@@ -160,7 +161,7 @@ export default function RegisterForm({ viewInterpretation = false }) {
                     <div className="flex justify-center mt-4 space-x-4 text-md">
                         <div className="flex items-center space-x-2">
                             <span className="text-green-500">✓</span>
-                            <p className="text-white">Unlimited Interpretations</p>
+                            <p className="text-white">Dream Journal</p>
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="text-green-500">✓</span>
@@ -168,7 +169,7 @@ export default function RegisterForm({ viewInterpretation = false }) {
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="text-green-500">✓</span>
-                            <p className="text-white">Access to all AI Models</p>
+                            <p className="text-white">Save Interpretations</p>
                         </div>
                     </div>
                 </div>

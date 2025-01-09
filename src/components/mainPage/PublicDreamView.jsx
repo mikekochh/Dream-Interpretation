@@ -60,10 +60,10 @@ const PublicDreamPopup = () => {
     return (
         <div className="justify-center text-center px-1 md:w-2/3 md:mx-auto">
             <div className="flex flex-col justify-center items-center">
-                <p className="golden-ratio-4 gradient-title-text">Make Dream Public</p>
+                <p className="text-4xl md:text-5xl gradient-title-text">Make Dream Public</p>
             </div>
             <div className="inline-flex items-center">
-                <p className="mb-2 golden-ratio-2">
+                <p className="mb-2 text-xl">
                     Add your dream to the dream stream and receive interpretations from the community.
                 </p>
             </div>

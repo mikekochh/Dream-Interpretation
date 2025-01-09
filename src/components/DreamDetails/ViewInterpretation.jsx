@@ -3,7 +3,7 @@ import Image from 'next/image';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
-const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback }) => {
+const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback, user, setCreateAccount }) => {
   if (!isOpen) return null;
 
   function cleanHTML(interpretation) {
@@ -92,6 +92,12 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInt
             </button>
           </div>
         </div>
+        {!user && (
+          <div className="DreamBox mt-2 p-2 rounded-xl text-center">
+            <p className="text-xl text-center font-thin">Create an account to start a dream journal and save your interpretations</p>
+            <button className="start-button" onClick={() => setCreateAccount(true)}>Sign Up</button>
+          </div>
+        )}
 
         {/* Modal Footer */}
         <div className="mt-4 flex justify-end">
