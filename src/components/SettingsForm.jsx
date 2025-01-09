@@ -455,7 +455,7 @@ const SettingsForm = () => {
                                     <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
                                         {oracles.filter(oracle => oracle.active).map((oracle) => (
                                             <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
-                                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} selectOracle={selectOracle} user={user} />
+                                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                                             </div>
                                         ))}
                                     </div>

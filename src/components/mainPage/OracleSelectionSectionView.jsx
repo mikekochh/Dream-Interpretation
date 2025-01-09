@@ -4,41 +4,29 @@ import OracleSection from '../OracleSection';
 
 const OracleSelectionSection = ({
     user,
-    scrollLeft,
-    scrollContainerRef,
     oracles,
     handleSelectionChange,
-    selectOracle,
-    scrollRight,
     journalDream,
     buttonText,
     selectedOracle
 }) => {
-    // const isButtonDisabled = (!user?.activated && user?.name) || (!oracleSelected && !user?.name);
 
     return (
         <div id="interpretation-section" className="relative">
             <OracleSelectionPopup user={user} />
             <div className="flex items-center justify-center relative">
-                <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                </button>
-                <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide md:overflow-x-visible md:flex-row">
-                    {oracles.filter(oracle => oracle.active).map((oracle) => (
-                        <div key={oracle._id} className="flex-none mx-2 md:flex-auto">
-                            <Suspense fallback={<div/>}>
-                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} selectOracle={selectOracle} user={user} />
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:flex md:overflow-x-visible md:flex-row">
+                    {oracles.filter((oracle) => oracle.active).map((oracle, index, arr) => (
+                        <div
+                            key={oracle._id}
+                            className={`mx-2 ${index === arr.length - 1 && arr.length % 2 !== 0 ? "col-span-2 place-self-center" : ""}`}
+                        >
+                            <Suspense fallback={<div />}>
+                                <OracleSection oracle={oracle} handleSelectionChange={handleSelectionChange} />
                             </Suspense>
                         </div>
                     ))}
                 </div>
-                <button onClick={scrollRight} className="absolute right-0 z-10 p-2 bg-white bg-opacity-25 rounded-full shadow-md hover:bg-opacity-50 md:hidden">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </button>
             </div>
             <div className="flex flex-col items-center">
                 <button
@@ -64,9 +52,9 @@ const OracleSelectionPopup = ({ user }) => {
             </div>
             <div className="inline-flex items-center flex-col mb-3">
                 <p className="golden-ratio-2">Select a Dream Oracle, with each taking you on a different journey of interpretation</p>
-                {!user && (
+                {/* {!user && (
                     <p className="golden-ratio-1 text-gold mt-1">Sign up to unlock all oracles</p>
-                )}
+                )} */}
             </div>
         </div>
     )

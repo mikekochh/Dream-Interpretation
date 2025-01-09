@@ -1,28 +1,18 @@
 "use client";
-import React, { useEffect } from 'react';
+import React from 'react';
 import 'reactjs-popup/dist/index.css';
 import Image from 'next/image';
 import InfoPopup from './InfoPopup';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
-const OracleSection = ({ oracle, handleSelectionChange, selectOracle, user }) => {
+const OracleSection = ({ oracle, handleSelectionChange }) => {
 
-    useEffect(() => {
-        if (oracle.oracleID === 1 && !user?.subscribed) {
-            selectOracle(oracle.oracleID)
-        }
-    }, [])
-    
-    const hasAccess = () => user || oracle.oracleID === 1;
+    const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''}`;
 
-    const imageClasses = `rounded-xl text-center ${oracle.selected ? 'border-8 border-gold' : ''} ${!hasAccess() ? 'filter grayscale blur-sm' : ''}`;
-
-    const parentClasses = `relative max-w-sm ${!hasAccess() ? 'cursor-not-allowed' : ''} hidden md:block`;
+    const parentClasses = `relative max-w-sm hidden md:block`;
 
     const handleClick = () => {
-        if (hasAccess()) {
-            handleSelectionChange(oracle.selected, oracle.oracleID);
-        }
+        handleSelectionChange(oracle.selected, oracle.oracleID);
     };
 
     return (
@@ -40,7 +30,7 @@ const OracleSection = ({ oracle, handleSelectionChange, selectOracle, user }) =>
                     draggable={false}
                 />
             </div>
-            <div className={`w-full relative max-w-sm md:hidden oracle-image-mobile ${!hasAccess() ? 'cursor-not-allowed' : ''}`}>
+            <div className={`w-full relative max-w-sm md:hidden oracle-image-mobile`}>
                 <Image 
                     layout="responsive"
                     width={50}
@@ -60,7 +50,6 @@ const OracleSection = ({ oracle, handleSelectionChange, selectOracle, user }) =>
                     icon={faQuestionCircle} 
                     infoText={oracle.oracleDescriptionShort}
                     infoTitle={`${oracle.oracleName}<br/>${oracle.oracleSpecialty}`}
-                    hasAccess={hasAccess()}
                 />
             </div>
         </div>

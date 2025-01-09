@@ -101,7 +101,6 @@ export default function JournalDreamView({
                         scrollContainerRef={scrollContainerRef}
                         oracles={oracles}
                         handleSelectionChange={handleSelectionChange}
-                        selectOracle={selectOracle}
                         scrollRight={scrollRight}
                         journalDream={journalDream}
                         buttonText={buttonText}
