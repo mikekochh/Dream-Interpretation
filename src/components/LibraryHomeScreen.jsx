@@ -47,8 +47,8 @@ const LibraryHomeScreen = () => {
     return (
         <div className="md:w-2/3 md:mx-auto md:px-0 md:py-8 px-3 py-8 bg-transparent">
             <h3 className="text-center font-thin golden-ratio-2 text-gray-200">2000+ Dream Symbols</h3>
-            <h2 className="text-center gradient-title-text golden-ratio-4">Dream Dictionary</h2>
-            <h3 className="text-center mb-6 golden-ratio-2 text-gray-100">
+            <h2 className="text-center gradient-title-text text-4xl md:text-5xl">Dream Dictionary</h2>
+            <h3 className="text-center mb-6 text-xl text-gray-100">
                 Search our dream dictionary for symbols that appeared in your dream to find out the meaning behind them
             </h3>
             <div className="px-4 md:w-2/3 mx-auto mt-6">

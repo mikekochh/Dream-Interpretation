@@ -24,8 +24,8 @@ const DreamArticles = () => {
   return (
     <div className="md:w-2/3 md:mx-auto md:px-0 md:py-8 px-3 py-8 bg-transparent">
       <h3 className="text-center font-thin golden-ratio-2 text-gray-200">Most Common Dreams</h3>
-      <h2 className="text-center gradient-title-text golden-ratio-4">In-Depth Symbol Analysis</h2>
-      <h3 className="text-center golden-ratio-2 text-gray-100">
+      <h2 className="text-center gradient-title-text text-4xl md:text-5xl">In-Depth Symbol Analysis</h2>
+      <h3 className="text-center text-xl text-gray-100">
         Read our in-depth interpretations of our most common dream symbols
       </h3>
 

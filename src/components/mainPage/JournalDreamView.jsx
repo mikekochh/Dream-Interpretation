@@ -11,13 +11,9 @@ export default function JournalDreamView({
     dream,
     setDream,
     handleSelectionChange,
-    selectOracle,
     oracles,
     journalDream,
     buttonText,
-    scrollLeft,
-    scrollRight,
-    scrollContainerRef,
     dreamStreak,
     dreamStep,
     incrementDreamStep,
@@ -97,11 +93,8 @@ export default function JournalDreamView({
                     </div>
                     <OracleSelectionSection
                         user={user}
-                        scrollLeft={scrollLeft}
-                        scrollContainerRef={scrollContainerRef}
                         oracles={oracles}
                         handleSelectionChange={handleSelectionChange}
-                        scrollRight={scrollRight}
                         journalDream={journalDream}
                         buttonText={buttonText}
                         selectedOracle={selectedOracle}

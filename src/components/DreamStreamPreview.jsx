@@ -54,8 +54,8 @@ const DreamStreamPreview = () => {
   return (
     <div className="md:w-2/3 md:mx-auto md:px-0 md:py-8 px-3 py-8 bg-transparent">
       <h3 className="text-center font-thin golden-ratio-2 text-gray-200">The best part about dreams is sharing them.</h3>
-      <h2 className="text-center gradient-title-text golden-ratio-4">Dream Stream</h2>
-      <h3 className="text-center mb-6 golden-ratio-2 text-gray-100">Share your dreams with the Dream Oracles community. Engage with fellow dreamers, sharing interpretations and thoughts on one another&apos;s dreams, while watching your dreams come to life as AI-generated images.</h3>
+      <h2 className="text-center gradient-title-text text-4xl md:text-5xl">Dream Stream</h2>
+      <h3 className="text-center mb-6 text-xl text-gray-100">Share your dreams with the Dream Oracles community. Engage with fellow dreamers, sharing interpretations and thoughts on one another&apos;s dreams, while watching your dreams come to life as AI-generated images.</h3>
       {/* Dream Stream section */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
         {dreamStream.map((dream) => (

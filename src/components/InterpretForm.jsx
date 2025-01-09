@@ -243,13 +243,9 @@ const InterpretForm = () => {
                         dream={dream}
                         setDream={setDream}
                         handleSelectionChange={handleSelectionChange}
-                        selectOracle={selectOracle}
                         oracles={oracles}
                         journalDream={journalDream}
                         buttonText={buttonText}
-                        scrollLeft={scrollLeft}
-                        scrollRight={scrollRight}
-                        scrollContainerRef={scrollContainerRef}
                         dreamStreak={dreamStreak}
                         dreamStep={dreamStep}
                         incrementDreamStep={incrementDreamStep}
