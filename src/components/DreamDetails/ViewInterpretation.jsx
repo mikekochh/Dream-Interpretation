@@ -6,9 +6,9 @@ import { useContext } from 'react';
 
 
 const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback, setCreateAccount }) => {
-  if (!isOpen) return null;
-
   const { user } = useContext(UserContext) || {};
+  
+  if (!isOpen) return null;
 
   function cleanHTML(interpretation) {
     const start = interpretation.indexOf('<');
@@ -107,7 +107,7 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInt
 
         <div className="DreamBox mt-2 p-2 rounded-xl text-center">
           <p className="text-xl text-center font-thin">Want to dive deeper?</p>
-          
+
         </div>
 
         {/* Modal Footer */}
