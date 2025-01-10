@@ -1,10 +1,14 @@
 import axios from 'axios';
 import Image from 'next/image';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { UserContext } from '@/context/UserContext';
+import { useContext } from 'react';
 
 
-const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback, user, setCreateAccount }) => {
+const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInterpretationFeedback, setCreateAccount }) => {
   if (!isOpen) return null;
+
+  const { user } = useContext(UserContext) || {};
 
   function cleanHTML(interpretation) {
     const start = interpretation.indexOf('<');
@@ -32,6 +36,8 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInt
 
   // Clean the interpretation HTML content
   const cleanInterpretation = cleanHTML(interpretation.interpretation);
+
+  console.log("user: ", user);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
@@ -98,6 +104,11 @@ const ViewInterpretation = ({ interpretation, oracle, isOpen, onClose, updateInt
             <button className="start-button" onClick={() => setCreateAccount(true)}>Sign Up</button>
           </div>
         )}
+
+        <div className="DreamBox mt-2 p-2 rounded-xl text-center">
+          <p className="text-xl text-center font-thin">Want to dive deeper?</p>
+          
+        </div>
 
         {/* Modal Footer */}
         <div className="mt-4 flex justify-end">
